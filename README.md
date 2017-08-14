@@ -126,3 +126,8 @@ People
 ## How to make business
 세상에 도움되는 일 -> 수익 Yes. 당연하지않나? 그렇지 않으면 사기다.
 수익나는일 -> 세상에 도움되지않는 일 -> 수익 No
+
+##### Known Error
+(0, _stackNaviation) is not a function
+import StackNavigator from '../'
+import { StackNavigator } from '../'
