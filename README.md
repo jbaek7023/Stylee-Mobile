@@ -128,6 +128,22 @@ People
 수익나는일 -> 세상에 도움되지않는 일 -> 수익 No
 
 ##### Known Error
-(0, _stackNaviation) is not a function
-import StackNavigator from '../'
-import { StackNavigator } from '../'
+1- (0, _stackNaviation) is not a function
+*> import StackNavigator from '../'
+=> import { StackNavigator } from '../'
+
+2- facebook::react::Recoverable: Could not open file: No such file or directory
+after reload
+The development server returned response error code: 502
+...
+<h2>Failed to complete tunnel connection</h2>
+
+=> (watchman is not working!)
+echo 256 | sudo tee -a /proc/sys/fs/inotify/max_user_instances
+echo 32768 | sudo tee -a /proc/sys/fs/inotify/max_queued_events
+echo 65536 | sudo tee -a /proc/sys/fs/inotify/max_user_watches
+watchman shutdown-server
+watchman watch-del-all
+and restart project
+
+3-
