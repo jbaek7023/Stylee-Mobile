@@ -187,3 +187,6 @@ https://facebook.github.io/watchman/docs/troubleshooting.html#poison-inotify-add
 8. Module problem
 returns 500 on Font -> installation process
 https://github.com/GeekyAnts/NativeBase#setup-with-crna
+
+9. Android Menu
+Ctrl M

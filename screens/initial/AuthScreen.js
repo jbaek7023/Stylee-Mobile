@@ -1,10 +1,38 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, AsyncStorage } from 'react-native';
 import { Container, Content, Button, Text, Form, Input, Label, Item } from 'native-base';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
 class AuthScreen extends Component {
   static navigationOptions = {
     title: 'Authentication'
+  }
+
+  // componentWillMount() {
+  //   this.onAuthComplete(this.props);
+  // }
+
+  componentDidMount() {
+    // debugging purpose
+    AsyncStorage.setItem('fb_token', null);
+
+  }
+
+  // When we rerender,
+  componentWillReceiveProps(nextProps) {
+    this.onAuthComplete(nextProps);
+  }
+
+  onAuthComplete(props) {
+    if (props.token) {
+      this.props.navigation.navigate('Main');
+    }
+  }
+
+  fbClicked = () => {
+    // Call the FacebookAction
+    this.props.facebookLogin();
   }
 
   render() {
@@ -13,7 +41,7 @@ class AuthScreen extends Component {
       <Content>
         <Form>
           <Item floatingLabel>
-            <Label>Username</Label>
+            <Label>Username or Email</Label>
             <Input />
           </Item>
           <Item floatingLabel last>
@@ -21,7 +49,9 @@ class AuthScreen extends Component {
             <Input />
           </Item>
         </Form>
-        <Button block><Text>Log in</Text></Button>
+        <Button block style={styles.buttonStyle}><Text>Log in</Text></Button>
+
+        <Button block style={styles.buttonStyle} onPress={this.fbClicked}><Text>Log in with the Facebook</Text></Button>
         </Content>
       </Container>
     )
@@ -35,6 +65,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
   },
+  buttonStyle: {
+    marginTop: 10,
+  }
 });
 
-export default AuthScreen;
+function mapStateToProps({ auth }) {
+  return { token: auth.token };
+}
+
+export default connect(mapStateToProps, actions)(AuthScreen);

@@ -9,8 +9,7 @@ import registerForPushNotificationsAsync from '../api/registerForPushNotificatio
 
 import WelcomeScreen from '../screens/initial/WelcomeScreen';
 
-const RootStackNavigator = TabNavigator (
-  {
+const RootTabNavigator = TabNavigator ({
     Auth: {
       screen: AuthStackNavigator,
     },
@@ -20,13 +19,15 @@ const RootStackNavigator = TabNavigator (
     Main: {
       screen: MainTabNavigator,
     },
-  },
-  {
+  }, {
     navigationOptions: () => ({
       headerTitleStyle: {
         fontWeight: 'normal',
       },
+      tabBarVisible: false
     }),
+    // prevent app from loading every page
+    lazy: true,
   }
 );
 
@@ -40,7 +41,7 @@ export default class RootNavigator extends React.Component {
   }
 
   render() {
-    return <RootStackNavigator />;
+    return <RootTabNavigator />;
   }
 
   _registerForPushNotifications() {

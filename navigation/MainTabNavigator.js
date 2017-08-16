@@ -9,17 +9,28 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
+import FeedScreen from '../screens/feed/FeedScreen';
+import StylebookScreen from '../screens/stylebook/StylebookScreen';
+import WardrobeScreen from '../screens/wardrobe/WardrobeScreen';
+import NotificationScreen from '../screens/notification/NotificationScreen';
+import MenuScreen from '../screens/menu/MenuScreen';
 
 export default TabNavigator(
   {
-    Home: {
-      screen: HomeScreen,
+    Feed: {
+      screen: FeedScreen,
     },
-    Links: {
-      screen: LinksScreen,
+    Stylebook: {
+      screen: StylebookScreen,
     },
-    Settings: {
-      screen: SettingsScreen,
+    Wardrobe: {
+      screen: WardrobeScreen,
+    },
+    Noti: {
+      screen: NotificationScreen,
+    },
+    Menu: {
+      screen: MenuScreen,
     },
   },
   {
@@ -28,17 +39,26 @@ export default TabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case 'Home':
+          case 'Feed':
             iconName = Platform.OS === 'ios'
               ? `ios-information-circle${focused ? '' : '-outline'}`
               : 'md-information-circle';
             break;
-          case 'Links':
+          case 'Stylebook':
             iconName = Platform.OS === 'ios'
               ? `ios-link${focused ? '' : '-outline'}`
               : 'md-link';
             break;
-          case 'Settings':
+          case 'Wardrobe':
+            iconName = Platform.OS === 'ios'
+              ? `ios-link${focused ? '' : '-outline'}`
+              : 'md-link';
+            break;
+          case 'Noti':
+            iconName = Platform.OS === 'ios'
+              ? `ios-options${focused ? '' : '-outline'}`
+              : 'md-options';
+          case 'Menu':
             iconName = Platform.OS === 'ios'
               ? `ios-options${focused ? '' : '-outline'}`
               : 'md-options';

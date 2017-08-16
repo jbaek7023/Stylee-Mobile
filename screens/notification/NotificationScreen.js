@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
-class StylebookScreen extends Component {
+class NotificationScreen extends Component {
   static navigationOptions = {
-    title: 'Stylebook'
+    title: 'Notification'
   }
+
   render() {
     return (
       <View>
-        <Text>StylebookScreen</Text>
-        <Text>StylebookScreen</Text>
+        <Text>llNotification</Text>
       </View>
-    )
+    );
   }
 }
 
-export default StylebookScreen;
+export default NotificationScreen;
