@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Container, Content, Button, Text, Form, Input, Label, Item } from 'native-base';
 
 class AuthScreen extends Component {
   static navigationOptions = {
@@ -8,22 +9,32 @@ class AuthScreen extends Component {
 
   render() {
     return (
-      <View>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-        <Text>Auth Screen</Text>
-      </View>
+      <Container style={styles.container}>
+      <Content>
+        <Form>
+          <Item floatingLabel>
+            <Label>Username</Label>
+            <Input />
+          </Item>
+          <Item floatingLabel last>
+            <Label>Password</Label>
+            <Input />
+          </Item>
+        </Form>
+        <Button block><Text>Log in</Text></Button>
+        </Content>
+      </Container>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    marginLeft: 10,
+    marginRight: 10,
+  },
+});
 
 export default AuthScreen;

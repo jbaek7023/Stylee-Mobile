@@ -4,6 +4,10 @@ import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
 
+// For React Redux
+import { Provider } from 'react-redux';
+import store from './store';
+
 export default class App extends React.Component {
   state = {
     assetsAreLoaded: false,
@@ -18,12 +22,14 @@ export default class App extends React.Component {
       return <AppLoading />;
     } else {
       return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          {Platform.OS === 'android' &&
-            <View style={styles.statusBarUnderlay} />}
-          <RootNavigation />
-        </View>
+        <Provider store={store}>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            {Platform.OS === 'android' &&
+              <View style={styles.statusBarUnderlay} />}
+            <RootNavigation />
+          </View>
+        </Provider>
       );
     }
   }
@@ -40,9 +46,14 @@ export default class App extends React.Component {
           Ionicons.font,
           // We include SpaceMono because we use it in HomeScreen.js. Feel free
           // to remove this if you are not using it in your app
-          { 'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf') },
+          { 'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf')},
         ]),
       ]);
+      await Expo.Font.loadAsync({
+        'Roboto': require('native-base/Fonts/Roboto.ttf'),
+        'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+        'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
+      });
     } catch (e) {
       // In this case, you might want to report the error to your error
       // reporting service, for example Sentry

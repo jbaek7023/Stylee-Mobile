@@ -146,4 +146,44 @@ watchman shutdown-server
 watchman watch-del-all
 and restart project
 
-3-
+3- exp: “Node version 4.6.1 is not supported, please use Node.js 6.0 or higher
+XDE : Warning: You are using npm version 5.3.0. There may be bugs in this
+ version, use it at your own risk. We recommend version 4.6.1.
+
+=> npm install npm@4.6.1 -g
+
+4. ctrl + M : Menu
+
+5. clone process
+  1) pull or clone
+  2) npm install
+
+6.
+```
+Couldn't start project on Android: ADB server didn't ACK
+* failed to start daemon *
+error: protocol fault (couldn't read status): Connection reset by peer
+error: protocol fault (couldn't read status): Connection reset by peer
+```
+=> ps aux and kill adb process.
+=> ex) kill -9 12796 (from jaemin 12796 0.3 0.0 ~ ~)
+
+=>OR restart the computer
+
+7.
+```
+jest-haste-map: Watchman crawl failed. Retrying once with node crawler.
+  Usually this happens when watchman isn't running. Create an empty `.watchmanconfig` file in your project's root folder or initialize a git or hg repository in your project.
+  Error: Watchman error: A non-recoverable condition has triggered.  Watchman needs your help!
+The triggering condition was at timestamp=1502849928: inotify-add-watch(/home/jaemin/Desktop/Stylee/workspace/Stylee-Mobile/node_modules/lottie-react-native/lib/android/build/intermediates/classes/debug/com/facebook/drawee/backends) -> The user limit on the total number of inotify watches was reached; increase the fs.inotify.max_user_watches sysctl
+All requests will continue to fail with this message until you resolve
+the underlying problem.  You will find more information on fixing this at
+https://facebook.github.io/watchman/docs/troubleshooting.html#poison-inotify-add-watch. Make sure watchman is running for this project. See https://facebook.github.io/watchman/docs/troubleshooting.html.
+```
+=> sudo sysctl fs.inotify.max_user_watches=32768
+=> restart atom
+=> echo 32768 | sudo tee -a /proc/sys/fs/inotify/max_user_watches
+
+8. Module problem
+returns 500 on Font -> installation process
+https://github.com/GeekyAnts/NativeBase#setup-with-crna
