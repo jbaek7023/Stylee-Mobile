@@ -1,5 +1,6 @@
 import { AsyncStorage } from 'react-native';
 import { Facebook } from 'expo';
+import axios from 'axios';
 
 import {
   FACEBOOK_LOGIN_SUCCESS,
@@ -8,6 +9,8 @@ import {
 
 // AsyncStorage.setItem('fb_token', token); <- returns a promise
 // AsyncStorage.getItem('fb_token');
+
+const ROOT_URL = 'http://localhost:8000'
 
 export const facebookLogin = () => async dispatch => {
   let token = await AsyncStorage.getItem('fb_token');
@@ -33,3 +36,18 @@ const doFacebookLogin = async dispatch => {
   await AsyncStorage.setItem('fb_token', token);
   dispatch({ type: FACEBOOK_LOGIN_SUCCESS, payload: token });
 };
+
+// export const signInUser = ({ username, password }) => async dispatch => {
+//     // let token = await AsyncStorage.getItem('auth_token');
+//     // if (token) {
+//     //   dispatch({ type: AUTH_LOGIN_SUCCESS, payload: token });
+//     // } else {
+//     //   // Post to API
+//     // }
+//     // if(username contains @) {
+//     //   axios.post(`${ROOT_URL}/signin`, { username: email, password })
+//     // } else {
+//     //   axios.post(`${ROOT_URL}/signin`, { username, password })
+//     // }
+//
+// }

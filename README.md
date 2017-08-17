@@ -134,12 +134,12 @@ People
 
 2- facebook::react::Recoverable: Could not open file: No such file or directory
 after reload
-The development server returned response error code: 502
-...
-<h2>Failed to complete tunnel connection</h2>
+The development server returned response error code: 502 ...
+Failed to complete tunnel connection
 
 => (watchman is not working!)
 echo 256 | sudo tee -a /proc/sys/fs/inotify/max_user_instances
+# sudo 니까 일단 첫번째껏만
 echo 32768 | sudo tee -a /proc/sys/fs/inotify/max_queued_events
 echo 65536 | sudo tee -a /proc/sys/fs/inotify/max_user_watches
 watchman shutdown-server
@@ -149,14 +149,13 @@ and restart project
 3- exp: “Node version 4.6.1 is not supported, please use Node.js 6.0 or higher
 XDE : Warning: You are using npm version 5.3.0. There may be bugs in this
  version, use it at your own risk. We recommend version 4.6.1.
-
 => npm install npm@4.6.1 -g
 
 4. ctrl + M : Menu
 
 5. clone process
-  1) pull or clone
-  2) npm install
+  - pull or clone
+  - npm install
 
 6.
 ```
@@ -190,3 +189,6 @@ https://github.com/GeekyAnts/NativeBase#setup-with-crna
 
 9. Android Menu
 Ctrl M
+
+10. COMPLETELY White screen -> Connecting to remote debugger
+=> Restart the simulator AND your project
