@@ -1,4 +1,5 @@
-# Lockerobe-Mobile
+# Stylee-Mobile
+Top issue now: Logged in-> Main -> Back button => logged in page.
 
 ## Feed
 FEED : Outfit + recent activities
@@ -165,6 +166,7 @@ error: protocol fault (couldn't read status): Connection reset by peer
 error: protocol fault (couldn't read status): Connection reset by peer
 ```
 => ps aux and kill adb process.
+ps aux | grep 'adb'
 => ex) kill -9 12796 (from jaemin 12796 0.3 0.0 ~ ~)
 
 =>OR restart the computer
@@ -192,3 +194,26 @@ Ctrl M
 
 10. COMPLETELY White screen -> Connecting to remote debugger
 => Restart the simulator AND your project
+
+11. Access-Control-Allow-Origin header is present... (CORS). <- This is to protect the user => You have to fix this on SERVER side
+
+12.
+
+Couldn't start project on Android: ** daemon still not running
+error: cannot connect to daemon: Connection refused
+error: cannot connect to daemon: Connection refused
+
+=> Just re-click
+
+13. Possible Unhandled Promise Rejection => return your dispatch
+
+14.ouldn't find preset "es2015" relative to directory "/path/to/node/package/attemping/to/install" .
+=> npm install babel-cli babel-preset-es2015
+
+15. Stuck on Loading Screen. => restart
+
+16. Failed to execute 'importScripts' on 'WorkerGlobalScope'
+=> Restart
+
+17. Expo requires Internet Connection
+=> 
