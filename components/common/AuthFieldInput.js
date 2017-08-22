@@ -1,7 +1,7 @@
 import React from 'react';
 import { Item, Label, Input, Text } from 'native-base';
 
-const AuthFieldInput = ({ label, value, onChangeText, placeholder, secureTextEntry }) => {
+const AuthFieldInput = ({ label, value, onChangeText, placeholder, secureTextEntry, returnKeyType }) => {
   return (
     <Item>
       <Input
@@ -10,6 +10,7 @@ const AuthFieldInput = ({ label, value, onChangeText, placeholder, secureTextEnt
         placeholder={placeholder}
         autoCorrect={false}
         secureTextEntry={secureTextEntry}
+        returnKeyType={returnKeyType}
       />
     </Item>
   );

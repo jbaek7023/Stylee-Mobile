@@ -133,6 +133,21 @@ People
 *> import StackNavigator from '../'
 => import { StackNavigator } from '../'
 
+2.0-.
+```
+jest-haste-map: Watchman crawl failed. Retrying once with node crawler.
+  Usually this happens when watchman isn't running. Create an empty `.watchmanconfig` file in your project's root folder or initialize a git or hg repository in your project.
+  Error: Watchman error: A non-recoverable condition has triggered.  Watchman needs your help!
+The triggering condition was at timestamp=1502849928: inotify-add-watch(/home/jaemin/Desktop/Stylee/workspace/Stylee-Mobile/node_modules/lottie-react-native/lib/android/build/intermediates/classes/debug/com/facebook/drawee/backends) -> The user limit on the total number of inotify watches was reached; increase the fs.inotify.max_user_watches sysctl
+All requests will continue to fail with this message until you resolve
+the underlying problem.  You will find more information on fixing this at
+https://facebook.github.io/watchman/docs/troubleshooting.html#poison-inotify-add-watch. Make sure watchman is running for this project. See https://facebook.github.io/watchman/docs/troubleshooting.html.
+```
+=> sudo sysctl fs.inotify.max_user_watches=32768
+=> restart atom
+=> echo 32768 | sudo tee -a /proc/sys/fs/inotify/max_user_watches
+
+
 2- facebook::react::Recoverable: Could not open file: No such file or directory
 after reload
 The development server returned response error code: 502 ...
@@ -171,19 +186,6 @@ ps aux | grep 'adb'
 
 =>OR restart the computer
 
-7.
-```
-jest-haste-map: Watchman crawl failed. Retrying once with node crawler.
-  Usually this happens when watchman isn't running. Create an empty `.watchmanconfig` file in your project's root folder or initialize a git or hg repository in your project.
-  Error: Watchman error: A non-recoverable condition has triggered.  Watchman needs your help!
-The triggering condition was at timestamp=1502849928: inotify-add-watch(/home/jaemin/Desktop/Stylee/workspace/Stylee-Mobile/node_modules/lottie-react-native/lib/android/build/intermediates/classes/debug/com/facebook/drawee/backends) -> The user limit on the total number of inotify watches was reached; increase the fs.inotify.max_user_watches sysctl
-All requests will continue to fail with this message until you resolve
-the underlying problem.  You will find more information on fixing this at
-https://facebook.github.io/watchman/docs/troubleshooting.html#poison-inotify-add-watch. Make sure watchman is running for this project. See https://facebook.github.io/watchman/docs/troubleshooting.html.
-```
-=> sudo sysctl fs.inotify.max_user_watches=32768
-=> restart atom
-=> echo 32768 | sudo tee -a /proc/sys/fs/inotify/max_user_watches
 
 8. Module problem
 returns 500 on Font -> installation process
@@ -216,4 +218,8 @@ error: cannot connect to daemon: Connection refused
 => Restart
 
 17. Expo requires Internet Connection
-=> 
+=>
+
+18. Couldn't load expo:local~~
+=> Restart
+=> Or... redirect from app

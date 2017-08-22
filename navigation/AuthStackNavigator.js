@@ -10,4 +10,10 @@ export default StackNavigator ({
   Signin: {
     screen: SigninScreen,
   },
+}, {
+    header: null,
+    headerMode: 'none',
+    navigationOptions: {
+      header: null
+    }
 });
