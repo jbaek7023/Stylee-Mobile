@@ -11,10 +11,9 @@ class MenuScreen extends Component {
     }
   }
 
-  drawModal = () => {
+  _drawModal = () => {
     return (
       <View><Text>modalHere</Text></View>
-
     );
   }
 

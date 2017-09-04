@@ -6,7 +6,9 @@ import {
   FACEBOOK_LOGIN_FAIL,
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGIN_FAIL,
-  SET_TOKEN
+  SET_TOKEN,
+  SOCIAL_FACEBOOK_LOGIN_FAIL,
+  FACEBOOK_LOGIN_CANCEL
 } from './types';
 
 // AsyncStorage.setItem('fb_token', token); <- returns a promise
@@ -34,7 +36,13 @@ const doFacebookLogin = async dispatch => {
   });
 
   if (type === 'cancel') {
-    return dispatch({ type: FACEBOOK_LOGIN_FAIL })
+    return dispatch({ type: FACEBOOK_LOGIN_CANCEL })
+  }
+
+  if (_.isNull(token)) {
+    // Facebook Network error
+    // Are you Offline?
+    dispatch({ type: FACEBOOK_LOGIN_FAIL });
   }
   doSocialAuthLogin(dispatch, token);
 };
@@ -52,7 +60,7 @@ const doSocialAuthLogin = async (dispatch, token) => {
     } else if (response.status === 403){
       console.log('You are not suposed to see this message. Contact Administrator');
     }
-    dispatch({ type: AUTH_LOGIN_FAIL });
+    dispatch({ type: SOCIAL_FACEBOOK_LOGIN_FAIL });
   });
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, AsyncStorage, View, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { StyleSheet, AsyncStorage, View, TouchableOpacity, Dimensions, Image, KeyboardAvoidingView } from 'react-native';
 import { Container, Content, Button, Form, Text,Input, Label, Item } from 'native-base';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
@@ -7,9 +7,12 @@ import _ from 'lodash';
 import Modal from 'react-native-modal';
 // import DjangoCSRFToken from 'django-react-csrftoken';
 import { width, height, totalSize } from 'react-native-dimension';
+import Hr from 'react-native-hr';
+
 import * as actions from '../../actions';
 
 import { AuthFieldInput } from '../../components/common/AuthFieldInput';
+import { CommonModal } from '../../components/common/CommonModal';
 
 class AuthScreen extends Component {
   static navigationOptions = {
@@ -63,24 +66,6 @@ class AuthScreen extends Component {
     this.props.facebookLogin();
   }
 
-  _renderModal = () => {
-    return (
-      <Container style={styles.modalStyle}>
-        <Modal isVisible={this.state.isModalVisible}>
-          <View style={styles.modalContainer}>
-            <Text style={{fontWeight: 'bold'}}>{this.props.errorMsg}</Text>
-            <Text style={styles.modalText}>{`It looks like ${this.state.username} doesn't match an existing account. If you don't have a Stylee account, you can create one now `}</Text>
-            <View style={styles.modalButtonContainer}>
-              <Button transparent style={styles.modalButtonStyle} onPress={this._hideModal}>
-                <Text style={styles.modalText}>Try Agin</Text>
-              </Button>
-            </View>
-          </View>
-        </Modal>
-      </Container>
-    );
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -89,14 +74,14 @@ class AuthScreen extends Component {
             <Text>English</Text>
           </Button>
         </View>
-        <View style={styles.formAndLogoContainer}>
+        <KeyboardAvoidingView behavior="padding" style={styles.formAndLogoContainer}>
           <View style={styles.logoContainer}>
             <Image
               style={styles.logo}
               source={require('../../assets/images/styleeicon.png')}
             />
           </View>
-          <Form>
+          <Form style={styles.formStyle}>
             <AuthFieldInput
               placeholder="Username or Email"
               value={this.state.username}
@@ -115,17 +100,23 @@ class AuthScreen extends Component {
             <Button block style={styles.buttonStyle} onPress={this._authClicked}>
               <Text style={styles.buttonText}>Log in</Text>
             </Button>
-            <Button block style={styles.buttonStyle} onPress={this._fbClicked}>
+            <Hr lineColor='#b3b3b3' text='OR'/>
+            <Button block onPress={this._fbClicked}>
               <Text style={styles.buttonText}>Log in with the Facebook</Text>
             </Button>
           </View>
           <View>
-            {this._renderModal()}
+            <CommonModal
+              username={this.state.username}
+              _hideModal={this._hideModal}
+              errorMsg={this.props.errorMsg}
+              isModalVisible={this.state.isModalVisible}
+            />
           </View>
           <View style={styles.signUpContainer}>
             <Text>CREATE NEW STYLEE ACCOUNT</Text>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     )
   }
@@ -144,6 +135,9 @@ const styles = StyleSheet.create({
   languagePosition: {
     alignItems: 'center'
   },
+  formStyle: {
+    paddingTop: 10
+  },
   formAndLogoContainer: {
     flex: 5,
     justifyContent: 'center',
@@ -152,9 +146,11 @@ const styles = StyleSheet.create({
   signUpContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    paddingBottom: 10
   },
   buttonContainer: {
+    marginTop:10,
     paddingLeft: 10,
     paddingRight: 10,
   },
@@ -165,44 +161,13 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   logo: {
-    width: 200,
-    height: 200
-  },
-  modalContainer: {
-    marginTop: 20
-  },
-  buttonStyle: {
-    marginTop: 10,
-  },
-  modalContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    width: width(100),
-    height: height(30),
-    backgroundColor:'pink'
-  },
-  modalTextTitle: {
-    fontSize: 16,
-    flex: 1,
-    justifyContent: 'center'
-  },
-  modalText: {
-    fontSize: 12,
-    flex: 1,
-    justifyContent: 'center',
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    backgroundColor:'blue'
-  },
-  modalButtonStyle: {
-    alignItems: 'flex-end',
+    width: width(50),
+    height: height(25)
   }
 });
 
 function mapStateToProps({ auth: {token, errorMsg} }) {
+  // errorMsg != null : trueErrorMsg
   return { token, errorMsg };
 }
 export default reduxForm({
