@@ -5,6 +5,7 @@ import {
   SET_TOKEN,
   SOCIAL_FACEBOOK_LOGIN_FAIL,
   FACEBOOK_LOGIN_CANCEL,
+  SET_DEFAULT_ALL,
 } from '../actions/types';
 
 const INITIAL_STATE = { token: null, authError: '' }
@@ -23,6 +24,8 @@ export default function(state = INITIAL_STATE, action) {
       return { token: action.payload, errorMsg: '' };
     case SOCIAL_FACEBOOK_LOGIN_FAIL:
       return { token: null, errorMsg: `Can't Login with your Facebook account`}
+    case SET_DEFAULT_ALL:
+      return { token: null, errorMsg: ''}
     default:
       return state;
   }

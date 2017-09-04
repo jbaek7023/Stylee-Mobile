@@ -31,7 +31,6 @@ class AuthScreen extends Component {
 
   componentWillMount() {
     // debugging purpose
-    AsyncStorage.removeItem('stylee_token');
     this._onAuthComplete(this.props);
   }
 

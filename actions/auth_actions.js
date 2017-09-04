@@ -8,7 +8,8 @@ import {
   AUTH_LOGIN_FAIL,
   SET_TOKEN,
   SOCIAL_FACEBOOK_LOGIN_FAIL,
-  FACEBOOK_LOGIN_CANCEL
+  FACEBOOK_LOGIN_CANCEL,
+  SET_DEFAULT_ALL
 } from './types';
 
 // AsyncStorage.setItem('fb_token', token); <- returns a promise
@@ -86,3 +87,8 @@ export const setToken = ( token ) => ({
   type: SET_TOKEN,
   payload: token
 });
+
+export const setDefaultAll = () => ({
+  type: SET_DEFAULT_ALL,
+  payload: null
+})
