@@ -223,3 +223,7 @@ error: cannot connect to daemon: Connection refused
 18. Couldn't load expo:local~~
 => Restart
 => Or... redirect from app
+
+19. Connection error
+=> adb reverse tcp:8081 tcp:8081
+=> Restart whole project and emulator -> (same error)

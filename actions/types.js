@@ -6,3 +6,4 @@ export const SET_TOKEN = 'set_token';
 export const SOCIAL_FACEBOOK_LOGIN_FAIL = 'social_facebook_login_fail';
 export const FACEBOOK_LOGIN_CANCEL = 'facebook_login_cancel';
 export const SET_DEFAULT_ALL = 'set_default_all';
+export const RETRIEVE_CUR_USER = 'retrieve_current_user';

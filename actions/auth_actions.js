@@ -18,20 +18,8 @@ import {
 // localhost -> 10.0.2.2:YOUR_PORT
 const ROOT_URL = 'http://10.0.2.2:8000'
 
-export const facebookLogin = () => async dispatch => {
-  let token = await AsyncStorage.getItem('fb_token');
-  if (token) {
-    // dispatch an action saying FB login is done
-    doSocialAuthLogin(dispatch, token);
-    // dispatch({ type: FACEBOOK_LOGIN_SUCCESS, payload: token });
-  } else {
-    // start FB login process
-    doFacebookLogin(dispatch);
-  }
-};
-
 // Getting dispatch as a parameter because we want to access to the dispatch from the parent function
-const doFacebookLogin = async dispatch => {
+export const doFacebookLogin = () => async dispatch => {
   let { type, token } = await Facebook.logInWithReadPermissionsAsync('1946324505614230', {
       permissions: ['public_profile']
   });
@@ -45,10 +33,13 @@ const doFacebookLogin = async dispatch => {
     // Are you Offline?
     dispatch({ type: FACEBOOK_LOGIN_FAIL });
   }
+
   doSocialAuthLogin(dispatch, token);
 };
 
 const doSocialAuthLogin = async (dispatch, token) => {
+  console.log(token);
+
   axios.post(`${ROOT_URL}/rest-auth/facebook/`, {
     token
   }).then(response => {
@@ -87,8 +78,3 @@ export const setToken = ( token ) => ({
   type: SET_TOKEN,
   payload: token
 });
-
-export const setDefaultAll = () => ({
-  type: SET_DEFAULT_ALL,
-  payload: null
-})

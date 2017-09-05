@@ -26,6 +26,7 @@ class AuthScreen extends Component {
     error: '',
     isModalVisible: false
   }
+
   _showModal = () => this.setState({ isModalVisible: true })
   _hideModal = () => this.setState({ isModalVisible: false })
 
@@ -53,6 +54,7 @@ class AuthScreen extends Component {
     }
     if (props.token) {
       this.props.navigation.navigate('Main');
+      this.setState({ password: ''})
     }
   }
 
@@ -62,7 +64,11 @@ class AuthScreen extends Component {
 
   _fbClicked = () => {
     // Call the FacebookAction
-    this.props.facebookLogin();
+    this.props.doFacebookLogin();
+  }
+
+  _goSignIn = () => {
+    this.props.navigation.navigate('Signin');
   }
 
   render() {
@@ -113,7 +119,7 @@ class AuthScreen extends Component {
             />
           </View>
           <View style={styles.signUpContainer}>
-            <Text>CREATE NEW STYLEE ACCOUNT</Text>
+            <Text onPress={this._goSignIn} >CREATE NEW STYLEE ACCOUNT</Text>
           </View>
         </KeyboardAvoidingView>
       </View>

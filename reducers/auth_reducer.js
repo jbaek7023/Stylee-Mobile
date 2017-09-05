@@ -8,7 +8,7 @@ import {
   SET_DEFAULT_ALL,
 } from '../actions/types';
 
-const INITIAL_STATE = { token: null, authError: '' }
+const INITIAL_STATE = { token: null, errorMsg: '' }
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -21,11 +21,13 @@ export default function(state = INITIAL_STATE, action) {
     case AUTH_LOGIN_FAIL:
       return { token: null, errorMsg: `Can't Find Account` };
     case SET_TOKEN:
+      console.log('passing set token');
+      console.log(action.payload);
       return { token: action.payload, errorMsg: '' };
+    case SET_DEFAULT_ALL:
+      return { token: null, errorMsg: '' };
     case SOCIAL_FACEBOOK_LOGIN_FAIL:
       return { token: null, errorMsg: `Can't Login with your Facebook account`}
-    case SET_DEFAULT_ALL:
-      return { token: null, errorMsg: ''}
     default:
       return state;
   }

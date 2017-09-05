@@ -20,6 +20,20 @@ class MenuScreen extends Component {
   state = {
     isModalVisible: false
   }
+
+  componentWillMount() {
+    // retrieve user data // add username and bio to props
+    this.props.retrieveCurrentUser(this.props.token);
+
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // retrieve user data // add username and bio to props
+    if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
+      nextProps.navigation.navigate('Auth');
+    }
+  }
+
   _showModal = () => this.setState({ isModalVisible: true })
   _hideModal = () => this.setState({ isModalVisible: false })
 
@@ -36,22 +50,20 @@ class MenuScreen extends Component {
   }
 
   _doLogOut = () => {
+    // remove stylee token, close modal, set all props null.
     AsyncStorage.removeItem('stylee_token');
     this.setState({ isModalVisible: false })
-    // Set props.token == null
-    this.setDefaultAll;
-    if ( this.props.token == undefined ) {
-      this.props.navigation.navigate('Auth');
-    }
+    this.props.setToken();
+
   }
 
   render() {
-    var items = ['John Baek','Language', 'Calendar','Logout'];
     return (
       <Container>
         <List>
           <ListItem>
-            <Text>jbaek7023</Text>
+            <Text>{this.props.username}</Text>
+            <Text>{this.props.bio}</Text>
           </ListItem>
           <ListItem>
             <Text>Find Password</Text>
@@ -70,10 +82,16 @@ class MenuScreen extends Component {
           </ListItem>
         </List>
         {this._drawModal()}
+        <Text></Text>
       </Container>
     );
-
   }
 }
 
-export default connect(null, actions)(MenuScreen);
+function mapStateToProps({ auth: { token }, menu:{ username, bio }}) {
+  return {
+    token, username, bio
+  }
+}
+
+export default connect(mapStateToProps, actions)(MenuScreen);
