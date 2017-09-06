@@ -4,15 +4,23 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { AuthFieldInput } from '../../components/common/AuthFieldInput';
 import { Field, reduxForm } from 'redux-form';
 import { Text, Button, Form, Input, Label } from 'native-base';
+import * as actions from '../../actions';
+import { connect } from 'react-redux';
 
-class SigninScreen extends Component {
+class SignUpUserBioScreen extends Component {
   state = {
-    username: '',
+    bio: '',
     password: '',
   }
 
   _submitEmail = () => {
-    
+    this.props.addFullNameAndPassword(this.state.bio, this.state.password)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.newAuth.bio) {
+      nextProps.navigation.navigate('SignUpUsername')
+    }
   }
 
   render() {
@@ -26,10 +34,17 @@ class SigninScreen extends Component {
         </View>
         <Form style={styles.formStyle}>
           <AuthFieldInput
-            placeholder="Email"
-            value={this.state.username}
-            onChangeText={username => this.setState({username})}
+            placeholder="Full Name"
+            value={this.state.bio}
+            onChangeText={bio => this.setState({bio})}
             returnKeyType="next"
+          />
+          <AuthFieldInput
+            placeholder="Password"
+            value={this.state.password}
+            onChangeText={password => this.setState({password})}
+            secureTextEntry
+            returnKeyType="go"
           />
         </Form>
         <View style={styles.buttonContainer}>
@@ -67,4 +82,9 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SigninScreen;
+
+function mapStateToProps({newAuth}) {
+  return { newAuth }
+}
+
+export default connect(mapStateToProps, actions)(SignUpUserBioScreen);

@@ -67,8 +67,8 @@ class AuthScreen extends Component {
     this.props.doFacebookLogin();
   }
 
-  _goSignIn = () => {
-    this.props.navigation.navigate('Signin');
+  _goSignUp = () => {
+    this.props.navigation.navigate('SignUp');
   }
 
   render() {
@@ -119,7 +119,7 @@ class AuthScreen extends Component {
             />
           </View>
           <View style={styles.signUpContainer}>
-            <Text onPress={this._goSignIn} >CREATE NEW STYLEE ACCOUNT</Text>
+            <Text onPress={this._goSignUp} >CREATE NEW STYLEE ACCOUNT</Text>
           </View>
         </KeyboardAvoidingView>
       </View>
