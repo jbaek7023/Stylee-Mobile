@@ -7,8 +7,9 @@ import {
   NETWORK_ERROR,
   ADD_VALID_EMAIL_FAIL,
   ADD_VALID_USERNAME,
-  ADD_EMAIL,
-  ADD_BIO_AND_PASSWORD
+  ADD_BIO_AND_PASSWORD,
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
@@ -19,16 +20,22 @@ export const doEmailCheck = (email) => async dispatch => {
 
   if (response.status === 200) {
     // Return valid email and username
+    response.data.email = email;
     dispatch({ type: ADD_VALID_EMAIL, payload: response.data })
   } else {
     dispatch({ type: NETWORK_ERROR })
   }
 }
 
-export const addEmail = (email) => ({
-  type: ADD_EMAIL,
-  payload: email
-})
+export const doUsernameCheck = (username) => async dispatch => {
+  let response = await axios.get(`${ROOT_URL}/profile/unamecheck/?un=${username}`)
+  if (response.status === 200) {
+    // Return valid email and username
+    dispatch({ type: ADD_VALID_USERNAME, payload: response.data })
+  } else {
+    dispatch({ type: NETWORK_ERROR })
+  }
+}
 
 export const addFullNameAndPassword = (fullname, password) => ({
   // add fullname and password to the props
@@ -37,17 +44,29 @@ export const addFullNameAndPassword = (fullname, password) => ({
 })
 
 
-export const registerNewUser = ( username, password, email ) => async dispatch => {
-  let response = await axios.post(`${ROOT_URL}/email/check`, {
-    username
-  })
+export const registerUser = ( username, email, password ) => async dispatch => {
+  console.log('username')
+  console.log(username)
+  console.log('password')
+  console.log(password)
+  console.log('email')
+  console.log(email)
 
-  if (response.status === 200) {
-    // Return valid email and username
-    dispatch({ type: ADD_VALID_EMAIL, payload: response })
+  let response = await axios.post(`${ROOT_URL}/rest-auth/registration/`, {
+    username,
+    email,
+    password1: password,
+    password2: password
+  })
+  if(response.data.token) {
+    // registration successful
+    console.log(response.data);
+    AsyncStorage.setItem('stylee_token', response.data.token);
+    dispatch({ type: REGISTER_SUCCESS, payload: response.data.token })
   } else {
-    dispatch({ type: ADD_VALID_EMAIL_FAIL })
+    dispatch({ type: REGISTER_FAIL, payload: response.data })
   }
+
 
   // get Username
 

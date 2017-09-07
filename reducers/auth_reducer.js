@@ -6,6 +6,8 @@ import {
   SOCIAL_FACEBOOK_LOGIN_FAIL,
   FACEBOOK_LOGIN_CANCEL,
   SET_DEFAULT_ALL,
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
 } from '../actions/types';
 
 const INITIAL_STATE = { token: null, errorMsg: '' }
@@ -28,6 +30,11 @@ export default function(state = INITIAL_STATE, action) {
       return { token: null, errorMsg: '' };
     case SOCIAL_FACEBOOK_LOGIN_FAIL:
       return { token: null, errorMsg: `Can't Login with your Facebook account`}
+
+    case REGISTER_SUCCESS:
+      return { token: action.payload, errorMsg: ''}
+    case REGISTER_FAIL:
+      return { token: null, errorMsg: '' }
     default:
       return state;
   }

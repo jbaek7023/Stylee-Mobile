@@ -14,7 +14,7 @@ class MenuScreen extends Component {
     headerMode: 'none',
     navigationOptions: {
       header: null
-    }
+    },
   }
 
   state = {
@@ -24,13 +24,17 @@ class MenuScreen extends Component {
   componentWillMount() {
     // retrieve user data // add username and bio to props
     this.props.retrieveCurrentUser(this.props.token);
-
   }
 
   componentWillReceiveProps(nextProps) {
     // retrieve user data // add username and bio to props
     if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
-      nextProps.navigation.navigate('Auth');
+      nextProps.navigation.navigate('Autho');
+    } else {
+      // if token is updated, retrieve current logged in user
+      if ( this.props.token !== nextProps.token) {
+        this.props.retrieveCurrentUser(nextProps.token);
+      }
     }
   }
 
@@ -54,7 +58,10 @@ class MenuScreen extends Component {
     AsyncStorage.removeItem('stylee_token');
     this.setState({ isModalVisible: false })
     this.props.setToken();
+  }
 
+  _changePassword = () => {
+    this.props.navigation.navigate('ChangePassword');
   }
 
   render() {
@@ -66,16 +73,20 @@ class MenuScreen extends Component {
             <Text>{this.props.bio}</Text>
           </ListItem>
           <ListItem>
-            <Text>Find Password</Text>
+            <Text>! Edit Profile</Text>
+          </ListItem>
+          <ListItem onPress={this._changePassword}>
+            <Text>Change Password </Text>
+          </ListItem>
+
+          <ListItem>
+            <Text>! Language Setting</Text>
           </ListItem>
           <ListItem>
-            <Text>Change Password</Text>
+            <Text>! Q&A</Text>
           </ListItem>
           <ListItem>
-            <Text>Q&A</Text>
-          </ListItem>
-          <ListItem>
-            <Text>Find Password</Text>
+            <Text>! Calendar</Text>
           </ListItem>
           <ListItem onPress={this._showModal}>
             <Text>Logout</Text>

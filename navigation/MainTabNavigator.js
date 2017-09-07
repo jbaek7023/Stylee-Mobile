@@ -13,7 +13,7 @@ import FeedScreen from '../screens/feed/FeedScreen';
 import StylebookScreen from '../screens/stylebook/StylebookScreen';
 import WardrobeScreen from '../screens/wardrobe/WardrobeScreen';
 import NotificationScreen from '../screens/notification/NotificationScreen';
-import MenuScreen from '../screens/menu/MenuScreen';
+import MenuStackNavigator from './MenuStackNavigator';
 
 export default TabNavigator(
   {
@@ -30,7 +30,7 @@ export default TabNavigator(
       screen: NotificationScreen,
     },
     Menu: {
-      screen: MenuScreen,
+      screen: MenuStackNavigator,
     },
   },
   {
@@ -76,6 +76,6 @@ export default TabNavigator(
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     animationEnabled: false,
-    swipeEnabled: false,
+    swipeEnabled: false
   }
 );

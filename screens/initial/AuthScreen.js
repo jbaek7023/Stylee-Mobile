@@ -41,19 +41,21 @@ class AuthScreen extends Component {
 
   // When we rerender,
   componentWillReceiveProps(nextProps) {
+    // onAuthComplete Pass twice. so. it's
     this._onAuthComplete(nextProps);
   }
 
   async _onAuthComplete(props) {
     let token = await AsyncStorage.getItem('stylee_token');
     if(!_.isNull(token)) {
+      console.log('passing onAuthTwice?')
       this.props.setToken(token);
     }
     if(this.props.errorMsg) {
       this._showModal();
     }
     if (props.token) {
-      this.props.navigation.navigate('Main');
+      this.props.navigation.navigate('Feed');
       this.setState({ password: ''})
     }
   }

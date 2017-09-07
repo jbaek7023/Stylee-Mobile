@@ -22,5 +22,6 @@ export default StackNavigator ({
     headerMode: 'none',
     navigationOptions: {
       header: null
-    }
+    },
+    lazy: true
 });

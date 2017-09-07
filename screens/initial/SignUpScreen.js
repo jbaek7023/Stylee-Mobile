@@ -8,6 +8,10 @@ import * as actions from '../../actions';
 import { connect } from 'react-redux';
 
 class SignUpScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: ''
+  });
+
   state = {
     email: '',
   }
@@ -15,12 +19,7 @@ class SignUpScreen extends Component {
   _submitEmail = () => {
     // async get
     this.props.doEmailCheck(this.state.email)
-    // newAuth.judge.username
-    // if(this.props.newAuth.username) {
-    //
-    // }
-    this.props.addEmail(this.state.email);
-    
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -29,7 +28,6 @@ class SignUpScreen extends Component {
     } else if (nextProps.newAuth.obtained==0) {
       // Email is Taken CSS
       console.log('obtained');
-
       // don't forget to implement 404 case
     }
   }

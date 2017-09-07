@@ -12,4 +12,5 @@ export const ADD_BIO_AND_PASSWORD = 'add_bio_and_password';
 export const ADD_USERNAME = 'add_username';
 export const ADD_VALID_EMAIL = 'add_valid_email';
 export const ADD_VALID_USERNAME = 'add_valid_username';
-export const ADD_EMAIL = 'add_email';
+export const REGISTER_SUCCESS = 'register_success';
+export const REGISTER_FAIL= 'register_fail';
