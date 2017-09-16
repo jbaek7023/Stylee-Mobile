@@ -23,7 +23,7 @@ class MenuScreen extends Component {
 
   componentWillMount() {
     // retrieve user data // add username and bio to props
-    this.props.retrieveCurrentUser(this.props.token);
+    this.props.retrieveCurrentUser(this.props.token, this.props.hType);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,7 +33,7 @@ class MenuScreen extends Component {
     } else {
       // if token is updated, retrieve current logged in user
       if ( this.props.token !== nextProps.token) {
-        this.props.retrieveCurrentUser(nextProps.token);
+        this.props.retrieveCurrentUser(nextProps.token, this.props.hType);
       }
     }
   }
@@ -56,22 +56,31 @@ class MenuScreen extends Component {
   _doLogOut = () => {
     // remove stylee token, close modal, set all props null.
     AsyncStorage.removeItem('stylee_token');
+    AsyncStorage.removeItem('fb_token');
     this.setState({ isModalVisible: false })
-    this.props.setToken();
+    this.props.setToken(undefined, undefined);
   }
 
   _changePassword = () => {
     this.props.navigation.navigate('ChangePassword');
   }
 
+  _renderProfile = () => {
+    // https://www.iconfinder.com/search/?q=user
+    return (
+      <ListItem>
+        <Text>{this.props.username}</Text>
+        <Text>{this.props.bio}</Text>
+      </ListItem>
+    );
+
+  }
+
   render() {
     return (
       <Container>
         <List>
-          <ListItem>
-            <Text>{this.props.username}</Text>
-            <Text>{this.props.bio}</Text>
-          </ListItem>
+          {this._renderProfile()}
           <ListItem>
             <Text>! Edit Profile</Text>
           </ListItem>
@@ -99,9 +108,9 @@ class MenuScreen extends Component {
   }
 }
 
-function mapStateToProps({ auth: { token }, menu:{ username, bio }}) {
+function mapStateToProps({ auth: { token, hType }, menu:{ username, bio }}) {
   return {
-    token, username, bio
+    token, username, bio, hType
   }
 }
 

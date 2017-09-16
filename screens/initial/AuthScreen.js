@@ -14,6 +14,8 @@ import * as actions from '../../actions';
 import { AuthFieldInput } from '../../components/common/AuthFieldInput';
 import { CommonModal } from '../../components/common/CommonModal';
 
+import { AppLoading } from 'expo';
+
 class AuthScreen extends Component {
   static navigationOptions = {
     title: 'Authentication',
@@ -24,15 +26,29 @@ class AuthScreen extends Component {
     username: '',
     password: '',
     error: '',
-    isModalVisible: false
+    isModalVisible: false,
+    isReady: false,
   }
 
   _showModal = () => this.setState({ isModalVisible: true })
-  _hideModal = () => this.setState({ isModalVisible: false })
 
-  componentWillMount() {
-    // debugging purpose
-    this._onAuthComplete(this.props);
+  _hideModal = () => {
+    // set error
+    this.props.emptyErrorMsg;
+    this.setState({ isModalVisible: false });
+  }
+
+  async componentWillMount() {
+    let token = await AsyncStorage.getItem('stylee_token');
+    if(!_.isNull(token)) {
+      this.props.setToken(token, 1);
+    } else {
+      let fbToken = await AsyncStorage.getItem('fb_token');
+      if(!_.isNull(fbToken)) {
+        this.props.setToken(fbToken, 2);
+      }
+    }
+    this.setState({isLoading:true});
   }
 
   componentDidMount() {
@@ -42,20 +58,15 @@ class AuthScreen extends Component {
   // When we rerender,
   componentWillReceiveProps(nextProps) {
     // onAuthComplete Pass twice. so. it's
-    this._onAuthComplete(nextProps);
-  }
+    console.log('yo');
 
-  async _onAuthComplete(props) {
-    let token = await AsyncStorage.getItem('stylee_token');
-    if(!_.isNull(token)) {
-      console.log('passing onAuthTwice?')
-      this.props.setToken(token);
-    }
-    if(this.props.errorMsg) {
+    console.log(nextProps.errorMsg);
+    if(nextProps.errorMsg) {
       this._showModal();
     }
-    if (props.token) {
-      this.props.navigation.navigate('Feed');
+    this.setState({isLoading:true});
+    if (nextProps.hType==1 || nextProps.hType==2) {
+      nextProps.navigation.navigate('Feed');
       this.setState({ password: ''})
     }
   }
@@ -74,6 +85,9 @@ class AuthScreen extends Component {
   }
 
   render() {
+    if(!this.state.isLoading) {
+      return <AppLoading />;
+    }
     return (
       <View style={styles.container}>
         <View style={styles.languageContainer}>
@@ -173,9 +187,9 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({ auth: {token, errorMsg} }) {
+function mapStateToProps({ auth: {token, hType,errorMsg} }) {
   // errorMsg != null : trueErrorMsg
-  return { token, errorMsg };
+  return { token, errorMsg, hType };
 }
 export default reduxForm({
   form: 'SignInUserForm',

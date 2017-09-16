@@ -8,33 +8,39 @@ import {
   SET_DEFAULT_ALL,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  FB_AUTH_LOGIN_SUCCESS,
+  FB_AUTH_LOGIN_FAIL,
+  EMPTY_ERROR_MSG
 } from '../actions/types';
 
-const INITIAL_STATE = { token: null, errorMsg: '' }
+const INITIAL_STATE = { token: null, errorMsg: undefined }
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FACEBOOK_LOGIN_CANCEL:
-      return { token: null, errorMsg: '' }
+      return { ...state, token: null, errorMsg: undefined }
     case FACEBOOK_LOGIN_FAIL:
-      return { token: null, errorMsg: 'You are not Online' }
+      return { ...state, token: null, errorMsg: 'You are not Online' }
+    case FB_AUTH_LOGIN_SUCCESS:
+      return { ...state, fbToken: action.payload, errorMsg: undefined, hType: 2}
+    case FB_AUTH_LOGIN_FAIL:
+      return { ...state, fbToken: null, errorMsg: 'Contact Administrator'}
     case AUTH_LOGIN_SUCCESS:
-      return { token: action.payload, errorMsg: ''};
+      return { ...state, token: action.payload, errorMsg: undefined, hType: 1};
     case AUTH_LOGIN_FAIL:
-      return { token: null, errorMsg: `Can't Find Account` };
+      return { ...state, token: null, errorMsg: `Can't Find Account` };
     case SET_TOKEN:
-      console.log('passing set token');
-      console.log(action.payload);
-      return { token: action.payload, errorMsg: '' };
+      return { ...state, token: action.payload.token, hType: action.payload.hType, errorMsg: '' };
     case SET_DEFAULT_ALL:
-      return { token: null, errorMsg: '' };
+      return { ...state, token: null, errorMsg: undefined };
     case SOCIAL_FACEBOOK_LOGIN_FAIL:
-      return { token: null, errorMsg: `Can't Login with your Facebook account`}
-
+      return { ...state, token: null, errorMsg: `Can't Login with your Facebook account`}
     case REGISTER_SUCCESS:
-      return { token: action.payload, errorMsg: ''}
+      return { ...state, token: action.payload, errorMsg: '', hType: 1 }
     case REGISTER_FAIL:
-      return { token: null, errorMsg: '' }
+      return { ...state, token: null, errorMsg: undefined }
+    case EMPTY_ERROR_MSG:
+      return { ...state, errorMsg: undefined}
     default:
       return state;
   }

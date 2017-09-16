@@ -7,6 +7,8 @@ import { Text, Button, Form, Input, Label } from 'native-base';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import _ from 'lodash';
+
 
 const ROOT_URL = 'http://10.0.2.2:8000';
 
@@ -14,22 +16,6 @@ class SignUpUsernameScreen extends Component {
   state = {
     username: this.props.newAuth.username,
     isValidUsername: true,
-  }
-
-  _handleChange = async (username) => {
-    this.setState({username})
-    let response = await axios.get(`${ROOT_URL}/profile/unamecheck/?un=${username}`)
-    if (response.status === 200) {
-        if(response.data.obtained) {
-          this.setState({isValidUsername: false})
-        } else {
-          this.setState({isValidUsername: true})
-        }
-    } else {
-
-    }
-    console.log('isValidUsername');
-    console.log(this.state.isValidUsername);
   }
 
   _register = () => {
@@ -44,8 +30,6 @@ class SignUpUsernameScreen extends Component {
     this.props.registerUser(username, email, password);
     // invalid? login? username should be wrong.
     // email: valid, password: valid, bio: valid, username: valid
-
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -69,7 +53,7 @@ class SignUpUsernameScreen extends Component {
           <AuthFieldInput
             placeholder="Username"
             value={this.state.username}
-            onChangeText={username => this._handleChange(username)}
+            onChangeText={username => this.setState({username})}
             returnKeyType="go"
           />
         </Form>

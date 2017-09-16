@@ -9,7 +9,10 @@ import {
   SET_TOKEN,
   SOCIAL_FACEBOOK_LOGIN_FAIL,
   FACEBOOK_LOGIN_CANCEL,
-  SET_DEFAULT_ALL
+  SET_DEFAULT_ALL,
+  FB_AUTH_LOGIN_SUCCESS,
+  FB_AUTH_LOGIN_FAIL,
+  EMPTY_ERROR_MSG
 } from './types';
 
 // AsyncStorage.setItem('fb_token', token); <- returns a promise
@@ -38,22 +41,19 @@ export const doFacebookLogin = () => async dispatch => {
 };
 
 const doSocialAuthLogin = async (dispatch, token) => {
-  console.log(token);
-
-  axios.post(`${ROOT_URL}/rest-auth/facebook/`, {
+  let response = await axios.post(`${ROOT_URL}/auth/convert-token/`, {
+    grant_type: 'convert_token',
+    client_id: 'jsEqE859ixa2TCXg5Fib26A9NxE1Pu6AqUbztmzm',
+    backend: 'facebook',
     token
-  }).then(response => {
-    AsyncStorage.setItem('stylee_token', response.data.token);
-    dispatch({ type: AUTH_LOGIN_SUCCESS, payload: response.data.token });
   })
-  .catch(response => {
-    if(response.status === 400) {
-      console.log('Not authorized. ');
-    } else if (response.status === 403){
-      console.log('You are not suposed to see this message. Contact Administrator');
-    }
-    dispatch({ type: SOCIAL_FACEBOOK_LOGIN_FAIL });
-  });
+  if (response.data.access_token) {
+    AsyncStorage.setItem('fb_token', response.data.access_token);
+    // fb is type 2
+    dispatch({ type: FB_AUTH_LOGIN_SUCCESS, payload: response.data.access_token });
+  } else {
+    dispatch({ type: FB_AUTH_LOGIN_FAIL });
+  }
 }
 
 export const doAuthLogin = ( username, password ) => dispatch => {
@@ -61,6 +61,7 @@ export const doAuthLogin = ( username, password ) => dispatch => {
     username,
     password,
   }).then(response => {
+    // fb is type 2
     AsyncStorage.setItem('stylee_token', response.data.token);
     dispatch({ type: AUTH_LOGIN_SUCCESS, payload: response.data.token });
   })
@@ -74,7 +75,11 @@ export const doAuthLogin = ( username, password ) => dispatch => {
   });
 };
 
-export const setToken = ( token ) => ({
+export const setToken = ( token, hType ) => ({
   type: SET_TOKEN,
-  payload: token
+  payload: { token, hType }
 });
+
+export const emptyErrorMsg = () => ({
+  type: EMPTY_ERROR_MSG
+})

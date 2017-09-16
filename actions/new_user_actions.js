@@ -45,13 +45,6 @@ export const addFullNameAndPassword = (fullname, password) => ({
 
 
 export const registerUser = ( username, email, password ) => async dispatch => {
-  console.log('username')
-  console.log(username)
-  console.log('password')
-  console.log(password)
-  console.log('email')
-  console.log(email)
-
   let response = await axios.post(`${ROOT_URL}/rest-auth/registration/`, {
     username,
     email,
@@ -60,8 +53,8 @@ export const registerUser = ( username, email, password ) => async dispatch => {
   })
   if(response.data.token) {
     // registration successful
-    console.log(response.data);
     AsyncStorage.setItem('stylee_token', response.data.token);
+    // set header type prop
     dispatch({ type: REGISTER_SUCCESS, payload: response.data.token })
   } else {
     dispatch({ type: REGISTER_FAIL, payload: response.data })
