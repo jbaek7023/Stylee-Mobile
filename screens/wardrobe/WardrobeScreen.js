@@ -3,7 +3,8 @@ import { View, Text } from 'react-native';
 
 class WardrobeScreen extends Component {
   static navigationOptions = {
-    title: 'Wardrobe'
+    title: 'Wardrobe',
+    tabBarVisible: false,
   }
   render() {
     return (

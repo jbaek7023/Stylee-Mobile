@@ -10,8 +10,8 @@ import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 import FeedScreen from '../screens/feed/FeedScreen';
-import StylebookScreen from '../screens/stylebook/StylebookScreen';
-import WardrobeScreen from '../screens/wardrobe/WardrobeScreen';
+import StylebookStackNavigator from './StylebookStackNavigator';
+import CameraScreen from '../screens/camera/CameraScreen';
 import NotificationScreen from '../screens/notification/NotificationScreen';
 import MenuStackNavigator from './MenuStackNavigator';
 
@@ -21,10 +21,10 @@ export default TabNavigator(
       screen: FeedScreen,
     },
     Stylebook: {
-      screen: StylebookScreen,
+      screen: StylebookStackNavigator,
     },
-    Wardrobe: {
-      screen: WardrobeScreen,
+    Camera: {
+      screen: CameraScreen,
     },
     Noti: {
       screen: NotificationScreen,
@@ -35,6 +35,7 @@ export default TabNavigator(
   },
   {
     navigationOptions: ({ navigation }) => ({
+      header: null,
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
         let iconName;
@@ -42,26 +43,28 @@ export default TabNavigator(
           case 'Feed':
             iconName = Platform.OS === 'ios'
               ? `ios-information-circle${focused ? '' : '-outline'}`
-              : 'md-information-circle';
+              : 'md-list-box';
             break;
           case 'Stylebook':
             iconName = Platform.OS === 'ios'
               ? `ios-link${focused ? '' : '-outline'}`
-              : 'md-link';
+              : 'md-albums';
             break;
-          case 'Wardrobe':
+          case 'Camera':
             iconName = Platform.OS === 'ios'
               ? `ios-link${focused ? '' : '-outline'}`
-              : 'md-link';
+              : 'md-camera';
             break;
           case 'Noti':
             iconName = Platform.OS === 'ios'
               ? `ios-options${focused ? '' : '-outline'}`
-              : 'md-options';
+              : 'md-notifications';
+            break;
           case 'Menu':
             iconName = Platform.OS === 'ios'
               ? `ios-options${focused ? '' : '-outline'}`
-              : 'md-options';
+              : 'md-menu';
+            break;
         }
         return (
           <Ionicons
@@ -73,9 +76,15 @@ export default TabNavigator(
         );
       },
     }),
+    header: null,
+    headerMode: 'none',
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     animationEnabled: false,
-    swipeEnabled: false
+    swipeEnabled: false,
+    backBehavior: 'none',
+    tabBarOptions: {
+      inactiveTintColor: '#455a64'
+    }
   }
 );

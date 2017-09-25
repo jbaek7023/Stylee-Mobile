@@ -23,3 +23,9 @@ export const ADD_VALID_EMAIL = 'add_valid_email';
 export const ADD_VALID_USERNAME = 'add_valid_username';
 export const REGISTER_SUCCESS = 'register_success';
 export const REGISTER_FAIL= 'register_fail';
+
+// Outfit (Stylebook)
+export const OUTFIT_LOAD_SUCCESS = 'outfit_load_success';
+export const OUTFIT_LOAD_FAIL = 'outfit_load_fail';
+export const O_DETAIL_LOAD_SUCCESS = 'o_detail_load_success';
+export const O_DETAIL_LOAD_FAIL = 'o_detail_load_fail';
