@@ -13,7 +13,7 @@ class FeedScreen extends Component {
 
   render() {
     return (
-        <View style={{flex: 1, backgroundColor: 'pink'}}>
+        <View style={{flex: 1}}>
           <Text>Feed Screen</Text>
           <Text>Feed Screen</Text>
           <FABs

@@ -13,12 +13,12 @@ class StylebookWrappingScreen extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Tabs initialPage={1}>
+        <Tabs initialPage={0}>
           <Tab heading="All">
             <StylebookAllScreen navigation={this.props.navigation}/>
           </Tab>
           <Tab heading="Category">
-            <StylebookCategoryScreen />
+            <StylebookCategoryScreen navigation={this.props.navigation} />
           </Tab>
           <Tab heading="Favorite">
             <Text>Favorite</Text>

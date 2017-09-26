@@ -78,32 +78,28 @@ class MenuScreen extends Component {
 
   render() {
     return (
-      <Container>
-        <List>
-          {this._renderProfile()}
-          <ListItem>
-            <Text>! Edit Profile</Text>
-          </ListItem>
-          <ListItem onPress={this._changePassword}>
-            <Text>Change Password </Text>
-          </ListItem>
+      <View style={{flex:1}}>
+        <Container>
+          <List>
+            {this._renderProfile()}
+            <ListItem>
+              <Text>! Edit Profile</Text>
+            </ListItem>
+            <ListItem onPress={this._changePassword}>
+              <Text>Change Password </Text>
+            </ListItem>
 
-          <ListItem>
-            <Text>! Language Setting</Text>
-          </ListItem>
-          <ListItem>
-            <Text>! Q&A</Text>
-          </ListItem>
-          <ListItem>
-            <Text>! Calendar</Text>
-          </ListItem>
-          <ListItem onPress={this._showModal}>
-            <Text>Logout</Text>
-          </ListItem>
-        </List>
-        {this._drawModal()}
-        <Text></Text>
-      </Container>
+            <ListItem>
+              <Text>! Language Setting</Text>
+            </ListItem>
+
+            <ListItem onPress={this._showModal}>
+              <Text>Logout</Text>
+            </ListItem>
+          </List>
+          {this._drawModal()}
+        </Container>
+      </View>
     );
   }
 }

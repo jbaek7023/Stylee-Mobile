@@ -29,3 +29,7 @@ export const OUTFIT_LOAD_SUCCESS = 'outfit_load_success';
 export const OUTFIT_LOAD_FAIL = 'outfit_load_fail';
 export const O_DETAIL_LOAD_SUCCESS = 'o_detail_load_success';
 export const O_DETAIL_LOAD_FAIL = 'o_detail_load_fail';
+export const CATEGORY_LIST_LOAD_SUCCESS = 'category_list_load_success';
+export const CATEGORY_LIST_LOAD_FAIL = 'category_list_load_fail';
+export const CATEGORY_DETAIL_LOAD_SUCCESS = 'category_detail_load_success';
+export const CATEGORY_DETAIL_LOAD_FAIL = 'category_detail_load_fail';

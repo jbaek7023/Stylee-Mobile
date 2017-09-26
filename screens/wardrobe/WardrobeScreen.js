@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { FABs } from '../../components/common/FABs';
 
 class WardrobeScreen extends Component {
   static navigationOptions = {
-    title: 'Wardrobe',
-    tabBarVisible: false,
+    title: 'Wardrobe'
   }
+
+  state = {
+    active: false
+  }
+
   render() {
     return (
-      <View>
-        <Text>WardrobeScreen Screen</Text>
-        <Text>WardrobeScreen Screen</Text>
-        <Text>WardrobeScreen Screen</Text>
-        <Text>WardrobeScreen Screen</Text>
+      <View style={{flex:1}}>
+        <FABs
+          active={this.state.active}
+        />
       </View>
     )
   }

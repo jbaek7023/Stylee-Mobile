@@ -11,9 +11,9 @@ import SettingsScreen from '../screens/SettingsScreen';
 
 import FeedScreen from '../screens/feed/FeedScreen';
 import StylebookStackNavigator from './StylebookStackNavigator';
-import CameraScreen from '../screens/camera/CameraScreen';
 import NotificationScreen from '../screens/notification/NotificationScreen';
 import MenuStackNavigator from './MenuStackNavigator';
+import WardrobeStackNavigator from './WardrobeStackNavigator';
 
 export default TabNavigator(
   {
@@ -23,8 +23,8 @@ export default TabNavigator(
     Stylebook: {
       screen: StylebookStackNavigator,
     },
-    Camera: {
-      screen: CameraScreen,
+    Wardrobe: {
+      screen: WardrobeStackNavigator,
     },
     Noti: {
       screen: NotificationScreen,
@@ -48,12 +48,12 @@ export default TabNavigator(
           case 'Stylebook':
             iconName = Platform.OS === 'ios'
               ? `ios-link${focused ? '' : '-outline'}`
-              : 'md-albums';
+              : 'md-body';
             break;
-          case 'Camera':
+          case 'Wardrobe':
             iconName = Platform.OS === 'ios'
               ? `ios-link${focused ? '' : '-outline'}`
-              : 'md-camera';
+              : 'md-shirt';
             break;
           case 'Noti':
             iconName = Platform.OS === 'ios'
@@ -84,7 +84,8 @@ export default TabNavigator(
     swipeEnabled: false,
     backBehavior: 'none',
     tabBarOptions: {
-      inactiveTintColor: '#455a64'
+        showLabel: false,
+        inactiveTintColor: '#455a64'
     }
   }
 );
