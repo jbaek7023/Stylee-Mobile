@@ -30,7 +30,15 @@ class OutwearScreen extends Component {
 
   }
 
+  // ToDo: AppLoading
   render() {
+    if(this.props.clothes && this.props.clothes.length==0) {
+      return (
+        <View style={{ flex:1 }}>
+          <Text>`Your Outwear slot is empty. Why don't you add more?`</Text>
+        </View>
+      );
+    }
     return (
       <View style={{ flex:1 }}>
         <ScrollView automaticallyAdjustContentInsets={false}>

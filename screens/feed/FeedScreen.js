@@ -11,6 +11,11 @@ class FeedScreen extends Component {
     active: false
   }
 
+
+  _onFABPress = () => {
+    this.setState({ active: !this.state.active });
+  }
+
   render() {
     return (
         <View style={{flex: 1}}>
@@ -18,6 +23,7 @@ class FeedScreen extends Component {
           <Text>Feed Screen</Text>
           <FABs
             active={this.state.active}
+            onPress={this._onFABPress}
           />
         </View>
     )

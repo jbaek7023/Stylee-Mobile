@@ -8,10 +8,11 @@ class BottomScreen extends Component {
   _keyExtractor = (item, index) => item.id;
 
   _handleImagePress = (id) => {
-    this.props.navigation.navigate('OutfitDetail', {id})
+    this.props.navigation.navigate('ClothDetail', {id})
   }
 
   _renderItem = ({item}) => {
+
     return (
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.id)}>
@@ -30,6 +31,13 @@ class BottomScreen extends Component {
   }
 
   render() {
+    if(this.props.clothes && this.props.clothes.length==0) {
+      return (
+        <View style={{ flex:1 }}>
+          <Text>`Your Outwear slot is empty. Why don't you add more?`</Text>
+        </View>
+      );
+    }
     return (
       <View style={{ flex:1 }}>
         <ScrollView automaticallyAdjustContentInsets={false}>

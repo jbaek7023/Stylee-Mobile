@@ -1,7 +1,7 @@
 import React from 'react';
 import { Fab, Icon, Button } from 'native-base';
 
-const FABs = ({active}) => {
+const FABs = ({active, onPress}) => {
   return (
     <Fab
       active={active}
@@ -9,7 +9,7 @@ const FABs = ({active}) => {
       containerStyle={{ }}
       style={{ backgroundColor: '#5067FF' }}
       position="bottomRight"
-      onPress={() => this.setState({ active: !this.state.active })}>
+      onPress={onPress}>
       <Icon name="share" />
       <Button style={{ backgroundColor: '#34A34F' }}>
         <Icon name="logo-whatsapp" />

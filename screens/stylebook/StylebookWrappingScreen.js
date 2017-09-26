@@ -6,8 +6,16 @@ import StylebookCategoryScreen from './StylebookCategoryScreen';
 import { FABs } from '../../components/common/FABs';
 
 class StylebookWrappingScreen extends Component {
+  static navigationOptions = {
+    title: 'Stylebook'
+  }
+
   state = {
     active: false,
+  }
+
+  _onFABPress = () => {
+    this.setState({ active: !this.state.active });
   }
 
   render() {
@@ -26,6 +34,7 @@ class StylebookWrappingScreen extends Component {
         </Tabs>
         <FABs
           active={this.state.active}
+          onPress={this._onFABPress}
         />
       </View>
     );

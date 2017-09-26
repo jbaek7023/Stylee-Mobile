@@ -25,6 +25,10 @@ class WardrobeScreen extends Component {
     this.props.fetchClothesAll(this.props.token, this.props.hType);
   }
 
+  _onFABPress = () => {
+    this.setState({ active: !this.state.active });
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
@@ -47,6 +51,7 @@ class WardrobeScreen extends Component {
         </Tabs>
         <FABs
           active={this.state.active}
+          onPress={this._onFABPress}
         />
       </View>
     )
