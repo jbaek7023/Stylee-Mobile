@@ -1,24 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFeedback } from 'react-native';
-import { width, height, totalSize } from 'react-native-dimension';
-import { Fab, Icon, Button } from 'native-base';
 import { connect } from 'react-redux';
-
+import { width, height, totalSize } from 'react-native-dimension';
 import * as actions from '../../actions';
 
-class StylebookAllScreen extends Component {
-
-  static navigationOptions = {
-  //  title:'All'
-  }
-
-  componentWillMount() {
-    if(this.props.token == undefined) {
-      // Auth Screen // set the
-    }
-    this.props.loadOutfitAll(this.props.token, this.props.hType);
-  }
-
+class BottomScreen extends Component {
   _keyExtractor = (item, index) => item.id;
 
   _handleImagePress = (id) => {
@@ -31,7 +17,7 @@ class StylebookAllScreen extends Component {
         onPress={() => this._handleImagePress(item.id)}>
         <Image
           key={item.id}
-          source={{uri: item.outfit_img}}
+          source={{uri: item.cloth_image}}
           style={styles.rowImage}
           resizeMode="cover"
         />
@@ -40,15 +26,7 @@ class StylebookAllScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // retrieve user data // add username and bio to props
-    if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
-      nextProps.navigation.navigate('Autho');
-    } else {
-      // if token is updated, retrieve current logged in user
-      if ( this.props.token !== nextProps.token) {
-        this.props.loadOutfitAll(this.props.token, this.props.hType);
-      }
-    }
+
   }
 
   render() {
@@ -56,7 +34,7 @@ class StylebookAllScreen extends Component {
       <View style={{ flex:1 }}>
         <ScrollView automaticallyAdjustContentInsets={false}>
           <FlatList
-            data={this.props.outfits}
+            data={this.props.clothes}
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
             numColumns={3}
@@ -76,11 +54,4 @@ const styles = StyleSheet.create({
   }
 });
 
-// var width = Dimensions.get('window').width;
-function mapStateToProps({auth: {token, hType}, outfit: {outfits} }) {
-  return {
-    token, hType, outfits
-  }
-}
-
-export default connect(mapStateToProps, actions)(StylebookAllScreen);
+export default connect(null, actions)(BottomScreen);

@@ -33,3 +33,5 @@ export const CATEGORY_LIST_LOAD_SUCCESS = 'category_list_load_success';
 export const CATEGORY_LIST_LOAD_FAIL = 'category_list_load_fail';
 export const CATEGORY_DETAIL_LOAD_SUCCESS = 'category_detail_load_success';
 export const CATEGORY_DETAIL_LOAD_FAIL = 'category_detail_load_fail';
+export const CLOTHES_LIST_SUCCESS = 'clothes_list_success';
+export const CLOTHES_LIST_FAIL = 'clothes_list_fail';

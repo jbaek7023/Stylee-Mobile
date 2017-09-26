@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, List, ListItem, Text } from 'native-base';
+import { Container, Content, List, ListItem, Text, Left, Body, Thumbnail } from 'native-base';
 import { View, AsyncStorage } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -67,46 +67,60 @@ class MenuScreen extends Component {
 
   _renderProfile = () => {
     // https://www.iconfinder.com/search/?q=user
-    return (
-      <ListItem>
-        <Text>{this.props.username}</Text>
-        <Text>{this.props.bio}</Text>
-      </ListItem>
-    );
-
+    if(this.props.currentUser) {
+      return (
+        <ListItem avatar style={{marginLeft: -15, paddingLeft: 15}} >
+          <Left>
+            <Thumbnail source={{ uri: this.props.currentUser.image }} />
+          </Left>
+          <Body>
+            <Text>{this.props.currentUser.username}</Text>
+          </Body>
+        </ListItem>
+      );
+    }
+    return (<ListItem><Text>Not Found</Text></ListItem>);
   }
 
   render() {
     return (
       <View style={{flex:1}}>
-        <Container>
+        <Content>
           <List>
             {this._renderProfile()}
-            <ListItem>
-              <Text>! Edit Profile</Text>
+            <ListItem style={{marginLeft: -15, paddingLeft: 15}}>
+              <Left>
+                <Text>! Edit Profile</Text>
+              </Left>
             </ListItem>
-            <ListItem onPress={this._changePassword}>
-              <Text>Change Password </Text>
+            <ListItem style={{marginLeft: -15, paddingLeft: 15}} onPress={this._changePassword}>
+              <Left>
+                <Text>Change Password </Text>
+              </Left>
             </ListItem>
 
-            <ListItem>
-              <Text>! Language Setting</Text>
+            <ListItem style={{marginLeft: -15, paddingLeft: 15}}>
+              <Left>
+                <Text>! Language Setting</Text>
+              </Left>
             </ListItem>
 
-            <ListItem onPress={this._showModal}>
-              <Text>Logout</Text>
+            <ListItem style={{marginLeft: -15, paddingLeft: 15}} onPress={this._showModal}>
+              <Left>
+                <Text>Logout</Text>
+              </Left>
             </ListItem>
           </List>
-          {this._drawModal()}
-        </Container>
+        </Content>
+        {this._drawModal()}
       </View>
     );
   }
 }
 
-function mapStateToProps({ auth: { token, hType }, menu:{ username, bio }}) {
+function mapStateToProps({ auth: { token, hType }, menu:{ currentUser }}) {
   return {
-    token, username, bio, hType
+    token, hType, currentUser
   }
 }
 

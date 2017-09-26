@@ -24,7 +24,6 @@ export const loadOutfitAll = (token, hType) => async dispatch => {
 
   let response = await axios.get(`${ROOT_URL}/outfits/list/`, { headers });
   if (response.status === 200) {
-    // Or just dispatch. (experiment)
     dispatch({ type: OUTFIT_LOAD_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: OUTFIT_LOAD_FAIL })
