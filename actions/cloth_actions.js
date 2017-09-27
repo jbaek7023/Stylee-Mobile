@@ -20,9 +20,43 @@ export const fetchClothesAll = (token, hType) => async dispatch => {
 
   let response = await axios.get(`${ROOT_URL}/clothes/list/`, { headers });
   if (response.status === 200) {
-    dispatch({ type: CLOTHES_LIST_SUCCESS, payload: response.data })
+    const types = {
+      tops: [],
+      outwears: [],
+      bottoms: [],
+      shoes: [],
+      etcs: []
+    }
+
+    response.data.forEach(item => {
+      switch (item.big_cloth_type) {
+        case 't':
+          types.tops.push(item);
+          break;
+
+        case 'o':
+          types.outwears.push(item);
+          break;
+
+        case 'b':
+          types.bottoms.push(item);
+          break;
+
+        case 's':
+          types.shoes.push(item);
+          break;
+
+        case 'e':
+          types.etcs.push(item);
+          break;
+
+        default:
+          break
+      }
+    });
+    dispatch({ type: CLOTHES_LIST_SUCCESS, payload: types });
   } else {
-    dispatch({ type: CLOTHES_LIST_FAIL })
+    dispatch({ type: CLOTHES_LIST_FAIL });
   }
 }
 

@@ -64,22 +64,11 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({auth: {token, hType}, wardrobe: {clothesList}}) {
-  let tops = clothesList.filter((item) =>  item.big_cloth_type === 't');
-  let outwears = clothesList.filter((item) =>  item.big_cloth_type === 'o');
-  let bottoms = clothesList.filter((item) =>  item.big_cloth_type === 'b');
-  let shoes = clothesList.filter((item) =>  item.big_cloth_type === 's');
-  let etcs = clothesList.filter((item) =>  item.big_cloth_type === 'e');
-
-  return {
-    token,
-    hType,
-    tops,
-    outwears,
-    bottoms,
-    shoes,
-    etcs
-  };
+function mapStateToProps({
+    auth: {token, hType},
+    wardrobe: { clothesList: {tops, bottoms, outwears, shoes, etcs} }
+  }) {
+  return { token, hType, tops, outwears, bottoms, shoes, etcs };
 }
 
 export default connect(mapStateToProps, actions)(WardrobeScreen);
