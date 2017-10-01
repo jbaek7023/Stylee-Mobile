@@ -14,7 +14,10 @@ import EtcScreen from './EtcScreen';
 
 class WardrobeScreen extends Component {
   static navigationOptions = {
-    title: 'Wardrobe'
+    title: 'Wardrobe',
+    headerStyle: {  },
+    headerTitleStyle: { alignSelf: 'center' },
+
   }
 
   state = {

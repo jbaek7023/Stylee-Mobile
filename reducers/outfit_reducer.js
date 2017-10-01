@@ -7,9 +7,11 @@ import {
   CATEGORY_LIST_LOAD_FAIL,
   CATEGORY_DETAIL_LOAD_SUCCESS,
   CATEGORY_DETAIL_LOAD_FAIL,
+  STAR_OUTFIT_LOAD_SUCCESS,
+  STAR_OUTFIT_LOAD_FAIL
 } from '../actions/types';
 
-const INITIAL_STATE = { categories:null, outfits: null, outfitDetail: null, categoryDetail: null }
+const INITIAL_STATE = { categories:null, outfits: null, outfitDetail: null, categoryDetail: null, starOutfits: null }
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -29,6 +31,10 @@ export default function(state = INITIAL_STATE, action) {
      return { ...state, categoryDetail: action.payload }
     case CATEGORY_DETAIL_LOAD_FAIL:
      return { ...state, categoryDetail: null }
+    case STAR_OUTFIT_LOAD_SUCCESS:
+     return { ...state, starOutfits: action.payload }
+    case STAR_OUTFIT_LOAD_FAIL:
+     return { ...state, starOutfits: null }
     default:
       return state;
   }

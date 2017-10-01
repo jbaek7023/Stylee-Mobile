@@ -33,23 +33,18 @@ export const fetchClothesAll = (token, hType) => async dispatch => {
         case 't':
           types.tops.push(item);
           break;
-
         case 'o':
           types.outwears.push(item);
           break;
-
         case 'b':
           types.bottoms.push(item);
           break;
-
         case 's':
           types.shoes.push(item);
           break;
-
         case 'e':
           types.etcs.push(item);
           break;
-
         default:
           break
       }

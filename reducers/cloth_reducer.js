@@ -10,8 +10,6 @@ const INITIAL_STATE = { clothesList: [], clothDetail: null }
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case CLOTHES_LIST_SUCCESS:
-      console.log('hello clothes_list');
-      console.log(action.payload);
       return { ...state,  clothesList: action.payload }
     case CLOTHES_LIST_FAIL:
       return { ...state, }

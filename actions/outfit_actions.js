@@ -9,6 +9,8 @@ import {
   CATEGORY_LIST_LOAD_FAIL,
   CATEGORY_DETAIL_LOAD_SUCCESS,
   CATEGORY_DETAIL_LOAD_FAIL,
+  STAR_OUTFIT_LOAD_SUCCESS,
+  STAR_OUTFIT_LOAD_FAIL
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
@@ -54,7 +56,7 @@ export const fetchCategoryDetail = (token, hType, id) => async dispatch => {
     headers = { 'Authorization': `Bearer ${token}`};
   }
 
-  let response = await axios.get(`${ROOT_URL}/category/category/${id}`, { headers });
+  let response = await axios.get(`${ROOT_URL}/category/detail/${id}`, { headers });
   if (response.status === 200) {
     dispatch({ type: CATEGORY_DETAIL_LOAD_SUCCESS, payload: response.data })
   } else {
@@ -77,3 +79,19 @@ export const loadCategoryAll = (token, hType) => async dispatch => {
     dispatch({ type: CATEGORY_LIST_LOAD_FAIL })
   }
 }
+
+export const fetchStarOutfitAll = (token, hType) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(`${ROOT_URL}/stars/list/`, { headers });
+  if (response.status === 200) {
+    dispatch({ type: STAR_OUTFIT_LOAD_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: STAR_OUTFIT_LOAD_FAIL })
+  }
+};
