@@ -7,7 +7,9 @@ import RootNavigation from './navigation/RootNavigation';
 // For React Redux
 import { Provider } from 'react-redux';
 import store from './store';
+import {bootstrap} from './config/bootstrap';
 
+bootstrap();
 export default class App extends React.Component {
   state = {
     assetsAreLoaded: false,
@@ -46,13 +48,18 @@ export default class App extends React.Component {
           Ionicons.font,
           // We include SpaceMono because we use it in HomeScreen.js. Feel free
           // to remove this if you are not using it in your app
-          { 'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf')},
+          { 'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf',
+
+        )},
         ]),
       ]);
       await Expo.Font.loadAsync({
         'Roboto': require('native-base/Fonts/Roboto.ttf'),
         'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+        'Roboto-Light': require('./assets/fonts/Roboto-Light.ttf'),
+        'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
         'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
+        'fontawesome': require('./assets/fonts/fontawesome.ttf'),
       });
     } catch (e) {
       // In this case, you might want to report the error to your error
