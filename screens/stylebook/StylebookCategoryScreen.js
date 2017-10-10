@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Image, View, Text, StyleSheet, TouchableWithoutFeedback, ScrollView, FlatList } from 'react-native';
 import { Card, CardItem, Body } from 'native-base';
-
+import {
+  RkText,
+  RkCard, RkStyleSheet
+} from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import { width, height, totalSize } from 'react-native-dimension';
 import * as actions from '../../actions';
@@ -55,16 +58,13 @@ class StylebookCategoryScreen extends Component {
       <TouchableWithoutFeedback
         onPress={() => this._handleCategoryPress(item.id)}
         style={styles.rowImage}>
-        <Card>
-          <CardItem cardBody>
+        <RkCard rkType='imgBlock'>
           {this._renderImage(item)}
-          </CardItem>
-          <CardItem>
-            <Body>
-              <Text>{item.name}</Text>
-            </Body>
-          </CardItem>
-        </Card>
+          <View rkCardImgOverlay rkCardContent style={styles.overlay}>
+            <RkText rkType='header4 inverseColor'>{item.name}</RkText>
+          </View>
+        </RkCard>
+
       </TouchableWithoutFeedback>
     );
   }

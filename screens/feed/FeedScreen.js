@@ -45,10 +45,6 @@ class FeedScreen extends Component {
               <SocialBar/>
             </View >
           </RkCard>
-          <FABs
-            active={this.state.active}
-            onPress={this._onFABPress}
-          />
         </View>
     )
   }

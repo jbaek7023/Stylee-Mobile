@@ -9,7 +9,7 @@ import { FABs } from '../../components/common/FABs';
 
 class StylebookWrappingScreen extends Component {
   static navigationOptions = {
-    title: 'Stylebook',
+    title: 'STYLEBOOK',
     headerStyle: {  },
     headerTitleStyle: { alignSelf: 'center' },
   }

@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  RkCard,
+  RkText,
+  RkStyleSheet
+} from 'react-native-ui-kitten';
+import { Avatar } from '../../components/Avatar';
+import { SocialBar } from '../../components/SocialBar';
+
 import { Container, Content, Button, Card, CardItem, Left, Thumbnail, Body, Icon, Right } from 'native-base';
 import TimeAgo from 'react-native-timeago';
 
-
 class OutfitDetail extends Component {
+  static navigationOptions = {
+    title: 'OUTFIT DETAIL'
+  };
+
   componentWillMount() {
     const { id } = this.props.navigation.state.params;
     const { token, hType} = this.props;
@@ -21,60 +32,48 @@ class OutfitDetail extends Component {
   render () {
     const detail = this.props.outfitDetail;
 
+    // User Access Not Yet
     if(detail) {
       return (
-        <Container>
-          <Content>
-            <Card>
-              <CardItem>
-                <Left>
-                  <Thumbnail source={{uri: detail.user.image}} />
-                  <Body>
-                    <Text>{detail.user.username}</Text>
-                    <Text note>{detail.user.username}</Text>
-                  </Body>
-                </Left>
-              </CardItem>
-              <CardItem cardBody>
-                <Image source={{uri: detail.outfit_img}} style={{height: 200, width: null, flex: 1}}/>
-              </CardItem>
-              <CardItem>
-                <Left>
-                  <Button transparent>
-                    <Icon active name="thumbs-up" />
-                    <Text>{detail.like_count} Likes</Text>
-                  </Button>
-                </Left>
-                <Body>
-                  <Button transparent>
-                    <Icon active name="chatbubbles" />
-                    <Text>4 Comments</Text>
-                  </Button>
-                </Body>
-                <Right>
-                  <Text><TimeAgo time={detail.publish}/></Text>
-                </Right>
-              </CardItem>
-              <CardItem>
-                <Left>
-                  <Text>{detail.content}</Text>
-                  <Text>{detail.gender}</Text>
-                  <Text>{detail.location}</Text>
-                </Left>
-              </CardItem>
-            </Card>
-          </Content>
-        </Container>
+        <ScrollView style={styles.root}>
+          <RkCard rkType='article'>
+            <Image rkCardImg source={{uri: detail.outfit_img}}/>
+            <View rkCardHeader>
+              <View>
+                <RkText style={styles.title} rkType='header4'>detail.user.username</RkText>
+                <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
+              </View>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileV1', {id: this.data.id})}>
+                <Avatar rkType='circle' img={{uri: detail.user.image}}/>
+              </TouchableOpacity>
+            </View>
+            <View rkCardContent>
+              <View>
+                <RkText rkType='primary3 bigLine'>{detail.content}</RkText>
+              </View>
+            </View>
+            <View rkCardFooter>
+              <SocialBar/>
+            </View>
+          </RkCard>
+        </ScrollView>
       );
     }
     return (<View><Text>Loading</Text></View>);
-
-
   }
 }
 
 function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail}}) {
   return { token, hType, outfitDetail}
 }
+
+let styles = RkStyleSheet.create(theme => ({
+  root: {
+    backgroundColor: theme.colors.screen.base
+  },
+  title: {
+    marginBottom: 5
+  },
+}));
 
 export default connect(mapStateToProps, actions)(OutfitDetail);

@@ -13,7 +13,6 @@ class CategoryDetail extends Component {
     this.props.fetchCategoryDetail(token, hType, id);
   }
 
-
   _keyExtractor = (item, index) => item.id;
 
   _handleImagePress = (id) => {
