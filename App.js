@@ -60,6 +60,7 @@ export default class App extends React.Component {
         'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
         'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
         'fontawesome': require('./assets/fonts/fontawesome.ttf'),
+        'icomoon': require('./assets/fonts/icomoon.ttf'),
       });
     } catch (e) {
       // In this case, you might want to report the error to your error

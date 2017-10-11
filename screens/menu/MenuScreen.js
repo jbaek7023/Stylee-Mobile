@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { Container, Content, List, ListItem, Text, Left, Body, Thumbnail } from 'native-base';
-import { View, AsyncStorage } from 'react-native';
+import { View, AsyncStorage, StyleSheet } from 'react-native';
 
 import { connect } from 'react-redux';
 import { LogOutConfirmationModal } from '../../components/common/LogOutConfirmationModal';
 import _ from 'lodash';
 import * as actions from '../../actions';
+import {
+  RkText,
+  RkStyleSheet,
+  RkTheme
+} from 'react-native-ui-kitten';
+import {FontIcons} from '../../assets/icons';
 
 class MenuScreen extends Component {
   static navigationOptions = {
-    title: 'Menu',
-    header: null,
-    headerMode: 'none',
-    navigationOptions: {
-      header: null
-    },
+    title: 'MENU',
   }
 
   state = {
@@ -69,7 +70,7 @@ class MenuScreen extends Component {
     // https://www.iconfinder.com/search/?q=user
     if(this.props.currentUser) {
       return (
-        <ListItem avatar style={{marginLeft: -15, paddingLeft: 15}} >
+        <ListItem onPress={this._handleProfilePress}>
           <Left>
             <Thumbnail source={{ uri: this.props.currentUser.image }} />
           </Left>
@@ -82,33 +83,51 @@ class MenuScreen extends Component {
     return (<ListItem><Text>Not Found</Text></ListItem>);
   }
 
+  _handleProfilePress = () => {
+    this.props.navigation.navigate('Profile', {id:1});
+  }
+
   render() {
     return (
       <View style={{flex:1}}>
-        <Content>
+        <Content style={styles.list}>
           <List>
             {this._renderProfile()}
-            <ListItem style={{marginLeft: -15, paddingLeft: 15}}>
-              <Left>
-                <Text>! Edit Profile</Text>
-              </Left>
+            <ListItem>
+              <View style={styles.item}>
+                <View style={styles.container}>
+                <RkText style={styles.icon}
+                  rkType='primary moon xxlarge'>{FontIcons.login}</RkText>
+                  <RkText>!Edit Profile</RkText>
+                </View>
+              </View>
             </ListItem>
-            <ListItem style={{marginLeft: -15, paddingLeft: 15}} onPress={this._changePassword}>
-              <Left>
-                <Text>Change Password </Text>
-              </Left>
+            <ListItem onPress={this._changePassword}>
+              <View style={styles.item}>
+                <View style={styles.container}>
+                <RkText style={styles.icon}
+                  rkType='primary moon xxlarge'>{FontIcons.login}</RkText>
+                  <RkText>Change Password</RkText>
+                </View>
+              </View>
             </ListItem>
-
-            <ListItem style={{marginLeft: -15, paddingLeft: 15}}>
-              <Left>
-                <Text>! Language Setting</Text>
-              </Left>
+            <ListItem>
+              <View style={styles.item}>
+                <View style={styles.container}>
+                <RkText style={styles.icon}
+                  rkType='primary moon xxlarge'>{FontIcons.login}</RkText>
+                  <RkText>!Language Setting</RkText>
+                </View>
+              </View>
             </ListItem>
-
-            <ListItem style={{marginLeft: -15, paddingLeft: 15}} onPress={this._showModal}>
-              <Left>
-                <Text>Logout</Text>
-              </Left>
+            <ListItem onPress={this._showModal}>
+              <View style={styles.item}>
+                <View style={styles.container}>
+                <RkText style={styles.icon}
+                  rkType='primary moon xxlarge'>{FontIcons.login}</RkText>
+                  <RkText>Logout</RkText>
+                </View>
+              </View>
             </ListItem>
           </List>
         </Content>
@@ -123,5 +142,27 @@ function mapStateToProps({ auth: { token, hType }, menu:{ currentUser }}) {
     token, hType, currentUser
   }
 }
+
+let styles = RkStyleSheet.create(theme => ({
+  item: {
+    height: 50,
+    justifyContent: 'center',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colors.border.base,
+    paddingHorizontal: 16
+  },
+  list: {
+    backgroundColor: theme.colors.screen.base,
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  icon: {
+    width: 34,
+    textAlign: 'center',
+    marginRight: 16
+  }
+}));
 
 export default connect(mapStateToProps, actions)(MenuScreen);

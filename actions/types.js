@@ -41,3 +41,7 @@ export const CLOTHES_LIST_SUCCESS = 'clothes_list_success';
 export const CLOTHES_LIST_FAIL = 'clothes_list_fail';
 export const C_DETAIL_LOAD_SUCCESS = 'clothes_detail_sucess';
 export const C_DETAIL_LOAD_FAIL = 'clothes_detail_fail';
+
+// User Profile
+export const USER_PAGE_FETCH_SUCCESS = 'user_page_fetch_success';
+export const USER_PAGE_FETCH_FAIL = 'user_page_fetch_fail';

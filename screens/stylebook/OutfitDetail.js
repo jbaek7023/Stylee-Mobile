@@ -9,8 +9,6 @@ import {
 } from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
 import { SocialBar } from '../../components/SocialBar';
-
-import { Container, Content, Button, Card, CardItem, Left, Thumbnail, Body, Icon, Right } from 'native-base';
 import TimeAgo from 'react-native-timeago';
 
 class OutfitDetail extends Component {
@@ -40,7 +38,7 @@ class OutfitDetail extends Component {
             <Image rkCardImg source={{uri: detail.outfit_img}}/>
             <View rkCardHeader>
               <View>
-                <RkText style={styles.title} rkType='header4'>detail.user.username</RkText>
+                <RkText style={styles.title} rkType='header4'>{detail.user.username}</RkText>
                 <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
               </View>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileV1', {id: this.data.id})}>

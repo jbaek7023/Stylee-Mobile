@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import { View, Text, Image } from 'react-native';
-import { Container, Content, Button, Card, CardItem, Left, Thumbnail, Body, Icon, Right } from 'native-base';
+import { TouchableOpacity, View, Text, Image, ScrollView } from 'react-native';
+import {
+  RkCard,
+  RkText,
+  RkStyleSheet
+} from 'react-native-ui-kitten';
+import { Avatar } from '../../components/Avatar';
+import { SocialBar } from '../../components/SocialBar';
 import TimeAgo from 'react-native-timeago';
 
 
@@ -22,46 +28,28 @@ class ClothDetail extends Component {
     const detail = this.props.clothDetail;
     if(detail) {
       return (
-        <Container>
-          <Content>
-            <Card>
-              <CardItem>
-                <Left>
-                  <Thumbnail source={{uri: detail.user.image}} />
-                  <Body>
-                    <Text>{detail.user.username}</Text>
-                    <Text note>{detail.user.username}</Text>
-                  </Body>
-                </Left>
-              </CardItem>
-              <CardItem cardBody>
-                <Image source={{uri: detail.cloth_image}} style={{height: 400, width: null, flex: 1}}/>
-              </CardItem>
-              <CardItem>
-                <Left>
-                  <Button transparent>
-                    <Icon active name="thumbs-up" />
-                    <Text>{detail.like_count} Likes</Text>
-                  </Button>
-                </Left>
-                <Body>
-                  <Button transparent>
-                    <Icon active name="chatbubbles" />
-                    <Text>{(detail.comment_count-2)} Comments</Text>
-                  </Button>
-                </Body>
-                <Right>
-                  <Text><TimeAgo time={detail.detail.publish}/></Text>
-                </Right>
-              </CardItem>
-              <CardItem>
-                <Left>
-                  <Text>{detail.content}</Text>
-                </Left>
-              </CardItem>
-            </Card>
-          </Content>
-        </Container>
+        <ScrollView style={styles.root}>
+          <RkCard rkType='article'>
+            <Image rkCardImg source={{uri: detail.cloth_image}}/>
+            <View rkCardHeader>
+              <View>
+                <RkText style={styles.title} rkType='header4'>{detail.user.username}</RkText>
+                <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
+              </View>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileV1', {id: this.data.id})}>
+                <Avatar rkType='circle' img={{uri: detail.user.image}}/>
+              </TouchableOpacity>
+            </View>
+            <View rkCardContent>
+              <View>
+                <RkText rkType='primary3 bigLine'>{detail.content}</RkText>
+              </View>
+            </View>
+            <View rkCardFooter>
+              <SocialBar/>
+            </View>
+          </RkCard>
+        </ScrollView>
       );
     }
     return (<View><Text>Loading</Text></View>);
@@ -73,5 +61,14 @@ class ClothDetail extends Component {
 function mapStateToProps({auth: {token, hType}, wardrobe: {clothDetail}}) {
   return { token, hType, clothDetail}
 }
+
+let styles = RkStyleSheet.create(theme => ({
+  root: {
+    backgroundColor: theme.colors.screen.base
+  },
+  title: {
+    marginBottom: 5
+  },
+}));
 
 export default connect(mapStateToProps, actions)(ClothDetail);

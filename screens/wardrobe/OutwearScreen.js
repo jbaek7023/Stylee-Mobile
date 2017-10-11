@@ -12,7 +12,6 @@ class OutwearScreen extends Component {
   }
 
   _renderItem = ({item}) => {
-
     return (
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.id)}>

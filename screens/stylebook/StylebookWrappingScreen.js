@@ -27,7 +27,7 @@ class StylebookWrappingScreen extends Component {
       <View style={{flex: 1}}>
         <Tabs initialPage={0}>
           <Tab
-            heading={<TabHeading><Icon name="md-square" /><Text>All</Text></TabHeading>}
+            heading={<TabHeading><Icon name="md-square" /></TabHeading>}
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
@@ -35,7 +35,7 @@ class StylebookWrappingScreen extends Component {
             <StylebookAllScreen navigation={this.props.navigation}/>
           </Tab>
           <Tab
-            heading={<TabHeading><Icon name="md-albums" /><Text>Category</Text></TabHeading>}
+            heading={<TabHeading><Icon name="md-albums" /></TabHeading>}
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}>
