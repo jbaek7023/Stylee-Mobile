@@ -11,7 +11,9 @@ import {Avatar} from '../../components/Avatar';
 
 class NotificationScreen extends Component {
   static navigationOptions = {
-      title: 'Notifications'
+      title: 'Notifications',
+      headerStyle: {  },
+      headerTitleStyle: { alignSelf: 'center' },
     };
 
   _keyExtractor = (item, index) => item.id;
@@ -53,8 +55,8 @@ class NotificationScreen extends Component {
   render() {
     return (
       <FlatList
-        data={null}
         style={styles.root}
+        data={null}
         renderItem={this._renderRow}
         keyExtractor={this._keyExtractor}
       />

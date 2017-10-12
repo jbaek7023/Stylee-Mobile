@@ -9,7 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
-import FeedScreen from '../screens/feed/FeedScreen';
+import FeedStackNavigator from './FeedStackNavigator';
 import StylebookStackNavigator from './StylebookStackNavigator';
 import MenuStackNavigator from './MenuStackNavigator';
 import WardrobeStackNavigator from './WardrobeStackNavigator';
@@ -18,7 +18,7 @@ import NotificationStackNavigator from './NotificationStackNavigator';
 export default TabNavigator(
   {
     Feed: {
-      screen: FeedScreen,
+      screen: FeedStackNavigator,
     },
     Stylebook: {
       screen: StylebookStackNavigator,
