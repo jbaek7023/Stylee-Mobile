@@ -15,6 +15,8 @@ export const FB_AUTH_LOGIN_FAIL = 'fb_auth_login_fail';
 export const RETRIEVE_CUR_USER = 'retrieve_current_user';
 export const NETWORK_ERROR = 'network_error';
 export const RETRIEVE_CUR_USER_FAILED = 'retrieve_cur_user_failed';
+export const EDIT_PROFILE_SUCCESS = 'retrieve_profile_success';
+export const EDIT_PROFILE_FAIL = 'retrieve_profile_fail';
 
 // Create new User
 export const ADD_BIO_AND_PASSWORD = 'add_bio_and_password';

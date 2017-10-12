@@ -31,7 +31,6 @@ class StylebookStarScreen extends Component {
   }
 
   _renderItem = ({item}) => {
-    console.log(item)
     return (
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.content_type, item.object_id)}>

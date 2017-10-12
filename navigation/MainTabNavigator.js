@@ -11,9 +11,9 @@ import SettingsScreen from '../screens/SettingsScreen';
 
 import FeedScreen from '../screens/feed/FeedScreen';
 import StylebookStackNavigator from './StylebookStackNavigator';
-import NotificationScreen from '../screens/notification/NotificationScreen';
 import MenuStackNavigator from './MenuStackNavigator';
 import WardrobeStackNavigator from './WardrobeStackNavigator';
+import NotificationStackNavigator from './NotificationStackNavigator';
 
 export default TabNavigator(
   {
@@ -27,7 +27,7 @@ export default TabNavigator(
       screen: WardrobeStackNavigator,
     },
     Noti: {
-      screen: NotificationScreen,
+      screen: NotificationStackNavigator,
     },
     Menu: {
       screen: MenuStackNavigator,

@@ -84,7 +84,11 @@ class MenuScreen extends Component {
   }
 
   _handleProfilePress = () => {
-    this.props.navigation.navigate('Profile', {id:1});
+    this.props.navigation.navigate('Profile');
+  }
+
+  _handleEditProfile = () => {
+    this.props.navigation.navigate('EditProfile')
   }
 
   render() {
@@ -93,12 +97,12 @@ class MenuScreen extends Component {
         <Content style={styles.list}>
           <List>
             {this._renderProfile()}
-            <ListItem>
+            <ListItem onPress={this._handleEditProfile}>
               <View style={styles.item}>
                 <View style={styles.container}>
                 <RkText style={styles.icon}
                   rkType='primary moon xxlarge'>{FontIcons.login}</RkText>
-                  <RkText>!Edit Profile</RkText>
+                  <RkText>Edit Profile</RkText>
                 </View>
               </View>
             </ListItem>
@@ -137,12 +141,6 @@ class MenuScreen extends Component {
   }
 }
 
-function mapStateToProps({ auth: { token, hType }, menu:{ currentUser }}) {
-  return {
-    token, hType, currentUser
-  }
-}
-
 let styles = RkStyleSheet.create(theme => ({
   item: {
     height: 50,
@@ -164,5 +162,11 @@ let styles = RkStyleSheet.create(theme => ({
     marginRight: 16
   }
 }));
+
+function mapStateToProps({ auth: { token, hType }, menu:{ currentUser }}) {
+  return {
+    token, hType, currentUser
+  }
+}
 
 export default connect(mapStateToProps, actions)(MenuScreen);

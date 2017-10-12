@@ -4,6 +4,7 @@ import ChangePasswordScreen from '../screens/menu/ChangePasswordScreen';
 import MenuScreen from '../screens/menu/MenuScreen';
 import UserProfileScreen from '../screens/profile/UserProfileScreen';
 import OutfitDetail from '../screens/stylebook/OutfitDetail';
+import EditProfileScreen from '../screens/menu/EditProfileScreen';
 
 export default StackNavigator ({
   Menuo: {
@@ -17,6 +18,9 @@ export default StackNavigator ({
   },
   OutfitDetail: {
     screen: OutfitDetail
+  },
+  EditProfile: {
+    screen: EditProfileScreen
   }
 }, {
     // header: null,
