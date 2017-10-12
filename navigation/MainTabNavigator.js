@@ -86,6 +86,7 @@ export default TabNavigator(
     tabBarOptions: {
         showLabel: false,
         inactiveTintColor: '#455a64'
-    }
+    },
+    lazy: true,
   }
 );

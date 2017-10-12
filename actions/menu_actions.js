@@ -9,27 +9,26 @@ import {
 
 const ROOT_URL = 'http://10.0.2.2:8000';
 
-export const retrieveCurrentUser = (token, hType) => dispatch => {
+export const retrieveCurrentUser = (token, hType) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};
-  console.log('in retrieve header type');
-  console.log(hType);
   if(hType==1) {
     headers = { 'Authorization': `JWT ${token}`};
   } else if (hType==2) {
     headers = { 'Authorization': `Bearer ${token}`};
   }
 
-  axios.get(`${ROOT_URL}/profile/detail/`, { headers }).then(response => {
+  let response = await axios.get(`${ROOT_URL}/profile/detail/`, { headers });
+
+  if(response.status === 200) {
     dispatch({ type: RETRIEVE_CUR_USER, payload: response.data });
-  })
-  .catch(response => {
+  } else {
     if(response.status === 401) {
       // Authorization Token has been expired
     } else if (response.status === 403){
       console.log('You are not suposed to see this message. Contact Administrator');
     }
     dispatch({ type: RETRIEVE_CUR_USER_FAILED });
-  });
+  }
 }
 
 export const fetchEditProfile = (token, hType) => async dispatch => {

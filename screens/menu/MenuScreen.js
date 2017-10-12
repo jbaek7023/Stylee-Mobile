@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, List, ListItem, Text, Left, Body, Thumbnail } from 'native-base';
-import { View, AsyncStorage, StyleSheet } from 'react-native';
+import { ScrollView, TouchableOpacity, View, AsyncStorage, StyleSheet } from 'react-native';
 
 import { connect } from 'react-redux';
 import { LogOutConfirmationModal } from '../../components/common/LogOutConfirmationModal';
@@ -11,7 +11,16 @@ import {
   RkStyleSheet,
   RkTheme
 } from 'react-native-ui-kitten';
-import {FontIcons} from '../../assets/icons';
+import {FontAwesome} from '../../assets/icons';
+import { Avatar } from '../../components/Avatar';
+
+import {
+  RkSwitch,
+} from '../../components/switch';
+
+import {
+  FindFriends,
+} from '../../components/FindFriends';
 
 class MenuScreen extends Component {
   static navigationOptions = {
@@ -19,7 +28,12 @@ class MenuScreen extends Component {
   }
 
   state = {
-    isModalVisible: false
+    isModalVisible: false,
+    sendPush: true,
+    shouldRefresh: false,
+    twitterEnabled: true,
+    googleEnabled: false,
+    facebookEnabled: true
   }
 
   componentWillMount() {
@@ -71,12 +85,13 @@ class MenuScreen extends Component {
     if(this.props.currentUser) {
       return (
         <ListItem onPress={this._handleProfilePress}>
-          <Left>
-            <Thumbnail source={{ uri: this.props.currentUser.image }} />
-          </Left>
-          <Body>
-            <Text>{this.props.currentUser.username}</Text>
-          </Body>
+          <Avatar rkType='circle'
+            style={styles.avatar}
+            img={{ uri: this.props.currentUser.image }}/>
+            <View>
+              <RkText rkType='header4'>{this.props.currentUser.username}</RkText>
+              <RkText rkType='secondary2 hintColor'>View Profile</RkText>
+            </View>
         </ListItem>
       );
     }
@@ -93,50 +108,87 @@ class MenuScreen extends Component {
 
   render() {
     return (
-      <View style={{flex:1}}>
-        <Content style={styles.list}>
-          <List>
-            {this._renderProfile()}
-            <ListItem onPress={this._handleEditProfile}>
-              <View style={styles.item}>
-                <View style={styles.container}>
-                <RkText style={styles.icon}
-                  rkType='primary moon xxlarge'>{FontIcons.login}</RkText>
-                  <RkText>Edit Profile</RkText>
-                </View>
-              </View>
-            </ListItem>
-            <ListItem onPress={this._changePassword}>
-              <View style={styles.item}>
-                <View style={styles.container}>
-                <RkText style={styles.icon}
-                  rkType='primary moon xxlarge'>{FontIcons.login}</RkText>
-                  <RkText>Change Password</RkText>
-                </View>
-              </View>
-            </ListItem>
-            <ListItem>
-              <View style={styles.item}>
-                <View style={styles.container}>
-                <RkText style={styles.icon}
-                  rkType='primary moon xxlarge'>{FontIcons.login}</RkText>
-                  <RkText>!Language Setting</RkText>
-                </View>
-              </View>
-            </ListItem>
-            <ListItem onPress={this._showModal}>
-              <View style={styles.item}>
-                <View style={styles.container}>
-                <RkText style={styles.icon}
-                  rkType='primary moon xxlarge'>{FontIcons.login}</RkText>
-                  <RkText>Logout</RkText>
-                </View>
-              </View>
-            </ListItem>
-          </List>
-        </Content>
+      <ScrollView style={styles.container}>
+        <View style={styles.section}>{this._renderProfile()}</View>
+        <View style={styles.section}>
+          <View style={[styles.row, styles.heading]}>
+            <RkText rkType='primary header6'>PROFILE SETTINGS</RkText>
+          </View>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.rowButton} onPress={this._handleEditProfile}>
+              <RkText rkType='header6'>Edit Profile</RkText>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.rowButton} onPress={this._changePassword}>
+              <RkText rkType='header6'>Change Password</RkText>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.rowButton}>
+              <RkText rkType='header6'>Language Setting</RkText>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.row}>
+            <RkText rkType='header6'>Send Push Notifications</RkText>
+            <RkSwitch style={styles.switch}
+                      value={this.state.sendPush}
+                      name="Push"
+                      onValueChange={(sendPush) => this.setState({sendPush})}/>
+          </View>
+        </View>
+        <View style={styles.section}>
+          <View style={[styles.row, styles.heading]}>
+            <RkText rkType='primary header6'>FIND FRIENDS</RkText>
+          </View>
+          <View style={styles.row}>
+            <FindFriends color={RkTheme.current.colors.twitter} text='Twitter' icon={FontAwesome.twitter}
+                         selected={this.state.twitterEnabled}
+                         onPress={() => {
+                           this.setState({twitterEnabled: !this.state.twitterEnabled})
+                         }}/>
+          </View>
+          <View style={styles.row}>
+            <FindFriends color={RkTheme.current.colors.google} text='Google' icon={FontAwesome.google}
+                         selected={this.state.googleEnabled} onPress={() => {
+              this.setState({googleEnabled: !this.state.googleEnabled})
+            }}/>
+          </View>
+          <View style={styles.row}>
+            <FindFriends color={RkTheme.current.colors.facebook} text='Facebook' icon={FontAwesome.facebook}
+                         selected={this.state.facebookEnabled} onPress={() => {
+              this.setState({facebookEnabled: !this.state.facebookEnabled})
+            }}/>
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <View style={[styles.row, styles.heading]}>
+            <RkText rkType='primary header6'>SUPPORT</RkText>
+          </View>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.rowButton}>
+              <RkText rkType='header6'>Help</RkText>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.rowButton}>
+              <RkText rkType='header6'>Privacy Policy</RkText>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.rowButton}>
+              <RkText rkType='header6'>Terms & Conditions</RkText>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.rowButton} onPress={this._showModal}>
+              <RkText rkType='header6'>Logout</RkText>
+            </TouchableOpacity>
+          </View>
+        </View>
         {this._drawModal()}
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -160,7 +212,37 @@ let styles = RkStyleSheet.create(theme => ({
     width: 34,
     textAlign: 'center',
     marginRight: 16
-  }
+  },
+  avatar: {
+    marginRight: 16
+  },
+  container: {
+    backgroundColor: theme.colors.screen.base,
+  },
+  header: {
+    paddingVertical: 25
+  },
+  section: {
+    marginVertical: 15
+  },
+  heading: {
+    paddingBottom: 12.5
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 17.5,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colors.border.base,
+    alignItems: 'center'
+  },
+  rowButton: {
+    flex: 1,
+    paddingVertical: 24
+  },
+  switch: {
+    marginVertical: 14
+  },
 }));
 
 function mapStateToProps({ auth: { token, hType }, menu:{ currentUser }}) {

@@ -41,6 +41,7 @@ class AuthScreen extends Component {
   async componentWillMount() {
     let token = await AsyncStorage.getItem('stylee_token');
     if(!_.isNull(token)) {
+      console.log('tokeny')
       this.props.setToken(token, 1);
     } else {
       let fbToken = await AsyncStorage.getItem('fb_token');
@@ -58,15 +59,16 @@ class AuthScreen extends Component {
   // When we rerender,
   componentWillReceiveProps(nextProps) {
     // onAuthComplete Pass twice. so. it's
-    console.log('yo');
-
-    console.log(nextProps.errorMsg);
     if(nextProps.errorMsg) {
       this._showModal();
     }
     this.setState({isLoading:true});
-    if (nextProps.hType==1 || nextProps.hType==2) {
+    console.log('Debug in componentWilReceiveProps');
+    console.log(nextProps.token);
+    console.log(nextProps.hType);
+    if (nextProps.hType == 1 || nextProps.hType == 2) {
       nextProps.navigation.navigate('Feed');
+      console.log('passing here');
       this.setState({ password: ''})
     }
   }

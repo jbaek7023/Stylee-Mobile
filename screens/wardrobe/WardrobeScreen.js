@@ -17,7 +17,6 @@ class WardrobeScreen extends Component {
     title: 'Wardrobe',
     headerStyle: {  },
     headerTitleStyle: { alignSelf: 'center' },
-
   }
 
   state = {

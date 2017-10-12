@@ -15,8 +15,9 @@ class StylebookAllScreen extends Component {
   componentWillMount() {
     if(this.props.token == undefined) {
       // Auth Screen // set the
+    } else {
+      this.props.loadOutfitAll(this.props.token, this.props.hType);
     }
-    this.props.loadOutfitAll(this.props.token, this.props.hType);
   }
 
   _keyExtractor = (item, index) => item.id;

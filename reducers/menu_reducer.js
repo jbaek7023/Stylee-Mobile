@@ -10,13 +10,13 @@ const INITIAL_STATE = { username: '' }
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case RETRIEVE_CUR_USER:
-      return { currentUser: action.payload[0].user }
+      return { ...state, currentUser: action.payload[0].user }
     case RETRIEVE_CUR_USER_FAILED:
-      return { username: 'Not Loaded', bio: 'Not Loaded' }
+      return { ...state, username: 'Not Loaded', bio: 'Not Loaded' }
     case EDIT_PROFILE_SUCCESS:
-      return { profile: action.payload }
+      return { ...state, profile: action.payload }
     case EDIT_PROFILE_FAIL:
-      return { profile: {} }
+      return { ...state, profile: {} }
     default:
       return state;
   }

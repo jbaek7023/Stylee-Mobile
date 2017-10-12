@@ -24,6 +24,11 @@ export const loadOutfitAll = (token, hType) => async dispatch => {
     headers = { 'Authorization': `Bearer ${token}`};
   }
 
+  console.log('debug start');
+  console.log(token);
+  console.log(hType);
+  console.log('debug END');
+
   let response = await axios.get(`${ROOT_URL}/outfits/list/`, { headers });
   if (response.status === 200) {
     dispatch({ type: OUTFIT_LOAD_SUCCESS, payload: response.data })

@@ -59,10 +59,6 @@ export const registerUser = ( username, email, password ) => async dispatch => {
   } else {
     dispatch({ type: REGISTER_FAIL, payload: response.data })
   }
-
-
-  // get Username
-
 }
 
 export const setFullName = (fullname) => async dispatch => {

@@ -13,7 +13,6 @@ import * as actions from '../../actions';
 class UserProfileScreen extends Component {
 
   componentWillMount() {
-    const { id } = this.props.navigation.state.params;
     const { token, hType } = this.props;
     this.props.fetchMyProfile(token, hType);
   }
