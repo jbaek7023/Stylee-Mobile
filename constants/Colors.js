@@ -1,4 +1,5 @@
-const tintColor = '#2f95dc';
+const tintColor = '#A478E6';
+// tintColor: TabBar Icon Active Colors
 
 export default {
   tintColor,

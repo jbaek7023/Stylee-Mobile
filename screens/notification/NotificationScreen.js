@@ -8,13 +8,18 @@ import {
 } from 'react-native';
 import {RkStyleSheet, RkText} from 'react-native-ui-kitten';
 import {Avatar} from '../../components/Avatar';
+import { NavBar } from '../../components/navBar';
+import {withRkTheme} from 'react-native-ui-kitten'
+
+let ThemedNavigationBar = withRkTheme(NavBar);
 
 class NotificationScreen extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => ({
       title: 'Notifications',
-      headerStyle: {  },
-      headerTitleStyle: { alignSelf: 'center' },
-    };
+      header: (headerProps) => {
+        return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
+      },
+    });
 
   _keyExtractor = (item, index) => item.id;
 

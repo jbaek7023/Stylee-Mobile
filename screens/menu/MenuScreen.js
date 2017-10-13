@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, List, ListItem, Text, Left, Body, Thumbnail } from 'native-base';
-import { ScrollView, TouchableOpacity, View, AsyncStorage, StyleSheet } from 'react-native';
+import { ScrollView, TouchableOpacity, View, AsyncStorage, StyleSheet, Button } from 'react-native';
 
 import { connect } from 'react-redux';
 import { LogOutConfirmationModal } from '../../components/common/LogOutConfirmationModal';
@@ -9,23 +9,36 @@ import * as actions from '../../actions';
 import {
   RkText,
   RkStyleSheet,
-  RkTheme
+  RkTheme,
+  RkButton,
 } from 'react-native-ui-kitten';
+
+
+
+
 import {FontAwesome} from '../../assets/icons';
 import { Avatar } from '../../components/Avatar';
 
 import {
-  RkSwitch,
-} from '../../components/switch';
+  RkSwitch
+} from '../../components/switch/index';
 
 import {
   FindFriends,
 } from '../../components/FindFriends';
+// Nav Bar
+import { NavBar } from '../../components/navBar';
+import {withRkTheme} from 'react-native-ui-kitten'
+let ThemedNavigationBar = withRkTheme(NavBar);
 
 class MenuScreen extends Component {
-  static navigationOptions = {
-    title: 'MENU',
-  }
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Menu',
+    gesturesEnabled: false,
+    header: (headerProps) => {
+      return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
+    }
+  })
 
   state = {
     isModalVisible: false,
@@ -241,7 +254,7 @@ let styles = RkStyleSheet.create(theme => ({
     paddingVertical: 24
   },
   switch: {
-    marginVertical: 14
+    marginVertical: 0
   },
 }));
 

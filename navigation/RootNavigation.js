@@ -24,9 +24,10 @@ const RootTabNavigator = TabNavigator ({
       headerTitleStyle: {
         fontWeight: 'normal',
       },
-      tabBarVisible: false
+      tabBarVisible: false,
+
     }),
-    // prevent app from loading every page
+    swipeEnabled: false,
     lazy: true,
   }
 );

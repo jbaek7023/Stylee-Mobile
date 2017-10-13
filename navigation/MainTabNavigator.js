@@ -85,7 +85,16 @@ export default TabNavigator(
     backBehavior: 'none',
     tabBarOptions: {
         showLabel: false,
-        inactiveTintColor: '#455a64'
+        style: {
+          backgroundColor: 'white',
+          // borderTopWidth: 1,
+          // borderColor: 'black',
+
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.8,
+          shadowRadius: 2,
+        }
     },
     lazy: true,
   }

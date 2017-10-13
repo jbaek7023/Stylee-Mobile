@@ -6,15 +6,29 @@ import { Field, reduxForm } from 'redux-form';
 import { Text, Button, Form, Input, Label } from 'native-base';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
+import {
+  RkText,
+  RkButton,
+} from 'react-native-ui-kitten';
+
+// Nav Bar
+import { NavBar } from '../../components/navBar';
+import {withRkTheme} from 'react-native-ui-kitten'
 
 import axios from 'axios';
+
+let ThemedNavigationBar = NavBar;
 
 const ROOT_URL = 'http://10.0.2.2:8000';
 
 class ChangePasswordScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: `Change Passowrd`,
+    title: `Change Password`,
     tabBarVisible: false,
+    headerRight: (<RkButton rkType='clear' style={{width: 40}}><RkText rkType='awesome hero'>S</RkText></RkButton>),
+    header: (headerProps) => {
+      return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
+    }
   });
 
   state = {

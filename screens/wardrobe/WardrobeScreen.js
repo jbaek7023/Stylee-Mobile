@@ -11,13 +11,17 @@ import OutwearScreen from './OutwearScreen';
 import BottomScreen from './BottomScreen';
 import ShoeScreen from './ShoeScreen';
 import EtcScreen from './EtcScreen';
+import { NavBar } from '../../components/navBar';
+import {withRkTheme} from 'react-native-ui-kitten'
+let ThemedNavigationBar = withRkTheme(NavBar);
 
 class WardrobeScreen extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => ({
     title: 'Wardrobe',
-    headerStyle: {  },
-    headerTitleStyle: { alignSelf: 'center' },
-  }
+    header: (headerProps) => {
+      return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
+    },
+  })
 
   state = {
     active: false
@@ -34,7 +38,7 @@ class WardrobeScreen extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Tabs initialPage={0}>
+        <Tabs initialPage={0} style={{backgroundColor: '#D5CFF2'}}>
           <Tab heading={<TabHeading><Text style={styles.tabHeadingStyle}>Tops</Text></TabHeading>}>
             <TopScreen clothes={this.props.tops} navigation={this.props.navigation}/>
           </Tab>

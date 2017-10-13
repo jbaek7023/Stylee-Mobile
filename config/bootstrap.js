@@ -6,7 +6,7 @@ import {RkTheme} from 'react-native-ui-kitten';
 import {KittenTheme} from './theme';
 import {AvatarTypes} from '../components/Avatar/types';
 // import {GradientButtonTypes} from '../components/gradientButton/types';
-// import {SwitchTypes} from '../components/switch/types';
+import {SwitchTypes} from '../components/switch/types';
 import {SocialBarTypes} from '../components/SocialBar/types';
 import {scale, scaleModerate, scaleVertical} from '../utils/scale';
 
@@ -482,7 +482,7 @@ export let bootstrap = () => {
 
   RkTheme.registerComponent('Avatar', AvatarTypes);
   // RkTheme.registerComponent('GradientButton', GradientButtonTypes);
-  // RkTheme.registerComponent('RkSwitch', SwitchTypes);
+  RkTheme.registerComponent('RkSwitch', SwitchTypes);
   RkTheme.registerComponent('SocialBar', SocialBarTypes);
 
   // StatusBar.setBarStyle('dark-content', true);

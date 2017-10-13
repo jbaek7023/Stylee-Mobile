@@ -60,8 +60,29 @@ const Colors = {
   followersFourth: '#42a5f5',
 
   chartsAreaStroke:'#097fe5',
-  chartsAreaFill: '#d6ecff'
+  chartsAreaFill: '#d6ecff',
 
+  //my theme 1
+  // purple
+  violetBlue: '#A677AA',
+  lilac: '#C693CC',
+  magnolia: '#F9F8FA',
+  //grey purple
+  whiteLilac: '#E4DEEC',
+  fog: '#DCD5E9',
+  titanWhite: '#D4D3D5',
+
+  //my theme 2
+  // purple
+  mediumPurple: '#A478E6',
+  quartz: '#D5CFF2',
+  // rose
+  paleRose: '#EBDDDF',
+  // grey
+  lightGrey: '#D0D0D0',
+  suvaGrey: '#968D8A',
+  // white
+  ghostWhite: '#FAFAFE'
 };
 
 const Fonts = {
@@ -76,6 +97,9 @@ const FontBaseValue = scale(18);
 export const KittenTheme = {
   name: 'light',
   colors: {
+    navbar: Colors.violetBlue,
+    navbarText: Colors.ghostWhite,
+
     accent: Colors.accent,
     primary: Colors.primary,
     disabled: Colors.disabled,
