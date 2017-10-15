@@ -9,6 +9,7 @@ import {
   RkTheme
 } from 'react-native-ui-kitten';
 import { FontAwesome } from '../../assets/icons';
+import _ from 'lodash'
 
 export class Avatar extends RkComponent {
   componentName = 'Avatar';
@@ -25,12 +26,22 @@ export class Avatar extends RkComponent {
 
   renderImg(styles) {
     let {image, badge, badgeText} = styles;
-    return (
-      <View>
-        <Image style={image} source={this.props.img}/>
-        { this.props.badge && this.renderBadge(badge, badgeText)}
-      </View>
-    )
+    if(_.isNil(this.props.img)) {
+      return (
+        <View>
+          <Image style={image} source={require('../../assets/images/robot-dev.png')}/>
+          { this.props.badge && this.renderBadge(badge, badgeText)}
+        </View>
+      )
+    } else {
+      return (
+        <View>
+          <Image style={image} source={this.props.img}/>
+          { this.props.badge && this.renderBadge(badge, badgeText)}
+        </View>
+      )
+    }
+
   }
 
   renderBadge(style, textStyle) {

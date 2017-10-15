@@ -5,6 +5,7 @@ import newAuth from './new_user_reducer';
 import outfit from './outfit_reducer';
 import wardrobe from './cloth_reducer';
 import user from './user_reducer';
+import comment from './comment_reducer';
 
 export default combineReducers({
   auth,
@@ -13,4 +14,5 @@ export default combineReducers({
   outfit,
   wardrobe,
   user,
+  comment
 });

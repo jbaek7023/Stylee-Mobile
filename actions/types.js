@@ -47,3 +47,9 @@ export const C_DETAIL_LOAD_FAIL = 'clothes_detail_fail';
 // User Profile
 export const USER_PAGE_FETCH_SUCCESS = 'user_page_fetch_success';
 export const USER_PAGE_FETCH_FAIL = 'user_page_fetch_fail';
+
+// Comments
+export const FETCH_COMMENTS_SUCCESS = 'fetch_comments_success';
+export const FETCH_COMMENTS_FAIL = 'fetch_comments_fail';
+export const COMMENT_DETAIL_SUCCESS = 'comment_detail_success';
+export const COMMENT_DETAIL_FAIL = 'comment_detail_fail';

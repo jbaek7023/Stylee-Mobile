@@ -17,7 +17,7 @@ let ThemedNavigationBar = withRkTheme(NavBar);
 
 class WardrobeScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    title: 'Wardrobe',
+    title: '옷장',
     header: (headerProps) => {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
     },
@@ -39,34 +39,46 @@ class WardrobeScreen extends Component {
     return (
       <View style={{flex: 1}}>
         <Tabs initialPage={0} style={{backgroundColor: '#D5CFF2'}}>
-          <Tab heading={<TabHeading><Text style={styles.tabHeadingStyle}>Tops</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>상의</Text></TabHeading>}>
             <TopScreen clothes={this.props.tops} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading><Text style={styles.tabHeadingStyle}>Outers</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>아우터</Text></TabHeading>}>
             <OutwearScreen clothes={this.props.outwears} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading><Text style={styles.tabHeadingStyle}>Bottoms</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>하의</Text></TabHeading>}>
            <BottomScreen clothes={this.props.bottoms} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading><Text style={styles.tabHeadingStyle}>Shoes</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>신발</Text></TabHeading>}>
             <ShoeScreen clothes={this.props.shoes} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading><Text style={styles.tabHeadingStyle}>ETC</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>기타</Text></TabHeading>}>
             <EtcScreen clothes={this.props.etcs} navigation={this.props.navigation}/>
           </Tab>
         </Tabs>
-        <FABs
-          active={this.state.active}
-          onPress={this._onFABPress}
-        />
+
       </View>
     )
   }
 }
-
+// <FABs
+//   active={this.state.active}
+//   onPress={this._onFABPress}
+// />
 const styles = StyleSheet.create({
   tabHeadingStyle: {
     color: 'white'
+  },
+  tabStyle : {
+    backgroundColor: '#A478E6',
+  },
+  activeTabStyle: {
+    backgroundColor: 'white',
+  },
+  textStyle: {
+    color: 'white',
+  },
+  activeTextStyle: {
+    color: 'white',
   }
 });
 

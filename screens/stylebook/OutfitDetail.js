@@ -22,10 +22,24 @@ class OutfitDetail extends Component {
     this.props.fetchOutfitDetail(token, hType, id);
   }
 
+  _renderComments = (comments) => {
+    let result = comments.map(( obj, index ) => {
+      return (<Text key={index}><Text style={{fontWeight: 'bold'}}>{obj.user.username}</Text> {obj.content}</Text>);
+    });
+
+    return result;
+    // obj.id, obj.user.image, obj.user.id, obj.content, obj.publish, obj.updated, obj.reply_count
+  }
+
   // categories, comment_count,
   //   comments, content, gender, id,
   //   like_count, liked, location, outfit_img,
   //   publish, tagged_clothes, updated, user
+
+  _handleCommentPress = () => {
+    const { id } = this.props.navigation.state.params;
+    this.props.navigation.navigate('Comments', {id, postType: 1});
+  }
 
   render () {
     const detail = this.props.outfitDetail;
@@ -52,6 +66,14 @@ class OutfitDetail extends Component {
             </View>
             <View rkCardFooter>
               <SocialBar/>
+            </View>
+            <View rkCardContent>
+              <View>
+                {this._renderComments(detail.comments)}
+                <RkText
+                  onPress={this._handleCommentPress}
+                  rkType='secondary2 hintColor'>댓글8개 모두보기</RkText>
+              </View>
             </View>
           </RkCard>
         </ScrollView>

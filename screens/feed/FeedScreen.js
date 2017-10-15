@@ -50,14 +50,16 @@ class FeedScreen extends Component {
   }
 
   _renderHeader = () => {
-
     return (
       <View style={styles.searchContainer}>
-        <RkTextInput autoCapitalize='none'
-                     autoCorrect={false}
-                     label={<RkText rkType='awesome'>{FontAwesome.search}</RkText>}
-                     rkType='row'
-                     placeholder='Search'/>
+        <RkTextInput rkType='row'
+          autoCapitalize='none'
+          autoCorrect={false}
+          label={<RkText rkType='awesome' style={{color:'white'}}>{FontAwesome.search}</RkText>}
+          placeholder='Search'
+          style={styles.searchBar}
+          inputStyle={{color:'white'}}
+          />
       </View>
     )
   }
@@ -90,12 +92,15 @@ let styles = RkStyleSheet.create(theme => ({
     height: 300
   },
   searchContainer: {
-    backgroundColor: theme.colors.screen.bold,
+    backgroundColor: theme.colors.navbar,
     paddingHorizontal: 16,
     paddingVertical: 10,
     height: 60,
     alignItems: 'center'
   },
+  searchBar: {
+    backgroundColor: theme.colors.navbar,
+  }
 }));
 
 export default FeedScreen;

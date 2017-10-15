@@ -56,7 +56,7 @@ class StylebookCategoryScreen extends Component {
   _renderItem = ({item}) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() => this._handleCategoryPress(item.id)}
+        onPress={() => this._handleCategoryPress(item.id, item.name)}
         style={styles.rowImage}>
         <RkCard rkType='imgBlock'>
           {this._renderImage(item)}
@@ -71,8 +71,8 @@ class StylebookCategoryScreen extends Component {
 
   _keyExtractor = (item, index) => item.id;
 
-  _handleCategoryPress = (id) => {
-    this.props.navigation.navigate('CategoryDetail', {id})
+  _handleCategoryPress = (id, name) => {
+    this.props.navigation.navigate('CategoryDetail', {id, name})
   }
 
   render() {

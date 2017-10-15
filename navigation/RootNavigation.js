@@ -27,7 +27,6 @@ const RootTabNavigator = TabNavigator ({
       tabBarVisible: false,
 
     }),
-    swipeEnabled: false,
     lazy: true,
   }
 );

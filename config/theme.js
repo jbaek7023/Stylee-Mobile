@@ -82,7 +82,8 @@ const Colors = {
   lightGrey: '#D0D0D0',
   suvaGrey: '#968D8A',
   // white
-  ghostWhite: '#FAFAFE'
+  ghostWhite: '#FAFAFE',
+  whiteSmoke: '#F5F5F5'
 };
 
 const Fonts = {
@@ -97,9 +98,10 @@ const FontBaseValue = scale(18);
 export const KittenTheme = {
   name: 'light',
   colors: {
-    navbar: Colors.violetBlue,
+    navbar: Colors.mediumPurple,
     navbarText: Colors.ghostWhite,
-
+    searchBar: Colors.quartz,
+    categoryContent: Colors.whiteSmoke,
     accent: Colors.accent,
     primary: Colors.primary,
     disabled: Colors.disabled,
@@ -130,7 +132,7 @@ export const KittenTheme = {
     button: {
       back: Colors.background,
       underlay: Colors.neutralBackground,
-      highlight: Colors.primary
+      highlight: Colors.primary,
     },
     border: {
       base: Colors.border,

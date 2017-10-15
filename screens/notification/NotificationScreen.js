@@ -15,7 +15,7 @@ let ThemedNavigationBar = withRkTheme(NavBar);
 
 class NotificationScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-      title: 'Notifications',
+      title: '알림',
       header: (headerProps) => {
         return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
       },
