@@ -23,7 +23,7 @@ import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten';
 import TimeAgo from 'react-native-timeago';
 import _ from 'lodash';
-
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 let ThemedNavigationBar = withRkTheme(NavBar);
 
 class CommentsScreen extends Component {
@@ -152,9 +152,7 @@ class CommentsScreen extends Component {
 //id, replyCount, userId, uri, username, content, publish
   render() {
     return (
-      <RkAvoidKeyboard style={styles.bigContainer} onResponderRelease={(event) => {
-        Keyboard.dismiss();
-      }}>
+      <View style={{flex:1}}>
         <FlatList
           ref='list'
           style={styles.root}
@@ -163,7 +161,8 @@ class CommentsScreen extends Component {
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}/>
         {this._renderKeyboard()}
-      </RkAvoidKeyboard>
+        <KeyboardSpacer style={{backgroundColor:'blue'}}/>
+      </View>
     )
   }
 
@@ -181,10 +180,6 @@ class CommentsScreen extends Component {
 
 let styles = RkStyleSheet.create(theme => ({
   root: {
-    backgroundColor: theme.colors.screen.base
-  },
-  bigContainer: {
-    flex: 1,
     backgroundColor: theme.colors.screen.base
   },
   container: {

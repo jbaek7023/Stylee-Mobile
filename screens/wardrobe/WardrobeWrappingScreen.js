@@ -11,12 +11,13 @@ import OutwearScreen from './OutwearScreen';
 import BottomScreen from './BottomScreen';
 import ShoeScreen from './ShoeScreen';
 import EtcScreen from './EtcScreen';
+import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
 
-class WardrobeScreen extends Component {
+class WardrobeWrappingScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     title: '옷장',
     header: (headerProps) => {
@@ -25,15 +26,24 @@ class WardrobeScreen extends Component {
   })
 
   state = {
-    active: false
+    isModalVisible: false
   }
 
   componentWillMount() {
     this.props.fetchClothesAll(this.props.token, this.props.hType);
   }
 
-  _onFABPress = () => {
-    this.setState({ active: !this.state.active });
+  _showModal = () => this.setState({ isModalVisible: true })
+  _hideModal = () => this.setState({ isModalVisible: false })
+
+  _renderModal = () => {
+    return (
+      <CameraImageSelectModal
+        hideModal={this._hideModal}
+        isModalVisible={this.state.isModalVisible}
+        navigation={this.props.navigation}
+      />
+    )
   }
 
   render() {
@@ -56,7 +66,8 @@ class WardrobeScreen extends Component {
             <EtcScreen clothes={this.props.etcs} navigation={this.props.navigation}/>
           </Tab>
         </Tabs>
-        <FABs />
+        {this._renderModal()}
+        <FABs onFABsPress={this._showModal}/>
       </View>
     )
   }
@@ -90,4 +101,4 @@ function mapStateToProps({
   return { token, hType, tops, outwears, bottoms, shoes, etcs };
 }
 
-export default connect(mapStateToProps, actions)(WardrobeScreen);
+export default connect(mapStateToProps, actions)(WardrobeWrappingScreen);

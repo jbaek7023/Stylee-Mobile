@@ -41,7 +41,6 @@ class AuthScreen extends Component {
   async componentWillMount() {
     let token = await AsyncStorage.getItem('stylee_token');
     if(!_.isNull(token)) {
-      console.log('tokeny')
       this.props.setToken(token, 1);
     } else {
       let fbToken = await AsyncStorage.getItem('fb_token');

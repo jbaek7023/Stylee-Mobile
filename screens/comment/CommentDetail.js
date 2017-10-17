@@ -45,20 +45,22 @@ class CommentDetail extends Component {
   _renderComment = (user, publish, content) => {
     if(user) {
       let { id, image:uri, username } = user;
-      return (<View style={styles.container}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id})}>
-          <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
-        </TouchableOpacity>
-        <View style={styles.content}>
-          <View style={styles.contentHeader}>
-            <RkText rkType='header5'>{username}</RkText>
-            <RkText rkType='secondary4 hintColor'>
-              <TimeAgo time={publish}/>
-            </RkText>
+      return (
+        <View style={styles.container}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id})}>
+            <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+          </TouchableOpacity>
+          <View style={styles.content}>
+            <View style={styles.contentHeader}>
+              <RkText rkType='header5'>{username}</RkText>
+              <RkText rkType='secondary4 hintColor'>
+                <TimeAgo time={publish}/>
+              </RkText>
+            </View>
+            <RkText rkType='primary3 mediumLine'>{content}</RkText>
           </View>
-          <RkText rkType='primary3 mediumLine'>{content}</RkText>
         </View>
-      </View>);
+      );
     }
     return <View />
 

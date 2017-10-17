@@ -18,28 +18,27 @@ class CameraImageSelectModal extends Component {
   render() {
     let { isModalVisible } = this.props;
     return (
-      <View>
-        <Modal
-          isVisible={isModalVisible}
-          onBackdropPress={() => {console.log('hey')}}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalTitleTextContainer}>
-              <Text style={styles.modalTitleText}>Hello World</Text>
-            </View>
-            <View style={styles.modalContentTextContainer}>
-              <Text style={styles.modalContentText}></Text>
-            </View>
-            <View style={styles.modalButtonContainer}>
-              <Button transparent onPress={this._handleCameraPress}>
-                <Text style={[styles.modalText, styles.black]}>Camera</Text>
-              </Button>
-              <Button transparent onPress={this._handleAlbumPress}>
-                <Text style={styles.modalText}>Album</Text>
-              </Button>
-            </View>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress = {() => this.props.hideModal()}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalTitleTextContainer}>
+            <Text style={styles.modalTitleText}>Hello World</Text>
           </View>
-        </Modal>
-      </View>
+          <View style={styles.modalContentTextContainer}>
+            <Text style={styles.modalContentText}></Text>
+          </View>
+          <View style={styles.modalButtonContainer}>
+            <Button transparent onPress={this._handleCameraPress}>
+              <Text style={[styles.modalText, styles.black]}>Camera</Text>
+            </Button>
+            <Button transparent onPress={this._handleAlbumPress}>
+              <Text style={styles.modalText}>Open Album</Text>
+            </Button>
+          </View>
+        </View>
+      </Modal>
+
     );
   }
 };
