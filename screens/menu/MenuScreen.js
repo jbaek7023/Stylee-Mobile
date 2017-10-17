@@ -69,7 +69,6 @@ class MenuScreen extends Component {
   _showModal = () => this.setState({ isModalVisible: true })
   _hideModal = () => this.setState({ isModalVisible: false })
 
-
   _drawModal = () => {
     return (
       <LogOutConfirmationModal

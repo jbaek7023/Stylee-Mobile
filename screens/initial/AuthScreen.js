@@ -63,12 +63,9 @@ class AuthScreen extends Component {
       this._showModal();
     }
     this.setState({isLoading:true});
-    console.log('Debug in componentWilReceiveProps');
-    console.log(nextProps.token);
-    console.log(nextProps.hType);
+
     if (nextProps.hType == 1 || nextProps.hType == 2) {
       nextProps.navigation.navigate('Feed');
-      console.log('passing here');
       this.setState({ password: ''})
     }
   }

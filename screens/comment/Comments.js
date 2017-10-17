@@ -76,7 +76,6 @@ class CommentsScreen extends Component {
               this.props.navigation.navigate('CommentDetail', {id})}}
             style={styles.cmtContainer}>
             <RkText
-
               rkType='header6'>View all {replyCount} replies</RkText>
           </TouchableOpacity>
           <View style={[styles.container, {marginLeft: 25}]}>
@@ -134,9 +133,6 @@ class CommentsScreen extends Component {
   }
 
   _renderKeyboard = () => {
-    console.log('in keyboard');
-    console.log('in keyboard');
-    console.log('in keyboard');
     return (
       <View style={styles.footer}>
         <RkTextInput

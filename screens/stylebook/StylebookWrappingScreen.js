@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Tab, Tabs, TabHeading, Icon } from 'native-base';
 import StylebookAllScreen from './StylebookAllScreen';
 import StylebookCategoryScreen from './StylebookCategoryScreen';
@@ -8,7 +8,7 @@ import StylebookStarScreen from './StylebookStarScreen';
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten';
 import { FABs } from '../../components/common/FABs';
-
+import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 let ThemedNavigationBar = withRkTheme(NavBar);
 
 class StylebookWrappingScreen extends Component {
@@ -20,11 +20,20 @@ class StylebookWrappingScreen extends Component {
   })
 
   state = {
-    active: false,
+    isModalVisible: false
   }
 
-  _onFABPress = () => {
-    this.setState({ active: !this.state.active });
+  _showModal = () => this.setState({ isModalVisible: true })
+  _hideModal = () => this.setState({ isModalVisible: false })
+
+  _renderModal = () => {
+    return (
+      <CameraImageSelectModal
+        hideModal={this._hideModal}
+        isModalVisible={this.state.isModalVisible}
+        navigation={this.props.navigation}
+      />
+    )
   }
 
   render() {
@@ -51,7 +60,7 @@ class StylebookWrappingScreen extends Component {
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
-            <StylebookCategoryScreen navigation={this.props.navigation} />
+            <StylebookCategoryScreen navigation={this.props.navigation}/>
           </Tab>
           <Tab
             heading={<TabHeading style={styles.tabStyle}><Icon style={styles.textStyle} name="star" /></TabHeading>}
@@ -59,9 +68,11 @@ class StylebookWrappingScreen extends Component {
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
-            <StylebookStarScreen navigation={this.props.navigation} />
+            <StylebookStarScreen navigation={this.props.navigation}/>
           </Tab>
         </Tabs>
+        {this._renderModal()}
+        <FABs onFABsPress={this._showModal} />
       </View>
     );
   }
@@ -72,10 +83,10 @@ class StylebookWrappingScreen extends Component {
 //   active={this.state.active}
 //   onPress={this._onFABPress}
 // />
-
+// backgroundColor: '#A478E6',
 const styles = StyleSheet.create({
   tabStyle : {
-    backgroundColor: '#A478E6',
+    backgroundColor: '#7E50CE',
   },
   activeTabStyle: {
     backgroundColor: 'white',

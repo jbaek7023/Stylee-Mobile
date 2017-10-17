@@ -11,6 +11,7 @@ import OutwearScreen from './OutwearScreen';
 import BottomScreen from './BottomScreen';
 import ShoeScreen from './ShoeScreen';
 import EtcScreen from './EtcScreen';
+
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
@@ -55,7 +56,7 @@ class WardrobeScreen extends Component {
             <EtcScreen clothes={this.props.etcs} navigation={this.props.navigation}/>
           </Tab>
         </Tabs>
-
+        <FABs />
       </View>
     )
   }
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   tabStyle : {
-    backgroundColor: '#A478E6',
+    backgroundColor: '#7E50CE',
   },
   activeTabStyle: {
     backgroundColor: 'white',
