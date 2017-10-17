@@ -5,14 +5,19 @@ import {
   FlatList,
   View,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Image,
+  Platform
 } from 'react-native';
 import {
   RkStyleSheet,
-  RkText
+  RkText,
+  RkTextInput,
+  RkButton
 } from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
 import { NavBar } from '../../components/navBar';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {withRkTheme} from 'react-native-ui-kitten';
 import TimeAgo from 'react-native-timeago';
 
@@ -21,7 +26,6 @@ let ThemedNavigationBar = withRkTheme(NavBar);
 class CommentDetail extends Component {
   constructor(props){
     super(props);
-    this._renderItem = this._renderItem.bind(this);
   }
 
   static navigationOptions = ({navigation}) => ({
@@ -31,6 +35,10 @@ class CommentDetail extends Component {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
     },
   });
+
+  state = {
+    message: ''
+  }
 
   _keyExtractor(item, index) {
     return item.id;
@@ -66,7 +74,7 @@ class CommentDetail extends Component {
 
   }
 
-  _renderItem({item}) {
+  _renderItem = ({item}) => {
     let { id, image: uri, username } = item.user;
     let { content, publish } = item;
     return (
@@ -87,6 +95,32 @@ class CommentDetail extends Component {
     )
   }
 
+  // Keyboard Setup
+  _scroll() {
+    if (Platform.OS === 'ios') {
+      this.refs.list.scrollToEnd();
+    } else {
+      _.delay(() => this.refs.list.scrollToEnd(), 100);
+    }
+  }
+
+  _renderKeyboard = () => {
+    return (
+      <View style={styles.footer}>
+        <RkTextInput
+          onFocus={() => this._scroll(true)}
+          onBlur={() => this._scroll(true)}
+          onChangeText={(message) => this.setState({message})}
+          value={this.state.message}
+          rkType='row sticker'
+          placeholder="Add a comment..."/>
+        <RkButton onPress={() => this._pushMessage()} style={styles.send} rkType='circle'>
+          <Image source={require('../../assets/icons/sendIcon.png')}/>
+        </RkButton>
+      </View>
+    );
+  }
+
   render() {
     let { user, publish, content } = this.props.replyComment;
     return (
@@ -98,6 +132,8 @@ class CommentDetail extends Component {
           ItemSeparatorComponent={this._renderSeparator}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}/>
+        {this._renderKeyboard()}
+        <KeyboardSpacer/>
       </View>
     )
   }
@@ -135,6 +171,18 @@ let styles = RkStyleSheet.create(theme => ({
   },
   replyStyle: {
     marginLeft: 25
+  },
+  footer: {
+    flexDirection: 'row',
+    minHeight: 60,
+    padding: 10,
+    backgroundColor: theme.colors.screen.alter
+  },
+  send: {
+    backgroundColor: theme.colors.navbar,
+    width: 40,
+    height: 40,
+    marginLeft: 10,
   }
 }));
 

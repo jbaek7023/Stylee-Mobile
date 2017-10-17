@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Image, View, Text, FlatList } from 'react-native';
+import { Image, View, Text, FlatList, TouchableOpacity } from 'react-native';
 
 import {
   RkCard,
   RkText,
   RkStyleSheet,
   RkTextInput,
+  RkButton
 } from 'react-native-ui-kitten';
 
 import { Avatar } from '../../components/Avatar';
@@ -51,18 +52,27 @@ class FeedScreen extends Component {
 
   _renderHeader = () => {
     return (
-      <View style={styles.searchContainer}>
-        <RkTextInput rkType='row'
-          autoCapitalize='none'
-          autoCorrect={false}
-          label={<RkText rkType='awesome' style={{color:'white'}}>{FontAwesome.search}</RkText>}
-          placeholder='Search'
-          style={styles.searchBar}
-          inputStyle={{color:'white'}}
-          />
-      </View>
+      <TouchableOpacity
+        style={styles.searchContainer}>
+        <RkButton
+          onPress={ () => {this.props.navigation.navigate("Searcho");}}><RkText>Search</RkText></RkButton>
+      </TouchableOpacity>
     )
   }
+  // <TouchableOpacity style={[styles.wrapper, this.props.style]} onPress={this.props.onPress}>
+  //   <View style={styles.container}>
+  //     <View style={styles.text}>
+  //       <RkText rkType='awesome' style={[styles.icon, color]}>{this.props.icon}</RkText>
+  //       <RkText rkType='header6' style={color}>{`Find Friends With ${this.props.text}`}</RkText>
+  //     </View>
+  //     <RkText rkType='awesome small' style={color}>{FontAwesome.chevronRight}</RkText>
+  //   </View>
+  // </TouchableOpacity>
+
+  // <FindFriends color={RkTheme.current.colors.google} text='Google' icon={FontAwesome.google}
+  //                        selected={this.state.googleEnabled} onPress={() => {
+  //             this.setState({googleEnabled: !this.state.googleEnabled})
+  //           }}/>
 
   render() {
     return (

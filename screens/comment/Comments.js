@@ -98,15 +98,26 @@ class CommentsScreen extends Component {
     return (<View />)
   }
 
+  _renderAvatar = (uri) => {
+    if(_.isNil(uri)) {
+      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/robot-dev.png')}/>)
+    }
+    return (
+      <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+    );
+  }
+
   _renderItem = (row) => {
     let { id: userId, image: uri, username } = row.item.user;
     let { id: commentId, content, publish, reply_count: replyCount } = row.item;
     // userId, uri, username, content, publish <- reply
+
+
     return (
       <View>
         <View style={styles.container}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
-            <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+            {this._renderAvatar(uri)}
           </TouchableOpacity>
           <View style={styles.content}>
             <View style={styles.contentHeader}>
@@ -161,7 +172,7 @@ class CommentsScreen extends Component {
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}/>
         {this._renderKeyboard()}
-        <KeyboardSpacer style={{backgroundColor:'blue'}}/>
+        <KeyboardSpacer/>
       </View>
     )
   }

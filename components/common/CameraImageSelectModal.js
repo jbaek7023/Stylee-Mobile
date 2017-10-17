@@ -3,17 +3,39 @@ import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Modal from 'react-native-modal';
 import { Text, Button } from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
+import { ImagePicker } from 'expo';
 
 class CameraImageSelectModal extends Component {
   _handleCameraPress = () => {
     this.props.hideModal();
-    // this.props.navigation.navigate('OpenCamera');
+    this.props.navigation.navigate('CameraTake');
   }
 
-  _handleAlbumPress = () => {
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+    console.log(result);
+
+//     result_sample
+//     {
+//   "cancelled":false,
+//   "height":1611,
+//   "width":2148,
+//   "uri":"file:///data/user/0/host.exp.exponent/cache/cropped1814158652.jpg"
+// }
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  };
+
+  _handleAlbumPress = async () => {
     this.props.hideModal();
-    // this.props.navigation.navigate('OpenAlbums');
+    this._pickImage();
   }
+
+
 
   render() {
     let { isModalVisible } = this.props;

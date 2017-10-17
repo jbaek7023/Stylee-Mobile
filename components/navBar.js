@@ -5,7 +5,7 @@ import {
   Dimensions,
 } from 'react-native';
 import _ from 'lodash';
-import {RkText, RkButton, RkStyleSheet} from 'react-native-ui-kitten';
+import {RkText, RkButton, RkStyleSheet, RkTextInput} from 'react-native-ui-kitten';
 import {FontAwesome} from '../assets/icons';
 import {UIConstants} from '../config/appConstants';
 import {scale, scaleModerate, scaleVertical} from '../utils/scale';
@@ -14,7 +14,6 @@ export class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {width: undefined};
-
   }
 
   _renderRight(headerRight) {
@@ -83,6 +82,24 @@ export class NavBar extends React.Component {
       });
     };
 
+    if(title==="searchbar") {
+      return (
+          <RkTextInput
+            rkType='row'
+            ref="sbar"
+            autoCapitalize='none'
+            autoCorrect={false}
+            label={<RkText rkType='awesome' style={{color:'white'}}>{FontAwesome.search}</RkText>}
+            placeholder='검색'
+            underlineWidth="1"
+            underlineColor="white"
+            style={styles.searchBar}
+            inputStyle={{color:'white'}}
+            labelStyle={{marginRight:0}}
+          />
+      );
+    }
+
     return (
       <View style={styles.title} onLayout={onLayout}>
         <RkText style={styles.titleText}>{title}</RkText>
@@ -138,5 +155,9 @@ let styles = RkStyleSheet.create(theme => ({
   },
   titleText: {
     color: theme.colors.navbarText
-  }
+  },
+  searchBar: {
+    backgroundColor: theme.colors.navbar,
+    marginLeft: 27,
+  },
 }));
