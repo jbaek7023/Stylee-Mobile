@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, Text, FlatList, StyleSheet } from 'react-native';
+import { Image, View, Text, FlatList, StyleSheet, TextInput } from 'react-native';
 import {UIConstants} from '../../config/appConstants';
 
 import {
@@ -13,7 +13,7 @@ import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
 import { SocialBar } from '../../components/SocialBar';
-import { FontAwesome } from '../../assets/icons'
+import { FontAwesome } from '../../assets/icons';
 let ThemedNavigationBar = withRkTheme(NavBar);
 
 class SearchScreen extends Component {
@@ -58,7 +58,6 @@ class SearchScreen extends Component {
         <View style={styles.containerheader}>
           <RkTextInput
             rkType='row'
-            ref="sbar"
             autoCapitalize='none'
             autoCorrect={false}
             label={<RkText rkType='awesome' style={{color:'white'}}>{FontAwesome.search}</RkText>}
@@ -70,6 +69,7 @@ class SearchScreen extends Component {
             labelStyle={{marginRight:0}}
             value={this.state.inputText}
             onChangeText={(inputText)=>{this.setState({inputText})}}
+            autoFocus={true}
           />
           <View style={styles.left}>
             <RkButton
@@ -96,10 +96,6 @@ class SearchScreen extends Component {
         ListHeaderComponent={this._renderHeader}
       />
     );
-  }
-
-  componentDidMount() {
-    this.refs.sbar.focus();
   }
 }
 
