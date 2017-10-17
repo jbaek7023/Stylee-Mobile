@@ -4,6 +4,11 @@ import { Camera, Permissions } from 'expo';
 import { ImagePicker } from 'expo';
 
 export default class CameraTake extends Component {
+  static navigationOptions = ({navigation}) => ({
+    title: '옷장',
+    tabBarVisible: false
+  })
+
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
@@ -50,6 +55,7 @@ export default class CameraTake extends Component {
               </TouchableOpacity>
             </View>
           </Camera>
+          <View></View>
         </View>
       );
     }

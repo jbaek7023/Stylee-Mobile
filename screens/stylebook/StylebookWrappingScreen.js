@@ -7,13 +7,13 @@ import StylebookStarScreen from './StylebookStarScreen';
 // Nav Bar
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten';
-import { FABs } from '../../components/common/FABs';
+import FABs from '../../components/common/FABs';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 let ThemedNavigationBar = withRkTheme(NavBar);
 
 class StylebookWrappingScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    title: '스타일북',
+    title: 'Stylebook',
     header: (headerProps) => {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
     },
@@ -46,7 +46,7 @@ class StylebookWrappingScreen extends Component {
         textStyle={styles.textStyle}
         >
           <Tab
-            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>전체</Text></TabHeading>}
+            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>All</Text></TabHeading>}
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
@@ -55,7 +55,7 @@ class StylebookWrappingScreen extends Component {
             <StylebookAllScreen navigation={this.props.navigation}/>
           </Tab>
           <Tab
-            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>카테고리</Text></TabHeading>}
+            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>Category</Text></TabHeading>}
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
@@ -71,12 +71,13 @@ class StylebookWrappingScreen extends Component {
             <StylebookStarScreen navigation={this.props.navigation}/>
           </Tab>
         </Tabs>
-        {this._renderModal()}
-        <FABs onFABsPress={this._showModal} />
+        <FABs navigation={this.props.navigation}/>
       </View>
     );
   }
 }
+
+// {this._renderModal()}
 
 // Tabs: tabBarUnderlineStyle
 // <FABs

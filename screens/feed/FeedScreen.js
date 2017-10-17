@@ -52,11 +52,11 @@ class FeedScreen extends Component {
 
   _renderHeader = () => {
     return (
-      <TouchableOpacity
+      <View
         style={styles.searchContainer}>
         <RkButton
           onPress={ () => {this.props.navigation.navigate("Searcho");}}><RkText>Search</RkText></RkButton>
-      </TouchableOpacity>
+      </View>
     )
   }
   // <TouchableOpacity style={[styles.wrapper, this.props.style]} onPress={this.props.onPress}>

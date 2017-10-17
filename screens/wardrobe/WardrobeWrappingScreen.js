@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { FABs } from '../../components/common/FABs';
+import FABs from '../../components/common/FABs';
 import { Tabs, Tab, TabHeading } from 'native-base';
 
 import { connect } from 'react-redux';

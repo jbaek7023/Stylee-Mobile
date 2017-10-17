@@ -53,6 +53,7 @@ class SearchScreen extends Component {
   }
 
   _renderHeader = () => {
+    // underline width doesn't work properly
     return (
       <View style={styles.layoutheader}>
         <View style={styles.containerheader}>
