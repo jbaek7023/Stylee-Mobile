@@ -5,16 +5,27 @@ import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import {
   RkCard,
   RkText,
-  RkStyleSheet
+  RkStyleSheet,
+  RkButton
 } from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
 import { SocialBar } from '../../components/SocialBar';
 import TimeAgo from 'react-native-timeago';
+import {FontAwesome} from '../../assets/icons';
 
 class OutfitDetail extends Component {
-  static navigationOptions = {
-    title: 'OUTFIT DETAIL'
-  };
+  static navigationOptions = ({navigation}) => ({
+    headerLeft: (
+      <RkButton
+        rkType='clear'
+        style={{width: 50}}
+        onPress={() => {
+          navigation.goBack()
+        }}>
+        <RkText style={{color: 'black'}} rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+      </RkButton>
+		),
+  });
 
   componentWillMount() {
     const { id } = this.props.navigation.state.params;

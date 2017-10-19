@@ -14,6 +14,7 @@ export const FontIcons = {
 
 export const FontAwesome = {
   heart: String.fromCharCode(61444),
+  hearto: String.fromCharCode(61578),
   comment: String.fromCharCode(61669),
   user: String.fromCharCode(62144),
   twitter: String.fromCharCode(61593),
@@ -28,4 +29,8 @@ export const FontAwesome = {
   slashEye: String.fromCharCode(61552),
   github: String.fromCharCode(61595),
   profile: String.fromCharCode(62142),
+  category: String.fromCharCode(62029),
+  bookmarko: String.fromCharCode(61591),
+  bookmar: String.fromCharCode(61486),
+
 };
