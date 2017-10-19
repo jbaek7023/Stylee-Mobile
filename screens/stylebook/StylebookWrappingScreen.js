@@ -6,14 +6,24 @@ import StylebookCategoryScreen from './StylebookCategoryScreen';
 import StylebookStarScreen from './StylebookStarScreen';
 // Nav Bar
 import { NavBar } from '../../components/navBar';
-import {withRkTheme} from 'react-native-ui-kitten';
+import {withRkTheme, RkText} from 'react-native-ui-kitten';
 import FABs from '../../components/common/FABs';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 let ThemedNavigationBar = withRkTheme(NavBar);
+import { FontAwesome } from '../../assets/icons'
+import { Ionicons } from '@expo/vector-icons';
 
 class StylebookWrappingScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     title: 'Stylebook',
+    headerRight: (
+      <Ionicons
+        name='ios-contact'
+        size={32}
+        style={{ marginBottom: -3 }}
+        color="white"
+      />
+    ),
     header: (headerProps) => {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
     },
@@ -87,7 +97,9 @@ class StylebookWrappingScreen extends Component {
 // backgroundColor: '#A478E6',
 const styles = StyleSheet.create({
   tabStyle : {
-    backgroundColor: '#7E50CE',
+    backgroundColor: '#6F3AB1',
+    height: 50,
+    justifyContent: 'center'
   },
   activeTabStyle: {
     backgroundColor: 'white',

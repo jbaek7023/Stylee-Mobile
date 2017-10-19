@@ -121,12 +121,16 @@ export class NavBar extends React.Component {
   }
 }
 
+// borderBottomWidth: StyleSheet.hairlineWidth,
+// borderBottomColor: theme.colors.border.base
+
+
 let styles = RkStyleSheet.create(theme => ({
   layout: {
     backgroundColor: theme.colors.navbar,
     paddingTop: UIConstants.StatusbarHeight,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: theme.colors.border.base
+    height: 50,
+    justifyContent: 'center'
   },
   container: {
     flexDirection: 'row',
@@ -148,10 +152,10 @@ let styles = RkStyleSheet.create(theme => ({
   title: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
-    alignItems: 'center',
+    marginLeft: 40
   },
   menu: {
-    width: 40
+    width: 50
   },
   titleText: {
     color: theme.colors.navbarText

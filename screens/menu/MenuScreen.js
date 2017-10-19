@@ -13,9 +13,6 @@ import {
   RkButton,
 } from 'react-native-ui-kitten';
 
-
-
-
 import {FontAwesome} from '../../assets/icons';
 import { Avatar } from '../../components/Avatar';
 
@@ -215,10 +212,6 @@ let styles = RkStyleSheet.create(theme => ({
   },
   list: {
     backgroundColor: theme.colors.screen.base,
-  },
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center'
   },
   icon: {
     width: 34,

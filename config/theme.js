@@ -74,7 +74,7 @@ const Colors = {
 
   //my theme 2
   // purple
-  mediumPurple: '#7E50CE',
+  mediumPurple: '#6F3AB1',
   mediumPurple2: '#A478E6',
   quartz: '#D5CFF2',
   // rose

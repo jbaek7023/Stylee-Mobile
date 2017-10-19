@@ -1,11 +1,12 @@
 import { StackNavigator } from 'react-navigation';
 
-import FeedScreen from '../screens/feed/FeedScreen';
+import FeedWrappingScreen from '../screens/feed/FeedWrappingScreen';
 import SearchScreen from '../screens/feed/SearchScreen';
+import FeedMainTabNavigator from './FeedMainTabNavigator';
 
 export default StackNavigator ({
   Feedo: {
-    screen: FeedScreen,
+    screen: FeedWrappingScreen,
   },
   Searcho: {
     screen: SearchScreen,

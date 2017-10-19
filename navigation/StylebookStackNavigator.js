@@ -7,8 +7,8 @@ import ClothDetail from '../screens/wardrobe/ClothDetail';
 import CommentsScreen from '../screens/comment/Comments';
 import UserProfileScreen from '../screens/profile/UserProfileScreen';
 import CommentDetail from '../screens/comment/CommentDetail';
-import CameraTake from '../screens/camera/CameraTake';
-import ImagePickerScreen from '../screens/camera/ImagePickerScreen';
+import AddStyleScreen from '../screens/camera/AddStyleScreen';
+import AddClothScreen from '../screens/camera/AddClothScreen';
 
 export default StackNavigator ({
   Stylebooko: {
@@ -32,12 +32,12 @@ export default StackNavigator ({
   CommentDetail: {
     screen: CommentDetail
   },
-  CameraTake: {
-    screen: CameraTake
+  AddStyleo: {
+    screen: AddStyleScreen
   },
-  ImagePicker : {
-    screen: ImagePickerScreen
-  }
+  AddClotho: {
+    screen: AddClothScreen
+  },
 }, {
     lazy: true
 });

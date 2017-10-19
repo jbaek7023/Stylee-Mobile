@@ -18,8 +18,8 @@ let ThemedNavigationBar = withRkTheme(NavBar);
 
 class SearchScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    header: null
-
+    header: null,
+    tabBarVisible: false
   })
 
   state = {

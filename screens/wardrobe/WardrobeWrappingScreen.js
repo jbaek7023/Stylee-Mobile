@@ -12,14 +12,23 @@ import BottomScreen from './BottomScreen';
 import ShoeScreen from './ShoeScreen';
 import EtcScreen from './EtcScreen';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
-
+import { FontAwesome } from '../../assets/icons'
 import { NavBar } from '../../components/navBar';
-import {withRkTheme} from 'react-native-ui-kitten'
+import {withRkTheme, RkText} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
+import { Ionicons } from '@expo/vector-icons';
 
 class WardrobeWrappingScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     title: '옷장',
+    headerRight: (
+      <Ionicons
+        name='ios-contact'
+        size={32}
+        style={{ marginBottom: -3 }}
+        color="white"
+      />
+      ),
     header: (headerProps) => {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
     },
@@ -81,7 +90,7 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   tabStyle : {
-    backgroundColor: '#7E50CE',
+    backgroundColor: '#6F3AB1',
   },
   activeTabStyle: {
     backgroundColor: 'white',

@@ -11,8 +11,9 @@ import {
 
 import { Avatar } from '../../components/Avatar';
 import { SocialBar } from '../../components/SocialBar';
-class FeedScreen extends Component {
+class PopularPostScreen extends Component {
   static navigationOptions = ({navigation}) => ({
+    title: 'Popular',
     header: null
   })
 
@@ -95,4 +96,4 @@ let styles = RkStyleSheet.create(theme => ({
   }
 }));
 
-export default FeedScreen;
+export default PopularPostScreen;

@@ -5,16 +5,17 @@ import { FontAwesome } from '../../assets/icons';
 import { RkText } from 'react-native-ui-kitten';
 import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
+import { ImagePicker } from 'expo';
 
 class FABs extends Component {
   render() {
     return (
-      <ActionButton buttonColor="#7E50CE">
+      <ActionButton buttonColor="#6F3AB1">
         <ActionButton.Item
           buttonColor='#3498db'
           title="스타일 올리기"
           onPress={() => {
-            this.props.navigation.navigate('CameraTake');
+            this.props.navigation.navigate('AddStyleo');
           }}>
           <Icon name="md-body" style={styles.actionStyleButton} />
         </ActionButton.Item>
@@ -22,7 +23,7 @@ class FABs extends Component {
           buttonColor='#1abc9c'
           title="옷 올리기"
           onPress={() => {
-            this.props.navigation.navigate('CameraTake');
+            this.props.navigation.navigate('AddClotho');
           }}>
           <Icon name="md-shirt" style={styles.actionClothIcon} />
         </ActionButton.Item>
