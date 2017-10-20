@@ -1,46 +1,37 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, FlatList, TouchableWithoutFeedback, Image } from 'react-native';
 import {
   RkCard,
   RkText,
   RkStyleSheet,
-  RkButton
+  RkButton,
 } from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
 import { SocialBar } from '../../components/SocialBar';
 import TimeAgo from 'react-native-timeago';
 import {FontAwesome} from '../../assets/icons';
 import { Dimensions } from 'react-native';
-import Image from 'react-native-scalable-image';
+import { NavBar } from '../../components/navBar';
+import {withRkTheme} from 'react-native-ui-kitten'
+let ThemedNavigationBar = withRkTheme(NavBar);
+import { Ionicons } from '@expo/vector-icons';
+import { width, height, totalSize } from 'react-native-dimension';
+import { threeImageWidth } from '../../utils/scale';
+
+console.log(threeImageWidth);
 
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerLeft: (
-      <RkButton
-        rkType='clear'
-        style={{width: 50}}
-        onPress={() => {
-          navigation.goBack();
-
-        }}>
-        <RkText style={{color: 'black'}} rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
-      </RkButton>
-		),
-    headerRight: (
-      <RkButton
-        rkType='clear'
-        style={{width: 42}}
-        onPress={() => {
-          navigation.goBack()
-        }}>
-        <RkText style={{color: 'black'}} rkType='awesome hero'>{FontAwesome.menu}</RkText>
-      </RkButton>
-    )
+    title: 'Style',
+    headerRight: (<Ionicons name="md-more" size={32} style={{ marginLeft: 5 }} color="white"/>),
+    header: (headerProps) => {
+      return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
+    },
   });
 
-  componentDidMount() {
+  componentWillMount() {
     const { id } = this.props.navigation.state.params;
     const { token, hType} = this.props;
     this.props.fetchOutfitDetail(token, hType, id);
@@ -74,9 +65,41 @@ class OutfitDetail extends Component {
     );
   }
 
+  _handleImagePress = (id) => {
+    this.props.navigation.navigate('ClothDetail', {id})
+  }
+
+  _renderClothesItem = ({item}) => {
+    if(!_.isNil(item.cloth_image)) {
+      return (
+        <TouchableWithoutFeedback
+          onPress={() => this._handleImagePress(item.id)}>
+          <Image
+            key={item.id}
+            source={{uri: item.cloth_image}}
+            style={styles.rowImage}
+            resizeMode="cover"
+          />
+        </TouchableWithoutFeedback>
+      );
+    }
+    return (
+      <TouchableWithoutFeedback
+        onPress={() => this._handleImagePress(item.id)}>
+        <Image
+          key={item.id}
+          source={require('../../assets/images/robot-dev.png')}
+          style={styles.rowImage}
+          resizeMode="cover"
+        />
+      </TouchableWithoutFeedback>
+    );
+  }
+
+  _keyExtractor = (item, index) => item.id;
+
   render () {
     const detail = this.props.outfitDetail;
-
     // User Access Not Yet
     if(detail) {
       return (
@@ -89,34 +112,46 @@ class OutfitDetail extends Component {
               <View style={styles.content}>
                 <View style={styles.contentHeader}>
                   <RkText rkType='header5'>{detail.user.username}</RkText>
-                  <RkText rkType='secondary4 hintColor'>
-                    <TimeAgo time={detail.publish}/>
-                  </RkText>
+                  <RkButton>Follow</RkButton>
                 </View>
-                <RkText rkType='primary3 mediumLine'>{detail.content}</RkText>
               </View>
             </View>
-            <Image width={Dimensions.get('window').width} source={{uri: detail.outfit_img}} />
+            <Image
+              style={styles.outfitImage}
+              resizeMode="cover"
+              source={{uri: detail.outfit_img}} />
             <View rkCardContent>
               <SocialBar/>
             </View>
-
             <View rkCardContent>
               <View>
-                <RkText rkType='primary3 bigLine'>{detail.content}</RkText>
+                <View>
+                  <Text style={{fontWeight: 'bold'}}>좋아요 {detail.like_count.toString()}개</Text>
+                </View>
+                <View style={{marginTop: 5}}>
+                  <Text><Text style={{fontWeight: 'bold'}}>{detail.user.username}</Text> {detail.content}</Text>
+                </View>
+                <View style={{marginTop: 5}}>
+                  <RkText
+                    onPress={this._handleCommentPress}
+                    rkType='secondary2 hintColor'>댓글{detail.comment_count.toString()}개 모두보기</RkText>
+                  {this._renderComments(detail.comments)}
+                  <RkText style={{marginTop: 8}} rkType='secondary4 hintColor'>
+                    <TimeAgo time={detail.publish}/>
+                  </RkText>
+                </View>
               </View>
             </View>
-            <View rkCardContent>
-              <View>
-                {this._renderComments(detail.comments)}
-                <RkText
-                  onPress={this._handleCommentPress}
-                  rkType='secondary2 hintColor'>댓글8개 모두보기</RkText>
-              </View>
+            <View style={{marginTop: 11}}>
+              <RkText style={{marginLeft:14}}>태그된 옷 (3)</RkText>
+              <FlatList
+                style={{marginTop:8}}
+                data={this.props.outfitDetail.tagged_clothes}
+                renderItem={this._renderClothesItem}
+                keyExtractor={this._keyExtractor}
+                numColumns={3}
+              />
             </View>
-
-
-
           </RkCard>
         </ScrollView>
       );
@@ -149,9 +184,20 @@ let styles = RkStyleSheet.create(theme => ({
   },
   contentHeader: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 6
   },
+  outfitImage: {
+    width: width(100),
+    height: width(100)
+  },
+  rowImage:{
+    width: threeImageWidth,
+    height: threeImageWidth,
+    marginRight: 2,
+    marginTop: 2
+  }
 }));
 
 export default connect(mapStateToProps, actions)(OutfitDetail);

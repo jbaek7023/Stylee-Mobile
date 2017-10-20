@@ -56,15 +56,12 @@ class StylebookCategoryScreen extends Component {
   _renderItem = ({item}) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() => this._handleCategoryPress(item.id, item.name)}
-        style={styles.rowImage}>
-        <RkCard rkType='imgBlock'>
+        onPress={() => this._handleCategoryPress(item.id, item.name)}>
+        <View style={styles.rowContainer}>
           {this._renderImage(item)}
-          <View rkCardImgOverlay rkCardContent style={styles.overlay}>
-            <RkText rkType='header4 inverseColor'>{item.name}</RkText>
-          </View>
-        </RkCard>
-
+          <Text>{item.name}</Text>
+          <RkText rkType="secondary2 hintColor">스타일 3개</RkText>
+        </View>
       </TouchableWithoutFeedback>
     );
   }
@@ -84,23 +81,26 @@ class StylebookCategoryScreen extends Component {
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
             numColumns={2}
+            style={{flex: 1, flexDirection: 'row'}}
+            contentContainerStyle={{justifyContent: 'center'}}
           />
         </ScrollView>
-
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  viewRow:{
-      flexDirection:'row',
-    },
     rowImage:{
-      width:width(49),
-      height:width(49),
-      borderWidth:.5,
-      borderColor:'#fff'
+      width:width(44),
+      height:width(44),
+      borderWidth:1,
+      borderColor:'#DCDCDC',
+
+    },
+    rowContainer: {
+      marginLeft:width(4),
+      marginTop: 12
     }
 });
 

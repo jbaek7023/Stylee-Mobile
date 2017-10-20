@@ -228,6 +228,9 @@ error: cannot connect to daemon: Connection refused
 => adb reverse tcp:8081 tcp:8081
 => Restart whole project and emulator -> (same error)
 
-20. 
+20.
 Couldn't start project on Android: Error running adb: This computer is not authorized to debug the device. Please follow the instructions here to enable USB debugging:
 https://developer.android.com/studio/run/device.html#developer-device-options. If you are using Genymotion go to Settings -> ADB, select "Use custom Android SDK tools", and point it at your Android SDK directory.
+
+21. yellow screen
+check the import

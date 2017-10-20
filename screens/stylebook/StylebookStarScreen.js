@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFe
 import { width, height, totalSize } from 'react-native-dimension';
 import { Fab, Icon, Button } from 'native-base';
 import { connect } from 'react-redux';
+import { threeImageWidth } from '../../utils/scale';
 
 import * as actions from '../../actions';
 
@@ -74,10 +75,10 @@ class StylebookStarScreen extends Component {
 
 const styles = StyleSheet.create({
   rowImage:{
-    width:width(33),
-    height:width(33),
-    borderWidth:.5,
-    borderColor:'#fff'
+    width:threeImageWidth,
+    height:threeImageWidth,
+    marginRight:2,
+    marginTop:2
   }
 });
 
