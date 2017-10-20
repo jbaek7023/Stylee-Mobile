@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { width, height, totalSize } from 'react-native-dimension';
-import { Fab, Icon, Button, H1 } from 'native-base';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten';
 import { SocialBar } from '../../components/SocialBar';
+import { Ionicons } from '@expo/vector-icons';
+import {FontAwesome} from '../../assets/icons';
+
 import {
   RkCard,
   RkText,
@@ -18,6 +20,9 @@ let ThemedNavigationBar = withRkTheme(NavBar);
 
 class CategoryDetail extends Component {
   static navigationOptions = ({navigation}) => ({
+    headerRight: (
+      <Ionicons name="md-more" size={32} style={{ marginLeft: 5 }} color="white"/>
+    ),
     header: (headerProps) => {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
     },
@@ -51,18 +56,22 @@ class CategoryDetail extends Component {
 
   render() {
     const detail = this.props.categoryDetail;
-
+    console.log(detail);
     if(detail) {
+      console.log(detail.name);
+      let outfitCount = detail.outfit_count.toString();
       return (
         <ScrollView style={styles.root} automaticallyAdjustContentInsets={false}>
           <RkCard>
             <View rkCardContent style={styles.cardContent}>
               <RkText rkType='h2'>{detail.name}</RkText>
-              <RkText rkType='h5' style={styles.marginName}>생성자: {detail.owner.username}</RkText>
-              <RkText rkType='secondary2 hintColor bigLine'>패션디자인{detail.detail}</RkText>
+              <RkText rkType='h5' style={styles.marginName}>username</RkText>
+              <RkText rkType='secondary2 hintColor bigLine'>{detail.detail}This is one</RkText>
+              <View style={{alignItems: 'flex-end'}}><RkText rkType='awesome small'>{FontAwesome.category} 카테고리추가</RkText></View>
             </View>
-
-            <View rkCardContent><RkText rkType='secondary2'>`아웃핏 {detail.outfit_count}개`</RkText></View>
+            <View rkCardContent>
+              <RkText rkType='secondary2'>스타일 {outfitCount}개</RkText>
+            </View>
           </RkCard>
             <FlatList
               data={detail.outfits}
