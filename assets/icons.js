@@ -31,6 +31,7 @@ export const FontAwesome = {
   profile: String.fromCharCode(62142),
   category: String.fromCharCode(62029),
   bookmarko: String.fromCharCode(61591),
-  bookmar: String.fromCharCode(61486),
+  bookmark: String.fromCharCode(61486),
+  menu: String.fromCharCode(61762),
 
 };

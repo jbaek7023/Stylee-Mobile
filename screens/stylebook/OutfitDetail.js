@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import {
   RkCard,
   RkText,
@@ -12,6 +12,8 @@ import { Avatar } from '../../components/Avatar';
 import { SocialBar } from '../../components/SocialBar';
 import TimeAgo from 'react-native-timeago';
 import {FontAwesome} from '../../assets/icons';
+import { Dimensions } from 'react-native';
+import Image from 'react-native-scalable-image';
 
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation}) => ({
@@ -20,14 +22,25 @@ class OutfitDetail extends Component {
         rkType='clear'
         style={{width: 50}}
         onPress={() => {
-          navigation.goBack()
+          navigation.goBack();
+
         }}>
         <RkText style={{color: 'black'}} rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
       </RkButton>
 		),
+    headerRight: (
+      <RkButton
+        rkType='clear'
+        style={{width: 42}}
+        onPress={() => {
+          navigation.goBack()
+        }}>
+        <RkText style={{color: 'black'}} rkType='awesome hero'>{FontAwesome.menu}</RkText>
+      </RkButton>
+    )
   });
 
-  componentWillMount() {
+  componentDidMount() {
     const { id } = this.props.navigation.state.params;
     const { token, hType} = this.props;
     this.props.fetchOutfitDetail(token, hType, id);
@@ -52,6 +65,15 @@ class OutfitDetail extends Component {
     this.props.navigation.navigate('Comments', {id, postType: 1});
   }
 
+  _renderAvatar = (uri) => {
+    if(_.isNil(uri)) {
+      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/robot-dev.png')}/>)
+    }
+    return (
+      <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+    );
+  }
+
   render () {
     const detail = this.props.outfitDetail;
 
@@ -60,23 +82,29 @@ class OutfitDetail extends Component {
       return (
         <ScrollView style={styles.root}>
           <RkCard rkType='article'>
-            <Image rkCardImg source={{uri: detail.outfit_img}}/>
-            <View rkCardHeader>
-              <View>
-                <RkText style={styles.title} rkType='header4'>{detail.user.username}</RkText>
-                <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
-              </View>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileV1', {id: this.data.id})}>
-                <Avatar rkType='circle' img={{uri: detail.user.image}}/>
+            <View style={styles.container}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+                {this._renderAvatar(detail.user.image)}
               </TouchableOpacity>
+              <View style={styles.content}>
+                <View style={styles.contentHeader}>
+                  <RkText rkType='header5'>{detail.user.username}</RkText>
+                  <RkText rkType='secondary4 hintColor'>
+                    <TimeAgo time={detail.publish}/>
+                  </RkText>
+                </View>
+                <RkText rkType='primary3 mediumLine'>{detail.content}</RkText>
+              </View>
             </View>
+            <Image width={Dimensions.get('window').width} source={{uri: detail.outfit_img}} />
+            <View rkCardContent>
+              <SocialBar/>
+            </View>
+
             <View rkCardContent>
               <View>
                 <RkText rkType='primary3 bigLine'>{detail.content}</RkText>
               </View>
-            </View>
-            <View rkCardFooter>
-              <SocialBar/>
             </View>
             <View rkCardContent>
               <View>
@@ -86,6 +114,9 @@ class OutfitDetail extends Component {
                   rkType='secondary2 hintColor'>댓글8개 모두보기</RkText>
               </View>
             </View>
+
+
+
           </RkCard>
         </ScrollView>
       );
@@ -103,7 +134,23 @@ let styles = RkStyleSheet.create(theme => ({
     backgroundColor: theme.colors.screen.base
   },
   title: {
-    marginBottom: 5
+    marginBottom: 5,
+  },
+  content: {
+    marginLeft: 16,
+    flex: 1,
+  },
+  container: {
+    paddingLeft: 19,
+    paddingRight: 16,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'flex-start'
+  },
+  contentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 6
   },
 }));
 

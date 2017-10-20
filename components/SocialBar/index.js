@@ -25,12 +25,28 @@ export class SocialBar extends RkComponent {
     label: {}
   };
 
+  _handleLikePress = () => {
+    if(this.state.like) {
+      this.setState({like:false})
+    } else {
+      this.setState({like:true})
+    }
+  }
+
+  _handleBookmarkPress = () => {
+    if(this.state.star) {
+      this.setState({star:false})
+    } else {
+      this.setState({star:true})
+    }
+  }
+
   _renderHeart = (like) => {
     let {section, icon, label} = this.defineStyles();
     if (like) {
       return (
         <View style={section}>
-          <RkButton rkType='clear' style={styles.buttonStyle}>
+          <RkButton rkType='clear' style={styles.buttonStyle} onPress={this._handleLikePress}>
             <RkText rkType='awesome primary' style={icon}>{FontAwesome.heart}</RkText>
             <RkText rkType='primary4 primary' style={[label, {marginTop: 5}]}>좋아요 </RkText>
           </RkButton>
@@ -39,7 +55,7 @@ export class SocialBar extends RkComponent {
     }
     return (
       <View style={section}>
-        <RkButton rkType='clear' style={styles.buttonStyle}>
+        <RkButton rkType='clear' style={styles.buttonStyle} onPress={this._handleLikePress}>
           <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.hearto}</RkText>
           <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>좋아요 </RkText>
         </RkButton>
@@ -54,16 +70,16 @@ export class SocialBar extends RkComponent {
     if (star) {
       return (
         <View style={section}>
-          <RkButton rkType='clear' style={styles.buttonStyle}>
-            <RkText rkType='awesome warning' style={icon}>{FontAwesome.bookmark}</RkText>
-            <RkText rkType='primary4 warning' style={[label, {marginTop: 5}]}>북마크 </RkText>
+          <RkButton rkType='clear' style={styles.buttonStyle} onPress={this._handleBookmarkPress}>
+            <RkText rkType='awesome' style={[icon, {color: '#FF8F00'}]}>{FontAwesome.bookmark}</RkText>
+            <RkText rkType='primary4' style={[label, {marginTop: 5, color: '#FF8F00'}]}>북마크 </RkText>
           </RkButton>
         </View>
       );
     }
     return (
       <View style={section}>
-        <RkButton rkType='clear' style={styles.buttonStyle}>
+        <RkButton rkType='clear' style={styles.buttonStyle} onPress={this._handleBookmarkPress}>
           <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.bookmarko}</RkText>
           <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>북마크 </RkText>
         </RkButton>

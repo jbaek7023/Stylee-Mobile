@@ -62,7 +62,7 @@ class CategoryDetail extends Component {
               <RkText rkType='secondary2 hintColor bigLine'>패션디자인{detail.detail}</RkText>
             </View>
 
-            <View rkCardContent><RkText rkType='secondary2'>아웃핏 3개 ALL SORT</RkText></View>
+            <View rkCardContent><RkText rkType='secondary2'>`아웃핏 {detail.outfit_count}개`</RkText></View>
           </RkCard>
             <FlatList
               data={detail.outfits}
@@ -70,7 +70,6 @@ class CategoryDetail extends Component {
               keyExtractor={this._keyExtractor}
               numColumns={3}
             />
-
         </ScrollView>
       );
     }

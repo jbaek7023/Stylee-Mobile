@@ -73,7 +73,7 @@ class StylebookWrappingScreen extends Component {
             <StylebookCategoryScreen navigation={this.props.navigation}/>
           </Tab>
           <Tab
-            heading={<TabHeading style={styles.tabStyle}><Icon style={styles.textStyle} name="star" /></TabHeading>}
+            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>Bookmark</Text></TabHeading>}
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
