@@ -26,10 +26,9 @@ export const AvatarTypes = (theme) => {
     },
     big: {
       image: {
-        width: 110,
-        height: 110,
+        width: 90,
+        height: 90,
         borderRadius: 55,
-        marginBottom: 19
       },
       container: {
         flexDirection: 'column'
