@@ -12,6 +12,7 @@ import _ from 'lodash';
 import * as actions from '../../actions';
 import { Button } from 'native-base';
 import TimeAgo from 'react-native-timeago';
+import { SocialBar } from '../../components/SocialBar';
 
 class UserProfileScreen extends Component {
 
@@ -59,6 +60,7 @@ class UserProfileScreen extends Component {
     // detail -> item
     return (
       <RkCard rkType='article'>
+        <View style={styles.profileSeperator} />
         <View style={styles.container}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
             {this._renderAvatar(item.user.image)}
@@ -147,7 +149,7 @@ class UserProfileScreen extends Component {
           data={profile.outfits}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
-          numColumns={3}
+          numColumns={1}
         />
       </ScrollView>
     );
@@ -198,7 +200,10 @@ let styles = RkStyleSheet.create(theme => ({
   },
   space: {
     marginBottom: 3,
-
+  },
+  profileSeperator: {
+    backgroundColor: '#e6e6ee',
+    height: 7
   },
   separator: {
     backgroundColor: theme.colors.border.base,
@@ -221,7 +226,6 @@ let styles = RkStyleSheet.create(theme => ({
   button: {
     flex: 1,
     alignSelf: 'center',
-
   },
   rowImage:{
     width:width(33),
@@ -233,6 +237,27 @@ let styles = RkStyleSheet.create(theme => ({
     flexDirection: 'column',
     marginLeft:20,
     width: specWidth,
+  },
+  container: {
+    paddingLeft: 19,
+    paddingRight: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 50,
+  },
+  content: {
+    marginLeft: 16,
+    flex: 1,
+  },
+  contentHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 6
+  },
+  outfitImage: {
+    width: width(100),
+    height: width(100)
   }
 }));
 
