@@ -108,7 +108,8 @@ class MenuScreen extends Component {
   }
 
   _handleProfilePress = () => {
-    this.props.navigation.navigate('Profile');
+    console.log(this.props.currentUser.username);
+    this.props.navigation.navigate('Profile', {username:this.props.currentUser.username});
   }
 
   _handleEditProfile = () => {

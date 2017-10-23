@@ -12,23 +12,29 @@ import { Avatar } from '../../components/Avatar';
 import { SocialBar } from '../../components/SocialBar';
 import TimeAgo from 'react-native-timeago';
 import {FontAwesome} from '../../assets/icons';
-import { Dimensions } from 'react-native';
-import { NavBar } from '../../components/navBar';
-import {withRkTheme} from 'react-native-ui-kitten'
-let ThemedNavigationBar = withRkTheme(NavBar);
+
 import { Ionicons } from '@expo/vector-icons';
 import { width, height, totalSize } from 'react-native-dimension';
 import { threeImageWidth } from '../../utils/scale';
 
-console.log(threeImageWidth);
 
 class OutfitDetail extends Component {
-  static navigationOptions = ({navigation}) => ({
-    title: 'Style',
-    headerRight: (<Ionicons name="md-more" size={32} style={{ marginLeft: 5 }} color="white"/>),
-    header: (headerProps) => {
-      return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
-    },
+  static navigationOptions = ({navigation, screenProps}) => ({
+    headerLeft: (
+      <RkButton
+        rkType='clear'
+        style={styles.menu}
+        onPress={() => {
+          navigation.goBack()
+        }}>
+        <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+      </RkButton>
+    ),
+    headerStyle: {height: 50},
+    headerRight: (
+      <Ionicons name="md-more" style={{marginRight: 14}} size={27} color="black"/>
+    ),
+    title: !_.isNil(screenProps.outfitDetail) ? `${screenProps.outfitDetail.user.username}'s Style`: ''
   });
 
   componentWillMount() {
@@ -105,17 +111,6 @@ class OutfitDetail extends Component {
       return (
         <ScrollView style={styles.root}>
           <RkCard rkType='article'>
-            <View style={styles.container}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
-                {this._renderAvatar(detail.user.image)}
-              </TouchableOpacity>
-              <View style={styles.content}>
-                <View style={styles.contentHeader}>
-                  <RkText rkType='header5'>{detail.user.username}</RkText>
-                  <RkButton>Follow</RkButton>
-                </View>
-              </View>
-            </View>
             <Image
               style={styles.outfitImage}
               resizeMode="cover"
@@ -143,6 +138,21 @@ class OutfitDetail extends Component {
               </View>
             </View>
             <View style={{marginTop: 11}}>
+              <RkText style={{marginLeft:14}}>작성자</RkText>
+              <View style={styles.container}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+                  {this._renderAvatar(detail.user.image)}
+                </TouchableOpacity>
+                <View style={styles.content}>
+                  <View style={styles.contentHeader}>
+                    <RkText rkType='header5'>{detail.user.username}</RkText>
+                    <RkText rkType='header5' style={{color: 'blue'}}>팔로우하기</RkText>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={{marginTop: 11}}>
               <RkText style={{marginLeft:14}}>태그된 옷 (3)</RkText>
               <FlatList
                 style={{marginTop:8}}
@@ -151,6 +161,10 @@ class OutfitDetail extends Component {
                 keyExtractor={this._keyExtractor}
                 numColumns={3}
               />
+            </View>
+            <View style={{marginTop: 11}}>
+              <RkText style={{marginLeft:14}}>스타일정보</RkText>
+              <Text>gender, location, </Text>
             </View>
           </RkCard>
         </ScrollView>
@@ -178,9 +192,9 @@ let styles = RkStyleSheet.create(theme => ({
   container: {
     paddingLeft: 19,
     paddingRight: 16,
-    paddingVertical: 12,
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'center',
+    height: 50,
   },
   contentHeader: {
     flexDirection: 'row',
@@ -197,6 +211,9 @@ let styles = RkStyleSheet.create(theme => ({
     height: threeImageWidth,
     marginRight: 2,
     marginTop: 2
+  },
+  menu: {
+    width: 50
   }
 }));
 

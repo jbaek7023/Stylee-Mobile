@@ -57,7 +57,7 @@ export default class App extends React.Component {
         'Roboto': require('native-base/Fonts/Roboto.ttf'),
         'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
         'Roboto-Light': require('./assets/fonts/Roboto-Light.ttf'),
-        'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+        'Roboto-Regular': require('native-base/Fonts/Roboto_medium.ttf'),
         'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
         'fontawesome': require('./assets/fonts/fontawesome.ttf'),
         'icomoon': require('./assets/fonts/icomoon.ttf'),

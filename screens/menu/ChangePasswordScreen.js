@@ -13,7 +13,7 @@ import {
 
 // Nav Bar
 import { NavBar } from '../../components/navBar';
-import {withRkTheme} from 'react-native-ui-kitten'
+import {withRkTheme} from 'react-native-ui-kitten';
 
 import axios from 'axios';
 
