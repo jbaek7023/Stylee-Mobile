@@ -76,7 +76,7 @@ class WardrobeWrappingScreen extends Component {
           </Tab>
         </Tabs>
         {this._renderModal()}
-        <FABs onFABsPress={this._showModal}/>
+        <FABs navigation={this.props.navigation}/>
       </View>
     )
   }

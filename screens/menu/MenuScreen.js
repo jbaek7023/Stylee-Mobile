@@ -146,30 +146,6 @@ class MenuScreen extends Component {
                       onValueChange={(sendPush) => this.setState({sendPush})}/>
           </View>
         </View>
-        <View style={styles.section}>
-          <View style={[styles.row, styles.heading]}>
-            <RkText rkType='primary header6'>FIND FRIENDS</RkText>
-          </View>
-          <View style={styles.row}>
-            <FindFriends color={RkTheme.current.colors.twitter} text='Twitter' icon={FontAwesome.twitter}
-                         selected={this.state.twitterEnabled}
-                         onPress={() => {
-                           this.setState({twitterEnabled: !this.state.twitterEnabled})
-                         }}/>
-          </View>
-          <View style={styles.row}>
-            <FindFriends color={RkTheme.current.colors.google} text='Google' icon={FontAwesome.google}
-                         selected={this.state.googleEnabled} onPress={() => {
-              this.setState({googleEnabled: !this.state.googleEnabled})
-            }}/>
-          </View>
-          <View style={styles.row}>
-            <FindFriends color={RkTheme.current.colors.facebook} text='Facebook' icon={FontAwesome.facebook}
-                         selected={this.state.facebookEnabled} onPress={() => {
-              this.setState({facebookEnabled: !this.state.facebookEnabled})
-            }}/>
-          </View>
-        </View>
 
         <View style={styles.section}>
           <View style={[styles.row, styles.heading]}>

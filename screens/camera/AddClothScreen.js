@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RkText, RkTextInput, RkStyleSheet } from 'react-native-ui-kitten';
-import { ScrollView, View, List, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 
@@ -27,7 +27,9 @@ class AddClothScreen extends Component {
   state = {
     isModalVisible: true,
     onlyMe: false,
-    myInfo: true
+    myInfo: true,
+    text: '',
+    textHeight: 0
   }
 
   _showModal = () => this.setState({ isModalVisible: true })
@@ -46,40 +48,71 @@ class AddClothScreen extends Component {
   render() {
     return (
       <ScrollView style={styles.container}>
-        <View style={styles.photoRow}>
-          <TouchableOpacity
-            onPress={()=>{this.setState({isModalVisible:true})}}>
-            <Image
-              source={require('../../assets/images/robot-dev.png')}
-              resizeMode="cover"
-              />
-          </TouchableOpacity>
-          <RkTextInput />
+        <View style={styles.headContainer}>
+          <View style={styles.leftheadContainer}>
+            <TouchableOpacity
+              style={[styles.imageContainer, {height: Math.max(70, this.state.textHeight)}]}
+              onPress={()=>{this.setState({isModalVisible:true})}}>
+              <Image
+                source={require('../../assets/images/robot-dev.png')}
+                resizeMode="cover"
+                style={styles.headImageStyle}
+                />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.rightheadContainer}>
+            <TextInput
+              multiline
+              selectionColor='grey'
+              underlineColorAndroid='white'
+              placeholder="문구입력"
+              style={[styles.inputStyle, {height: Math.max(70, this.state.textHeight)}]}
+              onChangeText={(text)=>{
+                this.setState({text})
+              }}
+              onContentSizeChange={(event) => {
+                this.setState({ textHeight: event.nativeEvent.contentSize.height });
+              }}
+              value={this.state.text}/>
+          </View>
         </View>
-        <View style={styles.row}>
+
+        <View>
+          <RkText>General Info</RkText>
+        </View>
+        <View>
+          <TouchableOpacity><RkText>Type</RkText><RkText>T-Shirt</RkText></TouchableOpacity>
+
+          <TouchableOpacity><RkText>Seasons</RkText><RkText>Fall, Spring</RkText></TouchableOpacity>
+          <TouchableOpacity><RkText>Gender</RkText><RkText>Unisex</RkText></TouchableOpacity>
+          <TouchableOpacity><RkText>Size</RkText><RkText>M(95)</RkText></TouchableOpacity>
+          <TouchableOpacity><RkText>Color</RkText><RkText>#333333</RkText></TouchableOpacity>
+        </View>
+        <View>
+          <RkText>Tagged Styles</RkText>
+        </View>
+        <View>
+
+        </View>
+        <View>
           <RkText>Cloth Detail</RkText>
-          <TouchableOpacity>
-            <RkText>Cloth Type(AI)</RkText>
-          </TouchableOpacity>
-          <TouchableOpacity><RkText>Color(Auto)</RkText></TouchableOpacity>
 
-          <TouchableOpacity><RkText>Seasons(Auto)</RkText></TouchableOpacity>
-
-          <TouchableOpacity><RkText>Location(Auto)</RkText></TouchableOpacity>
-          <RkText>link, Brand</RkText>
-
-          <RkText>Tag Outfit</RkText>
-
-          <RkText>General Information</RkText>
+        </View>
+        <View>
+          <RkText>Brand</RkText>
+          <RkText>Location</RkText>
+          <RkText>Link</RkText>
+          <RkText>In Wardrobe</RkText>
           <CheckBox
             onClick={(myInfo)=>this.setState({myInfo})}
             isChecked={this.state.myInfo}
             leftText='User Info'
           />
-          <RkText>Gender</RkText>
-          <RkTextInput />
-          <RkText>Location</RkText>
-          <RkTextInput />
+        </View>
+        <View>
+          <RkText>Privacy</RkText>
+        </View>
+        <View>
           <RkText>Only Me</RkText>
           <RkSwitch
             style={styles.switch}
@@ -94,7 +127,6 @@ class AddClothScreen extends Component {
     );
   }
 }
-// onContentSizeChange={(event) => { let currentHeight = event.nativeEvent.contentSize.height; if (currentHeight > 100){ currentHeight = 100; } this.setState({ inputHeight: currentHeight }) }}
 
 let styles = RkStyleSheet.create(theme => ({
   container: {
@@ -111,12 +143,31 @@ let styles = RkStyleSheet.create(theme => ({
     borderColor: theme.colors.border.base,
     alignItems: 'center'
   },
-  photoRow: {
+  headContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 17.5,
-    borderBottomWidth: 3,
-    borderColor: theme.colors.border.base,
-    alignItems: 'center'
+    borderBottomWidth: 1,
+    borderColor: 'grey'
+  },
+  leftheadContainer: {
+    width:90
+  },
+  imageContainer: {
+    margin:10,
+    justifyContent: 'center'
+  },
+  inputStyle: {
+    marginTop:10,
+    marginBottom:10,
+    flex: 1,
+    fontSize: 15
+  },
+  headImageStyle: {
+    width:70,
+    height: 70
+  },
+  rightheadContainer: {
+    alignItems: 'stretch',
+    flex: 1
   }
 }));
 
