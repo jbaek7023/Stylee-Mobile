@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { RkText, RkTextInput, RkStyleSheet } from 'react-native-ui-kitten';
-import { ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { RkText, RkTextInput, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
+import { ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
+import { threeImageWidth } from '../../utils/scale';
+import {FontAwesome} from '../../assets/icons';
 
 import {
   RkSwitch
@@ -19,9 +21,26 @@ class AddClothScreen extends Component {
     title: '옷 올리기',
     gesturesEnabled: false,
     tabBarVisible: false,
-    header: (headerProps) => {
-      return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
-    }
+    headerStyle: {height: 50},
+    headerLeft: (
+      <RkButton
+        rkType='clear'
+        style={{width: 50}}
+        onPress={() => {
+          navigation.goBack()
+        }}>
+        <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+      </RkButton>
+    ),
+    headerRight: (
+      <RkButton
+        rkType='clear'
+        onPress={() => {
+          navigation.goBack()
+        }}>
+        <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>저장</RkText>
+      </RkButton>
+    ),
   })
 
   state = {
@@ -29,7 +48,8 @@ class AddClothScreen extends Component {
     onlyMe: false,
     myInfo: true,
     text: '',
-    textHeight: 0
+    textHeight: 0,
+    inWardrobe: true
   }
 
   _showModal = () => this.setState({ isModalVisible: true })
@@ -65,7 +85,7 @@ class AddClothScreen extends Component {
               multiline
               selectionColor='grey'
               underlineColorAndroid='white'
-              placeholder="문구입력"
+              placeholder="문구입력..."
               style={[styles.inputStyle, {height: Math.max(70, this.state.textHeight)}]}
               onChangeText={(text)=>{
                 this.setState({text})
@@ -78,50 +98,78 @@ class AddClothScreen extends Component {
         </View>
 
         <View>
-          <RkText>General Info</RkText>
-        </View>
-        <View>
-          <TouchableOpacity><RkText>Type</RkText><RkText>T-Shirt</RkText></TouchableOpacity>
+          <View style={styles.dContainer}>
+            <RkText rkType="header5">Detail</RkText>
+          </View>
 
-          <TouchableOpacity><RkText>Seasons</RkText><RkText>Fall, Spring</RkText></TouchableOpacity>
-          <TouchableOpacity><RkText>Gender</RkText><RkText>Unisex</RkText></TouchableOpacity>
-          <TouchableOpacity><RkText>Size</RkText><RkText>M(95)</RkText></TouchableOpacity>
-          <TouchableOpacity><RkText>Color</RkText><RkText>#333333</RkText></TouchableOpacity>
-        </View>
-        <View>
-          <RkText>Tagged Styles</RkText>
-        </View>
-        <View>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">T-Shirt</RkText>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Seasons</RkText><RkText rkType="primary2">Fall, Spring</RkText>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Unisex</RkText>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Size</RkText><RkText rkType="primary2">M(95)</RkText>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Color</RkText><RkText rkType="primary2">#f64e59</RkText>
+          </TouchableOpacity>
 
-        </View>
-        <View>
-          <RkText>Cloth Detail</RkText>
+          <View style={styles.contextSeperator}/>
 
-        </View>
-        <View>
-          <RkText>Brand</RkText>
-          <RkText>Location</RkText>
-          <RkText>Link</RkText>
-          <RkText>In Wardrobe</RkText>
-          <CheckBox
-            onClick={(myInfo)=>this.setState({myInfo})}
-            isChecked={this.state.myInfo}
-            leftText='User Info'
-          />
-        </View>
-        <View>
-          <RkText>Privacy</RkText>
-        </View>
-        <View>
-          <RkText>Only Me</RkText>
-          <RkSwitch
-            style={styles.switch}
-            value={this.state.onlyMe}
-            name="Push"
-            onValueChange={(onlyMe) => this.setState({onlyMe})}/>
-        </View>
-        <View>
-          {this._renderModal()}
+          <View style={styles.dContainer}>
+            <RkText rkType="header5">Tagged Styles</RkText>
+          </View>
+          <View style={styles.dContainer}>
+            <Image
+              source={require('../../assets/images/robot-dev.png')}
+              resizeMode="cover"
+              style={styles.taggedImage}
+              />
+          </View>
+
+          <View style={styles.contextSeperator}/>
+
+          <View style={styles.dContainer}>
+            <RkText rkType="header5">More Detail</RkText>
+          </View>
+          <View style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Brand</RkText><RkText rkType="primary2">Nike</RkText>
+          </View>
+          <View style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Location</RkText><RkText rkType="primary2">USA</RkText>
+          </View>
+          <View style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Link</RkText><RkText rkType="primary2">www.naver.com</RkText>
+          </View>
+          <View style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">In Wardrobe</RkText>
+            <RkSwitch
+              style={styles.switch}
+              value={this.state.inWardrobe}
+              name="Push"
+              onValueChange={(inWardrobe) => this.setState({inWardrobe})}/>
+          </View>
+
+          <View style={styles.contextSeperator}/>
+
+          <View style={styles.dContainer}>
+            <RkText rkType="header5">Privacy</RkText>
+          </View>
+          <View style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Only Me</RkText>
+            <RkSwitch
+              style={styles.switch}
+              value={this.state.onlyMe}
+              name="Push"
+              onValueChange={(onlyMe) => this.setState({onlyMe})}/>
+          </View>
+          <View>
+            {this._renderModal()}
+          </View>
         </View>
       </ScrollView>
     );
@@ -138,15 +186,14 @@ let styles = RkStyleSheet.create(theme => ({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 17.5,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: theme.colors.border.base,
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 0,
+    paddingLeft:20
   },
   headContainer: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor: 'grey'
+    borderColor: '#cfcfd6'
   },
   leftheadContainer: {
     width:90
@@ -159,7 +206,8 @@ let styles = RkStyleSheet.create(theme => ({
     marginTop:10,
     marginBottom:10,
     flex: 1,
-    fontSize: 15
+    fontSize: 15,
+    marginRight: 10
   },
   headImageStyle: {
     width:70,
@@ -168,6 +216,22 @@ let styles = RkStyleSheet.create(theme => ({
   rightheadContainer: {
     alignItems: 'stretch',
     flex: 1
+  },
+  dHeader: {
+    color: theme.colors.primary,
+  },
+  dContainer: {
+    padding: 10
+  },
+  taggedImage: {
+    width:threeImageWidth,
+    height: threeImageWidth,
+    marginRight: 2,
+    marginTop: 2,
+  },
+  contextSeperator: {
+    backgroundColor: "#e6e6ee",
+    height: 0.5
   }
 }));
 

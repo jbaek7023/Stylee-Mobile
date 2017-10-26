@@ -33,5 +33,5 @@ export const FontAwesome = {
   bookmarko: String.fromCharCode(61591),
   bookmark: String.fromCharCode(61486),
   menu: String.fromCharCode(61762),
-
+  check: String.fromCharCode(61452),
 };

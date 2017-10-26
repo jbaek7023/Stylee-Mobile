@@ -138,13 +138,6 @@ class MenuScreen extends Component {
               <RkText rkType='header6'>Language Setting</RkText>
             </TouchableOpacity>
           </View>
-          <View style={styles.row}>
-            <RkText rkType='header6'>Send Push Notifications</RkText>
-            <RkSwitch style={styles.switch}
-                      value={this.state.sendPush}
-                      name="Push"
-                      onValueChange={(sendPush) => this.setState({sendPush})}/>
-          </View>
         </View>
 
         <View style={styles.section}>
@@ -165,6 +158,11 @@ class MenuScreen extends Component {
             <TouchableOpacity style={styles.rowButton}>
               <RkText rkType='header6'>Terms & Conditions</RkText>
             </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.section}>
+          <View style={[styles.row, styles.heading]}>
+            <RkText rkType='primary header6'>ACCOUNT</RkText>
           </View>
           <View style={styles.row}>
             <TouchableOpacity style={styles.rowButton} onPress={this._showModal}>

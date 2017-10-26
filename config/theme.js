@@ -84,7 +84,8 @@ const Colors = {
   suvaGrey: '#968D8A',
   // white
   ghostWhite: '#FAFAFE',
-  whiteSmoke: '#F5F5F5'
+  whiteSmoke: '#F5F5F5',
+  nprimary: '#3F51B5',
 };
 
 const Fonts = {
@@ -99,6 +100,7 @@ const FontBaseValue = scale(18);
 export const KittenTheme = {
   name: 'light',
   colors: {
+    nprimary: Colors.nprimary,
     navbar: Colors.mediumPurple,
     navbarText: Colors.ghostWhite,
     searchBar: Colors.quartz,
