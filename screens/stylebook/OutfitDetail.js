@@ -137,8 +137,11 @@ class OutfitDetail extends Component {
                 </View>
               </View>
             </View>
-            <View style={{marginTop: 11}}>
-              <RkText style={{marginLeft:14}}>작성자</RkText>
+
+            <View>
+              <View style={styles.headContainer}>
+                <RkText rkType="header4">작성자</RkText>
+              </View>
               <View style={styles.container}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
                   {this._renderAvatar(detail.user.image)}
@@ -152,19 +155,27 @@ class OutfitDetail extends Component {
               </View>
             </View>
 
-            <View style={{marginTop: 11}}>
-              <RkText style={{marginLeft:14}}>태그된 옷 (3)</RkText>
+            <View>
+              <View style={styles.headContainer}>
+                <RkText rkType="header4">태그된 옷 (3)</RkText>
+              </View>
               <FlatList
-                style={{marginTop:8}}
                 data={this.props.outfitDetail.tagged_clothes}
                 renderItem={this._renderClothesItem}
                 keyExtractor={this._keyExtractor}
                 numColumns={3}
               />
             </View>
-            <View style={{marginTop: 11}}>
-              <RkText style={{marginLeft:14}}>스타일정보</RkText>
-              <Text>gender, location, </Text>
+            <View>
+              <View style={styles.headContainer}>
+                <RkText rkType="header4">스타일정보</RkText>
+              </View>
+              <TouchableOpacity style={[styles.dContainer, styles.row]}>
+                <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Male</RkText>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.dContainer, styles.lastrow]}>
+                <RkText rkType="primary3">Location</RkText><RkText rkType="primary2">USA</RkText>
+              </TouchableOpacity>
             </View>
           </RkCard>
         </ScrollView>
@@ -212,8 +223,28 @@ let styles = RkStyleSheet.create(theme => ({
     marginRight: 2,
     marginTop: 2
   },
+  dContainer: {
+    padding: 10
+  },
+  headContainer: {
+    padding: 10,
+    backgroundColor: '#f5f5f8'
+  },
   menu: {
     width: 50
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 0,
+    paddingLeft:20
+  },
+  lastrow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft:20
   }
 }));
 
