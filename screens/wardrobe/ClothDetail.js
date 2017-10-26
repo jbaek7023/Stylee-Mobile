@@ -135,8 +135,10 @@ class ClothDetail extends Component {
                 </View>
               </View>
             </View>
-            <View style={{marginTop: 11}}>
-              <RkText style={{marginLeft:14}}>작성자</RkText>
+            <View>
+              <View  style={styles.headContainer}>
+                <RkText rkType="header4">작성자</RkText>
+              </View>
               <View style={styles.container}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
                   {this._renderAvatar(detail.user.image)}
@@ -151,7 +153,9 @@ class ClothDetail extends Component {
             </View>
 
             <View style={{marginTop: 11}}>
-              <RkText style={{marginLeft:14}}>태그한 스타일 (2)</RkText>
+              <View style={styles.headContainer}>
+                <RkText rkType="header4">태그한 스타일 (2)</RkText>
+              </View>
               <FlatList
                 style={{marginTop:8}}
                 data={this.props.clothDetail.tagged_clothes}
@@ -161,8 +165,38 @@ class ClothDetail extends Component {
               />
             </View>
             <View style={{marginTop: 11}}>
-              <RkText style={{marginLeft:14}}>옷 정보</RkText>
-              <Text>gender, location, </Text>
+            <View style={styles.headContainer}>
+              <RkText rkType="header4">Detail</RkText>
+            </View>
+
+            <TouchableOpacity style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">T-Shirt</RkText>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Seasons</RkText><RkText rkType="primary2">Fall, Spring</RkText>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Unisex</RkText>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Size</RkText><RkText rkType="primary2">M(95)</RkText>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Color</RkText><RkText rkType="primary2">#f64e59</RkText>
+            </TouchableOpacity>
+            <View style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Brand</RkText><RkText rkType="primary2">Nike</RkText>
+            </View>
+            <View style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Location</RkText><RkText rkType="primary2">USA</RkText>
+            </View>
+            <View style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Link</RkText><RkText rkType="primary2">www.naver.com</RkText>
+            </View>
+            <View style={[styles.dContainer, styles.lastrow]}>
+              <RkText rkType="primary3">In wardrobe</RkText>
+              <RkText rkType="primary2">Yes</RkText>
+            </View>
             </View>
           </RkCard>
         </ScrollView>
@@ -211,9 +245,30 @@ let styles = RkStyleSheet.create(theme => ({
     alignItems: 'center',
     height: 50,
   },
+
   content: {
     marginLeft: 16,
     flex: 1,
+  },
+  dContainer: {
+    padding: 10
+  },
+  headContainer: {
+    padding: 10,
+    backgroundColor: '#f5f5f8'
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 0,
+    paddingLeft:20
+  },
+  lastrow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft:20
   }
 }));
 
