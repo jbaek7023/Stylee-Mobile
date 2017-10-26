@@ -120,15 +120,8 @@ class AddClothScreen extends Component {
 
           <View style={styles.contextSeperator}/>
 
-          <View style={styles.dContainer}>
-            <RkText rkType="header5">Tagged Styles</RkText>
-          </View>
-          <View style={styles.dContainer}>
-            <Image
-              source={require('../../assets/images/robot-dev.png')}
-              resizeMode="cover"
-              style={styles.taggedImage}
-              />
+          <View style={[styles.dContainer, styles.drow]}>
+            <RkText rkType="header5">Tagged Styles</RkText><RkText rkType="header5 primary right">Tag Style</RkText>
           </View>
 
           <View style={styles.contextSeperator}/>
@@ -189,6 +182,11 @@ let styles = RkStyleSheet.create(theme => ({
     alignItems: 'center',
     paddingTop: 0,
     paddingLeft:20
+  },
+  drow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   headContainer: {
     flexDirection: 'row',
