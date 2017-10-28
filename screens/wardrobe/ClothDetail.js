@@ -42,11 +42,6 @@ class ClothDetail extends Component {
     this.props.fetchClothDetail(token, hType, id);
   }
 
-  // categories, comment_count,
-  //   comments, content, gender, id,
-  //   like_count, liked, location, outfit_img,
-  //   publish, tagged_clothes, updated, user
-
   _renderComments = (comments) => {
     let result = comments.map(( obj, index ) => {
       return (<Text key={index}><Text style={{fontWeight: 'bold'}}>{obj.user.username}</Text> {obj.content}</Text>);

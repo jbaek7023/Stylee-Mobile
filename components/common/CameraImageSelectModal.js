@@ -6,24 +6,8 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { ImagePicker } from 'expo';
 
 class CameraImageSelectModal extends Component {
-  _handleCameraPress = async () => {
-    this.props.hideModal();
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [3, 3],
-    });
-    console.log(result);
-
-//     result_sample
-//     {
-//   "cancelled":false,
-//   "height":1611,
-//   "width":2148,
-//   "uri":"file:///data/user/0/host.exp.exponent/cache/cropped1814158652.jpg"
-// }
-    if (!result.cancelled) {
-      this.setState({ image: result.uri });
-    }
+  state = {
+    image: undefined,
   }
 
   _pickImage = async () => {
@@ -33,13 +17,7 @@ class CameraImageSelectModal extends Component {
     });
     console.log(result);
     this.props.hideModal();
-//     result_sample
-//     {
-//   "cancelled":false,
-//   "height":1611,
-//   "width":2148,
-//   "uri":"file:///data/user/0/host.exp.exponent/cache/cropped1814158652.jpg"
-// }
+
     if (!result.cancelled) {
       this.setState({ image: result.uri });
     }
@@ -49,8 +27,6 @@ class CameraImageSelectModal extends Component {
     this.props.hideModal();
     this._pickImage();
   }
-
-
 
   render() {
     let { isModalVisible } = this.props;

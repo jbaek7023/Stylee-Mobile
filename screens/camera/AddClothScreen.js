@@ -5,16 +5,28 @@ import CheckBox from 'react-native-check-box';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 import { threeImageWidth } from '../../utils/scale';
 import {FontAwesome} from '../../assets/icons';
-
+import { ImagePicker } from 'expo';
+import Modal from 'react-native-modal';
+import { width, height, totalSize } from 'react-native-dimension';
+import { Button } from 'native-base';
 import {
   RkSwitch
 } from '../../components/switch/index';
+import SelectorModal from '../../components/common/SelectorModal';
+const userList = {
+  "123":"All",
+  "124":"Spring",
+  "125":"Summer",
+  "126":"Fall",
+  "127":"Winter"
+}
 // Header Left goBack'
 // Header Title Post your Style
 // Header Right POST
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
+import { seasons, genders, outwearType, topType, bigType, topSize, clothColors } from '../../utils/menuItems';
 
 class AddClothScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -49,20 +61,145 @@ class AddClothScreen extends Component {
     myInfo: true,
     text: '',
     textHeight: 0,
-    inWardrobe: true
+    inWardrobe: true,
+    image: undefined,
+    isSelectorVisible: false,
+    items: [],
+    bigType: 'Top',
+    seasonType: ['Spring', 'Winter'],
+    gender: 'Unisex',
+    clothSize: 'M(95)',
+    clothColor: '#308444',
+    detailSelect: 1
   }
 
-  _showModal = () => this.setState({ isModalVisible: true })
-  _hideModal = () => this.setState({ isModalVisible: false })
+  _showModal = () => this.setState({ isModalVisible: true });
+  _hideModal = () => this.setState({ isModalVisible: false });
+  _showSelector = () => this.setState({ isSelectorVisible: true });
+  _hideSelector = () => this.setState({ isSelectorVisible: false });
+  _setBigType = (bigType) => this.setState({bigType});
+  _setSeason = (season) => this.setState({season});
+  _setGender = (gender) => this.setState({gender});
+  _setSize = (clothSize) => this.setState({clothSize});
+  _setColor = (clothColor) => this.setState({clothColor});
+  _setDetailSelect = (detailSelect) => this.setState({detailSelect});
 
+  // CAMERA
+  _handleCameraPress = async () => {
+    this._hideModal();
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [3, 3],
+    });
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  }
+
+  _handleAlbumPress = async () => {
+    this._hideModal();
+    this._pickImage();
+  }
+
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [3, 3],
+    });
+    console.log(result);
+    this._hideModal();
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  };
+  // END OF CAMEARA
+
+  // Camera or Roll mode Modal
   _renderModal = () => {
     return (
-      <CameraImageSelectModal
-        hideModal={this._hideModal}
-        isModalVisible={this.state.isModalVisible}
-        navigation={this.props.navigation}
-      />
+      <Modal
+        isVisible={this.state.isModalVisible}
+        onBackdropPress = {() => this._hideModal()}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalTitleTextContainer}>
+            <Text style={styles.modalTitleText}>Hello World</Text>
+          </View>
+          <View style={styles.modalContentTextContainer}>
+            <Text style={styles.modalContentText}></Text>
+          </View>
+          <View style={styles.modalButtonContainer}>
+            <Button transparent onPress={this._handleCameraPress}>
+              <Text style={[styles.modalText, styles.black]}>Camera</Text>
+            </Button>
+            <Button transparent onPress={this._handleAlbumPress}>
+              <Text style={styles.modalText}>Open Album</Text>
+            </Button>
+          </View>
+        </View>
+      </Modal>
     )
+  }
+
+  _selectAction = (value) => {
+    // if seasons, genders, bigType, topType, outwearType
+    let { detailSelect } = this.state;
+    console.log(detailSelect);
+    if(detailSelect===1) {
+      this._setBigType(value);
+    } else if(detailSelect===2) {
+      this._setSeason(value);
+    } else if(detailSelect===3) {
+      this._setGender(value);
+    } else if(detailSelect===4) {
+      this._setSize(value);
+    } else if(detailSelect===5) {
+      this._setColor(value);
+    }
+    this._hideSelector()
+  }
+
+  // Selector Modal
+  _renderSelectorModal = () => {
+    return (
+      <SelectorModal
+        isSelectorVisible={this.state.isSelectorVisible}
+        multiple={false}
+        items={this.state.items}
+        hideSelector={this._hideSelector}
+        selectAction={this._selectAction}
+      />
+    );
+  }
+
+  _handleDetailPress = (option) => {
+    // 3 = Gender
+    // { seasons, genders, outwearType, topType, bigType }
+    if(option===1) {
+      this.setState({items: bigType})
+    } else if (option===2) {
+      this.setState({items: seasons})
+    } else if (option===3) {
+      this.setState({items: genders})
+    } else if (option===4) {
+      // if bigType == something,
+      this.setState({items: topSize})
+    } else if (option===5) {
+      this.setState({items: clothColors})
+    }
+    console.log('option');
+    console.log(option);
+    this._setDetailSelect(option);
+    this._showSelector();
+  }
+
+  _renderSeasons = () => {
+    let seasons = this.state.seasonType.map((season) => {
+      return ' '+season;
+    })
+    return seasons
   }
 
   render() {
@@ -102,20 +239,26 @@ class AddClothScreen extends Component {
             <RkText rkType="header5">Detail</RkText>
           </View>
 
-          <TouchableOpacity style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">T-Shirt</RkText>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}
+            onPress={() => {this._handleDetailPress(1)}}>
+            <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">{this.state.bigType}</RkText>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Seasons</RkText><RkText rkType="primary2">Fall, Spring</RkText>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}
+            onPress={() => {this._handleDetailPress(2)}}>
+            <RkText rkType="primary3">Seasons</RkText>
+            <RkText rkType="primary2">{this._renderSeasons()}</RkText>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Unisex</RkText>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}
+            onPress={() => {this._handleDetailPress(3)}}>
+            <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">{this.state.gender}</RkText>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Size</RkText><RkText rkType="primary2">M(95)</RkText>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}
+            onPress={() => {this._handleDetailPress(4)}}>
+            <RkText rkType="primary3">Size</RkText><RkText rkType="primary2">{this.state.clothSize}</RkText>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Color</RkText><RkText rkType="primary2">#f64e59</RkText>
+          <TouchableOpacity style={[styles.dContainer, styles.row]}
+            onPress={() => {this._handleDetailPress(5)}}>
+            <RkText rkType="primary3">Color</RkText><RkText rkType="primary2">{this.state.clothColor}</RkText>
           </TouchableOpacity>
 
           <View style={styles.contextSeperator}/>
@@ -162,6 +305,9 @@ class AddClothScreen extends Component {
           </View>
           <View>
             {this._renderModal()}
+          </View>
+          <View>
+            {this._renderSelectorModal()}
           </View>
         </View>
       </ScrollView>
@@ -230,6 +376,43 @@ let styles = RkStyleSheet.create(theme => ({
   contextSeperator: {
     backgroundColor: "#e6e6ee",
     height: 0.5
+  },
+  modalContainer: {
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    width: width(90),
+    height: height(30),
+    padding: 16
+  },
+  modalTitleTextContainer: {
+    flexDirection: 'row',
+    flex:1
+  },
+  modalTitleText: {
+    fontSize: totalSize(3),
+  },
+  modalContentTextContainer: {
+    flex: 2,
+    flexDirection: 'row',
+    padding: 10
+  },
+  modalContentText: {
+    fontSize: totalSize(2),
+    flex: 1,
+    color: '#696969'
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    flex: 1,
+    overflow: 'hidden'
+  },
+  modalButtonText: {
+    fontSize: totalSize(2),
+    flex: 1
+  },
+  black: {
+    color: 'black'
   }
 }));
 

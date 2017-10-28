@@ -53,3 +53,7 @@ export const FETCH_COMMENTS_SUCCESS = 'fetch_comments_success';
 export const FETCH_COMMENTS_FAIL = 'fetch_comments_fail';
 export const COMMENT_DETAIL_SUCCESS = 'comment_detail_success';
 export const COMMENT_DETAIL_FAIL = 'comment_detail_fail';
+
+// Create Cloth / Outfit
+export const CREATE_CLOTH_SUCCESS = 'create_cloth_success';
+export const CREATE_CLOTH_FAIL = 'create_cloth_fail';
