@@ -4,6 +4,8 @@ import Modal from 'react-native-modal';
 import { Text, Button } from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
 import { RkText, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
 class SelectorModal extends Component {
   state = {
@@ -21,7 +23,6 @@ class SelectorModal extends Component {
   }
 
   // update state -> render again -> update state :: infinite loop
-
   _renderItem = ({item}) => {
     return (
       <TouchableOpacity onPress={() => this.props.selectAction(item.value)}>
@@ -30,43 +31,56 @@ class SelectorModal extends Component {
     );
   }
 
-  // this.props.items = [
-  // {value: 'all'}, {value: 'Spring'}, {value: 'Summer'}, {value: 'Fall'}, {value: 'Winter'}
-  // ]
+  _handleMultipleItem = (itemId) => {
+    console.log('print');
+    console.log(itemId);
+    this.props.seasonSelectAction(itemId);
+  }
 
-  // this.props.items = [
-  // {value: 'Unisex'}, {value: 'Male'}, {value: 'Female'}
-  // {value: 'Top'}
-  // ]
-
-  // this.props.items = [
-  // {value: 'all'}, {value: 'Spring'}, {value: 'Summer'}, {value: 'Fall'}, {value: 'Winter'}
-  // ]
+  _renderItemForMultiple = ({item}) => {
+    return (
+      <TouchableOpacity onPress={() => {this._handleMultipleItem(item.id)}}>
+        <RkText>{item.value}</RkText>
+      </TouchableOpacity>
+    );
+  }
 
   render() {
     let { isSelectorVisible } = this.props;
     let { multiple } = this.props;
-    console.log(multiple);
-    console.log(isSelectorVisible);
-
-    return (
-      <Modal
-        isVisible={isSelectorVisible}
-        onBackdropPress = {() => this.props.hideSelector()}>
-        <View style={styles.modalContainer}>
-          <FlatList
-            style={styles.root}
-            data={this.props.items}
-            ItemSeparatorComponent={this._renderSeparator}
-            keyExtractor={this._keyExtractor}
-            renderItem={this._renderItem}/>
-        </View>
-      </Modal>
-    );
+    if(!multiple) {
+      return (
+        <Modal
+          isVisible={isSelectorVisible}
+          onBackdropPress = {() => this.props.hideSelector()}>
+          <View style={styles.modalContainer}>
+            <FlatList
+              style={styles.root}
+              data={this.props.items}
+              ItemSeparatorComponent={this._renderSeparator}
+              keyExtractor={this._keyExtractor}
+              renderItem={this._renderItem}/>
+          </View>
+        </Modal>
+      );
+    } else {
+      return (
+        <Modal
+          isVisible={isSelectorVisible}
+          onBackdropPress = {() => this.props.hideSelector()}>
+          <View style={styles.modalContainer}>
+            <FlatList
+              style={styles.root}
+              data={this.props.items}
+              ItemSeparatorComponent={this._renderSeparator}
+              keyExtractor={this._keyExtractor}
+              renderItem={this._renderItemForMultiple}/>
+          </View>
+        </Modal>
+      );
+    }
   }
 };
-
-
 
 const styles = RkStyleSheet.create(theme => ({
   root: {
@@ -113,4 +127,4 @@ const styles = RkStyleSheet.create(theme => ({
   }
 }));
 
-export default SelectorModal;
+export default connect(null, actions)(SelectorModal);

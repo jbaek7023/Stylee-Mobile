@@ -13,20 +13,12 @@ import {
   RkSwitch
 } from '../../components/switch/index';
 import SelectorModal from '../../components/common/SelectorModal';
-const userList = {
-  "123":"All",
-  "124":"Spring",
-  "125":"Summer",
-  "126":"Fall",
-  "127":"Winter"
-}
-// Header Left goBack'
-// Header Title Post your Style
-// Header Right POST
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
 import { seasons, genders, outwearType, topType, bigType, topSize, clothColors } from '../../utils/menuItems';
+import SelectedSeasonsSelector from '../../selectors/selected_seasons';
+import { connect } from 'react-redux';
 
 class AddClothScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -66,11 +58,15 @@ class AddClothScreen extends Component {
     isSelectorVisible: false,
     items: [],
     bigType: 'Top',
-    seasonType: ['Spring', 'Winter'],
+
+    selectedSeasonIds: [100],
+    seasons: seasons,
+
     gender: 'Unisex',
     clothSize: 'M(95)',
     clothColor: '#308444',
-    detailSelect: 1
+    detailSelect: 1,
+    multiple: false
   }
 
   _showModal = () => this.setState({ isModalVisible: true });
@@ -83,6 +79,7 @@ class AddClothScreen extends Component {
   _setSize = (clothSize) => this.setState({clothSize});
   _setColor = (clothColor) => this.setState({clothColor});
   _setDetailSelect = (detailSelect) => this.setState({detailSelect});
+  _setMultiple = (multiple) => this.setState({multiple})
 
   // CAMERA
   _handleCameraPress = async () => {
@@ -146,10 +143,11 @@ class AddClothScreen extends Component {
   _selectAction = (value) => {
     // if seasons, genders, bigType, topType, outwearType
     let { detailSelect } = this.state;
-    console.log(detailSelect);
+
     if(detailSelect===1) {
       this._setBigType(value);
     } else if(detailSelect===2) {
+      // Set Season
       this._setSeason(value);
     } else if(detailSelect===3) {
       this._setGender(value);
@@ -161,15 +159,28 @@ class AddClothScreen extends Component {
     this._hideSelector()
   }
 
+  _seasonSelectAction = (id) => {
+    if(_.includes(this.state.selectedSeasonIds, id)) {
+      let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
+          return curObject !== id;
+      });
+      this.setState({selectedSeasonIds : newSelectedSeasonIds});
+    } else {
+      let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
+      this.setState({selectedSeasonIds : newSelectedSeasonIds});
+    }
+  }
+
   // Selector Modal
   _renderSelectorModal = () => {
     return (
       <SelectorModal
         isSelectorVisible={this.state.isSelectorVisible}
-        multiple={false}
+        multiple={this.state.multiple}
         items={this.state.items}
         hideSelector={this._hideSelector}
         selectAction={this._selectAction}
+        seasonSelectAction={this._seasonSelectAction}
       />
     );
   }
@@ -179,27 +190,32 @@ class AddClothScreen extends Component {
     // { seasons, genders, outwearType, topType, bigType }
     if(option===1) {
       this.setState({items: bigType})
+      this._setMultiple(false)
     } else if (option===2) {
       this.setState({items: seasons})
+      this._setMultiple(true)
     } else if (option===3) {
       this.setState({items: genders})
+      this._setMultiple(false)
     } else if (option===4) {
       // if bigType == something,
       this.setState({items: topSize})
+      this._setMultiple(true)
     } else if (option===5) {
       this.setState({items: clothColors})
+      this._setMultiple(false)
     }
-    console.log('option');
-    console.log(option);
     this._setDetailSelect(option);
     this._showSelector();
   }
 
   _renderSeasons = () => {
-    let seasons = this.state.seasonType.map((season) => {
-      return ' '+season;
+    selectedSeasons = SelectedSeasonsSelector(this.state)
+    console.log(selectedSeasons);
+    let seasonList = selectedSeasons.map((season) => {
+      return ' '+season.value;
     })
-    return seasons
+    return seasonList
   }
 
   render() {
@@ -416,4 +432,4 @@ let styles = RkStyleSheet.create(theme => ({
   }
 }));
 
-export default AddClothScreen;
+export default connect(null, null)(AddClothScreen);

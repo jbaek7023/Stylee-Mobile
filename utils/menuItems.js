@@ -18,19 +18,19 @@ const bigType = [{
 
 //select 2
 const seasons = [{
-  id: '92iijs7yta',
+  id: 100,
   value: 'All',
 }, {
-  id: 'a0s0a8ssbsd',
+  id: 101,
   value: 'Spring',
 }, {
-  id: '16hbajsabsd',
+  id: 102,
   value: 'Summer',
 }, {
-  id: 'nahs75a5sg',
+  id: 103,
   value: 'Fall',
 }, {
-  id: '667atsas',
+  id: 104,
   value: 'Winter',
 }];
 

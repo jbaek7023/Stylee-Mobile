@@ -15,3 +15,8 @@ export const sendPost = ( imageUri, title, content ) => async dispatch => {
     dispatch({ type: CREATE_CLOTH_FAIL })
   }
 }
+
+export const selectSeasons = ( id ) => ({
+  type: SELECT_SEASON,
+  payload: id
+});

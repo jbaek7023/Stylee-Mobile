@@ -57,3 +57,4 @@ export const COMMENT_DETAIL_FAIL = 'comment_detail_fail';
 // Create Cloth / Outfit
 export const CREATE_CLOTH_SUCCESS = 'create_cloth_success';
 export const CREATE_CLOTH_FAIL = 'create_cloth_fail';
+export const SELECT_SEASON = 'select_season';
