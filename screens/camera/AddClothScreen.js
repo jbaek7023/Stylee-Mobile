@@ -74,6 +74,8 @@ class AddClothScreen extends Component {
     selectedColorIds: [],
     clothColor: clothColors,
 
+    selectedIds: [6, 1, 99, 21 ],
+
     gender: 'Unisex',
 
     detailSelect: 1,
@@ -153,10 +155,22 @@ class AddClothScreen extends Component {
     )
   }
 
-  _selectAction = (value) => {
+  _addOrDeleteId = (id) => {
+    if(_.includes(this.state.selectedIds, id)) {
+      let newSelectedIds = _.filter(this.state.selectedIds, (curObject) => {
+          return curObject !== id;
+      });
+      this.setState({selectedIds : newSelectedIds});
+    } else {
+      let newSelectedIds = [...this.state.selectedIds, id];
+      this.setState({selectedIds : newSelectedIds});
+    }
+  }
+
+  _selectAction = (value, id) => {
     // if seasons, genders, bigType, topType, outwearType
     let { detailSelect } = this.state;
-
+    this._addOrDeleteId(id);
     if(detailSelect===1) {
       // bigType: Top, Outwear, ETC -> Bottom / Shoes
       this._setBigType(value);
@@ -191,7 +205,12 @@ class AddClothScreen extends Component {
     }
   }
 
+
+
   _seasonSelectAction = (id) => {
+    // We can optimize this code later
+    this._addOrDeleteId(id);
+
     if(this.state.selectionType===4) {
       if(_.includes(this.state.selectedSizeIds, id)) {
         let newSelectedSizeIds = _.filter(this.state.selectedSizeIds, (curObject) => {
@@ -236,6 +255,7 @@ class AddClothScreen extends Component {
         selectAction={this._selectAction}
         seasonSelectAction={this._seasonSelectAction}
         selectionType={this.state.selectionType}
+        selectedIds={this.state.selectedIds}
       />
     );
   }

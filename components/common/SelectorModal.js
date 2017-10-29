@@ -9,7 +9,7 @@ import * as actions from '../../actions';
 
 class SelectorModal extends Component {
   state = {
-    image: undefined,
+    // undefined
   }
 
   _keyExtractor(item, index) {
@@ -22,11 +22,22 @@ class SelectorModal extends Component {
     )
   }
 
-  // update state -> render again -> update state :: infinite loop
+  _renderCheck = (id) => {
+    let { selectedIds } = this.props;
+    console.log(selectedIds);
+    if(_.includes(selectedIds, id)) {
+      return (<RkText>Check</RkText>);
+    }
+    return (<RkText> </RkText>);
+  }
+
   _renderItem = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => this.props.selectAction(item.value)}>
+      <TouchableOpacity
+        style={styles.itemStyle}
+        onPress={() => this.props.selectAction(item.value, item.id)}>
         <RkText>{item.value}</RkText>
+        { this._renderCheck(item.id) }
       </TouchableOpacity>
     );
   }
@@ -38,8 +49,11 @@ class SelectorModal extends Component {
 
   _renderItemForMultiple = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => {this._handleMultipleItem(item.id)}}>
+      <TouchableOpacity
+        style={styles.itemStyle}
+        onPress={() => {this._handleMultipleItem(item.id)}}>
         <RkText>{item.value}</RkText>
+        { this._renderCheck(item.id) }
       </TouchableOpacity>
     );
   }
@@ -92,6 +106,12 @@ const styles = RkStyleSheet.create(theme => ({
   seperator: {
     backgroundColor: 'black',
     height: 0.5
+  },
+  itemStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 5
   }
 }));
 
