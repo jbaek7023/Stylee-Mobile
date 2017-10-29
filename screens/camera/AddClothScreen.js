@@ -16,8 +16,10 @@ import SelectorModal from '../../components/common/SelectorModal';
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
-import { seasons, genders, outwearType, topType, bigType, topSize, clothColors } from '../../utils/menuItems';
+import { seasons, genders, outwearType, topType, bigType, topSize, clothColors, bottomSize, shoeSize } from '../../utils/menuItems';
 import SelectedSeasonsSelector from '../../selectors/selected_seasons';
+import SelectedColorsSelector from '../../selectors/selected_colors';
+import SelectedSizesSelector from '../../selectors/selected_sizes';
 import { connect } from 'react-redux';
 
 class AddClothScreen extends Component {
@@ -58,15 +60,23 @@ class AddClothScreen extends Component {
     isSelectorVisible: false,
     items: [],
     bigType: 'Top',
+    clothType: 'T-Shirt',
 
-    selectedSeasonIds: [100],
+    selectionType: 5,
+
+    selectedSeasonIds: [],
     seasons: seasons,
 
+    selectedSizeIds: [],
+    clothSize: topSize,
+
+    selectedColorIds: [],
+    clothColor: clothColors,
+
     gender: 'Unisex',
-    clothSize: 'M(95)',
-    clothColor: '#308444',
+
     detailSelect: 1,
-    multiple: false
+    multiple: false,
   }
 
   _showModal = () => this.setState({ isModalVisible: true });
@@ -79,7 +89,9 @@ class AddClothScreen extends Component {
   _setSize = (clothSize) => this.setState({clothSize});
   _setColor = (clothColor) => this.setState({clothColor});
   _setDetailSelect = (detailSelect) => this.setState({detailSelect});
-  _setMultiple = (multiple) => this.setState({multiple})
+  _setMultiple = (multiple) => this.setState({multiple});
+  _setSelectionType = (selectionType) => this.setState({selectionType});
+  _setClothType = (clothType) => this.setState({clothType});
 
   // CAMERA
   _handleCameraPress = async () => {
@@ -145,29 +157,60 @@ class AddClothScreen extends Component {
     let { detailSelect } = this.state;
 
     if(detailSelect===1) {
+      // bigType: Top, Outwear, ETC -> Bottom / Shoes
       this._setBigType(value);
+      this.setState({selectedSizeIds: []});
+      this.setState({items:topType});
+      this.setState({detailSelect:6});
     } else if(detailSelect===2) {
-      // Set Season
       this._setSeason(value);
+      this._hideSelector();
     } else if(detailSelect===3) {
       this._setGender(value);
+      this._hideSelector();
     } else if(detailSelect===4) {
       this._setSize(value);
+      this._hideSelector();
     } else if(detailSelect===5) {
       this._setColor(value);
+      this._hideSelector();
+    } else if (detailSelect===6) {
+      this._setClothType(value);
+      this._hideSelector();
     }
-    this._hideSelector()
   }
 
   _seasonSelectAction = (id) => {
-    if(_.includes(this.state.selectedSeasonIds, id)) {
-      let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
-          return curObject !== id;
-      });
-      this.setState({selectedSeasonIds : newSelectedSeasonIds});
+    if(this.state.selectionType===4) {
+      if(_.includes(this.state.selectedSizeIds, id)) {
+        let newSelectedSizeIds = _.filter(this.state.selectedSizeIds, (curObject) => {
+            return curObject !== id;
+        });
+        this.setState({selectedSizeIds : newSelectedSizeIds});
+      } else {
+        let newSelectedSizeIds = [...this.state.selectedSizeIds, id];
+        this.setState({selectedSizeIds : newSelectedSizeIds});
+      }
+    } else if (this.state.selectionType===5) {
+      if(_.includes(this.state.selectedColorIds, id)) {
+        let newSelectedColorIds = _.filter(this.state.selectedColorIds, (curObject) => {
+            return curObject !== id;
+        });
+        this.setState({selectedColorIds : newSelectedColorIds});
+      } else {
+        let newSelectedColorIds = [...this.state.selectedColorIds, id];
+        this.setState({selectedColorIds : newSelectedColorIds});
+      }
     } else {
-      let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
-      this.setState({selectedSeasonIds : newSelectedSeasonIds});
+      if(_.includes(this.state.selectedSeasonIds, id)) {
+        let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
+            return curObject !== id;
+        });
+        this.setState({selectedSeasonIds : newSelectedSeasonIds});
+      } else {
+        let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
+        this.setState({selectedSeasonIds : newSelectedSeasonIds});
+      }
     }
   }
 
@@ -181,6 +224,7 @@ class AddClothScreen extends Component {
         hideSelector={this._hideSelector}
         selectAction={this._selectAction}
         seasonSelectAction={this._seasonSelectAction}
+        selectionType={this.state.selectionType}
       />
     );
   }
@@ -198,20 +242,54 @@ class AddClothScreen extends Component {
       this.setState({items: genders})
       this._setMultiple(false)
     } else if (option===4) {
-      // if bigType == something,
-      this.setState({items: topSize})
+      if (this.state.bigType === 'Bottoms') {
+        this.setState({items: bottomSize})
+        this.setState({clothSize: bottomSize})
+      } else if (this.state.bigType === 'Shoes') {
+        this.setState({items: shoeSize})
+        this.setState({clothSize: shoeSize})
+      } else {
+        this.setState({items: topSize})
+        this.setState({clothSize: topSize})
+      }
       this._setMultiple(true)
     } else if (option===5) {
       this.setState({items: clothColors})
-      this._setMultiple(false)
+      this._setMultiple(true)
     }
     this._setDetailSelect(option);
+    this._setSelectionType(option);
     this._showSelector();
   }
 
   _renderSeasons = () => {
     selectedSeasons = SelectedSeasonsSelector(this.state)
-    console.log(selectedSeasons);
+    if(selectedSeasons.length==0) {
+      return '-'
+    }
+    let seasonList = selectedSeasons.map((season) => {
+      return ' '+season.value;
+    })
+    return seasonList
+  }
+
+  _renderSizes = () => {
+    selectedSeasons = SelectedSizesSelector(this.state)
+    if(selectedSeasons.length==0) {
+      return '-'
+    }
+    let seasonList = selectedSeasons.map((season) => {
+      return ' '+season.value;
+    })
+
+    return seasonList
+  }
+
+  _renderColors = () => {
+    selectedSeasons = SelectedColorsSelector(this.state)
+    if(selectedSeasons.length==0) {
+      return '-'
+    }
     let seasonList = selectedSeasons.map((season) => {
       return ' '+season.value;
     })
@@ -257,7 +335,7 @@ class AddClothScreen extends Component {
 
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(1)}}>
-            <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">{this.state.bigType}</RkText>
+            <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">{this.state.bigType}/{this.state.clothType}</RkText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(2)}}>
@@ -266,15 +344,18 @@ class AddClothScreen extends Component {
           </TouchableOpacity>
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(3)}}>
-            <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">{this.state.gender}</RkText>
+            <RkText rkType="primary3">Gender</RkText>
+            <RkText rkType="primary2">{this.state.gender}</RkText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(4)}}>
-            <RkText rkType="primary3">Size</RkText><RkText rkType="primary2">{this.state.clothSize}</RkText>
+            <RkText rkType="primary3">Size</RkText>
+            <RkText rkType="primary2">{this._renderSizes()}</RkText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(5)}}>
-            <RkText rkType="primary3">Color</RkText><RkText rkType="primary2">{this.state.clothColor}</RkText>
+            <RkText rkType="primary3">Color</RkText>
+            <RkText rkType="primary2">{this._renderColors()}</RkText>
           </TouchableOpacity>
 
           <View style={styles.contextSeperator}/>

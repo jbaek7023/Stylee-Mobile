@@ -6,8 +6,6 @@ const seasonsSelector = state => state.seasons
 const selectedSeasonsSelector = state => state.selectedSeasonIds
 
 const getSeasons = (seasons, selectedSeasonIds) => {
-  console.log('contains test');
-  console.log(_.includes([100], 100));
   const selectedSeasons = _.filter(
     seasons,
     season => _.includes(selectedSeasonIds, season.id)

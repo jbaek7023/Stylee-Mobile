@@ -32,8 +32,7 @@ class SelectorModal extends Component {
   }
 
   _handleMultipleItem = (itemId) => {
-    console.log('print');
-    console.log(itemId);
+    let { selectionType } = this.props;
     this.props.seasonSelectAction(itemId);
   }
 
