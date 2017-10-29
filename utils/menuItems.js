@@ -35,39 +35,137 @@ const seasons = [{
 }];
 
 const topType = [{
-  id: 11,
+  id: 99,
   value: 'T-Shirt',
 }, {
-  id: 12,
-  value: 'Long Sleeve',
+  id: 100,
+  value: 'Shirt/Blouse',
 }, {
-  id: 13,
-  value: 'Vest',
+  id: 101,
+  value: 'Sweatshirt / Long Sleeve',
 }, {
-  id: 14,
-  value: 'More',
+  id: 102,
+  value: 'Knitwear/Sweater',
 }, {
-  id: 15,
-  value: 'Other Top Type',
+  id: 103,
+  value: 'Hoodies',
+}, {
+  id: 104,
+  value: 'Sleeveless Shirt',
+}, {
+  id: 105,
+  value: 'One Piece',
+}, {
+  id: 106,
+  value: 'Other',
 }];
 
 const outwearType = [{
   id: 16,
-  value: 'Coat',
+  value: 'Coat/Blazer',
 }, {
   id: 17,
-  value: 'Paddi Jacket',
+  value: 'Jacket/Jumper',
 }, {
   id: 18,
-  value: 'Outweary',
+  value: 'Cardigan',
 }, {
   id: 19,
-  value: 'MoreDone',
+  value: 'Padded Jacket / Padded Coat',
 }, {
   id: 20,
-  value: 'Other Outwear Type',
+  value: 'Field Jacket',
+}, {
+  id: 96,
+  value: 'Zip Up Hoodie',
+}, {
+  id: 97,
+  value: 'Vest',
+}, {
+  id: 98,
+  value: 'Other',
 }];
 
+const etcType = [{
+  id: 71,
+  value: 'Bag'
+}, {
+  id: 72,
+  value: 'Hat'
+}, {
+  id: 73,
+  value: 'Watch'
+}, {
+  id: 74,
+  value: 'Belt'
+}, {
+  id: 75,
+  value: 'Swinwear'
+}, {
+  id: 76,
+  value: 'Socks'
+}, {
+  id: 77,
+  value: 'Cell Phone Case'
+}, {
+  id: 78,
+  value: 'Ring'
+}, {
+  id: 79,
+  value: 'Earring'
+}, {
+  id: 80,
+  value: 'Necklace'
+}, {
+  id: 81,
+  value: 'Other'
+}]
+
+const shoeType = [{
+  id: 82,
+  value: 'Sneakers'
+}, {
+  id: 83,
+  value: 'Loafers'
+}, {
+  id: 84,
+  value: 'High Heel'
+}, {
+  id: 85,
+  value: 'Shoes'
+}, {
+  id: 86,
+  value: 'Boots'
+}, {
+  id: 87,
+  value: 'Flip-Flop/Sandals'
+}, {
+  id: 88,
+  value: 'Sandals'
+}, {
+  id: 89,
+  value: 'Other'
+}]
+
+const bottomType = [{
+  id: 90,
+  value: 'Pants/Slacks'
+},{
+  id: 91,
+  value: 'Jeans'
+},{
+  id: 92,
+  value: 'Training Pants'
+},{
+  id: 93,
+  value: 'Shorts'
+},{
+  id: 94,
+  value: 'Skirt'
+},{
+  id: 95,
+  value: 'Other'
+}]
 
 //3
 const genders = [{
@@ -229,4 +327,4 @@ const clothColors = [{
   value: '#301226',
 }]
 
-export { seasons, genders, outwearType, topType, bigType, topSize, clothColors, bottomSize, shoeSize };
+export { seasons, genders, outwearType, topType, bigType, topSize, clothColors, bottomSize, shoeSize, bottomType, shoeType, etcType };

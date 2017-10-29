@@ -16,7 +16,8 @@ import SelectorModal from '../../components/common/SelectorModal';
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
-import { seasons, genders, outwearType, topType, bigType, topSize, clothColors, bottomSize, shoeSize } from '../../utils/menuItems';
+import { seasons, genders, outwearType, topType, bigType, topSize, clothColors, bottomSize, shoeSize, bottomType, shoeType, etcType } from '../../utils/menuItems';
+
 import SelectedSeasonsSelector from '../../selectors/selected_seasons';
 import SelectedColorsSelector from '../../selectors/selected_colors';
 import SelectedSizesSelector from '../../selectors/selected_sizes';
@@ -160,7 +161,17 @@ class AddClothScreen extends Component {
       // bigType: Top, Outwear, ETC -> Bottom / Shoes
       this._setBigType(value);
       this.setState({selectedSizeIds: []});
-      this.setState({items:topType});
+      if(value==='Bottoms') {
+        this.setState({items:bottomType});
+      } else if(value==='Shoes') {
+        this.setState({items:shoeType});
+      } else if(value==='Top'){
+        this.setState({items:topType});
+      } else if(value==='ETC') {
+        this.setState({items:etcType});
+      } else if(value==='Outwear') {
+        this.setState({items:outwearType})
+      }
       this.setState({detailSelect:6});
     } else if(detailSelect===2) {
       this._setSeason(value);
@@ -335,7 +346,7 @@ class AddClothScreen extends Component {
 
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(1)}}>
-            <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">{this.state.bigType}/{this.state.clothType}</RkText>
+            <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">{this.state.bigType} - {this.state.clothType}</RkText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(2)}}>
@@ -361,8 +372,12 @@ class AddClothScreen extends Component {
           <View style={styles.contextSeperator}/>
 
           <View style={[styles.dContainer, styles.drow]}>
-            <RkText rkType="header5">Tagged Styles</RkText><RkText rkType="header5 primary right">Tag Style</RkText>
+            <RkText rkType="header5">Tagged Styles</RkText>
+            <TouchableOpacity>
+              <RkText rkType="header5 primary right">Tag Style</RkText>
+            </TouchableOpacity>
           </View>
+          <View />
 
           <View style={styles.contextSeperator}/>
 

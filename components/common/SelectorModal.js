@@ -88,37 +88,6 @@ const styles = RkStyleSheet.create(theme => ({
   modalContainer: {
     justifyContent: 'center',
     backgroundColor: 'white',
-    padding: 16
-  },
-  modalTitleTextContainer: {
-    flexDirection: 'row',
-    flex:1
-  },
-  modalTitleText: {
-    fontSize: totalSize(3),
-  },
-  modalContentTextContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    padding: 10
-  },
-  modalContentText: {
-    fontSize: totalSize(2),
-    flex: 1,
-    color: '#696969'
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    flex: 1,
-    overflow: 'hidden'
-  },
-  modalButtonText: {
-    fontSize: totalSize(2),
-    flex: 1
-  },
-  black: {
-    color: 'black'
   },
   seperator: {
     backgroundColor: 'black',
