@@ -41,13 +41,14 @@ class TagStyleScreen extends Component {
   }
 
   _renderItem = ({item}) => {
-    if(!_.isNil(item.cloth_image)) {
+    console.log(item);
+    if(!_.isNil(item.outfit_img)) {
       return (
         <TouchableWithoutFeedback
           onPress={() => this._handleImagePress(item.id)}>
           <Image
             key={item.id}
-            source={{uri: item.outfit_image}}
+            source={{uri: item.outfit_img}}
             style={styles.rowImage}
             resizeMode="cover"
           />
@@ -72,13 +73,17 @@ class TagStyleScreen extends Component {
     return (
       <View style={styles.root}>
         <FlatList
-          data={this.props.items}
+          data={this.props.outfits}
           style={{marginTop:8}}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           numColumns={3}/>
       </View>
     );
+  }
+
+  componentDidMount() {
+    this.props.loadOutfitAll(this.props.token, this.props.hType);
   }
 };
 
@@ -95,4 +100,10 @@ const styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-export default connect(null, actions)(TagStyleScreen);
+function mapStateToProps({auth: {token, hType}, outfit: {outfits} }) {
+  return {
+    token, hType, outfits
+  }
+}
+
+export default connect(mapStateToProps, actions)(TagStyleScreen);

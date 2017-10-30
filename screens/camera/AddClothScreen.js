@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RkText, RkTextInput, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
-import { ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
+import { findNodeHandle, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 import { threeImageWidth } from '../../utils/scale';
@@ -9,6 +9,8 @@ import { ImagePicker } from 'expo';
 import Modal from 'react-native-modal';
 import { width, height, totalSize } from 'react-native-dimension';
 import { Button } from 'native-base';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+
 import {
   RkSwitch
 } from '../../components/switch/index';
@@ -22,6 +24,7 @@ import SelectedSeasonsSelector from '../../selectors/selected_seasons';
 import SelectedColorsSelector from '../../selectors/selected_colors';
 import SelectedSizesSelector from '../../selectors/selected_sizes';
 import { connect } from 'react-redux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 class AddClothScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -75,8 +78,11 @@ class AddClothScreen extends Component {
     clothColor: clothColors,
 
     gender: 'Unisex',
-
     multiple: false,
+    brand: '',
+
+    location: '',
+    link: ''
   }
 
   _showModal = () => this.setState({ isModalVisible: true });
@@ -317,9 +323,16 @@ class AddClothScreen extends Component {
     this.props.navigation.navigate('TagStyle');
   }
 
+  _scrollToInput = (reactNode: any) => {
+    // Add a 'scroll' ref to your ScrollView
+    this.scroll.props.scrollToFocusedInput(reactNode)
+  }
+
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <KeyboardAwareScrollView
+        innerRef={ref => {this.scroll = ref}}
+        style={styles.container}>
         <View style={styles.headContainer}>
           <View style={styles.leftheadContainer}>
             <TouchableOpacity
@@ -395,13 +408,37 @@ class AddClothScreen extends Component {
             <RkText rkType="header5">More Detail</RkText>
           </View>
           <View style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Brand</RkText><RkText rkType="primary2">Nike</RkText>
+            <RkText rkType="primary3">Brand</RkText>
+            <TextInput
+              onFocus={(event: Event) => {
+                this._scrollToInput(findNodeHandle(event.target))
+              }}
+              value={this.state.brand}
+              style={styles.moreDetailStyle}
+              underlineColorAndroid='white'
+              onChangeText={(brand) => this.setState({brand})}/>
           </View>
           <View style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Location</RkText><RkText rkType="primary2">USA</RkText>
+            <RkText rkType="primary3">Location</RkText>
+            <TextInput
+              onFocus={(event: Event) => {
+                this._scrollToInput(findNodeHandle(event.target))
+              }}
+              value={this.state.location}
+              style={styles.moreDetailStyle}
+              underlineColorAndroid='white'
+              onChangeText={(location) => this.setState({location})}/>
           </View>
           <View style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Link</RkText><RkText rkType="primary2">www.naver.com</RkText>
+            <RkText rkType="primary3">link</RkText>
+            <TextInput
+              onFocus={(event: Event) => {
+                this._scrollToInput(findNodeHandle(event.target))
+              }}
+              style={styles.moreDetailStyle}
+              value={this.state.link}
+              underlineColorAndroid='white'
+              onChangeText={(link) => this.setState({link})}/>
           </View>
           <View style={[styles.dContainer, styles.row]}>
             <RkText rkType="primary3">In Wardrobe</RkText>
@@ -432,7 +469,8 @@ class AddClothScreen extends Component {
             {this._renderSelectorModal()}
           </View>
         </View>
-      </ScrollView>
+        <KeyboardSpacer />
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -535,6 +573,11 @@ let styles = RkStyleSheet.create(theme => ({
   },
   black: {
     color: 'black'
+  },
+  moreDetailStyle: {
+    flex: 1,
+    textAlign: 'right',
+    fontSize: 15,
   }
 }));
 
