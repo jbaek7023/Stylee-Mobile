@@ -240,6 +240,9 @@ class AddClothScreen extends Component {
         selectedSeasonIds={this.state.selectedSeasonIds}
         selectedSizeIds={this.state.selectedSizeIds}
         selectedColorIds={this.state.selectedColorIds}
+        bigType={this.state.bigType}
+        clothType={this.state.clothType}
+        gender={this.state.gender}
       />
     );
   }

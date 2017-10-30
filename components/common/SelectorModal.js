@@ -24,19 +24,22 @@ class SelectorModal extends Component {
     )
   }
 
-  _renderCheck = (id) => {
-    console.log('passing Render Check')
+  _renderCheck = (id, value) => {
     let { selectionType } = this.props;
     let { selectedSeasonIds, selectedSizeIds, selectedColorIds } = this.state;
 
     if(selectionType===1) {
-
+      if(this.props.bigType===value) {
+        return (<RkText>Check</RkText>)
+      }
     } else if(selectionType===2) {
       if(_.includes(selectedSeasonIds, id)) {
           return (<RkText>Check</RkText>)
       }
     } else if(selectionType===3) {
-
+      if(this.props.gender===value) {
+        return (<RkText>Check</RkText>)
+      }
     } else if(selectionType===4) {
       if(_.includes(selectedSizeIds, id)) {
         return (<RkText>Check </RkText>);
@@ -46,7 +49,9 @@ class SelectorModal extends Component {
         return (<RkText>Check </RkText>);
       }
     } else if(selectionType===6){
-
+      if(this.props.clothType===value) {
+        return (<RkText>Check</RkText>)
+      }
     }
     return (<RkText></RkText>);
   }
@@ -57,13 +62,12 @@ class SelectorModal extends Component {
         style={styles.itemStyle}
         onPress={() => this.props.selectAction(item.value, item.id)}>
         <RkText>{item.value}</RkText>
-        { this._renderCheck(item.id) }
+        { this._renderCheck(item.id, item.value) }
       </TouchableOpacity>
     );
   }
 
   _handleMultipleItemPress = (id) => {
-    console.log('passing Item Press')
     let { selectionType } = this.props;
     // Add or Delete states in the modal
     if(selectionType===4) {
@@ -102,19 +106,17 @@ class SelectorModal extends Component {
   }
 
   _renderItemForMultiple = ({item}) => {
-    console.log('multiple item')
     return (
       <TouchableOpacity
         style={styles.itemStyle}
         onPress={() => {this._handleMultipleItemPress(item.id)}}>
         <RkText>{item.value}</RkText>
-        { this._renderCheck(item.id) }
+        { this._renderCheck(item.id, item.value) }
       </TouchableOpacity>
     );
   }
 
   render() {
-    console.log('passing render')
     let { isSelectorVisible } = this.props;
     let { multiple } = this.props;
     if(!multiple) {
@@ -133,7 +135,6 @@ class SelectorModal extends Component {
         </Modal>
       );
     } else {
-      console.log('passing multiple render')
       return (
         <Modal
           isVisible={isSelectorVisible}
