@@ -310,6 +310,10 @@ class AddClothScreen extends Component {
     return seasonList
   }
 
+  _handleTagStylePress = () => {
+    this.props.navigation.navigate('TagStyle');
+  }
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -376,7 +380,7 @@ class AddClothScreen extends Component {
 
           <View style={[styles.dContainer, styles.drow]}>
             <RkText rkType="header5">Tagged Styles</RkText>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this._handleTagStylePress()}>
               <RkText rkType="header5 primary right">Tag Style</RkText>
             </TouchableOpacity>
           </View>

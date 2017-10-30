@@ -9,6 +9,7 @@ import UserProfileScreen from '../screens/profile/UserProfileScreen';
 import CommentDetail from '../screens/comment/CommentDetail';
 import AddStyleScreen from '../screens/camera/AddStyleScreen';
 import AddClothScreen from '../screens/camera/AddClothScreen';
+import TagStyleScreen from '../screens/camera/TagStyleScreen';
 
 export default StackNavigator ({
   Stylebooko: {
@@ -38,6 +39,9 @@ export default StackNavigator ({
   AddClotho: {
     screen: AddClothScreen
   },
+  TagStyle: {
+    screen: TagStyleScreen
+  }
 }, {
     lazy: true
 });

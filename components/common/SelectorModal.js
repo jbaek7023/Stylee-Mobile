@@ -25,27 +25,30 @@ class SelectorModal extends Component {
   }
 
   _renderCheck = (id) => {
-    let { selectionType, selectedSeasonIds, selectedSizeIds, selectedColorIds } = this.props;
+    console.log('passing Render Check')
+    let { selectionType } = this.props;
+    let { selectedSeasonIds, selectedSizeIds, selectedColorIds } = this.state;
+
     if(selectionType===1) {
 
     } else if(selectionType===2) {
-      if(_.includes(this.state.selectedSeasonIds, id)) {
-        return (<RkText>Check </RkText>);
+      if(_.includes(selectedSeasonIds, id)) {
+          return (<RkText>Check</RkText>)
       }
     } else if(selectionType===3) {
 
     } else if(selectionType===4) {
-      if(_.includes(this.state.selectedSizeIds, id)) {
+      if(_.includes(selectedSizeIds, id)) {
         return (<RkText>Check </RkText>);
       }
     } else if(selectionType===5) {
-      if(_.includes(this.state.selectedColorIds, id)) {
+      if(_.includes(selectedColorIds, id)) {
         return (<RkText>Check </RkText>);
       }
     } else if(selectionType===6){
 
     }
-    return (<RkText> </RkText>);
+    return (<RkText></RkText>);
   }
 
   _renderItem = ({item}) => {
@@ -60,6 +63,7 @@ class SelectorModal extends Component {
   }
 
   _handleMultipleItemPress = (id) => {
+    console.log('passing Item Press')
     let { selectionType } = this.props;
     // Add or Delete states in the modal
     if(selectionType===4) {
@@ -98,6 +102,7 @@ class SelectorModal extends Component {
   }
 
   _renderItemForMultiple = ({item}) => {
+    console.log('multiple item')
     return (
       <TouchableOpacity
         style={styles.itemStyle}
@@ -109,6 +114,7 @@ class SelectorModal extends Component {
   }
 
   render() {
+    console.log('passing render')
     let { isSelectorVisible } = this.props;
     let { multiple } = this.props;
     if(!multiple) {
@@ -127,6 +133,7 @@ class SelectorModal extends Component {
         </Modal>
       );
     } else {
+      console.log('passing multiple render')
       return (
         <Modal
           isVisible={isSelectorVisible}
@@ -135,6 +142,7 @@ class SelectorModal extends Component {
             <FlatList
               style={styles.root}
               data={this.props.items}
+              extraData={[this.state.selectedSeasonIds, this.state.selectedColorIds, this.state.selectedSizeIds]}
               ItemSeparatorComponent={this._renderSeparator}
               keyExtractor={this._keyExtractor}
               renderItem={this._renderItemForMultiple}/>

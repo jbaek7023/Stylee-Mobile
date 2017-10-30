@@ -6,10 +6,7 @@ const sizeSelector = state => state.clothSize
 const selectedSizesSelector = state => state.selectedSizeIds
 
 const getSizes = (clothSize, selectedSizeIds) => {
-  console.log('--------START---------------')
-  console.log(clothSize);
-  console.log(selectedSizeIds);
-  console.log('--------END---------------')
+
   const selectedSizes = _.filter(
     clothSize,
     cloth => _.includes(selectedSizeIds, cloth.id)

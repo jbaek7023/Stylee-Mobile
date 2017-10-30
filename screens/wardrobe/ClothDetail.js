@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import { FlatList, TouchableOpacity, View, Text, Image, ScrollView } from 'react-native';
+import { FlatList, TouchableOpacity, View, Text, Image, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import {
   RkCard,
   RkText,
@@ -69,13 +69,13 @@ class ClothDetail extends Component {
   }
 
   _renderOutfitItem = ({item}) => {
-    if(!_.isNil(item.cloth_image)) {
+    if(!_.isNil(item.outfit_img)) {
       return (
         <TouchableWithoutFeedback
           onPress={() => this._handleImagePress(item.id)}>
           <Image
             key={item.id}
-            source={{uri: item.cloth_image}}
+            source={{uri: item.outfit_img}}
             style={styles.rowImage}
             resizeMode="cover"
           />
@@ -153,8 +153,8 @@ class ClothDetail extends Component {
               </View>
               <FlatList
                 style={{marginTop:8}}
-                data={this.props.clothDetail.tagged_clothes}
-                renderItem={this._renderClothesItem}
+                data={this.props.clothDetail.tagged_outfits}
+                renderItem={this._renderOutfitItem}
                 keyExtractor={this._keyExtractor}
                 numColumns={3}
               />
