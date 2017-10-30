@@ -82,7 +82,9 @@ class AddClothScreen extends Component {
     brand: '',
 
     location: '',
-    link: ''
+    link: '',
+
+    selectedStyleIds: [],
   }
 
   _showModal = () => this.setState({ isModalVisible: true });
@@ -97,6 +99,8 @@ class AddClothScreen extends Component {
   _setMultiple = (multiple) => this.setState({multiple});
   _setSelectionType = (selectionType) => this.setState({selectionType});
   _setClothType = (clothType) => this.setState({clothType});
+
+
 
   // CAMERA
   _handleCameraPress = async () => {
@@ -319,12 +323,17 @@ class AddClothScreen extends Component {
     return seasonList
   }
 
-  _handleTagStylePress = () => {
-    this.props.navigation.navigate('TagStyle');
+  onCheck = data => {
+    // set the num of length
+    this.setState(data);
   }
 
+  _handleTagStylePress = () => {
+    this.props.navigation.navigate('TagStyle', {onCheck: this.onCheck, selectedStyleIds: this.state.selectedStyleIds});
+  }
+
+
   _scrollToInput = (reactNode: any) => {
-    // Add a 'scroll' ref to your ScrollView
     this.scroll.props.scrollToFocusedInput(reactNode)
   }
 
