@@ -74,11 +74,8 @@ class AddClothScreen extends Component {
     selectedColorIds: [],
     clothColor: clothColors,
 
-    selectedIds: [6, 1, 99, 21 ],
-
     gender: 'Unisex',
 
-    detailSelect: 1,
     multiple: false,
   }
 
@@ -91,7 +88,6 @@ class AddClothScreen extends Component {
   _setGender = (gender) => this.setState({gender});
   _setSize = (clothSize) => this.setState({clothSize});
   _setColor = (clothColor) => this.setState({clothColor});
-  _setDetailSelect = (detailSelect) => this.setState({detailSelect});
   _setMultiple = (multiple) => this.setState({multiple});
   _setSelectionType = (selectionType) => this.setState({selectionType});
   _setClothType = (clothType) => this.setState({clothType});
@@ -155,23 +151,10 @@ class AddClothScreen extends Component {
     )
   }
 
-  _addOrDeleteId = (id) => {
-    if(_.includes(this.state.selectedIds, id)) {
-      let newSelectedIds = _.filter(this.state.selectedIds, (curObject) => {
-          return curObject !== id;
-      });
-      this.setState({selectedIds : newSelectedIds});
-    } else {
-      let newSelectedIds = [...this.state.selectedIds, id];
-      this.setState({selectedIds : newSelectedIds});
-    }
-  }
-
   _selectAction = (value, id) => {
     // if seasons, genders, bigType, topType, outwearType
-    let { detailSelect } = this.state;
-    this._addOrDeleteId(id);
-    if(detailSelect===1) {
+    let { selectionType } = this.state;
+    if(selectionType===1) {
       // bigType: Top, Outwear, ETC -> Bottom / Shoes
       this._setBigType(value);
       this.setState({selectedSizeIds: []});
@@ -186,20 +169,20 @@ class AddClothScreen extends Component {
       } else if(value==='Outwear') {
         this.setState({items:outwearType})
       }
-      this.setState({detailSelect:6});
-    } else if(detailSelect===2) {
+      this.setState({selectionType:6});
+    } else if(selectionType===2) {
       this._setSeason(value);
       this._hideSelector();
-    } else if(detailSelect===3) {
+    } else if(selectionType===3) {
       this._setGender(value);
       this._hideSelector();
-    } else if(detailSelect===4) {
+    } else if(selectionType===4) {
       this._setSize(value);
       this._hideSelector();
-    } else if(detailSelect===5) {
+    } else if(selectionType===5) {
       this._setColor(value);
       this._hideSelector();
-    } else if (detailSelect===6) {
+    } else if (selectionType===6) {
       this._setClothType(value);
       this._hideSelector();
     }
@@ -209,7 +192,6 @@ class AddClothScreen extends Component {
 
   _seasonSelectAction = (id) => {
     // We can optimize this code later
-    this._addOrDeleteId(id);
 
     if(this.state.selectionType===4) {
       if(_.includes(this.state.selectedSizeIds, id)) {
@@ -255,7 +237,9 @@ class AddClothScreen extends Component {
         selectAction={this._selectAction}
         seasonSelectAction={this._seasonSelectAction}
         selectionType={this.state.selectionType}
-        selectedIds={this.state.selectedIds}
+        selectedSeasonIds={this.state.selectedSeasonIds}
+        selectedSizeIds={this.state.selectedSizeIds}
+        selectedColorIds={this.state.selectedColorIds}
       />
     );
   }
@@ -288,7 +272,6 @@ class AddClothScreen extends Component {
       this.setState({items: clothColors})
       this._setMultiple(true)
     }
-    this._setDetailSelect(option);
     this._setSelectionType(option);
     this._showSelector();
   }
