@@ -7,7 +7,14 @@ import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
 import { ImagePicker } from 'expo';
 
+import { connect } from 'react-redux';
+
 class FABs extends Component {
+  onSave = data => {
+    // set the num of length
+    console.log(data);
+  }
+
   render() {
     return (
       <ActionButton buttonColor="#6F3AB1">
@@ -15,7 +22,7 @@ class FABs extends Component {
           buttonColor='#3498db'
           title="스타일 올리기"
           onPress={() => {
-            this.props.navigation.navigate('AddStyleo');
+            this.props.navigation.navigate('AddStyleo', {onSave: this.onSave});
           }}>
           <Icon name="md-body" style={styles.actionStyleButton} />
         </ActionButton.Item>
@@ -30,6 +37,8 @@ class FABs extends Component {
       </ActionButton>
     );
   }
+
+
 }
 
 
@@ -46,4 +55,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FABs;
+export default connect(null, null)(FABs);

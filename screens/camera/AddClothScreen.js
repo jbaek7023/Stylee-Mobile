@@ -10,7 +10,6 @@ import Modal from 'react-native-modal';
 import { width, height, totalSize } from 'react-native-dimension';
 import { Button } from 'native-base';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-
 import {
   RkSwitch
 } from '../../components/switch/index';
@@ -19,7 +18,6 @@ import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
 import { seasons, genders, outwearType, topType, bigType, topSize, clothColors, bottomSize, shoeSize, bottomType, shoeType, etcType } from '../../utils/menuItems';
-
 import SelectedSeasonsSelector from '../../selectors/selected_seasons';
 import SelectedColorsSelector from '../../selectors/selected_colors';
 import SelectedSizesSelector from '../../selectors/selected_sizes';
@@ -48,7 +46,7 @@ class AddClothScreen extends Component {
         onPress={() => {
           navigation.goBack()
         }}>
-        <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>저장</RkText>
+        <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
       </RkButton>
     ),
   })
@@ -324,7 +322,7 @@ class AddClothScreen extends Component {
   }
 
   onCheck = data => {
-    // set the num of length
+    console.log(data);
     this.setState(data);
   }
 
@@ -335,6 +333,29 @@ class AddClothScreen extends Component {
 
   _scrollToInput = (reactNode: any) => {
     this.scroll.props.scrollToFocusedInput(reactNode)
+  }
+
+  _renderTagStyleButton = () => {
+    let { length } = this.state.selectedStyleIds;
+    if (length===0) {
+      return (
+        <TouchableOpacity onPress={() => this._handleTagStylePress()}>
+          <RkText rkType="header5 primary right">Tag Style</RkText>
+        </TouchableOpacity>
+      );
+    } else if (length==1){
+      return (
+        <TouchableOpacity onPress={() => this._handleTagStylePress()}>
+          <RkText rkType="header5 primary right">{length} Style from Stylebook</RkText>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity onPress={() => this._handleTagStylePress()}>
+          <RkText rkType="header5 primary right">{length} Styles from Stylebook</RkText>
+        </TouchableOpacity>
+      );
+    }
   }
 
   render() {
@@ -405,9 +426,7 @@ class AddClothScreen extends Component {
 
           <View style={[styles.dContainer, styles.drow]}>
             <RkText rkType="header5">Tagged Styles</RkText>
-            <TouchableOpacity onPress={() => this._handleTagStylePress()}>
-              <RkText rkType="header5 primary right">Tag Style</RkText>
-            </TouchableOpacity>
+            {this._renderTagStyleButton()}
           </View>
           <View />
 

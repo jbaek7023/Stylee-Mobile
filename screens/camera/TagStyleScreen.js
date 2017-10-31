@@ -9,8 +9,10 @@ import * as actions from '../../actions';
 import {FontAwesome} from '../../assets/icons';
 import { threeImageWidth } from '../../utils/scale';
 import _ from 'lodash';
+import {UIConstants} from '../../config/appConstants';
 
 class TagStyleScreen extends Component {
+  // normal navigation
   static navigationOptions = ({ navigation }) => ({
     title: 'Tag Your Style',
     gesturesEnabled: false,
@@ -30,6 +32,8 @@ class TagStyleScreen extends Component {
       <RkButton
         rkType='clear'
         onPress={() => {
+          console.log(navigation.state.params.selectedStyleIds);
+          navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
           navigation.goBack();
         }}>
         <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
@@ -44,33 +48,47 @@ class TagStyleScreen extends Component {
   _handleImagePress = (id) => {
     // add image to selected press
     // add id to the array.
-    if(_.includes(this.state.selectedStyleIds, id)) {
-      let newSelectedStyleIds = _.filter(this.state.selectedStyleIds, (curObject) => {
+    let ids = this.state.selectedStyleIds
+    if(ids == undefined) {
+      ids = [];
+    }
+    if(_.includes(ids, id)) {
+      let newSelectedStyleIds = _.filter(ids, (curObject) => {
           return curObject !== id;
       });
       this.setState({selectedStyleIds : newSelectedStyleIds});
+      this.props.navigation.setParams({
+        selectedStyleIds: newSelectedStyleIds
+      })
     } else {
-      let newSelectedStyleIds = [...this.state.selectedStyleIds, id];
+      let newSelectedStyleIds = [...ids, id];
       this.setState({selectedStyleIds : newSelectedStyleIds});
+      this.props.navigation.setParams({
+        selectedStyleIds: newSelectedStyleIds
+      })
     }
+
   }
 
   _renderItem = ({item}) => {
     let isSelected = _.includes(this.state.selectedStyleIds, item.id);
 
+    // checkbox = onPress, checked, color,
     if(!_.isNil(item.outfit_img)) {
       return (
         <TouchableWithoutFeedback
-           style={{flex:1, position:'relative'}}
+           style={{flex:1}}
           onPress={() => this._handleImagePress(item.id, item.outfit_img)}>
-          <View style={{flex: 1}}>
+          <View style={styles.rowImage}>
             <Image
               key={item.id}
               source={{uri: item.outfit_img}}
               style={styles.rowImage}
               resizeMode="cover"
             />
-            <CheckBox checked={isSelected} style={{position: 'absolute', marginLeft:2, marginTop:2}}/>
+            <View style={{height:32, width:32, position:'absolute', top:0, right:0, marginTop:4, paddingRight:12}}>
+              <CheckBox checked={isSelected} color="#f64e59"/>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       );
@@ -79,14 +97,16 @@ class TagStyleScreen extends Component {
         <TouchableWithoutFeedback
            style={{flex:1}}
           onPress={() => this._handleImagePress(item.id, null)}>
-          <View style={{flex:1}}>
+          <View style={styles.rowImage}>
             <Image
               key={item.id}
               source={require('../../assets/images/robot-dev.png')}
               style={styles.rowImage}
               resizeMode="cover"
             />
-            <CheckBox checked={isSelected} style={{position:'absolute', marginLeft:2, marginTop:2, right: 0, top:0}}/>
+            <View style={{height:32, width:32, position:'absolute', top:0, right:0, marginTop:4, paddingRight:12}}>
+              <CheckBox checked={isSelected} color="#f64e59"/>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       );
@@ -100,15 +120,16 @@ class TagStyleScreen extends Component {
   }
 
   _renderHeader = () => {
+    console.log('renderHeader');
     return (
-      <View>
-        <View>
+      <View style={[styles.layoutheader, {backgroundColor:'blue'}]}>
+        <View style={styles.containerheader}>
           <RkButton
             rkType='clear'
             onPress={() => {
               this.props.navigation.goBack()
             }}>
-            <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+            <RkText rkType='awesome hero'>asd{FontAwesome.chevronLeft}</RkText>
           </RkButton>
         </View>
 
@@ -126,20 +147,23 @@ class TagStyleScreen extends Component {
   _keyExtractor = (item, index) => item.id;
   render() {
     let ids = this.state.selectedStyleIds
+    console.log(ids);
     if(ids == undefined) {
       ids = [];
     }
     return (
       <View style={styles.root}>
         <FlatList
+          renderHeader={this._renderHeader()}
           data={this.props.outfits}
           extraData={this.state.selectedStyleIds}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           numColumns={3}
-          renderHeader={this._renderHeader}/>
+
+          />
         <View style={styles.footer}>
-          <RkText rkType="primary2">{ids.length} Style(s) Selected</RkText>
+          <RkText rkType="primary2">{ids.length} Style Selected</RkText>
         </View>
       </View>
     );
@@ -166,7 +190,17 @@ const styles = RkStyleSheet.create(theme => ({
     backgroundColor: theme.colors.screen.alter,
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+  layoutheader: {
+    backgroundColor: theme.colors.navbar,
+    paddingTop: UIConstants.StatusbarHeight,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: theme.colors.border.base
+  },
+  containerheader: {
+    flexDirection: 'row',
+    height: UIConstants.AppbarHeight,
+  },
 }));
 
 function mapStateToProps({auth: {token, hType}, outfit: {outfits} }) {

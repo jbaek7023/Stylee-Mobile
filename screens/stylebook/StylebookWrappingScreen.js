@@ -87,14 +87,6 @@ class StylebookWrappingScreen extends Component {
   }
 }
 
-// {this._renderModal()}
-
-// Tabs: tabBarUnderlineStyle
-// <FABs
-//   active={this.state.active}
-//   onPress={this._onFABPress}
-// />
-// backgroundColor: '#A478E6',
 const styles = StyleSheet.create({
   tabStyle : {
     backgroundColor: '#6F3AB1',
