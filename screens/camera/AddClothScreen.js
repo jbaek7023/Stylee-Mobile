@@ -54,7 +54,6 @@ class AddClothScreen extends Component {
   state = {
     isModalVisible: true,
     onlyMe: false,
-    myInfo: true,
     text: '',
     textHeight: 0,
     inWardrobe: true,
@@ -63,25 +62,18 @@ class AddClothScreen extends Component {
     items: [],
     bigType: 'Top',
     clothType: 'T-Shirt',
-
     selectionType: 5,
-
     selectedSeasonIds: [],
     seasons: seasons,
-
     selectedSizeIds: [],
     clothSize: topSize,
-
     selectedColorIds: [],
     clothColor: clothColors,
-
     gender: 'Unisex',
     multiple: false,
     brand: '',
-
     location: '',
     link: '',
-
     selectedStyleIds: [],
   }
 
@@ -315,8 +307,12 @@ class AddClothScreen extends Component {
     if(selectedSeasons.length==0) {
       return '-'
     }
-    let seasonList = selectedSeasons.map((season) => {
-      return ' '+season.value;
+
+    let seasonList = selectedSeasons.map((season, index) => {
+      if(index==0) {
+        return season.name+' ';
+      }
+      return '/ '+season.name;
     })
     return seasonList
   }

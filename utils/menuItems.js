@@ -312,19 +312,60 @@ const shoeSize = [{
 // 5
 const clothColors = [{
   id: 29,
-  value: '#301222',
+  value: '#FF0000',
+  name: 'red'
 }, {
   id: 30,
-  value: '#301223',
+  value: '#FFA500',
+  name: 'orange'
 }, {
   id: 31,
-  value: '#301224',
+  value: '#ffff00',
+  name: 'yellow'
 }, {
   id: 32,
-  value: '#301225',
+  value: '#32CD32',
+  name: 'green'
 }, {
   id: 33,
+  value: '#0000ff',
+  name: 'blue'
+}, {
+  id: 107,
+  value: '#7D26CD',
+  name: 'purple'
+}, {
+  id: 108,
+  value: '#FF69B4',
+  name: 'pink'
+}, {
+  id: 110,
+  value: '#7EC0EE',
+  name: 'sky blue'
+}, {
+  id: 111,
+  value: '#C0C0C0',
+  name: 'silver'
+}, {
+  id: 112,
+  value: '#FFD700',
+  name: 'gold'
+}, {
+  id: 113,
+  value: '#8B4513',
+  name: 'brown'
+}, {
+  id: 114,
   value: '#301226',
+  name: 'White'
+}, {
+  id: 115,
+  value: '#301226',
+  name: 'Dark Red'
+}, {
+  id: 116,
+  value: '#000000',
+  name: 'Black'
 }]
 
 export { seasons, genders, outwearType, topType, bigType, topSize, clothColors, bottomSize, shoeSize, bottomType, shoeType, etcType };

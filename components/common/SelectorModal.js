@@ -56,6 +56,16 @@ class SelectorModal extends Component {
     return (<RkText></RkText>);
   }
 
+  _getColorStyle = (color) => {
+    console.log(color);
+    return {
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      backgroundColor: color
+    };
+  }
+
   _renderItem = ({item}) => {
     return (
       <TouchableOpacity
@@ -106,19 +116,33 @@ class SelectorModal extends Component {
   }
 
   _renderItemForMultiple = ({item}) => {
-    return (
-      <TouchableOpacity
-        style={styles.itemStyle}
-        onPress={() => {this._handleMultipleItemPress(item.id)}}>
-        <RkText>{item.value}</RkText>
-        { this._renderCheck(item.id, item.value) }
-      </TouchableOpacity>
-    );
+
+    if(this.props.selectionType!==5) {
+      return (
+        <TouchableOpacity
+          style={styles.itemStyle}
+          onPress={() => {this._handleMultipleItemPress(item.id)}}>
+          <RkText>{item.value}</RkText>
+          { this._renderCheck(item.id, item.value) }
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+       <TouchableOpacity
+         style={styles.itemStyle}
+         onPress={() => this._handleMultipleItemPress(item.id)}>
+         <View style={colorCircleStyle(item.value)} />
+         <RkText>{item.name}</RkText>
+         { this._renderCheck(item.id, item.value) }
+       </TouchableOpacity>
+      );
+    }
   }
 
   render() {
     let { isSelectorVisible } = this.props;
     let { multiple } = this.props;
+    let { selectionType } = this.props;
     if(!multiple) {
       return (
         <Modal
@@ -153,6 +177,15 @@ class SelectorModal extends Component {
     }
   }
 };
+
+function colorCircleStyle(colorCode) {
+   return {
+     backgroundColor: colorCode,
+     width: 24,
+     height: 24,
+     borderRadius: 12,
+   }
+ }
 
 const styles = RkStyleSheet.create(theme => ({
   root: {

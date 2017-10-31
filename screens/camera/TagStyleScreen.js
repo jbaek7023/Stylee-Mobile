@@ -32,8 +32,10 @@ class TagStyleScreen extends Component {
       <RkButton
         rkType='clear'
         onPress={() => {
-          console.log(navigation.state.params.selectedStyleIds);
           navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
+
+
+
           navigation.goBack();
         }}>
         <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
