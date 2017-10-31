@@ -10,7 +10,11 @@ import { ImagePicker } from 'expo';
 import { connect } from 'react-redux';
 
 class FABs extends Component {
-  onSave = data => {
+  state = {
+
+  }
+
+  onSaveCloth = data => {
     // set the num of length
     console.log(data);
   }
@@ -22,7 +26,7 @@ class FABs extends Component {
           buttonColor='#3498db'
           title="스타일 올리기"
           onPress={() => {
-            this.props.navigation.navigate('AddStyleo', {onSave: this.onSave});
+            this.props.navigation.navigate('AddStyleo', {onSaveCloth: this.onSaveCloth});
           }}>
           <Icon name="md-body" style={styles.actionStyleButton} />
         </ActionButton.Item>

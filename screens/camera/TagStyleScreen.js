@@ -33,9 +33,6 @@ class TagStyleScreen extends Component {
         rkType='clear'
         onPress={() => {
           navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
-
-
-
           navigation.goBack();
         }}>
         <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
@@ -115,36 +112,7 @@ class TagStyleScreen extends Component {
     }
   }
 
-  _goBack = () => {
-    const { navigation } = this.props;
-    navigation.state.params.onCheck({selectedStyleIds: this.state.selectedStyleIds});
-    navigation.goBack();
-  }
 
-  _renderHeader = () => {
-    console.log('renderHeader');
-    return (
-      <View style={[styles.layoutheader, {backgroundColor:'blue'}]}>
-        <View style={styles.containerheader}>
-          <RkButton
-            rkType='clear'
-            onPress={() => {
-              this.props.navigation.goBack()
-            }}>
-            <RkText rkType='awesome hero'>asd{FontAwesome.chevronLeft}</RkText>
-          </RkButton>
-        </View>
-
-        <RkButton
-          rkType='clear'
-          onPress={() => {
-            this._goBack();
-          }}>
-          <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>CHECK</RkText>
-        </RkButton>
-      </View>
-    );
-  }
 
   _keyExtractor = (item, index) => item.id;
   render() {
@@ -156,7 +124,6 @@ class TagStyleScreen extends Component {
     return (
       <View style={styles.root}>
         <FlatList
-          renderHeader={this._renderHeader()}
           data={this.props.outfits}
           extraData={this.state.selectedStyleIds}
           keyExtractor={this._keyExtractor}

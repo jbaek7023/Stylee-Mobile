@@ -63,6 +63,8 @@ class AddClothScreen extends Component {
     bigType: 'Top',
     clothType: 'T-Shirt',
     selectionType: 5,
+    multiple: false,
+
     selectedSeasonIds: [],
     seasons: seasons,
     selectedSizeIds: [],
@@ -70,11 +72,26 @@ class AddClothScreen extends Component {
     selectedColorIds: [],
     clothColor: clothColors,
     gender: 'Unisex',
-    multiple: false,
     brand: '',
     location: '',
     link: '',
     selectedStyleIds: [],
+    clothCreateRequest: {
+      image: undefined,
+      text: undefined,
+      bigType: undefined,
+      clothType: undefined,
+      selectedSeasonIds: undefined,
+      gender: undefined,
+      selectedSizeIds: undefined,
+      selectedColorIds: undefined,
+      selectedStyleIds: undefined,
+      brand: undefined,
+      location:  undefined,
+      link: undefined,
+      inWardrobe: undefined,
+      onlyMe: undefined,
+    }
   }
 
   _showModal = () => this.setState({ isModalVisible: true });
@@ -90,7 +107,12 @@ class AddClothScreen extends Component {
   _setSelectionType = (selectionType) => this.setState({selectionType});
   _setClothType = (clothType) => this.setState({clothType});
 
-
+  // _setImageRequest = () => {this.setState}
+  _setTextRequest = (text) => {
+    this.props.navigation.setParams({
+      text
+    })
+  }
 
   // CAMERA
   _handleCameraPress = async () => {
@@ -187,8 +209,6 @@ class AddClothScreen extends Component {
       this._hideSelector();
     }
   }
-
-
 
   _seasonSelectAction = (id) => {
     // We can optimize this code later

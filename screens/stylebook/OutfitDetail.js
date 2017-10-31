@@ -16,7 +16,7 @@ import {FontAwesome} from '../../assets/icons';
 import { Ionicons } from '@expo/vector-icons';
 import { width, height, totalSize } from 'react-native-dimension';
 import { threeImageWidth } from '../../utils/scale';
-
+import CategoryModal from '../../components/common/CategoryModal';
 
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
@@ -36,6 +36,13 @@ class OutfitDetail extends Component {
     ),
     title: !_.isNil(screenProps.outfitDetail) ? `${screenProps.outfitDetail.user.username}'s Style`: ''
   });
+
+  state = {
+    isCategoryVisible: true
+  }
+
+  hideModal = () => this.setState({isCategoryVisible: false})
+  showModal = () => this.setState({isCategoryVisible: true})
 
   componentWillMount() {
     const { id } = this.props.navigation.state.params;
@@ -178,6 +185,10 @@ class OutfitDetail extends Component {
               </TouchableOpacity>
             </View>
           </RkCard>
+          <CategoryModal
+            isCategoryVisible={this.state.isCategoryVisible}
+            hideModal={this.hideModal}
+            />
         </ScrollView>
       );
     }
