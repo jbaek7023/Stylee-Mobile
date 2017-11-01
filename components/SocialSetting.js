@@ -19,7 +19,6 @@ export class SocialSetting extends Component {
   }
 
   render() {
-
     let color = this.state.selected ? this.props.tintColor : RkTheme.current.colors.disabled;
     return (
       <View style={styles.container}>

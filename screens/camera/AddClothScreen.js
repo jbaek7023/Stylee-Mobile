@@ -44,7 +44,17 @@ class AddClothScreen extends Component {
       <RkButton
         rkType='clear'
         onPress={() => {
-          navigation.goBack()
+          let {image, text, bigType, clothType, selectedSeasonIds,
+            gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+            brand, location, link, inWardrobe, onlyMe } = navigation.state.params;
+          // send data
+          // navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
+          navigation.state.params.onSaveCloth({
+            image, text, bigType, clothType, selectedSeasonIds,
+            gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+            brand, location, link, inWardrobe, onlyMe
+          });
+          navigation.goBack();
         }}>
         <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
       </RkButton>
@@ -63,7 +73,6 @@ class AddClothScreen extends Component {
     bigType: 'Top',
     clothType: 'T-Shirt',
     selectionType: 5,
-    multiple: false,
 
     selectedSeasonIds: [],
     seasons: seasons,
@@ -76,43 +85,42 @@ class AddClothScreen extends Component {
     location: '',
     link: '',
     selectedStyleIds: [],
-    clothCreateRequest: {
-      image: undefined,
-      text: undefined,
-      bigType: undefined,
-      clothType: undefined,
-      selectedSeasonIds: undefined,
-      gender: undefined,
-      selectedSizeIds: undefined,
-      selectedColorIds: undefined,
-      selectedStyleIds: undefined,
-      brand: undefined,
-      location:  undefined,
-      link: undefined,
-      inWardrobe: undefined,
-      onlyMe: undefined,
-    }
+  }
+
+  componentWillMount() {
+    let {image, text, bigType, clothType, selectedSeasonIds,
+      gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+      brand, location, link, inWardrobe, onlyMe } = this.state;
+
+    // set params for everything
+    this.props.navigation.setParams({
+      image, text, bigType, clothType, selectedSeasonIds,
+      gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+      brand, location, link, inWardrobe, onlyMe
+    })
   }
 
   _showModal = () => this.setState({ isModalVisible: true });
   _hideModal = () => this.setState({ isModalVisible: false });
   _showSelector = () => this.setState({ isSelectorVisible: true });
   _hideSelector = () => this.setState({ isSelectorVisible: false });
-  _setBigType = (bigType) => this.setState({bigType});
-  _setSeason = (season) => this.setState({season});
-  _setGender = (gender) => this.setState({gender});
-  _setSize = (clothSize) => this.setState({clothSize});
-  _setColor = (clothColor) => this.setState({clothColor});
-  _setMultiple = (multiple) => this.setState({multiple});
+  _setBigType = (bigType) => {
+    this.setState({bigType});
+    this.props.navigation.setParams({bigType});
+  };
   _setSelectionType = (selectionType) => this.setState({selectionType});
-  _setClothType = (clothType) => this.setState({clothType});
-
-  // _setImageRequest = () => {this.setState}
-  _setTextRequest = (text) => {
-    this.props.navigation.setParams({
-      text
-    })
-  }
+  _setClothType = (clothType) => {this.setState({clothType});this.props.navigation.setParams({clothType});}
+  _setSelectedStyleIds = (selectedStyleIds) => {this.setState({selectedStyleIds});this.props.navigation.setParams({selectedStyleIds});}
+  _setSelectedSizeIds = (selectedSizeIds) => {this.setState({selectedSizeIds});this.props.navigation.setParams({selectedSizeIds});}
+  _setSelectedColorIds = (selectedColorIds) => {this.setState({selectedColorIds});this.props.navigation.setParams({selectedColorIds});}
+  _setSelectedSeasonIds = (selectedSeasonIds) => {this.setState({selectedSeasonIds});this.props.navigation.setParams({selectedSeasonIds});}
+  _setGender = (gender) => {this.setState({gender});this.props.navigation.setParams({gender});}
+  _setText = (text) => {this.setState({text}); this.props.navigation.setParams({text});}
+  _setBrand = (brand) => {this.setState({brand}); this.props.navigation.setParams({brand});}
+  _setLocation = (location) => {this.setState({location}); this.props.navigation.setParams({location});}
+  _setLink = (link) => {this.setState({link}); this.props.navigation.setParams({link});}
+  _setInWardrobe = (inWardrobe) => {this.setState({inWardrobe}); this.props.navigation.setParams({inWardrobe});}
+  _setOnlyMe = (onlyMe) => {this.setState({onlyMe}); this.props.navigation.setParams({onlyMe});}
 
   // CAMERA
   _handleCameraPress = async () => {
@@ -173,13 +181,13 @@ class AddClothScreen extends Component {
     )
   }
 
+  //  this is single action (selectionType: 1, 3, 6)
   _selectAction = (value, id) => {
     // if seasons, genders, bigType, topType, outwearType
     let { selectionType } = this.state;
     if(selectionType===1) {
-      // bigType: Top, Outwear, ETC -> Bottom / Shoes
       this._setBigType(value);
-      this.setState({selectedSizeIds: []});
+      this._setSelectedSizeIds([]);
       if(value==='Bottoms') {
         this.setState({items:bottomType});
       } else if(value==='Shoes') {
@@ -192,17 +200,8 @@ class AddClothScreen extends Component {
         this.setState({items:outwearType})
       }
       this.setState({selectionType:6});
-    } else if(selectionType===2) {
-      this._setSeason(value);
-      this._hideSelector();
     } else if(selectionType===3) {
       this._setGender(value);
-      this._hideSelector();
-    } else if(selectionType===4) {
-      this._setSize(value);
-      this._hideSelector();
-    } else if(selectionType===5) {
-      this._setColor(value);
       this._hideSelector();
     } else if (selectionType===6) {
       this._setClothType(value);
@@ -210,38 +209,37 @@ class AddClothScreen extends Component {
     }
   }
 
+  //  this is single action (selectionType: 2, 4, 5}
   _seasonSelectAction = (id) => {
-    // We can optimize this code later
-
     if(this.state.selectionType===4) {
       if(_.includes(this.state.selectedSizeIds, id)) {
         let newSelectedSizeIds = _.filter(this.state.selectedSizeIds, (curObject) => {
             return curObject !== id;
         });
-        this.setState({selectedSizeIds : newSelectedSizeIds});
+        this._setSelectedSizeIds(newSelectedSizeIds);
       } else {
         let newSelectedSizeIds = [...this.state.selectedSizeIds, id];
-        this.setState({selectedSizeIds : newSelectedSizeIds});
+        this._setSelectedSizeIds(newSelectedSizeIds);
       }
     } else if (this.state.selectionType===5) {
       if(_.includes(this.state.selectedColorIds, id)) {
         let newSelectedColorIds = _.filter(this.state.selectedColorIds, (curObject) => {
             return curObject !== id;
         });
-        this.setState({selectedColorIds : newSelectedColorIds});
+        this._setSelectedColorIds(newSelectedColorIds);
       } else {
         let newSelectedColorIds = [...this.state.selectedColorIds, id];
-        this.setState({selectedColorIds : newSelectedColorIds});
+        this._setSelectedColorIds(newSelectedColorIds);
       }
-    } else {
+    } else if(this.state.selectionType===2){
       if(_.includes(this.state.selectedSeasonIds, id)) {
         let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
             return curObject !== id;
         });
-        this.setState({selectedSeasonIds : newSelectedSeasonIds});
+        this._setSelectedSeasonIds(newSelectedSeasonIds);
       } else {
         let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
-        this.setState({selectedSeasonIds : newSelectedSeasonIds});
+        this._setSelectedSeasonIds(newSelectedSeasonIds);
       }
     }
   }
@@ -251,7 +249,6 @@ class AddClothScreen extends Component {
     return (
       <SelectorModal
         isSelectorVisible={this.state.isSelectorVisible}
-        multiple={this.state.multiple}
         items={this.state.items}
         hideSelector={this._hideSelector}
         selectAction={this._selectAction}
@@ -268,17 +265,13 @@ class AddClothScreen extends Component {
   }
 
   _handleDetailPress = (option) => {
-    // 3 = Gender
-    // { seasons, genders, outwearType, topType, bigType }
+    // clothSize , items: menu Itemds
     if(option===1) {
       this.setState({items: bigType})
-      this._setMultiple(false)
     } else if (option===2) {
       this.setState({items: seasons})
-      this._setMultiple(true)
     } else if (option===3) {
       this.setState({items: genders})
-      this._setMultiple(false)
     } else if (option===4) {
       if (this.state.bigType === 'Bottoms') {
         this.setState({items: bottomSize})
@@ -290,10 +283,8 @@ class AddClothScreen extends Component {
         this.setState({items: topSize})
         this.setState({clothSize: topSize})
       }
-      this._setMultiple(true)
     } else if (option===5) {
       this.setState({items: clothColors})
-      this._setMultiple(true)
     }
     this._setSelectionType(option);
     this._showSelector();
@@ -323,7 +314,7 @@ class AddClothScreen extends Component {
   }
 
   _renderColors = () => {
-    selectedSeasons = SelectedColorsSelector(this.state)
+    selectedSeasons = SelectedColorsSelector(this.state);
     if(selectedSeasons.length==0) {
       return '-'
     }
@@ -337,9 +328,8 @@ class AddClothScreen extends Component {
     return seasonList
   }
 
-  onCheck = data => {
-    console.log(data);
-    this.setState(data);
+  onCheck = ({selectedStyleIds}) => {
+    this._setSelectedStyleIds(selectedStyleIds);
   }
 
   _handleTagStylePress = () => {
@@ -399,7 +389,7 @@ class AddClothScreen extends Component {
               placeholder="문구입력..."
               style={[styles.inputStyle, {height: Math.max(70, this.state.textHeight)}]}
               onChangeText={(text)=>{
-                this.setState({text})
+                this._setText(text)
               }}
               onContentSizeChange={(event) => {
                 this.setState({ textHeight: event.nativeEvent.contentSize.height });
@@ -460,7 +450,7 @@ class AddClothScreen extends Component {
               value={this.state.brand}
               style={styles.moreDetailStyle}
               underlineColorAndroid='white'
-              onChangeText={(brand) => this.setState({brand})}/>
+              onChangeText={(brand) => this._setBrand(brand)}/>
           </View>
           <View style={[styles.dContainer, styles.row]}>
             <RkText rkType="primary3">Location</RkText>
@@ -471,7 +461,7 @@ class AddClothScreen extends Component {
               value={this.state.location}
               style={styles.moreDetailStyle}
               underlineColorAndroid='white'
-              onChangeText={(location) => this.setState({location})}/>
+              onChangeText={(location) => this._setLocation(location)}/>
           </View>
           <View style={[styles.dContainer, styles.row]}>
             <RkText rkType="primary3">link</RkText>
@@ -482,7 +472,7 @@ class AddClothScreen extends Component {
               style={styles.moreDetailStyle}
               value={this.state.link}
               underlineColorAndroid='white'
-              onChangeText={(link) => this.setState({link})}/>
+              onChangeText={(link) => this._setLink(link)}/>
           </View>
           <View style={[styles.dContainer, styles.row]}>
             <RkText rkType="primary3">In Wardrobe</RkText>
@@ -490,7 +480,7 @@ class AddClothScreen extends Component {
               style={styles.switch}
               value={this.state.inWardrobe}
               name="Push"
-              onValueChange={(inWardrobe) => this.setState({inWardrobe})}/>
+              onValueChange={(inWardrobe) => {console.log('helloworld')}}/>
           </View>
 
           <View style={styles.contextSeperator}/>
@@ -504,7 +494,7 @@ class AddClothScreen extends Component {
               style={styles.switch}
               value={this.state.onlyMe}
               name="Push"
-              onValueChange={(onlyMe) => this.setState({onlyMe})}/>
+              onValueChange={(onlyMe) => {this._setOnlyMe(onlyMe); console.log('asd');}}/>
           </View>
           <View>
             {this._renderModal()}

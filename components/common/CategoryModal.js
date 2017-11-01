@@ -21,11 +21,15 @@ class CategoryModal extends Component {
           <View style={styles.categoryHeader}>
             <RkText rkType="header3">Add To Category</RkText>
           </View>
-          <ScrollView>
+          <ScrollView style={styles.scrollViewStyle}>
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.all}</RkText></TouchableOpacity>
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.all}</RkText></TouchableOpacity>
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.all}</RkText></TouchableOpacity>
+            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
+            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
+            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
+            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
           </ScrollView>
@@ -73,6 +77,9 @@ const styles = RkStyleSheet.create(theme => ({
   iconStyle: {
     position: 'absolute',
     right: 20
+  },
+  scrollViewStyle: {
+    maxHeight: height(60)
   }
 }));
 

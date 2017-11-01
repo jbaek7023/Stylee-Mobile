@@ -86,7 +86,7 @@ class TagStyleScreen extends Component {
               resizeMode="cover"
             />
             <View style={{height:32, width:32, position:'absolute', top:0, right:0, marginTop:4, paddingRight:12}}>
-              <CheckBox checked={isSelected} color="#f64e59"/>
+              <CheckBox checked={isSelected} color="#f64e59" onPress={() => this._handleImagePress(item.id, item.outfit_img)}/>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -104,7 +104,7 @@ class TagStyleScreen extends Component {
               resizeMode="cover"
             />
             <View style={{height:32, width:32, position:'absolute', top:0, right:0, marginTop:4, paddingRight:12}}>
-              <CheckBox checked={isSelected} color="#f64e59"/>
+              <CheckBox checked={isSelected} color="#f64e59" onPress={() => this._handleImagePress(item.id, null)}/>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -117,7 +117,6 @@ class TagStyleScreen extends Component {
   _keyExtractor = (item, index) => item.id;
   render() {
     let ids = this.state.selectedStyleIds
-    console.log(ids);
     if(ids == undefined) {
       ids = [];
     }

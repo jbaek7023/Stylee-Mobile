@@ -116,7 +116,6 @@ class SelectorModal extends Component {
   }
 
   _renderItemForMultiple = ({item}) => {
-
     if(this.props.selectionType!==5) {
       return (
         <TouchableOpacity
@@ -141,8 +140,8 @@ class SelectorModal extends Component {
 
   render() {
     let { isSelectorVisible } = this.props;
-    let { multiple } = this.props;
     let { selectionType } = this.props;
+    let multiple = _.includes([2, 4, 5] , selectionType)
     if(!multiple) {
       return (
         <Modal

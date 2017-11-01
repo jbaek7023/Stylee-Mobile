@@ -11,10 +11,10 @@ import { connect } from 'react-redux';
 
 class FABs extends Component {
   state = {
-
+  
   }
 
-  onSaveCloth = data => {
+  onSaveCloth = (data) => {
     // set the num of length
     console.log(data);
   }
@@ -26,7 +26,7 @@ class FABs extends Component {
           buttonColor='#3498db'
           title="스타일 올리기"
           onPress={() => {
-            this.props.navigation.navigate('AddStyleo', {onSaveCloth: this.onSaveCloth});
+            this.props.navigation.navigate('AddStyleo');
           }}>
           <Icon name="md-body" style={styles.actionStyleButton} />
         </ActionButton.Item>
@@ -34,7 +34,7 @@ class FABs extends Component {
           buttonColor='#1abc9c'
           title="옷 올리기"
           onPress={() => {
-            this.props.navigation.navigate('AddClotho');
+            this.props.navigation.navigate('AddClotho', {onSaveCloth: this.onSaveCloth});
           }}>
           <Icon name="md-shirt" style={styles.actionClothIcon} />
         </ActionButton.Item>
