@@ -4,10 +4,47 @@ import {
   CLOTHES_LIST_SUCCESS,
   CLOTHES_LIST_FAIL,
   C_DETAIL_LOAD_SUCCESS,
-  C_DETAIL_LOAD_FAIL
+  C_DETAIL_LOAD_FAIL,
+  CREATE_CLOTH_SUCCESS,
+  CREATE_CLOTH_FAIL,
 } from './types';
-
 const ROOT_URL = 'http://10.0.2.2:8000';
+
+export const createCloth = (token, hType, clothObject) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let {image, text, bigType, clothType, selectedSeasonIds,
+    gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+    brand, location, link, inWardrobe, onlyMe} = clothObject;
+
+  let imageData = new FormData();
+  imageData.append('file', { uri: image });
+
+  console.log(text);
+  console.log(bigType);
+
+  let response = await axios.post(`${ROOT_URL}/clothes/create/`, {
+    image: imageData,
+    text, bigType, clothType, selectedSeasonIds,
+    gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+    brand, location, link, inWardrobe, onlyMe
+  }, {headers});
+
+  console.log(response.data);
+
+  if(response.data) {
+    dispatch({ type: CREATE_CLOTH_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: CREATE_CLOTH_FAIL })
+  }
+}
+
+
 
 
 export const fetchClothesAll = (token, hType) => async dispatch => {

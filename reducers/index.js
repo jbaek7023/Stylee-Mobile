@@ -14,5 +14,5 @@ export default combineReducers({
   outfit,
   wardrobe,
   user,
-  comment
+  comment,
 });

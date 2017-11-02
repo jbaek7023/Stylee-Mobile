@@ -37,12 +37,18 @@ export const CATEGORY_DETAIL_LOAD_SUCCESS = 'category_detail_load_success';
 export const CATEGORY_DETAIL_LOAD_FAIL = 'category_detail_load_fail';
 export const STAR_OUTFIT_LOAD_SUCCESS = 'star_outfit_load_success';
 export const STAR_OUTFIT_LOAD_FAIL = 'star_outfit_load_fail';
+// POST Create style
+export const CREATE_STYLE_SUCCESS = 'create_style_success';
+export const CREATE_STYLE_FAIL = 'create_style_fail';
 
 // Wardrobe
 export const CLOTHES_LIST_SUCCESS = 'clothes_list_success';
 export const CLOTHES_LIST_FAIL = 'clothes_list_fail';
 export const C_DETAIL_LOAD_SUCCESS = 'clothes_detail_sucess';
 export const C_DETAIL_LOAD_FAIL = 'clothes_detail_fail';
+// POST (Create Cloth and Style)
+export const CREATE_CLOTH_SUCCESS = 'create_cloth_success';
+export const CREATE_CLOTH_FAIL = 'create_cloth_fail';
 
 // User Profile
 export const USER_PAGE_FETCH_SUCCESS = 'user_page_fetch_success';
@@ -53,8 +59,3 @@ export const FETCH_COMMENTS_SUCCESS = 'fetch_comments_success';
 export const FETCH_COMMENTS_FAIL = 'fetch_comments_fail';
 export const COMMENT_DETAIL_SUCCESS = 'comment_detail_success';
 export const COMMENT_DETAIL_FAIL = 'comment_detail_fail';
-
-// Create Cloth / Outfit
-export const CREATE_CLOTH_SUCCESS = 'create_cloth_success';
-export const CREATE_CLOTH_FAIL = 'create_cloth_fail';
-export const SELECT_SEASON = 'select_season';

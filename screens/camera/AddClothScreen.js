@@ -62,6 +62,7 @@ class AddClothScreen extends Component {
   })
 
   state = {
+    image: null,
     isModalVisible: true,
     onlyMe: false,
     text: '',
@@ -121,6 +122,7 @@ class AddClothScreen extends Component {
   _setLink = (link) => {this.setState({link}); this.props.navigation.setParams({link});}
   _setInWardrobe = (inWardrobe) => {this.setState({inWardrobe}); this.props.navigation.setParams({inWardrobe});}
   _setOnlyMe = (onlyMe) => {this.setState({onlyMe}); this.props.navigation.setParams({onlyMe});}
+  _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
 
   // CAMERA
   _handleCameraPress = async () => {
@@ -129,10 +131,17 @@ class AddClothScreen extends Component {
       allowsEditing: true,
       aspect: [3, 3],
     });
-    console.log(result);
+
+//     Object {
+//   "cancelled": false,
+//   "height": 480,
+//   "uri": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540jbaek7023%252Fstylee/ImagePicker/324f36f5-14c2-481a-aeae-4f698e2f3919.jpg",
+//   "width": 480,
+// }
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      // this.setState({ image: result.uri });
+      this._setClothImage(result.uri);
     }
   }
 
@@ -146,11 +155,11 @@ class AddClothScreen extends Component {
       allowsEditing: true,
       aspect: [3, 3],
     });
-    console.log(result);
+
     this._hideModal();
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      this._setClothImage(result.uri);
     }
   };
   // END OF CAMEARA
@@ -364,6 +373,27 @@ class AddClothScreen extends Component {
     }
   }
 
+  _renderClothImage = () => {
+    let {image} = this.state;
+    if(!_.isNil(image)) {
+      return (
+        <Image
+          source={{uri: image}}
+          style={styles.headImageStyle}
+          resizeMode="cover"
+        />
+      );
+    } else {
+      return (
+        <Image
+          source={require('../../assets/images/robot-dev.png')}
+          resizeMode="cover"
+          style={styles.headImageStyle}
+        />
+      );
+    }
+  }
+
   render() {
     return (
       <KeyboardAwareScrollView
@@ -374,11 +404,7 @@ class AddClothScreen extends Component {
             <TouchableOpacity
               style={[styles.imageContainer, {height: Math.max(70, this.state.textHeight)}]}
               onPress={()=>{this.setState({isModalVisible:true})}}>
-              <Image
-                source={require('../../assets/images/robot-dev.png')}
-                resizeMode="cover"
-                style={styles.headImageStyle}
-                />
+              {this._renderClothImage()}
             </TouchableOpacity>
           </View>
           <View style={styles.rightheadContainer}>
@@ -405,27 +431,37 @@ class AddClothScreen extends Component {
 
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(1)}}>
+
             <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">{this.state.bigType} - {this.state.clothType}</RkText>
+
           </TouchableOpacity>
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(2)}}>
+
             <RkText rkType="primary3">Seasons</RkText>
             <RkText rkType="primary2">{this._renderSeasons()}</RkText>
+
           </TouchableOpacity>
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(3)}}>
+
             <RkText rkType="primary3">Gender</RkText>
             <RkText rkType="primary2">{this.state.gender}</RkText>
+
           </TouchableOpacity>
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(4)}}>
+
             <RkText rkType="primary3">Size</RkText>
             <RkText rkType="primary2">{this._renderSizes()}</RkText>
+
           </TouchableOpacity>
           <TouchableOpacity style={[styles.dContainer, styles.row]}
             onPress={() => {this._handleDetailPress(5)}}>
+
             <RkText rkType="primary3">Color</RkText>
             <RkText rkType="primary2">{this._renderColors()}</RkText>
+
           </TouchableOpacity>
 
           <View style={styles.contextSeperator}/>

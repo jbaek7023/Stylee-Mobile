@@ -6,17 +6,25 @@ import { RkText } from 'react-native-ui-kitten';
 import { Ionicons } from '@expo/vector-icons';
 import ActionButton from 'react-native-action-button';
 import { ImagePicker } from 'expo';
-
+import * as actions from '../../actions';
 import { connect } from 'react-redux';
 
 class FABs extends Component {
   state = {
-  
+
   }
 
-  onSaveCloth = (data) => {
+  onSaveCloth = (clothObject) => {
     // set the num of length
-    console.log(data);
+    let {token, hType} = this.props;
+    if(token) {
+      this.props.createCloth(token, hType, clothObject);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if we can new cloth,
+    // Retrieve wardrobe // fetch Clothes
   }
 
   render() {
@@ -59,4 +67,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, null)(FABs);
+function mapStateToProps({auth: {token, hType}}) {
+  return {token, hType}
+}
+
+export default connect(mapStateToProps, actions)(FABs);

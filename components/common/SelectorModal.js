@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, FlatList } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 import { Text, Button } from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
@@ -57,7 +57,6 @@ class SelectorModal extends Component {
   }
 
   _getColorStyle = (color) => {
-    console.log(color);
     return {
       width: 30,
       height: 30,
@@ -67,13 +66,18 @@ class SelectorModal extends Component {
   }
 
   _renderItem = ({item}) => {
+    let {value, id} = item;
     return (
+      <View>
       <TouchableOpacity
         style={styles.itemStyle}
-        onPress={() => this.props.selectAction(item.value, item.id)}>
-        <RkText>{item.value}</RkText>
-        { this._renderCheck(item.id, item.value) }
+        onPress={() => this.props.selectAction(value, id)}>
+        <RkText>{value}</RkText>
+        { this._renderCheck(id, value) }
+
       </TouchableOpacity>
+      <TouchableOpacity><Text>CLICK ME</Text></TouchableOpacity>
+      </View>
     );
   }
 
@@ -116,23 +120,28 @@ class SelectorModal extends Component {
   }
 
   _renderItemForMultiple = ({item}) => {
+    let {id, value, name} = item;
     if(this.props.selectionType!==5) {
       return (
         <TouchableOpacity
           style={styles.itemStyle}
-          onPress={() => {this._handleMultipleItemPress(item.id)}}>
-          <RkText>{item.value}</RkText>
-          { this._renderCheck(item.id, item.value) }
+          onPress={() => {this._handleMultipleItemPress(id)}}>
+
+          <RkText>{value}</RkText>
+          { this._renderCheck(id, value) }
+
         </TouchableOpacity>
       );
     } else {
       return (
        <TouchableOpacity
          style={styles.itemStyle}
-         onPress={() => this._handleMultipleItemPress(item.id)}>
-         <View style={colorCircleStyle(item.value)} />
-         <RkText>{item.name}</RkText>
-         { this._renderCheck(item.id, item.value) }
+         onPress={() => this._handleMultipleItemPress(id)}>
+
+         <View style={colorCircleStyle(value)} />
+         <RkText>{name}</RkText>
+         { this._renderCheck(id, value) }
+
        </TouchableOpacity>
       );
     }
@@ -146,7 +155,8 @@ class SelectorModal extends Component {
       return (
         <Modal
           isVisible={isSelectorVisible}
-          onBackdropPress = {() => this.props.hideSelector()}>
+          onBackdropPress = {() => this.props.hideSelector()}
+          animationInTiming={1}>
           <View style={styles.modalContainer}>
             <FlatList
               style={styles.root}
@@ -161,7 +171,8 @@ class SelectorModal extends Component {
       return (
         <Modal
           isVisible={isSelectorVisible}
-          onBackdropPress = {() => this.props.hideSelector()}>
+          onBackdropPress = {() => this.props.hideSelector()}
+          animationInTiming={1}>
           <View style={styles.modalContainer}>
             <FlatList
               style={styles.root}
