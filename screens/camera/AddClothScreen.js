@@ -46,11 +46,14 @@ class AddClothScreen extends Component {
         onPress={() => {
           let {image, text, bigType, clothType, selectedSeasonIds,
             gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-            brand, location, link, inWardrobe, onlyMe } = navigation.state.params;
+            brand, location, link, inWardrobe, onlyMe, base64 } = navigation.state.params;
+          console.log('onsave')
+          console.log(navigation.state.params)
+
           // send data
           // navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
           navigation.state.params.onSaveCloth({
-            image, text, bigType, clothType, selectedSeasonIds,
+            base64, text, bigType, clothType, selectedSeasonIds,
             gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
             brand, location, link, inWardrobe, onlyMe
           });
@@ -111,8 +114,18 @@ class AddClothScreen extends Component {
   };
   _setSelectionType = (selectionType) => this.setState({selectionType});
   _setClothType = (clothType) => {this.setState({clothType});this.props.navigation.setParams({clothType});}
-  _setSelectedStyleIds = (selectedStyleIds) => {this.setState({selectedStyleIds});this.props.navigation.setParams({selectedStyleIds});}
-  _setSelectedSizeIds = (selectedSizeIds) => {this.setState({selectedSizeIds});this.props.navigation.setParams({selectedSizeIds});}
+  _setSelectedStyleIds = (selectedStyleIds) => {
+    console.log(selectedStyleIds);
+    this.props.navigation.setParams({selectedStyleIds});
+    this.setState({selectedStyleIds});
+  }
+
+  _setSelectedSizeIds = (selectedSizeIds) => {
+    this.props.navigation.setParams({selectedSizeIds});
+    this.setState({selectedSizeIds});
+    console.log(this.props.navigation.state.params);
+  }
+
   _setSelectedColorIds = (selectedColorIds) => {this.setState({selectedColorIds});this.props.navigation.setParams({selectedColorIds});}
   _setSelectedSeasonIds = (selectedSeasonIds) => {this.setState({selectedSeasonIds});this.props.navigation.setParams({selectedSeasonIds});}
   _setGender = (gender) => {this.setState({gender});this.props.navigation.setParams({gender});}
@@ -130,8 +143,8 @@ class AddClothScreen extends Component {
     let result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [3, 3],
+      base64: true
     });
-
 //     Object {
 //   "cancelled": false,
 //   "height": 480,
@@ -142,6 +155,7 @@ class AddClothScreen extends Component {
     if (!result.cancelled) {
       // this.setState({ image: result.uri });
       this._setClothImage(result.uri);
+      this.props.navigation.setParams({base64: result.base64});
     }
   }
 
@@ -151,15 +165,17 @@ class AddClothScreen extends Component {
   }
 
   _pickImage = async () => {
+    this._hideModal();
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [3, 3],
+      base64: true
     });
 
-    this._hideModal();
 
     if (!result.cancelled) {
       this._setClothImage(result.uri);
+      this.props.navigation.setParams({base64: result.base64});
     }
   };
   // END OF CAMEARA
@@ -338,6 +354,8 @@ class AddClothScreen extends Component {
   }
 
   onCheck = ({selectedStyleIds}) => {
+    console.log('onCheck');
+    console.log(selectedStyleIds);
     this._setSelectedStyleIds(selectedStyleIds);
   }
 

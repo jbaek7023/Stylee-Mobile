@@ -49,7 +49,7 @@ class AddStyleScreen extends Component {
     myInfo: true,
     text: '',
     textHeight: 0,
-    isYou: true
+    isYou: true,
   }
 
   _showModal = () => this.setState({ isModalVisible: true })
@@ -97,9 +97,6 @@ class AddStyleScreen extends Component {
           </View>
         </View>
 
-
-
-
         <View style={styles.dContainer}>
           <RkText rkType="header5">Detail</RkText>
         </View>
@@ -135,10 +132,6 @@ class AddStyleScreen extends Component {
             name="Push"
             onValueChange={(onlyMe) => this.setState({onlyMe})}/>
         </View>
-
-
-
-
         {this._renderModal()}
       </ScrollView>
     );

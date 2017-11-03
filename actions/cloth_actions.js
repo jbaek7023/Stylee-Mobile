@@ -18,18 +18,16 @@ export const createCloth = (token, hType, clothObject) => async dispatch => {
     headers = { 'Authorization': `Bearer ${token}`};
   }
 
-  let {image, text, bigType, clothType, selectedSeasonIds,
+  let {base64, text, bigType, clothType, selectedSeasonIds,
     gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
     brand, location, link, inWardrobe, onlyMe} = clothObject;
+  console.log('Im here');
+  console.log(selectedStyleIds);
 
-  let imageData = new FormData();
-  imageData.append('file', { uri: image });
-
-  console.log(text);
-  console.log(bigType);
+  let image = base64;
 
   let response = await axios.post(`${ROOT_URL}/clothes/create/`, {
-    image: imageData,
+    image,
     text, bigType, clothType, selectedSeasonIds,
     gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
     brand, location, link, inWardrobe, onlyMe
@@ -43,9 +41,6 @@ export const createCloth = (token, hType, clothObject) => async dispatch => {
     dispatch({ type: CREATE_CLOTH_FAIL })
   }
 }
-
-
-
 
 export const fetchClothesAll = (token, hType) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};
