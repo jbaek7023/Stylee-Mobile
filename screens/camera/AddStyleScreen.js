@@ -65,6 +65,10 @@ class AddStyleScreen extends Component {
     )
   }
 
+  _openWardrobe = () => {
+    this.props.navigation.navigate('OpenWardrobe');
+  }
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -117,9 +121,12 @@ class AddStyleScreen extends Component {
             onValueChange={(isYou) => this.setState({isYou})}/>
         </View>
 
-        <View style={[styles.dContainer, styles.drow]}>
-          <RkText rkType="header5">Tagged Clothes</RkText><RkText rkType="header5 primary right">Tag Cloth</RkText>
-        </View>
+        <TouchableOpacity
+         style={[styles.dContainer, styles.drow]}
+         onPress={this._openWardrobe}>
+            <RkText rkType="header5">Tagged Clothes</RkText>
+            <RkText rkType="header5 primary right">Tag Cloth</RkText>
+        </TouchableOpacity>
 
         <View style={styles.dContainer}>
           <RkText rkType="header5">Privacy</RkText>

@@ -10,6 +10,7 @@ import CommentDetail from '../screens/comment/CommentDetail';
 import AddStyleScreen from '../screens/camera/AddStyleScreen';
 import AddClothScreen from '../screens/camera/AddClothScreen';
 import TagStyleScreen from '../screens/camera/TagStyleScreen';
+import OpenWardrobe from '../screens/camera/OpenWardrobe';
 
 export default StackNavigator ({
   Stylebooko: {
@@ -41,6 +42,9 @@ export default StackNavigator ({
   },
   TagStyle: {
     screen: TagStyleScreen
+  },
+  OpenWardrobe: {
+    screen: OpenWardrobe
   }
 }, {
     lazy: true

@@ -23,6 +23,7 @@ import SelectedColorsSelector from '../../selectors/selected_colors';
 import SelectedSizesSelector from '../../selectors/selected_sizes';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { NavigationActions } from 'react-navigation'
 
 class AddClothScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -115,15 +116,17 @@ class AddClothScreen extends Component {
   _setSelectionType = (selectionType) => this.setState({selectionType});
   _setClothType = (clothType) => {this.setState({clothType});this.props.navigation.setParams({clothType});}
   _setSelectedStyleIds = (selectedStyleIds) => {
-    console.log(selectedStyleIds);
-    this.props.navigation.setParams({selectedStyleIds});
+    const action = NavigationActions.setParams({ params: {selectedStyleIds}, key: 'id-1509842157447-6' });
+    this.props.navigation.dispatch(action);
+    this.props.navigation.setParams({styleIds:selectedStyleIds});
     this.setState({selectedStyleIds});
   }
 
   _setSelectedSizeIds = (selectedSizeIds) => {
     this.props.navigation.setParams({selectedSizeIds});
     this.setState({selectedSizeIds});
-    console.log(this.props.navigation.state.params);
+    console.log('size ')
+    console.log(this.props);
   }
 
   _setSelectedColorIds = (selectedColorIds) => {this.setState({selectedColorIds});this.props.navigation.setParams({selectedColorIds});}
@@ -171,7 +174,6 @@ class AddClothScreen extends Component {
       aspect: [3, 3],
       base64: true
     });
-
 
     if (!result.cancelled) {
       this._setClothImage(result.uri);
@@ -353,13 +355,23 @@ class AddClothScreen extends Component {
     return seasonList
   }
 
+
+
+
   onCheck = ({selectedStyleIds}) => {
-    console.log('onCheck');
-    console.log(selectedStyleIds);
+    // this.props.navigation.setParams({styleIds:selectedStyleIds});
+    // this.props.navigation.setParams({selectedStyleIds:[1,2,3,4,5]});
     this._setSelectedStyleIds(selectedStyleIds);
+    this.setState({selectedStyleIds});
   }
 
   _handleTagStylePress = () => {
+    // const navigateAction = NavigationActions.navigate({
+    //   routeName: 'AddClotho',
+    //   params: {onCheck: this.onCheck, selectedStyleIds: this.state.selectedStyleIds},
+    //   action: NavigationActions.navigate({ routeName: 'TagStyle'})
+    // })
+    // this.props.navigation.dispatch(navigateAction)
     this.props.navigation.navigate('TagStyle', {onCheck: this.onCheck, selectedStyleIds: this.state.selectedStyleIds});
   }
 
