@@ -13,7 +13,7 @@ import {UIConstants} from '../../config/appConstants';
 
 class TagStyleScreen extends Component {
   // normal navigation
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({ navigation, screenProps }) => ({
     title: 'Tag Your Style',
     gesturesEnabled: false,
     tabBarVisible: false,
@@ -34,6 +34,7 @@ class TagStyleScreen extends Component {
         onPress={() => {
           navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
           navigation.goBack();
+
         }}>
         <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
       </RkButton>

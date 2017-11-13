@@ -22,6 +22,10 @@ class CategoryModal extends Component {
             <RkText rkType="header3">Add To Category</RkText>
           </View>
           <ScrollView style={styles.scrollViewStyle}>
+            <FlatList
+
+
+            />
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.all}</RkText></TouchableOpacity>
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.all}</RkText></TouchableOpacity>
@@ -34,7 +38,7 @@ class CategoryModal extends Component {
             <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
           </ScrollView>
           <View style={styles.categoryAdder}>
-            <RkText rkType="header4"> + Add To New Category</RkText>
+            <RkText rkType="header4"> + Create New Category</RkText>
           </View>
         </View>
       </Modal>

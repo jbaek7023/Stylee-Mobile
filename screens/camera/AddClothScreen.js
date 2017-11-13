@@ -48,9 +48,9 @@ class AddClothScreen extends Component {
           let {image, text, bigType, clothType, selectedSeasonIds,
             gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
             brand, location, link, inWardrobe, onlyMe, base64 } = navigation.state.params;
-          console.log('onsave')
-          console.log(navigation.state.params)
-
+          console.log('onsave');
+          console.log(navigation.state.params.selectedStyleIds);
+          console.log('done');
           // send data
           // navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
           navigation.state.params.onSaveCloth({
@@ -78,7 +78,7 @@ class AddClothScreen extends Component {
     bigType: 'Top',
     clothType: 'T-Shirt',
     selectionType: 5,
-
+    selectedStyleIds: [],
     selectedSeasonIds: [],
     seasons: seasons,
     selectedSizeIds: [],
@@ -89,7 +89,6 @@ class AddClothScreen extends Component {
     brand: '',
     location: '',
     link: '',
-    selectedStyleIds: [],
   }
 
   componentWillMount() {
@@ -116,17 +115,15 @@ class AddClothScreen extends Component {
   _setSelectionType = (selectionType) => this.setState({selectionType});
   _setClothType = (clothType) => {this.setState({clothType});this.props.navigation.setParams({clothType});}
   _setSelectedStyleIds = (selectedStyleIds) => {
-    const action = NavigationActions.setParams({ params: {selectedStyleIds}, key: 'id-1509842157447-6' });
-    this.props.navigation.dispatch(action);
-    this.props.navigation.setParams({styleIds:selectedStyleIds});
+    console.log('this si selectedStyleIds in setSelectedStyleIds - Passing');
+    console.log(selectedStyleIds)
+    this.props.navigation.setParams({selectedStyleIds});
     this.setState({selectedStyleIds});
   }
 
   _setSelectedSizeIds = (selectedSizeIds) => {
     this.props.navigation.setParams({selectedSizeIds});
     this.setState({selectedSizeIds});
-    console.log('size ')
-    console.log(this.props);
   }
 
   _setSelectedColorIds = (selectedColorIds) => {this.setState({selectedColorIds});this.props.navigation.setParams({selectedColorIds});}
@@ -359,22 +356,17 @@ class AddClothScreen extends Component {
 
 
   onCheck = ({selectedStyleIds}) => {
-    // this.props.navigation.setParams({styleIds:selectedStyleIds});
-    // this.props.navigation.setParams({selectedStyleIds:[1,2,3,4,5]});
-    this._setSelectedStyleIds(selectedStyleIds);
+    this.props.navigation.setParams({selectedStyleIds:[1,2,3,4,5]});
+    console.log('passing here');
+    console.log(this.props.navigation);
+    console.log(this.state.selectedStyleIds);
+    // this._setSelectedStyleIds(selectedStyleIds);
     this.setState({selectedStyleIds});
   }
 
   _handleTagStylePress = () => {
-    // const navigateAction = NavigationActions.navigate({
-    //   routeName: 'AddClotho',
-    //   params: {onCheck: this.onCheck, selectedStyleIds: this.state.selectedStyleIds},
-    //   action: NavigationActions.navigate({ routeName: 'TagStyle'})
-    // })
-    // this.props.navigation.dispatch(navigateAction)
     this.props.navigation.navigate('TagStyle', {onCheck: this.onCheck, selectedStyleIds: this.state.selectedStyleIds});
   }
-
 
   _scrollToInput = (reactNode: any) => {
     this.scroll.props.scrollToFocusedInput(reactNode)

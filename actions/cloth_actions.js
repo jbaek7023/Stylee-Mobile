@@ -21,8 +21,6 @@ export const createCloth = (token, hType, clothObject) => async dispatch => {
   let {base64, text, bigType, clothType, selectedSeasonIds,
     gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
     brand, location, link, inWardrobe, onlyMe} = clothObject;
-  console.log('Im here');
-  console.log(selectedStyleIds);
 
   let image = base64;
 

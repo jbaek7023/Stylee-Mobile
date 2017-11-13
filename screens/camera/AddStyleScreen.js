@@ -5,6 +5,7 @@ import CheckBox from 'react-native-check-box';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 import { threeImageWidth } from '../../utils/scale';
 import {FontAwesome} from '../../assets/icons';
+import CategoryModal from '../../components/common/CategoryModal';
 
 import {
   RkSwitch
@@ -50,10 +51,13 @@ class AddStyleScreen extends Component {
     text: '',
     textHeight: 0,
     isYou: true,
+
   }
 
   _showModal = () => this.setState({ isModalVisible: true })
   _hideModal = () => this.setState({ isModalVisible: false })
+  _showCategoryModal = () => this.setState({ isCategoryVisible: true });
+  _hideCategoryModal = () => this.setState({ isCategoryVisible: false });
 
   _renderModal = () => {
     return (
@@ -67,6 +71,10 @@ class AddStyleScreen extends Component {
 
   _openWardrobe = () => {
     this.props.navigation.navigate('OpenWardrobe');
+  }
+
+  _openUserCategory = () => {
+    this._showCategoryModal();
   }
 
   render() {
@@ -123,6 +131,12 @@ class AddStyleScreen extends Component {
 
         <TouchableOpacity
          style={[styles.dContainer, styles.drow]}
+         onPress={this._openUserCategory}>
+            <RkText rkType="header5">Category</RkText>
+            <RkText rkType="header5 primary right">Add To Category</RkText>
+        </TouchableOpacity>
+        <TouchableOpacity
+         style={[styles.dContainer, styles.drow]}
          onPress={this._openWardrobe}>
             <RkText rkType="header5">Tagged Clothes</RkText>
             <RkText rkType="header5 primary right">Tag Cloth</RkText>
@@ -140,6 +154,10 @@ class AddStyleScreen extends Component {
             onValueChange={(onlyMe) => this.setState({onlyMe})}/>
         </View>
         {this._renderModal()}
+        <CategoryModal
+          isCategoryVisible={this.state.isCategoryVisible}
+          hideModal={this._hideCategoryModal}
+          />
       </ScrollView>
     );
   }
