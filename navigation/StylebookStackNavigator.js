@@ -12,6 +12,7 @@ import AddClothScreen from '../screens/camera/AddClothScreen';
 import TagStyleScreen from '../screens/camera/TagStyleScreen';
 import OpenWardrobe from '../screens/camera/OpenWardrobe';
 import FABs from '../components/common/FABs';
+import TagFromPhoto from '../screens/camera/TagFromPhoto';
 
 export default StackNavigator ({
   Stylebooko: {
@@ -49,6 +50,9 @@ export default StackNavigator ({
   },
   FABs: {
     screen: FABs
+  },
+  TagFromPhoto: {
+    screen: TagFromPhoto
   }
 }, {
     lazy: true

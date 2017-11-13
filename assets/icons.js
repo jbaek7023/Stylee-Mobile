@@ -36,4 +36,6 @@ export const FontAwesome = {
   check: String.fromCharCode(61452),
   onlyMe: String.fromCharCode(61475),
   all: String.fromCharCode(61612),
+  edit: String.fromCharCode(61504),
+  delete: String.fromCharCode(61453),
 };

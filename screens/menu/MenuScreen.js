@@ -30,7 +30,7 @@ let ThemedNavigationBar = withRkTheme(NavBar);
 
 class MenuScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: '메뉴',
+    title: 'Menu',
     gesturesEnabled: false,
     header: (headerProps) => {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>

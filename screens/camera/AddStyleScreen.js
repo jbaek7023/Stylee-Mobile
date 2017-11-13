@@ -6,6 +6,10 @@ import CameraImageSelectModal from '../../components/common/CameraImageSelectMod
 import { threeImageWidth } from '../../utils/scale';
 import {FontAwesome} from '../../assets/icons';
 import CategoryModal from '../../components/common/CategoryModal';
+import Modal from 'react-native-modal';
+import { Button } from 'native-base';
+import { width, height, totalSize } from 'react-native-dimension';
+import { ImagePicker } from 'expo';
 
 import {
   RkSwitch
@@ -14,7 +18,7 @@ import {
 // Header Title Post your Style
 // Header Right POST
 import { NavBar } from '../../components/navBar';
-import {withRkTheme} from 'react-native-ui-kitten'
+import { withRkTheme } from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
 
 class AddStyleScreen extends Component {
@@ -51,21 +55,73 @@ class AddStyleScreen extends Component {
     text: '',
     textHeight: 0,
     isYou: true,
-
+    image: null
   }
+  // END OF CAMEARA
+  _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
 
   _showModal = () => this.setState({ isModalVisible: true })
   _hideModal = () => this.setState({ isModalVisible: false })
   _showCategoryModal = () => this.setState({ isCategoryVisible: true });
   _hideCategoryModal = () => this.setState({ isCategoryVisible: false });
 
+  // CAMERA
+  _handleCameraPress = async () => {
+    this._hideModal();
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [3, 3],
+      base64: true
+    });
+
+    if (!result.cancelled) {
+      // this.setState({ image: result.uri });
+      this._setClothImage(result.uri);
+      this.props.navigation.setParams({base64: result.base64});
+    }
+  }
+
+  _handleAlbumPress = async () => {
+    this._hideModal();
+    this._pickImage();
+  }
+
+  _pickImage = async () => {
+    this._hideModal();
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [3, 3],
+      base64: true
+    });
+
+    if (!result.cancelled) {
+      this._setClothImage(result.uri);
+      this.props.navigation.setParams({base64: result.base64});
+    }
+  };
+
   _renderModal = () => {
     return (
-      <CameraImageSelectModal
-        hideModal={this._hideModal}
-        isModalVisible={this.state.isModalVisible}
-        navigation={this.props.navigation}
-      />
+      <Modal
+        isVisible={this.state.isModalVisible}
+        onBackdropPress = {() => this._hideModal()}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalTitleTextContainer}>
+            <Text style={styles.modalTitleText}>Hello World</Text>
+          </View>
+          <View style={styles.modalContentTextContainer}>
+            <Text style={styles.modalContentText}></Text>
+          </View>
+          <View style={styles.modalButtonContainer}>
+            <Button transparent onPress={this._handleCameraPress}>
+              <Text style={[styles.modalText, styles.black]}>Camera</Text>
+            </Button>
+            <Button transparent onPress={this._handleAlbumPress}>
+              <Text style={styles.modalText}>Open Album</Text>
+            </Button>
+          </View>
+        </View>
+      </Modal>
     )
   }
 
@@ -77,6 +133,36 @@ class AddStyleScreen extends Component {
     this._showCategoryModal();
   }
 
+  _renderClothImage = () => {
+    let {image} = this.state;
+    if(!_.isNil(image)) {
+      return (
+        <Image
+          source={{uri: image}}
+          style={styles.headImageStyle}
+          resizeMode="cover"
+        />
+      );
+    } else {
+      return (
+        <Image
+          source={require('../../assets/images/robot-dev.png')}
+          resizeMode="cover"
+          style={styles.headImageStyle}
+        />
+      );
+    }
+  }
+
+  _tagFromPhoto = () => {
+    let { image } = this.state;
+    if(image) {
+      this.props.navigation.navigate('TagFromPhoto', {image});
+    } else {
+      this._showModal();
+    }
+  }
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -85,11 +171,7 @@ class AddStyleScreen extends Component {
             <TouchableOpacity
               style={[styles.imageContainer, {height: Math.max(70, this.state.textHeight)}]}
               onPress={()=>{this.setState({isModalVisible:true})}}>
-              <Image
-                source={require('../../assets/images/robot-dev.png')}
-                resizeMode="cover"
-                style={styles.headImageStyle}
-                />
+              {this._renderClothImage()}
             </TouchableOpacity>
           </View>
           <View style={styles.rightheadContainer}>
@@ -109,6 +191,25 @@ class AddStyleScreen extends Component {
           </View>
         </View>
 
+        <TouchableOpacity
+         style={[styles.dContainer, styles.drow]}
+         onPress={this._openUserCategory}>
+            <RkText rkType="header5">Category</RkText>
+            <RkText rkType="header5 primary right">Add To Category</RkText>
+        </TouchableOpacity>
+        <TouchableOpacity
+         style={[styles.dContainer, styles.drow]}
+         onPress={this._openWardrobe}>
+            <RkText rkType="header5">Tagged Clothes</RkText>
+            <RkText rkType="header5 primary right">Open Wardrobe</RkText>
+        </TouchableOpacity>
+        <TouchableOpacity
+         style={[styles.dContainer, styles.drow]}
+         onPress={this._tagFromPhoto}>
+            <RkText rkType="header5"/>
+            <RkText rkType="header5 primary right">Tag From Photo</RkText>
+        </TouchableOpacity>
+
         <View style={styles.dContainer}>
           <RkText rkType="header5">Detail</RkText>
         </View>
@@ -121,26 +222,13 @@ class AddStyleScreen extends Component {
         </TouchableOpacity>
 
         <View style={[styles.dContainer, styles.row]}>
-          <RkText rkType="primary3">Are you in the picture?</RkText>
+          <RkText rkType="primary3">Is it you in the picture?</RkText>
           <RkSwitch
             style={styles.switch}
             value={this.state.isYou}
             name="Push"
             onValueChange={(isYou) => this.setState({isYou})}/>
         </View>
-
-        <TouchableOpacity
-         style={[styles.dContainer, styles.drow]}
-         onPress={this._openUserCategory}>
-            <RkText rkType="header5">Category</RkText>
-            <RkText rkType="header5 primary right">Add To Category</RkText>
-        </TouchableOpacity>
-        <TouchableOpacity
-         style={[styles.dContainer, styles.drow]}
-         onPress={this._openWardrobe}>
-            <RkText rkType="header5">Tagged Clothes</RkText>
-            <RkText rkType="header5 primary right">Tag Cloth</RkText>
-        </TouchableOpacity>
 
         <View style={styles.dContainer}>
           <RkText rkType="header5">Privacy</RkText>
@@ -153,11 +241,15 @@ class AddStyleScreen extends Component {
             name="Push"
             onValueChange={(onlyMe) => this.setState({onlyMe})}/>
         </View>
-        {this._renderModal()}
-        <CategoryModal
-          isCategoryVisible={this.state.isCategoryVisible}
-          hideModal={this._hideCategoryModal}
-          />
+        <View>
+          {this._renderModal()}
+        </View>
+        <View>
+          <CategoryModal
+            isCategoryVisible={this.state.isCategoryVisible}
+            hideModal={this._hideCategoryModal}
+            />
+        </View>
       </ScrollView>
     );
   }
@@ -247,7 +339,44 @@ let styles = RkStyleSheet.create(theme => ({
   contextSeperator: {
     backgroundColor: "#e6e6ee",
     height: 0.5
-  }
+  },
+  modalContainer: {
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    width: width(90),
+    height: height(30),
+    padding: 16
+  },
+  modalTitleTextContainer: {
+    flexDirection: 'row',
+    flex:1
+  },
+  modalTitleText: {
+    fontSize: totalSize(3),
+  },
+  modalContentTextContainer: {
+    flex: 2,
+    flexDirection: 'row',
+    padding: 10
+  },
+  modalContentText: {
+    fontSize: totalSize(2),
+    flex: 1,
+    color: '#696969'
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    flex: 1,
+    overflow: 'hidden'
+  },
+  modalButtonText: {
+    fontSize: totalSize(2),
+    flex: 1
+  },
+  black: {
+    color: 'black'
+  },
 }));
 
 export default AddStyleScreen;

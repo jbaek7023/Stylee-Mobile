@@ -12,7 +12,7 @@ let ThemedNavigationBar = withRkTheme(NavBar);
 
 class FeedWrappingScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    title: 'Stylee Feed',
+    title: 'Feed',
     headerRight: (
         <RkText
           rkType='awesome large'

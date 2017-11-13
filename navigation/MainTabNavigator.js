@@ -69,7 +69,7 @@ export default TabNavigator(
         return (
           <Ionicons
             name={iconName}
-            size={32}
+            size={30}
             style={{ marginBottom: -3 }}
             color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
           />
@@ -84,16 +84,20 @@ export default TabNavigator(
     swipeEnabled: false,
     backBehavior: 'none',
     tabBarOptions: {
-        showLabel: false,
+        showLabel: true,
+        activeTintColor: '#6F3AB1',
+        labelStyle: {
+          fontSize: 11
+        },
         style: {
           backgroundColor: 'white',
           borderTopWidth: 1,
           borderColor: 'black',
-
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.8,
           shadowRadius: 2,
+          height: 50
         }
     },
     lazy: true,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Image, View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, FlatList } from 'react-native';
+import { Image, View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, FlatList, Text } from 'react-native';
 import Modal from 'react-native-modal';
-import { Text, Button, CheckBox} from 'native-base';
+import { Button, CheckBox} from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
 import { RkText, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
@@ -51,19 +51,19 @@ class OpenWardrobe extends Component {
     return (
       <View style={{flex:1}}>
         <Tabs initialPage={0} style={{backgroundColor: '#D5CFF2'}}>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>상의</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Top</Text></TabHeading>}>
             <TopScreen clothes={this.props.tops} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>아우터</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Outerwear</Text></TabHeading>}>
             <OutwearScreen clothes={this.props.outwears} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>하의</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Bottom</Text></TabHeading>}>
            <BottomScreen clothes={this.props.bottoms} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>신발</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Shoes</Text></TabHeading>}>
             <ShoeScreen clothes={this.props.shoes} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>기타</Text></TabHeading>}>
+          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Others</Text></TabHeading>}>
             <EtcScreen clothes={this.props.etcs} navigation={this.props.navigation}/>
           </Tab>
         </Tabs>
