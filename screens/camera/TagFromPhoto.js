@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, TouchableWithoutFeedback, ScrollView, View, Image, Text, TouchableOpacity } from 'react-native';
+import { FlatList, ImageBackground, TouchableWithoutFeedback, ScrollView, View, Image, Text, TouchableOpacity } from 'react-native';
 import { width, height } from 'react-native-dimension';
 import { RkStyleSheet, RkText } from 'react-native-ui-kitten';
 import { Ionicons } from '@expo/vector-icons';
@@ -19,8 +19,8 @@ class TagFromPhoto extends Component {
     left: width(100) / 2,
     top: height(100) / 2,
     taggedClothes: {
-      0: {left:100, top:100, thumbSize:100},
-      1: {left:200, top:200, thumbSize:100},
+      0: {id:0, left:100, top:100, thumbSize:100, type: 'T-Shirt', seasons: ['Spring', 'Fall']},
+      1: {id:1, left:200, top:200, thumbSize:100, type: 'Cardigan', seasons: ['Spring', 'Winter']},
     },
     selectedClothId : 0,
   }
@@ -136,7 +136,6 @@ class TagFromPhoto extends Component {
         return (
           <View
             key={key}
-            {...this.props}
             style={{
               position: 'absolute',
               top,
@@ -177,6 +176,15 @@ class TagFromPhoto extends Component {
   _createTag = () => {
     let { taggedClothes } = this.state;
     let length = Object.keys(taggedClothes).length;
+    if(length>6) {
+      // Sorry, we're not allowing more than 6 clothes on this photo
+
+      // You can tag more later
+
+      // OK
+
+      return; // break the function
+    }
     while(taggedClothes[length]) {
       length++;
     }
@@ -184,9 +192,49 @@ class TagFromPhoto extends Component {
         selectedClothId:length,
         taggedClothes: {
           ...taggedClothes,
-          [length]: {left:200, top:200, thumbSize:100}
+          [length]: {id:length, left:200, top:200, thumbSize:100, type: 'T-Shirt', seasons: ['All']}
         }
     })
+  }
+
+  _renderSeasons = (seasons) => {
+    if(seasons.length==0) {
+      return '-'
+    }
+    let seasonList = seasons.map((season) => {
+      return ' '+season;
+    })
+    return seasonList
+  }
+
+  _renderTaggedItem = () => {
+    let selectedCloth = this.state.taggedClothes[this.state.selectedClothId]
+    if(selectedCloth) {
+      return (
+        <View
+          style={styles.headContainer}>
+          <View style={styles.leftheadContainer}>
+            <TouchableOpacity
+              style={styles.imageContainer}>
+              {this._renderTaggedClothImage()}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.rightheadContainer}>
+            <RkText rkType="header5">{selectedCloth.type}</RkText>
+            <RkText rkType="header5">{this._renderSeasons(selectedCloth.seasons)}</RkText>
+          </View>
+          <View>
+            <View>
+              <RkText rkType='awesome tag'>{FontAwesome.edit}</RkText>
+            </View>
+            <View>
+              <RkText rkType='awesome tag'>{FontAwesome.delete}</RkText>
+            </View>
+          </View>
+        </View>
+      );
+    }
+    return <View />
   }
 
   render() {
@@ -207,34 +255,12 @@ class TagFromPhoto extends Component {
             {this._renderPhotoImage(image)}
           </View>
           <View style={styles.dContainer}>
-            <RkText rkType="header4">Tagged Clothes (1)</RkText>
-
             <TouchableOpacity onPress={()=>{this._createTag()}}>
               <RkText rkType="awesome small">{FontAwesome.plus}</RkText>
             </TouchableOpacity>
           </View>
           <View>
-            <View style={styles.headContainer}>
-              <View style={styles.leftheadContainer}>
-                <TouchableOpacity
-                  style={styles.imageContainer}
-                  onPress={()=>{this.setState({isModalVisible:true})}}>
-                  {this._renderTaggedClothImage()}
-                </TouchableOpacity>
-              </View>
-              <View style={styles.rightheadContainer}>
-                <RkText rkType="header5">T-Shirt (Top)</RkText>
-                <RkText rkType="header5">Fall, Spring</RkText>
-              </View>
-              <View>
-                <View>
-                  <RkText rkType='awesome tag'>{FontAwesome.edit}</RkText>
-                </View>
-                <View>
-                  <RkText rkType='awesome tag'>{FontAwesome.delete}</RkText>
-                </View>
-              </View>
-            </View>
+            {this._renderTaggedItem()}
           </View>
         </ScrollView>
       );
