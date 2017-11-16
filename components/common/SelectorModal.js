@@ -76,7 +76,6 @@ class SelectorModal extends Component {
         { this._renderCheck(id, value) }
 
       </TouchableOpacity>
-      <TouchableOpacity><Text>CLICK ME</Text></TouchableOpacity>
       </View>
     );
   }

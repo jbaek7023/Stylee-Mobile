@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, ScrollView, View, Image, Text, TouchableOpacity } from 'react-native';
+import { ImageBackground, TouchableWithoutFeedback, ScrollView, View, Image, Text, TouchableOpacity } from 'react-native';
 import { width, height } from 'react-native-dimension';
 import { RkStyleSheet, RkText } from 'react-native-ui-kitten';
 import { Ionicons } from '@expo/vector-icons';
@@ -19,8 +19,8 @@ class TagFromPhoto extends Component {
     left: width(100) / 2,
     top: height(100) / 2,
     taggedClothes: {
-      0: {id:0, left:100, top:100, thumbSize:100},
-      1: {id:1, left:200, top:200, thumbSize:200},
+      0: {left:100, top:100, thumbSize:100},
+      1: {left:200, top:200, thumbSize:100},
     },
     selectedClothId : 0,
   }
@@ -43,6 +43,7 @@ class TagFromPhoto extends Component {
         if (gestureState.pinch && gestureState.previousPinch) {
           thumbSize *= (gestureState.pinch / gestureState.previousPinch)
         }
+
         let {left, top} = tag;
         left += (gestureState.moveX - gestureState.previousMoveX);
         top += (gestureState.moveY - gestureState.previousMoveY);
@@ -53,7 +54,6 @@ class TagFromPhoto extends Component {
         let bottomy = top + thumbSize/2;
 
         if (topbby>=0 && bottomy <= width(100) && righty <= width(100) && lefty >= 0) {
-
           var deep = _.cloneDeep(tag);
           deep.left = left
           deep.top = top
@@ -82,11 +82,20 @@ class TagFromPhoto extends Component {
       onResponderTerminate: (evt, gestureState) => {},
 
       onResponderSingleTapConfirmed: (evt, gestureState) => {
-        // console.log(gestureState.x0, gestureState.y0);
-        // // if x0, y0 in selected?
-        //   // select the item.
-        // //
-        // console.log(gestureState);
+        // if x0, y0 in selected?
+        let { taggedClothes } = this.state;
+        let { x0, y0 } = gestureState;
+        y0 -= 80; // subtract the navbar (MUST TEST on MACHINE)
+        for (key in taggedClothes) {
+          let { left, top, thumbSize } = taggedClothes[key];
+          left -= thumbSize/2;
+          top -= thumbSize/2;
+          let xMatch = (left-20 < x0 && x0 < left+thumbSize+20) ? true: false;
+          let yMatch = (top-20 < y0 && y0 < top+thumbSize+20) ? true: false;
+          if(xMatch && yMatch) {
+            this.setState({selectedClothId: key});
+          }
+        }
       },
       debug: false
     });
@@ -104,28 +113,32 @@ class TagFromPhoto extends Component {
       let thumbSize = cloth.thumbSize;
       let top = cloth.top - thumbSize/2;
       let left = cloth.left - thumbSize/2;
-      console.log('print--------');
-      console.log(key);
-      console.log(this.state.selectedClothId);
       if(key==this.state.selectedClothId) {
         return (
           <View
             key={key}
             style={{
+              position: 'absolute',
               top,
               left,
               height: thumbSize,
               width: thumbSize,
               borderWidth: 2,
-              borderColor: 'yellow'
+              borderColor: 'yellow',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}
-          />
+          >
+            <Text style={{color:'yellow', fontWeight: 'bold'}}>Move or Pinch</Text>
+          </View>
         );
       } else {
         return (
           <View
             key={key}
+            {...this.props}
             style={{
+              position: 'absolute',
               top,
               left,
               height: thumbSize,
@@ -151,27 +164,29 @@ class TagFromPhoto extends Component {
   }
 
   _renderPhotoImage = (image) => {
-    const thumbSize = this.state.thumbSize;
     return (
       <ImageBackground
         source={{uri: image}}
         style={styles.imageStyle}
         resizeMode="cover">
-        <View
-          style={{
-            position: 'absolute',
-            top: this.state.top - thumbSize/2,
-            left: this.state.left - thumbSize/2,
-            height: thumbSize,
-            width: thumbSize,
-            borderWidth: 1,
-            borderColor: 'white'
-          }}
-          pointerEvents='none'
-        />
         <View style={styles.imageStyle}>{this._renderTags()}</View>
       </ImageBackground>
     );
+  }
+
+  _createTag = () => {
+    let { taggedClothes } = this.state;
+    let length = Object.keys(taggedClothes).length;
+    while(taggedClothes[length]) {
+      length++;
+    }
+    this.setState({
+        selectedClothId:length,
+        taggedClothes: {
+          ...taggedClothes,
+          [length]: {left:200, top:200, thumbSize:100}
+        }
+    })
   }
 
   render() {
@@ -189,10 +204,14 @@ class TagFromPhoto extends Component {
             style={styles.imageStyle}
             {... this.gestureResponder}
           >
-          {this._renderPhotoImage(image)}
+            {this._renderPhotoImage(image)}
           </View>
           <View style={styles.dContainer}>
             <RkText rkType="header4">Tagged Clothes (1)</RkText>
+
+            <TouchableOpacity onPress={()=>{this._createTag()}}>
+              <RkText rkType="awesome small">{FontAwesome.plus}</RkText>
+            </TouchableOpacity>
           </View>
           <View>
             <View style={styles.headContainer}>
