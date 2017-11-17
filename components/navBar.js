@@ -129,7 +129,7 @@ let styles = RkStyleSheet.create(theme => ({
   layout: {
     backgroundColor: theme.colors.navbar,
     paddingTop: UIConstants.StatusbarHeight,
-    height: 50,
+    height: 40,
     justifyContent: 'center'
   },
   container: {

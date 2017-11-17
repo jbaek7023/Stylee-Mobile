@@ -26,7 +26,7 @@ export default class App extends React.Component {
       return (
         <Provider store={store}>
           <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor="#6F3AB1"/>}
             {Platform.OS === 'android' &&
               <View style={styles.statusBarUnderlay} />}
             <RootNavigation />
@@ -83,6 +83,6 @@ const styles = StyleSheet.create({
   },
   statusBarUnderlay: {
     height: 24,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: '#6F3AB1',
   },
 });

@@ -28,13 +28,11 @@ class FeedWrappingScreen extends Component {
     return (
       <View style={{flex: 1}}>
         <Tabs initialPage={0}
-        tabStyle={styles.tabStyle}
-        activeTabStyle={styles.activeTabStyle}
-        activeTextStyle={styles.activeTextStyle}
-        textStyle={styles.textStyle}
+          tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+          style={{height:40}}
         >
           <Tab
-            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>Following</Text></TabHeading>}
+            heading="Following"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
@@ -43,7 +41,7 @@ class FeedWrappingScreen extends Component {
             <FeedScreen navigation={this.props.navigation}/>
           </Tab>
           <Tab
-            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>Popular</Text></TabHeading>}
+            heading="Popular"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
@@ -58,18 +56,27 @@ class FeedWrappingScreen extends Component {
 
 let styles = RkStyleSheet.create(theme => ({
   tabStyle : {
-    backgroundColor: theme.colors.navbar,
+    // backgroundColor: theme.colors.navbar,
+    backgroundColor: 'white',
     justifyContent: 'center',
-    width: 120
+    width: 120,
+    height: 40,
   },
   activeTabStyle: {
     backgroundColor: 'white',
+    height: 40,
   },
   textStyle: {
-    color: 'white',
+    // color: 'white',
+    color: "#968D8A"
   },
   activeTextStyle: {
-    color: 'white',
+    // color: 'white',
+    color: theme.colors.navbar
+  },
+  tabBarUnderlineStyle: {
+    backgroundColor: theme.colors.navbar,
+    height: 2
   }
 }));
 

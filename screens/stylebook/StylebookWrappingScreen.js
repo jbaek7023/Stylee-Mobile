@@ -56,7 +56,7 @@ class StylebookWrappingScreen extends Component {
         textStyle={styles.textStyle}
         >
           <Tab
-            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>All</Text></TabHeading>}
+            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>Styles</Text></TabHeading>}
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
