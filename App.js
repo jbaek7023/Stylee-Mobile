@@ -4,6 +4,12 @@ import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
 
+// native base
+import { Container, StyleProvider } from 'native-base';
+import getTheme from './native-base-theme/components';
+import commonColor from './native-base-theme/variables/commonColor';
+
+
 // For React Redux
 import { Provider } from 'react-redux';
 import store from './store';
@@ -24,13 +30,16 @@ export default class App extends React.Component {
       return <AppLoading />;
     } else {
       return (
+
         <Provider store={store}>
+          <StyleProvider style={getTheme()}>
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor="#6F3AB1"/>}
             {Platform.OS === 'android' &&
               <View style={styles.statusBarUnderlay} />}
             <RootNavigation />
           </View>
+          </StyleProvider>
         </Provider>
       );
     }

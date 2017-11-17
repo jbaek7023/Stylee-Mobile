@@ -13,8 +13,7 @@ import { Avatar } from '../../components/Avatar';
 import { SocialBar } from '../../components/SocialBar';
 class PopularPostScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    title: 'Popular',
-    header: null
+    title: 'Popular'
   })
 
   _keyExtractor = (item, index) => item.id;

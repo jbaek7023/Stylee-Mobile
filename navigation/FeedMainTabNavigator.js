@@ -14,15 +14,11 @@ export default TabNavigator({
 }, {
     tabBarOptions: {
       style: {
-        backgroundColor: "#6F3AB1",
+        backgroundColor: "white",
       },
-      activeTintColor: "white",
-      inactiveTintColor: "white",
-      tabStyle: { width: 120 },
-      indicatorStyle: { backgroundColor: 'white' }
+      activeTintColor: "#6F3AB1",
+      inactiveTintColor: "#6F3AB1",
+      indicatorStyle: { backgroundColor: '#6F3AB1' }
     },
-    header: {
-
-    }
   }
 );

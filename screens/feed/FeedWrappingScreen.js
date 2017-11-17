@@ -29,15 +29,14 @@ class FeedWrappingScreen extends Component {
       <View style={{flex: 1}}>
         <Tabs initialPage={0}
           tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
-          style={{height:40}}
+          tabContainerStyle={{height: 40}}
         >
           <Tab
             heading="Following"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
-            textStyle={styles.textStyle}
-            >
+            textStyle={styles.textStyle}>
             <FeedScreen navigation={this.props.navigation}/>
           </Tab>
           <Tab

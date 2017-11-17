@@ -13,7 +13,7 @@ import { Avatar } from '../../components/Avatar';
 import { SocialBar } from '../../components/SocialBar';
 class FeedScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    header: null
+    title: 'Feed'
   })
 
   _keyExtractor = (item, index) => item.id;
