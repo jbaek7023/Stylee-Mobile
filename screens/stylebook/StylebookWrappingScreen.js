@@ -6,7 +6,7 @@ import StylebookCategoryScreen from './StylebookCategoryScreen';
 import StylebookStarScreen from './StylebookStarScreen';
 // Nav Bar
 import { NavBar } from '../../components/navBar';
-import {withRkTheme, RkText} from 'react-native-ui-kitten';
+import {withRkTheme, RkText, RkStyleSheet} from 'react-native-ui-kitten';
 import FABs from '../../components/common/FABs';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 let ThemedNavigationBar = withRkTheme(NavBar);
@@ -50,22 +50,17 @@ class StylebookWrappingScreen extends Component {
     return (
       <View style={{flex: 1}}>
         <Tabs initialPage={0}
-        tabStyle={styles.tabStyle}
-        activeTabStyle={styles.activeTabStyle}
-        activeTextStyle={styles.activeTextStyle}
-        textStyle={styles.textStyle}
-        >
+          tabBarUnderlineStyle={styles.tabBarUnderlineStyle}>
           <Tab
-            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>Styles</Text></TabHeading>}
+            heading="Styles"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
-            textStyle={styles.textStyle}
-            >
+            textStyle={styles.textStyle}>
             <StylebookAllScreen navigation={this.props.navigation}/>
           </Tab>
           <Tab
-            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>Category</Text></TabHeading>}
+            heading="Category"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
@@ -73,7 +68,7 @@ class StylebookWrappingScreen extends Component {
             <StylebookCategoryScreen navigation={this.props.navigation}/>
           </Tab>
           <Tab
-            heading={<TabHeading style={styles.tabStyle}><Text style={styles.textStyle}>Bookmark</Text></TabHeading>}
+            heading="Bookmark"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
@@ -87,21 +82,29 @@ class StylebookWrappingScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+let styles = RkStyleSheet.create(theme => ({
   tabStyle : {
-    backgroundColor: '#6F3AB1',
-    height: 50,
-    justifyContent: 'center'
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    width: 120,
+    height: 40,
   },
   activeTabStyle: {
     backgroundColor: 'white',
+    height: 40,
   },
   textStyle: {
-    color: 'white',
+    color: "#6d6d6d",
+    fontSize: 14
   },
   activeTextStyle: {
-    color: 'white',
+    color: theme.colors.navbar,
+    fontSize: 14
+  },
+  tabBarUnderlineStyle: {
+    backgroundColor: theme.colors.navbar,
+    height: 2
   }
-})
+}));
 
 export default StylebookWrappingScreen;

@@ -29,7 +29,6 @@ class FeedWrappingScreen extends Component {
       <View style={{flex: 1}}>
         <Tabs initialPage={0}
           tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
-          tabContainerStyle={{height: 40}}
         >
           <Tab
             heading="Following"
@@ -66,12 +65,12 @@ let styles = RkStyleSheet.create(theme => ({
     height: 40,
   },
   textStyle: {
-    // color: 'white',
-    color: "#968D8A"
+    color: "#6d6d6d",
+    fontSize: 14
   },
   activeTextStyle: {
-    // color: 'white',
-    color: theme.colors.navbar
+    color: theme.colors.navbar,
+    fontSize: 14
   },
   tabBarUnderlineStyle: {
     backgroundColor: theme.colors.navbar,

@@ -13,7 +13,7 @@ import ShoeScreen from './ShoeScreen';
 import EtcScreen from './EtcScreen';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 import { NavBar } from '../../components/navBar';
-import {withRkTheme, RkText} from 'react-native-ui-kitten'
+import {withRkTheme, RkText, RkStyleSheet } from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
 import { Ionicons } from '@expo/vector-icons';
 
@@ -57,20 +57,46 @@ class WardrobeWrappingScreen extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Tabs initialPage={0} style={{backgroundColor: '#D5CFF2'}}>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Top</Text></TabHeading>}>
+        <Tabs initialPage={0}
+          tabBarUnderlineStyle={styles.tabBarUnderlineStyle}>
+          <Tab
+            heading="Top"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            activeTextStyle={styles.activeTextStyle}
+            textStyle={styles.textStyle}>
             <TopScreen clothes={this.props.tops} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Outerwear</Text></TabHeading>}>
+          <Tab
+            heading="Outerwear"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            activeTextStyle={styles.activeTextStyle}
+            textStyle={styles.textStyle}>
             <OutwearScreen clothes={this.props.outwears} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Bottom</Text></TabHeading>}>
+          <Tab
+            heading="Bottom"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            activeTextStyle={styles.activeTextStyle}
+            textStyle={styles.textStyle}>
            <BottomScreen clothes={this.props.bottoms} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Shoes</Text></TabHeading>}>
+          <Tab
+            heading="Shoes"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            activeTextStyle={styles.activeTextStyle}
+            textStyle={styles.textStyle}>
             <ShoeScreen clothes={this.props.shoes} navigation={this.props.navigation}/>
           </Tab>
-          <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Others</Text></TabHeading>}>
+          <Tab
+            heading="Others"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            activeTextStyle={styles.activeTextStyle}
+            textStyle={styles.textStyle}>
             <EtcScreen clothes={this.props.etcs} navigation={this.props.navigation}/>
           </Tab>
         </Tabs>
@@ -80,27 +106,33 @@ class WardrobeWrappingScreen extends Component {
     )
   }
 }
-// <FABs
-//   active={this.state.active}
-//   onPress={this._onFABPress}
-// />
-const styles = StyleSheet.create({
-  tabHeadingStyle: {
-    color: 'white'
-  },
+
+let styles = RkStyleSheet.create(theme => ({
   tabStyle : {
-    backgroundColor: '#6F3AB1',
+    // backgroundColor: theme.colors.navbar,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    width: 120,
+    height: 40
   },
   activeTabStyle: {
     backgroundColor: 'white',
+    height: 40,
   },
   textStyle: {
-    color: 'white',
+    color: "#6d6d6d",
+    fontSize: 12
   },
   activeTextStyle: {
-    color: 'white',
+    color: theme.colors.navbar,
+    fontSize: 12
+  },
+  tabBarUnderlineStyle: {
+    backgroundColor: theme.colors.navbar,
+    height: 2
   }
-});
+}));
+
 
 function mapStateToProps({
     auth: {token, hType},
