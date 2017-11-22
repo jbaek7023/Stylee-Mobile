@@ -206,8 +206,8 @@ class AddStyleScreen extends Component {
         <TouchableOpacity
          style={[styles.dContainer, styles.drow]}
          onPress={this._tagFromPhoto}>
-            <RkText rkType="header5"/>
-            <RkText rkType="header5 primary right">From Photo</RkText>
+            <RkText rkType="header5">New Clothes</RkText>
+            <RkText rkType="header5 primary right">Tag From Photo</RkText>
         </TouchableOpacity>
 
         <View style={styles.dContainer}>

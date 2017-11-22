@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {FontAwesome} from '../../assets/icons';
 import {createResponder} from 'react-native-gesture-responder';
 import _ from 'lodash';
+import CroppedImage from '../../components/CroppedImage';
 
 class TagFromPhoto extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -19,8 +20,8 @@ class TagFromPhoto extends Component {
     left: width(100) / 2,
     top: height(100) / 2,
     taggedClothes: {
-      0: {id:0, left:100, top:100, thumbSize:100, type: 'T-Shirt', seasons: ['Spring', 'Fall']},
-      1: {id:1, left:200, top:200, thumbSize:100, type: 'Cardigan', seasons: ['Spring', 'Winter']},
+      0: {id:0, left:100, top:100, thumbSize:100, type: 'A', seasons: ['All', 'All']},
+      1: {id:1, left:200, top:200, thumbSize:100, type: 'B', seasons: ['All', 'All']},
     },
     selectedClothId : 0,
   }
@@ -152,14 +153,37 @@ class TagFromPhoto extends Component {
     return output;
   }
 
-  _renderTaggedClothImage = () => {
-    return (
-      <Image
-        source={require('../../assets/images/robot-dev.png')}
-        resizeMode="cover"
-        style={styles.headImageStyle}
-      />
-    );
+  _renderTaggedClothImage = (image) => {
+    let { selectedClothId } = this.state;
+    if(selectedClothId) {
+      // style={selectedStyle(left, top, thumbSize)}
+      let { left, top, thumbSize } = this.state.taggedClothes[this.state.selectedClothId];
+      let realTop = top - thumbSize/2;
+      let realLeft = left - thumbSize/2;
+      // left,
+      // top,
+      // width:70,
+      // height: 70
+      return (
+        <CroppedImage
+          source={{uri: image}}
+          cropTop={realTop}
+          cropLeft={realLeft}
+          cropWidth={thumbSize}
+          cropHeight={thumbSize}
+          width={width(100)}
+          height={width(100)}
+          resizeMode="contain" />
+      );
+    } else {
+      return (
+        <Image
+          source={require('../../assets/images/robot-dev.png')}
+          resizeMode="cover"
+          style={styles.headImageStyle}
+        />
+      );
+    }
   }
 
   _renderPhotoImage = (image) => {
@@ -192,7 +216,7 @@ class TagFromPhoto extends Component {
         selectedClothId:length,
         taggedClothes: {
           ...taggedClothes,
-          [length]: {id:length, left:200, top:200, thumbSize:100, type: 'T-Shirt', seasons: ['All']}
+          [length]: {id:length, left:200, top:200, thumbSize:100, type: 'a', seasons: ['All']}
         }
     })
   }
@@ -207,7 +231,7 @@ class TagFromPhoto extends Component {
     return seasonList
   }
 
-  _renderTaggedItem = () => {
+  _renderTaggedItem = (image) => {
     let selectedCloth = this.state.taggedClothes[this.state.selectedClothId]
     if(selectedCloth) {
       return (
@@ -216,7 +240,7 @@ class TagFromPhoto extends Component {
           <View style={styles.leftheadContainer}>
             <TouchableOpacity
               style={styles.imageContainer}>
-              {this._renderTaggedClothImage()}
+              {this._renderTaggedClothImage(image)}
             </TouchableOpacity>
           </View>
           <View style={styles.rightheadContainer}>
@@ -260,7 +284,7 @@ class TagFromPhoto extends Component {
             </TouchableOpacity>
           </View>
           <View>
-            {this._renderTaggedItem()}
+            {this._renderTaggedItem(image)}
           </View>
         </ScrollView>
       );
@@ -270,6 +294,15 @@ class TagFromPhoto extends Component {
       );
     }
   }
+}
+
+function selectedStyle(left, top, thumbSize) {
+  return {
+    left,
+    top,
+    width:70,
+    height: 70
+  };
 }
 
 let styles = RkStyleSheet.create(theme => ({
