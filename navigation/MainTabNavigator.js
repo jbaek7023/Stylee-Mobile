@@ -93,10 +93,6 @@ export default TabNavigator(
           backgroundColor: 'white',
           borderTopWidth: 0.5,
           borderColor: 'black',
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.8,
-          shadowRadius: 2,
           height: 50
         }
     },

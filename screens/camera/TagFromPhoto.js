@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FlatList, ImageBackground, TouchableWithoutFeedback, ScrollView, View, Image, Text, TouchableOpacity } from 'react-native';
 import { width, height } from 'react-native-dimension';
-import { RkStyleSheet, RkText } from 'react-native-ui-kitten';
+import { RkStyleSheet, RkText, RkButton } from 'react-native-ui-kitten';
 import { Ionicons } from '@expo/vector-icons';
 import {FontAwesome} from '../../assets/icons';
 import {createResponder} from 'react-native-gesture-responder';
@@ -10,8 +10,8 @@ import CroppedImage from '../../components/CroppedImage';
 
 class TagFromPhoto extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Tag From Photo',
-    tabBarVisible: false
+    tabBarVisible: false,
+    header: null
   });
 
   state = {
@@ -20,8 +20,8 @@ class TagFromPhoto extends Component {
     left: width(100) / 2,
     top: height(100) / 2,
     taggedClothes: {
-      0: {id:0, left:100, top:100, thumbSize:100, type: 'A', seasons: ['All', 'All']},
-      1: {id:1, left:200, top:200, thumbSize:100, type: 'B', seasons: ['All', 'All']},
+      // 0: {id:0, left:100, top:100, thumbSize:100, type: 'A', seasons: ['All', 'All']},
+      // 1: {id:1, left:200, top:200, thumbSize:100, type: 'B', seasons: ['All', 'All']},
     },
     selectedClothId : 0,
   }
@@ -247,18 +247,51 @@ class TagFromPhoto extends Component {
             <RkText rkType="header5">{selectedCloth.type}</RkText>
             <RkText rkType="header5">{this._renderSeasons(selectedCloth.seasons)}</RkText>
           </View>
-          <View>
-            <View>
-              <RkText rkType='awesome tag'>{FontAwesome.edit}</RkText>
-            </View>
-            <View>
-              <RkText rkType='awesome tag'>{FontAwesome.delete}</RkText>
-            </View>
+          <View style={styles.editDeleteContainer}>
+            <TouchableOpacity style={styles.editContainer}>
+              <RkText rkType='awesome'>{FontAwesome.edit}</RkText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.deleteContainer}>
+              <RkText rkType='awesome'>{FontAwesome.delete}</RkText>
+            </TouchableOpacity>
           </View>
         </View>
       );
     }
-    return <View />
+    return (
+      <View style={styles.emptyContainer}>
+        <RkText rkType="primary3">Press plus sign or tab the image</RkText>
+      </View>
+    );
+  }
+
+  _renderHeader = () => {
+    return (
+      <View style={styles.header}>
+        <View style={styles.headerLayout}>
+          <RkButton
+            rkType='clear'
+            style={styles.menu}
+            onPress={() => {
+            this.props.navigation.goBack()
+          }}>
+            <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+          </RkButton>
+          <View rkCardHeader style={styles.left}>
+            <View style={styles.content}>
+              <View style={styles.contentHeader}>
+                <RkText rkType='header3'>Tag From Photo</RkText>
+              </View>
+            </View>
+          </View>
+          <View style={styles.right}>
+              <TouchableOpacity onPress={()=>{this.saveTagging()}}>
+                <RkText rkType="header3">SAVE</RkText>
+              </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
   }
 
   render() {
@@ -271,22 +304,30 @@ class TagFromPhoto extends Component {
 
     if(image) {
       return (
-        <ScrollView>
-          <View
-            style={styles.imageStyle}
-            {... this.gestureResponder}
-          >
-            {this._renderPhotoImage(image)}
-          </View>
-          <View style={styles.dContainer}>
-            <TouchableOpacity onPress={()=>{this._createTag()}}>
-              <RkText rkType="awesome small">{FontAwesome.plus}</RkText>
-            </TouchableOpacity>
-          </View>
-          <View>
-            {this._renderTaggedItem(image)}
-          </View>
-        </ScrollView>
+        <View style={styles.root}>
+          {this._renderHeader()}
+          <ScrollView>
+            <View
+              style={styles.imageStyle}
+              {... this.gestureResponder}
+            >
+              {this._renderPhotoImage(image)}
+            </View>
+            <View style={styles.clothSeparator}/>
+            <View style={styles.dContainer}>
+              <RkText rkType="header4">Selected Cloth</RkText>
+              <TouchableOpacity
+                style={[styles.right, {right: 20}]}
+                onPress={()=>{this._createTag()}}>
+                <RkText rkType="awesome">{FontAwesome.plus}</RkText>
+              </TouchableOpacity>
+            </View>
+            <View>
+              {this._renderTaggedItem(image)}
+            </View>
+          </ScrollView>
+        </View>
+
       );
     } else {
       return (
@@ -306,17 +347,44 @@ function selectedStyle(left, top, thumbSize) {
 }
 
 let styles = RkStyleSheet.create(theme => ({
+  emptyContainer: {
+    height: 90,
+    backgroundColor: theme.colors.screen.base,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  editDeleteContainer: {
+    flexDirection: 'row',
+    paddingRight: 15,
+  },
+  editContainer: {
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  deleteContainer:{
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  root: {
+    backgroundColor: "#e6e6ee",
+    flex: 1
+  },
+  clothSeparator: {
+    backgroundColor: "#e6e6ee",
+    height: 5,
+  },
   imageStyle: {
     width: width(100),
     height: width(100)
   },
   headContainer: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#cfcfd6'
+    backgroundColor: theme.colors.screen.base
   },
   leftheadContainer: {
-    width:90
+    width: 90
   },
   imageContainer: {
     margin:10,
@@ -326,15 +394,68 @@ let styles = RkStyleSheet.create(theme => ({
   },
   rightheadContainer: {
     alignItems: 'stretch',
-    flex: 1
+    flex: 1,
+    padding: 10
   },
   headImageStyle: {
     width:70,
     height: 70
   },
   dContainer: {
-    padding: 10
-  }
+    paddingTop: 10,
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingBottom: 10,
+    backgroundColor: theme.colors.screen.base,
+    borderBottomWidth: 1,
+    borderColor: '#e6e6ee'
+  },
+  rightButtons: {
+    flexDirection: 'row'
+  },
+  //header
+  header: {
+    height: 55,
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderColor: '#CCC',
+    shadowColor: '#000',
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 2,
+    },
+    elevation: 4,
+    zIndex: 5,
+    overflow: 'visible'
+  },
+  headerLayout: {
+    height: 55,
+    alignItems: 'center',
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: theme.colors.screen.base
+  },
+  left: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  right: {
+    position: 'absolute',
+    right: 15,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+  },
+  menu: {
+    width: 50
+  },
+  content: {
+    flex: 1,
+  },
+  contentHeader: {
+    justifyContent: 'center',
+  },
 }));
 
 export default TagFromPhoto;

@@ -32,7 +32,7 @@ class FABs extends Component {
       <ActionButton buttonColor="#6F3AB1">
         <ActionButton.Item
           buttonColor='#3498db'
-          title="스타일 올리기"
+          title="Add your Style"
           onPress={() => {
             this.props.navigation.navigate('AddStyleo');
           }}>
@@ -40,7 +40,7 @@ class FABs extends Component {
         </ActionButton.Item>
         <ActionButton.Item
           buttonColor='#1abc9c'
-          title="옷 올리기"
+          title="Add your Cloth"
           onPress={() => {
             this.props.navigation.navigate('AddClotho', {onSaveCloth: this.onSaveCloth});
           }}>

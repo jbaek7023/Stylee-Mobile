@@ -50,6 +50,9 @@ export let bootstrap = () => {
   RkTheme.setType('RkText', 'tag', {
     fontSize: scale(25)
   });
+  RkTheme.setType('RkText', 'topTag', {
+    fontSize: scale(19)
+  });
 
   RkTheme.setType('RkText', 'menuIcon', {
     fontSize: 44

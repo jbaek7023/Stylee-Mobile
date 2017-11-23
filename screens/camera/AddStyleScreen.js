@@ -23,7 +23,7 @@ let ThemedNavigationBar = withRkTheme(NavBar);
 
 class AddStyleScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: '스타일 올리기',
+    title: 'Add Your Style',
     gesturesEnabled: false,
     tabBarVisible: false,
     headerStyle: {height: 50},
@@ -43,7 +43,7 @@ class AddStyleScreen extends Component {
         onPress={() => {
           navigation.goBack()
         }}>
-        <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>저장</RkText>
+        <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
       </RkButton>
     ),
   })
