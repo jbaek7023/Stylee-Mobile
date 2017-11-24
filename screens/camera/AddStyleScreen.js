@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RkText, RkTextInput, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
-import { ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
+import { ImageEditor, ImageStore, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 import { threeImageWidth } from '../../utils/scale';
@@ -55,7 +55,9 @@ class AddStyleScreen extends Component {
     text: '',
     textHeight: 0,
     isYou: true,
-    image: null
+    image: null,
+    width: null,
+    height: null
   }
   // END OF CAMEARA
   _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
@@ -64,6 +66,8 @@ class AddStyleScreen extends Component {
   _hideModal = () => this.setState({ isModalVisible: false })
   _showCategoryModal = () => this.setState({ isCategoryVisible: true });
   _hideCategoryModal = () => this.setState({ isCategoryVisible: false });
+  _setWidth = (width) => this.setState({ width })
+  _setHeight = (height) => this.setState({ height })
 
   // CAMERA
   _handleCameraPress = async () => {
@@ -77,6 +81,11 @@ class AddStyleScreen extends Component {
     if (!result.cancelled) {
       // this.setState({ image: result.uri });
       this._setClothImage(result.uri);
+      console.log(result);
+      console.log(result.height);
+      console.log(result.width);
+      this._setWidth(result.width);
+      this._setHeight(result.height);
       this.props.navigation.setParams({base64: result.base64});
     }
   }
@@ -96,6 +105,11 @@ class AddStyleScreen extends Component {
 
     if (!result.cancelled) {
       this._setClothImage(result.uri);
+      // console.log(result);
+      console.log(result.height);
+      console.log(result.width);
+      this._setWidth(result.width);
+      this._setHeight(result.height);
       this.props.navigation.setParams({base64: result.base64});
     }
   };
@@ -154,10 +168,56 @@ class AddStyleScreen extends Component {
     }
   }
 
+  tagFromPhoto = (taggedClothes) => {
+    // console.log(taggedClothes);
+    // Execute cropImage
+    // taggedClothes[0]
+    let { left, top, thumbSize } = taggedClothes[0];
+    let topData = top - thumbSize/2;
+    let leftData = left - thumbSize/2;
+
+    console.log(this.state.height);
+    //480 480
+    console.log(topData);
+    console.log(thumbSize); //347
+    console.log(width(100));
+    let realThumbSize = thumbSize/width(100)*(this.state.width);
+    let realTop = topData/width(100)*(this.state.height);
+    let realLeft = leftData/width(100)*(this.state.width);
+    console.log(realThumbSize);
+
+    let imageData = {
+      offset: {
+        x: realLeft,
+        y: realTop
+      },
+      size: {
+        width: realThumbSize,
+        height: realThumbSize
+      },
+      resizeMode: 'contain'
+    }
+    ImageEditor.cropImage(
+      this.state.image,
+      imageData,
+      (successURI) => {
+        ImageStore.getBase64ForTag(successURI,
+          (base64Data) => {
+            console.log(base64Data);
+          },
+          (failure) => {console.log('failed to load')});
+        console.log(successURI);
+        ImageStore.removeImageForTag(successURI)
+      },
+      (error) => { console.log('ERROR: ', error)}
+    )
+    // Saved success uri goes to setState to tagged Clothes.
+  }
+
   _tagFromPhoto = () => {
     let { image } = this.state;
     if(image) {
-      this.props.navigation.navigate('TagFromPhoto', {image});
+      this.props.navigation.navigate('TagFromPhoto', {image, tagFromPhoto: this.tagFromPhoto});
     } else {
       this._showModal();
     }
@@ -209,6 +269,8 @@ class AddStyleScreen extends Component {
             <RkText rkType="header5">New Clothes</RkText>
             <RkText rkType="header5 primary right">Tag From Photo</RkText>
         </TouchableOpacity>
+
+
 
         <View style={styles.dContainer}>
           <RkText rkType="header5">Detail</RkText>

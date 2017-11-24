@@ -265,6 +265,11 @@ class TagFromPhoto extends Component {
     );
   }
 
+  _saveTagging = () => {
+    this.props.navigation.state.params.tagFromPhoto(this.state.taggedClothes);
+    this.props.navigation.goBack();
+  }
+
   _renderHeader = () => {
     return (
       <View style={styles.header}>
@@ -285,7 +290,7 @@ class TagFromPhoto extends Component {
             </View>
           </View>
           <View style={styles.right}>
-              <TouchableOpacity onPress={()=>{this.saveTagging()}}>
+              <TouchableOpacity onPress={()=>{this._saveTagging()}}>
                 <RkText rkType="header3">SAVE</RkText>
               </TouchableOpacity>
           </View>
