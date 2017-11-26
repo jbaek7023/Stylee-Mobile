@@ -203,11 +203,13 @@ class AddStyleScreen extends Component {
       (successURI) => {
         ImageStore.getBase64ForTag(successURI,
           (base64Data) => {
-            console.log(base64Data);
+            // console.log(base64Data);
+            // set this base data to the cropped datas
           },
           (failure) => {console.log('failed to load')});
         console.log(successURI);
-        ImageStore.removeImageForTag(successURI)
+        let removeResult = ImageStore.removeImageForTag(successURI);
+        console.log(removeResult);
       },
       (error) => { console.log('ERROR: ', error)}
     )

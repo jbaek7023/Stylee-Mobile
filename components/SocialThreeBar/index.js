@@ -48,7 +48,7 @@ export class SocialThreeBar extends RkComponent {
         <View style={section}>
           <RkButton rkType='clear' onPress={this._handleLikePress}>
             <RkText rkType='awesome primary' style={icon}>{FontAwesome.heart}</RkText>
-            <RkText rkType='primary4 primary' style={[label, {marginTop: 5}]}>좋아요 </RkText>
+            <RkText rkType='primary4 primary' style={[label, {marginTop: 5}]}>Like</RkText>
           </RkButton>
         </View>
       );
@@ -57,7 +57,7 @@ export class SocialThreeBar extends RkComponent {
       <View style={section}>
         <RkButton rkType='clear' onPress={this._handleLikePress}>
           <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.hearto}</RkText>
-          <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>좋아요 </RkText>
+          <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>Like</RkText>
         </RkButton>
       </View>
     );
@@ -72,7 +72,7 @@ export class SocialThreeBar extends RkComponent {
         <View style={section}>
           <RkButton rkType='clear'  onPress={this._handleBookmarkPress}>
             <RkText rkType='awesome' style={[icon, {color: '#FF8F00'}]}>{FontAwesome.bookmark}</RkText>
-            <RkText rkType='primary4' style={[label, {marginTop: 5, color: '#FF8F00'}]}>북마크 </RkText>
+            <RkText rkType='primary4' style={[label, {marginTop: 5, color: '#FF8F00'}]}>Bookmark</RkText>
           </RkButton>
         </View>
       );
@@ -81,7 +81,7 @@ export class SocialThreeBar extends RkComponent {
       <View style={section}>
         <RkButton rkType='clear' onPress={this._handleBookmarkPress}>
           <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.bookmarko}</RkText>
-          <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>북마크 </RkText>
+          <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>Bookmark</RkText>
         </RkButton>
       </View>
     );
@@ -98,7 +98,7 @@ export class SocialThreeBar extends RkComponent {
         <View style={section}>
           <RkButton rkType='clear'>
             <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.comment}</RkText>
-            <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>댓글달기 </RkText>
+            <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>Comment</RkText>
           </RkButton>
         </View>
         {this._renderStar(this.state.star)}

@@ -24,45 +24,47 @@ import SelectedSizesSelector from '../../selectors/selected_sizes';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationActions } from 'react-navigation'
+import * as actions from '../../actions';
 
 class AddClothScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: '옷 올리기',
     gesturesEnabled: false,
     tabBarVisible: false,
-    headerStyle: {height: 50},
-    headerLeft: (
-      <RkButton
-        rkType='clear'
-        style={{width: 50}}
-        onPress={() => {
-          navigation.goBack()
-        }}>
-        <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
-      </RkButton>
-    ),
-    headerRight: (
-      <RkButton
-        rkType='clear'
-        onPress={() => {
-          let {image, text, bigType, clothType, selectedSeasonIds,
-            gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-            brand, location, link, inWardrobe, onlyMe, base64 } = navigation.state.params;
-          console.log('onsave');
-          console.log(navigation.state.params.selectedStyleIds);
-          console.log('done');
-          // send data
-          // navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
-          navigation.state.params.onSaveCloth({
-            base64, text, bigType, clothType, selectedSeasonIds,
-            gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-            brand, location, link, inWardrobe, onlyMe
-          });
-          navigation.goBack();
-        }}>
-        <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
-      </RkButton>
-    ),
+    header: null
+    // headerStyle: {height: 50},
+    // headerLeft: (
+    //   <RkButton
+    //     rkType='clear'
+    //     style={{width: 50}}
+    //     onPress={() => {
+    //       navigation.goBack()
+    //     }}>
+    //     <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+    //   </RkButton>
+    // ),
+    // headerRight: (
+    //   <RkButton
+    //     rkType='clear'
+    //     onPress={() => {
+    //       let {image, text, bigType, clothType, selectedSeasonIds,
+    //         gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+    //         brand, location, link, inWardrobe, onlyMe, base64 } = navigation.state.params;
+    //       console.log('onsave');
+    //       console.log(navigation.state.params.selectedStyleIds);
+    //       console.log('done');
+    //       // send data
+    //       // navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
+    //       navigation.state.params.onSaveCloth({
+    //         base64, text, bigType, clothType, selectedSeasonIds,
+    //         gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+    //         brand, location, link, inWardrobe, onlyMe
+    //       });
+    //       navigation.goBack();
+    //     }}>
+    //     <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
+    //   </RkButton>
+    // ),
   })
 
   state = {
@@ -89,6 +91,7 @@ class AddClothScreen extends Component {
     brand: '',
     location: '',
     link: '',
+    base64: undefined
   }
 
   componentWillMount() {
@@ -155,7 +158,7 @@ class AddClothScreen extends Component {
     if (!result.cancelled) {
       // this.setState({ image: result.uri });
       this._setClothImage(result.uri);
-      this.props.navigation.setParams({base64: result.base64});
+      this.setState({base64: result.base64});
     }
   }
 
@@ -174,7 +177,7 @@ class AddClothScreen extends Component {
 
     if (!result.cancelled) {
       this._setClothImage(result.uri);
-      this.props.navigation.setParams({base64: result.base64});
+      this.setState({base64: result.base64});
     }
   };
   // END OF CAMEARA
@@ -356,11 +359,6 @@ class AddClothScreen extends Component {
 
 
   onCheck = ({selectedStyleIds}) => {
-    this.props.navigation.setParams({selectedStyleIds:[1,2,3,4,5]});
-    console.log('passing here');
-    console.log(this.props.navigation);
-    console.log(this.state.selectedStyleIds);
-    // this._setSelectedStyleIds(selectedStyleIds);
     this.setState({selectedStyleIds});
   }
 
@@ -416,153 +414,199 @@ class AddClothScreen extends Component {
     }
   }
 
+  _renderHeader = () => {
+    return (
+      <View style={styles.header}>
+        <View style={styles.headerLayout}>
+          <RkButton
+            rkType='clear'
+            style={styles.menu}
+            onPress={() => {
+            this.props.navigation.goBack()
+          }}>
+            <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+          </RkButton>
+          <View rkCardHeader style={styles.left}>
+            <View style={styles.content}>
+              <View style={styles.contentHeader}>
+                <RkText rkType='header3'>Add Your Cloth</RkText>
+              </View>
+            </View>
+          </View>
+          <View style={styles.right}>
+              <TouchableOpacity onPress={
+                ()=>{
+                  let {image, text, bigType, clothType, selectedSeasonIds,
+                    gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+                    brand, location, link, inWardrobe, onlyMe, base64 } = this.state;
+                  let {token, hType} = this.props;
+                  if(token) {
+                    this.props.createCloth(token, hType, {
+                      image, text, bigType, clothType, selectedSeasonIds,
+                      gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+                      brand, location, link, inWardrobe, onlyMe, base64 });
+                  }
+                  this.props.navigation.goBack();
+                }}>
+                <RkText rkType="header3">SAVE</RkText>
+              </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
   render() {
     return (
-      <KeyboardAwareScrollView
-        innerRef={ref => {this.scroll = ref}}
-        style={styles.container}>
-        <View style={styles.headContainer}>
-          <View style={styles.leftheadContainer}>
-            <TouchableOpacity
-              style={[styles.imageContainer, {height: Math.max(70, this.state.textHeight)}]}
-              onPress={()=>{this.setState({isModalVisible:true})}}>
-              {this._renderClothImage()}
+      <View style={{flex:1}}>
+        {this._renderHeader()}
+        <KeyboardAwareScrollView
+          innerRef={ref => {this.scroll = ref}}
+          style={styles.container}>
+
+          <View style={styles.headContainer}>
+            <View style={styles.leftheadContainer}>
+              <TouchableOpacity
+                style={[styles.imageContainer, {height: Math.max(70, this.state.textHeight)}]}
+                onPress={()=>{this.setState({isModalVisible:true})}}>
+                {this._renderClothImage()}
+              </TouchableOpacity>
+            </View>
+            <View style={styles.rightheadContainer}>
+              <TextInput
+                multiline
+                selectionColor='grey'
+                underlineColorAndroid='white'
+                placeholder="문구입력..."
+                style={[styles.inputStyle, {height: Math.max(70, this.state.textHeight)}]}
+                onChangeText={(text)=>{
+                  this._setText(text)
+                }}
+                onContentSizeChange={(event) => {
+                  this.setState({ textHeight: event.nativeEvent.contentSize.height });
+                }}
+                value={this.state.text}/>
+            </View>
+          </View>
+
+          <View>
+            <View style={styles.dContainer}>
+              <RkText rkType="header5">Detail</RkText>
+            </View>
+
+            <TouchableOpacity style={[styles.dContainer, styles.row]}
+              onPress={() => {this._handleDetailPress(1)}}>
+
+              <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">{this.state.bigType} - {this.state.clothType}</RkText>
+
             </TouchableOpacity>
+            <TouchableOpacity style={[styles.dContainer, styles.row]}
+              onPress={() => {this._handleDetailPress(2)}}>
+
+              <RkText rkType="primary3">Seasons</RkText>
+              <RkText rkType="primary2">{this._renderSeasons()}</RkText>
+
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.dContainer, styles.row]}
+              onPress={() => {this._handleDetailPress(3)}}>
+
+              <RkText rkType="primary3">Gender</RkText>
+              <RkText rkType="primary2">{this.state.gender}</RkText>
+
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.dContainer, styles.row]}
+              onPress={() => {this._handleDetailPress(4)}}>
+
+              <RkText rkType="primary3">Size</RkText>
+              <RkText rkType="primary2">{this._renderSizes()}</RkText>
+
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.dContainer, styles.row]}
+              onPress={() => {this._handleDetailPress(5)}}>
+
+              <RkText rkType="primary3">Color</RkText>
+              <RkText rkType="primary2">{this._renderColors()}</RkText>
+
+            </TouchableOpacity>
+
+            <View style={styles.contextSeperator}/>
+
+            <View style={[styles.dContainer, styles.drow]}>
+              <RkText rkType="header5">Tagged Styles</RkText>
+              {this._renderTagStyleButton()}
+            </View>
+            <View />
+
+            <View style={styles.contextSeperator}/>
+
+            <View style={styles.dContainer}>
+              <RkText rkType="header5">More Detail</RkText>
+            </View>
+            <View style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Brand</RkText>
+              <TextInput
+                onFocus={(event: Event) => {
+                  this._scrollToInput(findNodeHandle(event.target))
+                }}
+                value={this.state.brand}
+                style={styles.moreDetailStyle}
+                underlineColorAndroid='white'
+                onChangeText={(brand) => this._setBrand(brand)}/>
+            </View>
+            <View style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Location</RkText>
+              <TextInput
+                onFocus={(event: Event) => {
+                  this._scrollToInput(findNodeHandle(event.target))
+                }}
+                value={this.state.location}
+                style={styles.moreDetailStyle}
+                underlineColorAndroid='white'
+                onChangeText={(location) => this._setLocation(location)}/>
+            </View>
+            <View style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">link</RkText>
+              <TextInput
+                onFocus={(event: Event) => {
+                  this._scrollToInput(findNodeHandle(event.target))
+                }}
+                style={styles.moreDetailStyle}
+                value={this.state.link}
+                underlineColorAndroid='white'
+                onChangeText={(link) => this._setLink(link)}/>
+            </View>
+            <View style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">In Wardrobe</RkText>
+              <RkSwitch
+                style={styles.switch}
+                value={this.state.inWardrobe}
+                name="Push"
+                onValueChange={(inWardrobe) => {console.log('helloworld')}}/>
+            </View>
+
+            <View style={styles.contextSeperator}/>
+
+            <View style={styles.dContainer}>
+              <RkText rkType="header5">Privacy</RkText>
+            </View>
+            <View style={[styles.dContainer, styles.row]}>
+              <RkText rkType="primary3">Only Me</RkText>
+              <RkSwitch
+                style={styles.switch}
+                value={this.state.onlyMe}
+                name="Push"
+                onValueChange={(onlyMe) => {this._setOnlyMe(onlyMe); console.log('asd');}}/>
+            </View>
+            <View>
+              {this._renderModal()}
+            </View>
+            <View>
+              {this._renderSelectorModal()}
+            </View>
           </View>
-          <View style={styles.rightheadContainer}>
-            <TextInput
-              multiline
-              selectionColor='grey'
-              underlineColorAndroid='white'
-              placeholder="문구입력..."
-              style={[styles.inputStyle, {height: Math.max(70, this.state.textHeight)}]}
-              onChangeText={(text)=>{
-                this._setText(text)
-              }}
-              onContentSizeChange={(event) => {
-                this.setState({ textHeight: event.nativeEvent.contentSize.height });
-              }}
-              value={this.state.text}/>
-          </View>
-        </View>
-
-        <View>
-          <View style={styles.dContainer}>
-            <RkText rkType="header5">Detail</RkText>
-          </View>
-
-          <TouchableOpacity style={[styles.dContainer, styles.row]}
-            onPress={() => {this._handleDetailPress(1)}}>
-
-            <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">{this.state.bigType} - {this.state.clothType}</RkText>
-
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.dContainer, styles.row]}
-            onPress={() => {this._handleDetailPress(2)}}>
-
-            <RkText rkType="primary3">Seasons</RkText>
-            <RkText rkType="primary2">{this._renderSeasons()}</RkText>
-
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.dContainer, styles.row]}
-            onPress={() => {this._handleDetailPress(3)}}>
-
-            <RkText rkType="primary3">Gender</RkText>
-            <RkText rkType="primary2">{this.state.gender}</RkText>
-
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.dContainer, styles.row]}
-            onPress={() => {this._handleDetailPress(4)}}>
-
-            <RkText rkType="primary3">Size</RkText>
-            <RkText rkType="primary2">{this._renderSizes()}</RkText>
-
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.dContainer, styles.row]}
-            onPress={() => {this._handleDetailPress(5)}}>
-
-            <RkText rkType="primary3">Color</RkText>
-            <RkText rkType="primary2">{this._renderColors()}</RkText>
-
-          </TouchableOpacity>
-
-          <View style={styles.contextSeperator}/>
-
-          <View style={[styles.dContainer, styles.drow]}>
-            <RkText rkType="header5">Tagged Styles</RkText>
-            {this._renderTagStyleButton()}
-          </View>
-          <View />
-
-          <View style={styles.contextSeperator}/>
-
-          <View style={styles.dContainer}>
-            <RkText rkType="header5">More Detail</RkText>
-          </View>
-          <View style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Brand</RkText>
-            <TextInput
-              onFocus={(event: Event) => {
-                this._scrollToInput(findNodeHandle(event.target))
-              }}
-              value={this.state.brand}
-              style={styles.moreDetailStyle}
-              underlineColorAndroid='white'
-              onChangeText={(brand) => this._setBrand(brand)}/>
-          </View>
-          <View style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Location</RkText>
-            <TextInput
-              onFocus={(event: Event) => {
-                this._scrollToInput(findNodeHandle(event.target))
-              }}
-              value={this.state.location}
-              style={styles.moreDetailStyle}
-              underlineColorAndroid='white'
-              onChangeText={(location) => this._setLocation(location)}/>
-          </View>
-          <View style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">link</RkText>
-            <TextInput
-              onFocus={(event: Event) => {
-                this._scrollToInput(findNodeHandle(event.target))
-              }}
-              style={styles.moreDetailStyle}
-              value={this.state.link}
-              underlineColorAndroid='white'
-              onChangeText={(link) => this._setLink(link)}/>
-          </View>
-          <View style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">In Wardrobe</RkText>
-            <RkSwitch
-              style={styles.switch}
-              value={this.state.inWardrobe}
-              name="Push"
-              onValueChange={(inWardrobe) => {console.log('helloworld')}}/>
-          </View>
-
-          <View style={styles.contextSeperator}/>
-
-          <View style={styles.dContainer}>
-            <RkText rkType="header5">Privacy</RkText>
-          </View>
-          <View style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Only Me</RkText>
-            <RkSwitch
-              style={styles.switch}
-              value={this.state.onlyMe}
-              name="Push"
-              onValueChange={(onlyMe) => {this._setOnlyMe(onlyMe); console.log('asd');}}/>
-          </View>
-          <View>
-            {this._renderModal()}
-          </View>
-          <View>
-            {this._renderSelectorModal()}
-          </View>
-        </View>
-        <KeyboardSpacer />
-      </KeyboardAwareScrollView>
+          <KeyboardSpacer />
+        </KeyboardAwareScrollView>
+      </View>
     );
   }
 }
@@ -670,7 +714,52 @@ let styles = RkStyleSheet.create(theme => ({
     flex: 1,
     textAlign: 'right',
     fontSize: 15,
-  }
+  },
+  header: {
+    height: 55,
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderColor: '#CCC',
+    shadowColor: '#000',
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 2,
+    },
+    elevation: 4,
+    zIndex: 5,
+    overflow: 'visible'
+  },
+  headerLayout: {
+    height: 55,
+    alignItems: 'center',
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: theme.colors.screen.base
+  },
+  left: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  right: {
+    position: 'absolute',
+    right: 15,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+  },
+  menu: {
+    width: 50
+  },
+  content: {
+    flex: 1,
+  },
+  contentHeader: {
+    justifyContent: 'center',
+  },
 }));
 
-export default connect(null, null)(AddClothScreen);
+function mapStateToProps({auth: {token, hType}}) {
+  return {token, hType}
+}
+export default connect(mapStateToProps, actions)(AddClothScreen);

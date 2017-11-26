@@ -8,7 +8,7 @@ const bigType = [{
   value: 'Outwear',
 }, {
   id: 3,
-  value: 'Bottoms',
+  value: 'Bottom',
 }, {
   id: 4,
   value: 'Shoes',
@@ -58,7 +58,7 @@ const topType = [{
   value: 'One Piece',
 }, {
   id: 106,
-  value: 'Other',
+  value: 'Other Top',
 }];
 
 const outwearType = [{
@@ -84,7 +84,7 @@ const outwearType = [{
   value: 'Vest',
 }, {
   id: 98,
-  value: 'Other',
+  value: 'Other Outwear',
 }];
 
 const etcType = [{
@@ -101,7 +101,7 @@ const etcType = [{
   value: 'Belt'
 }, {
   id: 75,
-  value: 'Swinwear'
+  value: 'Swimwear'
 }, {
   id: 76,
   value: 'Socks'
@@ -119,7 +119,7 @@ const etcType = [{
   value: 'Necklace'
 }, {
   id: 81,
-  value: 'Other'
+  value: 'Others'
 }]
 
 const shoeType = [{
@@ -145,7 +145,7 @@ const shoeType = [{
   value: 'Sandals'
 }, {
   id: 89,
-  value: 'Other'
+  value: 'Other Shoes'
 }]
 
 const bottomType = [{
@@ -165,7 +165,7 @@ const bottomType = [{
   value: 'Skirt'
 },{
   id: 95,
-  value: 'Other'
+  value: 'Other Bottoms'
 }]
 
 //3
@@ -183,7 +183,7 @@ const genders = [{
 // 4
 const topSize = [{
   id: 47,
-  value: 'Free Size'
+  value: 'Free'
 }, {
   id: 24,
   value: 'XXS',
@@ -212,7 +212,7 @@ const topSize = [{
 
 const bottomSize = [{
   id: 48,
-  value: 'Free Size'
+  value: 'Free'
 }, {
   id: 34,
   value: '26',

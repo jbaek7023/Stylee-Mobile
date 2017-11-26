@@ -108,7 +108,7 @@ class ClothDetail extends Component {
               style={styles.clothImage}
               resizeMode="cover"
               source={{uri: detail.cloth_image}} />
-            <View rkCardContent>
+            <View style={{marginTop: 10, marginBottom: 10}}>
               <SocialThreeBar />
             </View>
             <View rkCardContent>

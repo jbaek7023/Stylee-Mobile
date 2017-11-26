@@ -11,6 +11,7 @@ import {
 const ROOT_URL = 'http://10.0.2.2:8000';
 
 export const createCloth = (token, hType, clothObject) => async dispatch => {
+  console.log(clothObject);
   let headers = { 'Authorization': `JWT ${token}`};
   if(hType==1) {
     headers = { 'Authorization': `JWT ${token}`};

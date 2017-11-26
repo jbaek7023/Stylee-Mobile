@@ -141,7 +141,7 @@ class OutfitDetail extends Component {
                 style={styles.outfitImage}
                 resizeMode="cover"
                 source={{uri: detail.outfit_img}} />
-              <View rkCardContent>
+              <View style={{marginTop: 10, marginBottom: 10}}>
                 <SocialBar/>
               </View>
               <View rkCardContent>
