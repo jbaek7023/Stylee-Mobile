@@ -19,21 +19,8 @@ import { threeImageWidth } from '../../utils/scale';
 
 class ClothDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
-    headerLeft: (
-      <RkButton
-        rkType='clear'
-        style={styles.menu}
-        onPress={() => {
-          navigation.goBack()
-        }}>
-        <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
-      </RkButton>
-    ),
-    headerStyle: {height: 50},
-    headerRight: (
-      <Ionicons name="md-more" style={{marginRight: 14}} size={27} color="black"/>
-    ),
-    title: !_.isNil(screenProps.clothDetail) ? `${screenProps.clothDetail.user.username}'s Style`: ''
+    tabBarVisible: false,
+    header: null
   });
 
   componentWillMount() {
@@ -97,103 +84,129 @@ class ClothDetail extends Component {
 
   _keyExtractor = (item, index) => item.id;
 
+  _renderAvatar = (uri) => {
+    if(_.isNil(uri)) {
+      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/robot-dev.png')}/>)
+    }
+    return (
+      <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+    );
+  }
+
+  _renderHeader = (detail) => {
+    return (
+      <View style={styles.header}>
+        <View style={styles.headerLayout}>
+          <View rkCardHeader style={styles.left}>
+            <RkButton
+              rkType='clear'
+              style={styles.menu}
+              onPress={() => {
+              this.props.navigation.goBack()
+            }}>
+              <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+            </RkButton>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+              {this._renderAvatar(detail.user.image)}
+            </TouchableOpacity>
+            <View style={styles.content}>
+              <View style={styles.contentHeader}>
+                <RkText rkType='header5'>{detail.user.username}</RkText>
+                <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
+              </View>
+            </View>
+          </View>
+          <View style={styles.right}>
+            <RkText><RkText rkType='header5' style={{color: 'blue'}}>Follow</RkText></RkText>
+          </View>
+        </View>
+      </View>
+    );
+  }
 
   render () {
     const detail = this.props.clothDetail;
     if(detail) {
       return (
-        <ScrollView style={styles.root}>
-          <RkCard rkType='article'>
-            <Image
-              style={styles.clothImage}
-              resizeMode="cover"
-              source={{uri: detail.cloth_image}} />
-            <View style={{marginTop: 10, marginBottom: 10}}>
-              <SocialThreeBar />
-            </View>
-            <View rkCardContent>
-              <View>
+        <View style={{flex:1}}>
+          {this._renderHeader(detail)}
+          <ScrollView style={styles.root}>
+            <RkCard rkType='article'>
+              <Image
+                style={styles.clothImage}
+                resizeMode="cover"
+                source={{uri: detail.cloth_image}} />
+              <View style={{marginTop: 10, marginBottom: 10}}>
+                <SocialThreeBar handleCommentPress={this._handleCommentPress}/>
+              </View>
+              <View rkCardContent>
                 <View>
-                  <Text style={{fontWeight: 'bold'}}>좋아요 {detail.like_count.toString()}개</Text>
-                </View>
-                <View style={{marginTop: 5}}>
-                  <Text><Text style={{fontWeight: 'bold'}}>{detail.user.username}</Text> {detail.content}</Text>
-                </View>
-                <View style={{marginTop: 5}}>
-                  <RkText
-                    onPress={this._handleCommentPress}
-                    rkType='secondary2 hintColor'>댓글{detail.comment_count.toString()}개 모두보기</RkText>
-                    {this._renderComments(detail.comments)}
-                  <RkText style={{marginTop: 8}} rkType='secondary4 hintColor'>
-                    <TimeAgo time={detail.publish}/>
-                  </RkText>
-                </View>
-              </View>
-            </View>
-            <View>
-              <View style={styles.headContainer}>
-                <RkText rkType="header4">작성자</RkText>
-              </View>
-              <View style={styles.container}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
-                  {this._renderAvatar(detail.user.image)}
-                </TouchableOpacity>
-                <View style={styles.content}>
-                  <View style={styles.contentHeader}>
-                    <RkText rkType='header5'>{detail.user.username}</RkText>
-                    <RkText rkType='header5' style={{color: 'blue'}}>팔로우하기</RkText>
+                  <View>
+                    <Text style={{fontWeight: 'bold'}}>{detail.like_count.toString()} Likes</Text>
+                  </View>
+                  <View style={{marginTop: 5}}>
+                    <Text><Text style={{fontWeight: 'bold'}}>{detail.user.username}</Text> {detail.content}</Text>
+                  </View>
+                  <View style={{marginTop: 5}}>
+                    <RkText
+                      onPress={()=>this._handleCommentPress()}
+                      rkType='secondary2 hintColor'>댓글{detail.comment_count.toString()}개 모두보기</RkText>
+                      {this._renderComments(detail.comments)}
+                    <RkText style={{marginTop: 8}} rkType='secondary4 hintColor'>
+                      <TimeAgo time={detail.publish}/>
+                    </RkText>
                   </View>
                 </View>
               </View>
-            </View>
 
-            <View>
-              <View style={styles.headContainer}>
-                <RkText rkType="header4">태그된 스타일 (2)</RkText>
+              <View>
+                <View style={styles.headContainer}>
+                  <RkText rkType="header4">Tagged Styles (2)</RkText>
+                </View>
+                <FlatList
+                  style={{marginTop:8}}
+                  data={this.props.clothDetail.tagged_outfits}
+                  renderItem={this._renderOutfitItem}
+                  keyExtractor={this._keyExtractor}
+                  numColumns={3}
+                />
               </View>
-              <FlatList
-                style={{marginTop:8}}
-                data={this.props.clothDetail.tagged_outfits}
-                renderItem={this._renderOutfitItem}
-                keyExtractor={this._keyExtractor}
-                numColumns={3}
-              />
-            </View>
-            <View>
-              <View style={styles.headContainer}>
-                <RkText rkType="header4">Detail</RkText>
+              <View>
+                <View style={styles.headContainer}>
+                  <RkText rkType="header4">Detail</RkText>
+                </View>
+                <TouchableOpacity style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">T-Shirt</RkText>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary3">Seasons</RkText><RkText rkType="primary2">Fall, Spring</RkText>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Unisex</RkText>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary3">Size</RkText><RkText rkType="primary2">M(95)</RkText>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary3">Color</RkText><RkText rkType="primary2">#f64e59</RkText>
+                </TouchableOpacity>
+                <View style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary3">Brand</RkText><RkText rkType="primary2">Nike</RkText>
+                </View>
+                <View style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary3">Location</RkText><RkText rkType="primary2">USA</RkText>
+                </View>
+                <View style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary3">Link</RkText><RkText rkType="primary2">www.naver.com</RkText>
+                </View>
+                <View style={[styles.dContainer, styles.lastrow]}>
+                  <RkText rkType="primary3">In wardrobe</RkText>
+                  <RkText rkType="primary2">Yes</RkText>
+                </View>
               </View>
-              <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">T-Shirt</RkText>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary3">Seasons</RkText><RkText rkType="primary2">Fall, Spring</RkText>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Unisex</RkText>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary3">Size</RkText><RkText rkType="primary2">M(95)</RkText>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary3">Color</RkText><RkText rkType="primary2">#f64e59</RkText>
-              </TouchableOpacity>
-              <View style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary3">Brand</RkText><RkText rkType="primary2">Nike</RkText>
-              </View>
-              <View style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary3">Location</RkText><RkText rkType="primary2">USA</RkText>
-              </View>
-              <View style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary3">Link</RkText><RkText rkType="primary2">www.naver.com</RkText>
-              </View>
-              <View style={[styles.dContainer, styles.lastrow]}>
-                <RkText rkType="primary3">In wardrobe</RkText>
-                <RkText rkType="primary2">Yes</RkText>
-              </View>
-            </View>
-          </RkCard>
-        </ScrollView>
+            </RkCard>
+          </ScrollView>
+        </View>
       );
     }
     return (<View><Text>Loading</Text></View>);
@@ -263,7 +276,48 @@ let styles = RkStyleSheet.create(theme => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingLeft:20
-  }
+  },
+  //header
+  content: {
+    flex: 1,
+  },
+  contentHeader: {
+    justifyContent: 'space-between',
+    paddingLeft: 10
+  },
+  header: {
+    height: 55,
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderColor: '#CCC',
+    shadowColor: '#000',
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 2,
+    },
+    elevation: 4,
+    zIndex: 5,
+    overflow: 'visible'
+  },
+  headerLayout: {
+    height: 55,
+    alignItems: 'center',
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: theme.colors.screen.base
+  },
+  left: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  right: {
+    position: 'absolute',
+    right: 15,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+  },
 }));
 
 export default connect(mapStateToProps, actions)(ClothDetail);

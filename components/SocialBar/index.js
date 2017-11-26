@@ -94,15 +94,16 @@ export class SocialBar extends RkComponent {
     return (
       <View style={styles.container}>
         {this._renderHeart(this.state.like)}
-
         <View style={section}>
-          <RkButton rkType='clear' style={styles.buttonStyle}>
+          <RkButton rkType='clear' style={styles.buttonStyle}
+            onPress={()=>this.props.handleCommentPress()}>
             <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.comment}</RkText>
             <RkText rkType='primary4 hintColor' style={{marginTop: 5}}>Comment</RkText>
           </RkButton>
         </View>
         <View style={section}>
-          <RkButton rkType='clear' style={styles.buttonStyle}>
+          <RkButton rkType='clear' style={styles.buttonStyle}
+            onPress={()=>this.props.showModal()}>
             <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.category}</RkText>
             <RkText rkType='primary4 hintColor' style={{marginTop: 5}}>Category</RkText>
           </RkButton>

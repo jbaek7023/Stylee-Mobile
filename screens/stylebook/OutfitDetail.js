@@ -20,11 +20,12 @@ import CategoryModal from '../../components/common/CategoryModal';
 
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
+    tabBarVisible: false,
     header: null
   });
 
   state = {
-    isCategoryVisible: true
+    isCategoryVisible: false
   }
 
   hideModal = () => this.setState({isCategoryVisible: false})
@@ -115,7 +116,7 @@ class OutfitDetail extends Component {
           <View style={styles.content}>
             <View style={styles.contentHeader}>
               <RkText rkType='header5'>{detail.user.username}</RkText>
-              <RkText rkType='secondary2 hintColor'>20 hrs ago</RkText>
+              <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
             </View>
           </View>
         </View>
@@ -126,7 +127,7 @@ class OutfitDetail extends Component {
     );
   }
 
-  render () {
+  render() {
     const detail = this.props.outfitDetail;
     // User Access Not Yet
     if(detail) {
@@ -142,12 +143,15 @@ class OutfitDetail extends Component {
                 resizeMode="cover"
                 source={{uri: detail.outfit_img}} />
               <View style={{marginTop: 10, marginBottom: 10}}>
-                <SocialBar/>
+                <SocialBar
+                  handleCommentPress={this._handleCommentPress}
+                  showModal={this.showModal}
+                />
               </View>
               <View rkCardContent>
                 <View>
                   <View>
-                    <Text style={{fontWeight: 'bold'}}>좋아요 {detail.like_count.toString()}개</Text>
+                    <Text style={{fontWeight: 'bold'}}>{detail.like_count.toString()} Likes</Text>
                   </View>
                   <View style={{marginTop: 5}}>
                     <Text><Text style={{fontWeight: 'bold'}}>{detail.user.username}</Text> {detail.content}</Text>
@@ -155,7 +159,7 @@ class OutfitDetail extends Component {
                   <View style={{marginTop: 5}}>
                     <RkText
                       onPress={this._handleCommentPress}
-                      rkType='secondary2 hintColor'>댓글{detail.comment_count.toString()}개 모두보기</RkText>
+                      rkType='secondary2 hintColor'>View all {detail.comment_count.toString()} Comments</RkText>
                     {this._renderComments(detail.comments)}
                     <RkText style={{marginTop: 8}} rkType='secondary4 hintColor'>
                       <TimeAgo time={detail.publish}/>
@@ -166,7 +170,7 @@ class OutfitDetail extends Component {
 
               <View>
                 <View style={styles.headContainer}>
-                  <RkText rkType="header4">태그된 옷 (3)</RkText>
+                  <RkText rkType="header4">Tagged Clothes ({this.props.outfitDetail.tagged_clothes.length.toString()})</RkText>
                 </View>
                 <FlatList
                   data={this.props.outfitDetail.tagged_clothes}
