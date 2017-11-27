@@ -59,8 +59,8 @@ class StylebookCategoryScreen extends Component {
         onPress={() => this._handleCategoryPress(item.id, item.name)}>
         <View style={styles.rowContainer}>
           {this._renderImage(item)}
-          <Text>{item.name}</Text>
-          <RkText rkType="secondary2 hintColor">스타일 3개</RkText>
+          <RkText rkType="primary3">{item.name}</RkText>
+          <RkText rkType="secondary2 hintColor">3 Styles</RkText>
         </View>
       </TouchableWithoutFeedback>
     );

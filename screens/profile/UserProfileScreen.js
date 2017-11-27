@@ -68,7 +68,7 @@ class UserProfileScreen extends Component {
           <View style={styles.content}>
             <View style={styles.contentHeader}>
               <RkText rkType='header5'>{item.user.username}</RkText>
-              <RkText rkType='header5' style={{color: 'blue'}}>팔로우하기</RkText>
+              <RkText rkType='header5' style={{color: 'blue'}}></RkText>
             </View>
           </View>
         </View>
@@ -77,36 +77,30 @@ class UserProfileScreen extends Component {
       		resizeMode="cover"
       		source={{uri: item.outfit_img}}
           onPress={()=>{this._handleImagePress(item.id)}}/>
-      	<View rkCardContent>
+        <View style={{marginLeft:20, marginRight: 20}}>
+          <View style={{marginTop: 10}}>
+              <RkText rkType="header3">{item.content}</RkText>
+          </View>
+      		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+    				<RkText rkType="secondary2 hintColor">{item.like_count.toString()} Likes</RkText>
+    				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{item.comment_count.toString()} Comments</RkText>
+          </View>
+        </View>
+      	<View style={styles.socialContainer}>
       		<SocialBar/>
       	</View>
-      	<View rkCardContent>
-      		<View>
-      			<View>
-      				<Text style={{fontWeight: 'bold'}}>좋아요 {item.like_count.toString()}개</Text>
-      			</View>
-      			<View style={{marginTop: 5}}>
-      		  		<Text><Text style={{fontWeight: 'bold'}}>{item.user.username}</Text> {item.content}</Text>
-      			</View>
-      			<View style={{marginTop: 5}}>
-      		  		<RkText
-      		    onPress={this._handleCommentPress}
-      		    rkType='secondary2 hintColor'>댓글{item.comment_count.toString()}개 모두보기</RkText>
-      		  {this._renderComments(item.comments)}
-      		  		<RkText style={{marginTop: 8}} rkType='secondary4 hintColor'>
-      		    			<TimeAgo time={item.publish}/>
-      		  		</RkText>
-      			</View>
-      		</View>
-      	</View>
+        <View rkCardContent style={styles.commentContainer}>
+          <View style={{marginTop: 5}}>
+            {this._renderComments(item.comments)}
+            <RkText
+              onPress={this._handleCommentPress}
+                rkType='secondary2 hintColor'>댓글{item.comment_count.toString()}개 모두보기</RkText>
+          </View>
+        </View>
       </RkCard>
     );
   }
 
-
-  // <RkText rkType='header2'>{profile.username}</RkText>
-  // <RkText rkType='header4'>{profile.title}</RkText>
-  //
   _renderProfile = (profile) => {
     return (
       <ScrollView style={styles.root}>
@@ -194,6 +188,16 @@ let styles = RkStyleSheet.create(theme => ({
     borderBottomWidth: 1,
     borderColor: theme.colors.border.base
   },
+  socialContainer: {
+    paddingTop: 10,
+    paddingBottom: 10,
+
+  },
+  commentContainer: {
+    // borderColor: '#e3e3e3',
+    borderTopWidth: 1.5,
+    borderColor: '#e3e3e3',
+  },
   section: {
     alignItems: 'center',
     width: eachSpec,
@@ -202,8 +206,8 @@ let styles = RkStyleSheet.create(theme => ({
     marginBottom: 3,
   },
   profileSeperator: {
-    backgroundColor: '#e6e6ee',
-    height: 7
+    backgroundColor: '#D3D3D3',
+    height: 10
   },
   separator: {
     backgroundColor: theme.colors.border.base,

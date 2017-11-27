@@ -142,35 +142,36 @@ class OutfitDetail extends Component {
                 style={styles.outfitImage}
                 resizeMode="cover"
                 source={{uri: detail.outfit_img}} />
-              <View style={{marginTop: 10, marginBottom: 10}}>
+
+              <View style={{marginLeft:20, marginRight: 20}}>
+                <View style={{marginTop: 10}}>
+                    <RkText rkType="header3">{detail.content}</RkText>
+                </View>
+            		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+          				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
+          				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
+                </View>
+              </View>
+
+              <View style={styles.socialContainer}>
                 <SocialBar
                   handleCommentPress={this._handleCommentPress}
                   showModal={this.showModal}
                 />
               </View>
-              <View rkCardContent>
-                <View>
-                  <View>
-                    <Text style={{fontWeight: 'bold'}}>{detail.like_count.toString()} Likes</Text>
-                  </View>
-                  <View style={{marginTop: 5}}>
-                    <Text><Text style={{fontWeight: 'bold'}}>{detail.user.username}</Text> {detail.content}</Text>
-                  </View>
-                  <View style={{marginTop: 5}}>
-                    <RkText
-                      onPress={this._handleCommentPress}
-                      rkType='secondary2 hintColor'>View all {detail.comment_count.toString()} Comments</RkText>
-                    {this._renderComments(detail.comments)}
-                    <RkText style={{marginTop: 8}} rkType='secondary4 hintColor'>
-                      <TimeAgo time={detail.publish}/>
-                    </RkText>
-                  </View>
+              <View rkCardContent style={styles.commentContainer}>
+                <View style={{marginTop: 5}}>
+                  {this._renderComments(detail.comments)}
+                  <RkText
+                    onPress={this._handleCommentPress}
+                    rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
                 </View>
+
               </View>
 
               <View>
                 <View style={styles.headContainer}>
-                  <RkText rkType="header4">Tagged Clothes ({this.props.outfitDetail.tagged_clothes.length.toString()})</RkText>
+                  <RkText rkType="header5">Tagged Clothes ({this.props.outfitDetail.tagged_clothes.length.toString()})</RkText>
                 </View>
                 <FlatList
                   data={this.props.outfitDetail.tagged_clothes}
@@ -181,7 +182,7 @@ class OutfitDetail extends Component {
               </View>
               <View>
                 <View style={styles.headContainer}>
-                  <RkText rkType="header4">스타일정보</RkText>
+                  <RkText rkType="header5">Style Detail</RkText>
                 </View>
                 <TouchableOpacity style={[styles.dContainer, styles.row]}>
                   <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Male</RkText>
@@ -215,7 +216,15 @@ let styles = RkStyleSheet.create(theme => ({
     backgroundColor: theme.colors.screen.base,
     marginBottom: 50
   },
-
+  socialContainer: {
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  commentContainer: {
+    // borderColor: '#e3e3e3',
+    borderTopWidth: 1.5,
+    borderColor: '#e3e3e3',
+  },
   title: {
     marginBottom: 5,
   },
@@ -241,7 +250,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
   headContainer: {
     padding: 10,
-    backgroundColor: '#f5f5f8'
+    borderTopWidth: 2,
+    borderColor: "#e3e3e3"
   },
   menu: {
     width: 50

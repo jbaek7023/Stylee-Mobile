@@ -56,9 +56,7 @@ class CategoryDetail extends Component {
 
   render() {
     const detail = this.props.categoryDetail;
-    console.log(detail);
     if(detail) {
-      console.log(detail.name);
       let outfitCount = detail.outfit_count.toString();
       return (
         <ScrollView style={styles.root} automaticallyAdjustContentInsets={false}>
@@ -67,10 +65,10 @@ class CategoryDetail extends Component {
               <RkText rkType='h2'>{detail.name}</RkText>
               <RkText rkType='h5' style={styles.marginName}>username</RkText>
               <RkText rkType='secondary2 hintColor bigLine'>{detail.detail}This is one</RkText>
-              <View style={{alignItems: 'flex-end'}}><RkText rkType='awesome small'>{FontAwesome.category} 카테고리추가</RkText></View>
+              <View style={{alignItems: 'flex-end'}}><RkText rkType='awesome small'>{FontAwesome.category} Add</RkText></View>
             </View>
             <View rkCardContent>
-              <RkText rkType='secondary2'>스타일 {outfitCount}개</RkText>
+              <RkText rkType='secondary2'>{outfitCount} Styles</RkText>
             </View>
           </RkCard>
             <FlatList

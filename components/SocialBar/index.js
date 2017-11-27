@@ -105,7 +105,7 @@ export class SocialBar extends RkComponent {
           <RkButton rkType='clear' style={styles.buttonStyle}
             onPress={()=>this.props.showModal()}>
             <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.category}</RkText>
-            <RkText rkType='primary4 hintColor' style={{marginTop: 5}}>Category</RkText>
+            <RkText rkType='primary4 hintColor' style={{marginTop: 5}}>Categorize</RkText>
           </RkButton>
         </View>
         {this._renderStar(this.state.star)}

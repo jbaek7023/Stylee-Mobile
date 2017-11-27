@@ -118,8 +118,6 @@ class AddClothScreen extends Component {
   _setSelectionType = (selectionType) => this.setState({selectionType});
   _setClothType = (clothType) => {this.setState({clothType});this.props.navigation.setParams({clothType});}
   _setSelectedStyleIds = (selectedStyleIds) => {
-    console.log('this si selectedStyleIds in setSelectedStyleIds - Passing');
-    console.log(selectedStyleIds)
     this.props.navigation.setParams({selectedStyleIds});
     this.setState({selectedStyleIds});
   }
@@ -215,7 +213,7 @@ class AddClothScreen extends Component {
     if(selectionType===1) {
       this._setBigType(value);
       this._setSelectedSizeIds([]);
-      if(value==='Bottoms') {
+      if(value==='Bottom') {
         this.setState({items:bottomType});
       } else if(value==='Shoes') {
         this.setState({items:shoeType});
@@ -300,7 +298,7 @@ class AddClothScreen extends Component {
     } else if (option===3) {
       this.setState({items: genders})
     } else if (option===4) {
-      if (this.state.bigType === 'Bottoms') {
+      if (this.state.bigType === 'Bottom') {
         this.setState({items: bottomSize})
         this.setState({clothSize: bottomSize})
       } else if (this.state.bigType === 'Shoes') {
