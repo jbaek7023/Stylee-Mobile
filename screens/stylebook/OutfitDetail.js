@@ -25,7 +25,7 @@ class OutfitDetail extends Component {
   });
 
   state = {
-    isCategoryVisible: false
+    isCategoryVisible: false,
   }
 
   hideModal = () => this.setState({isCategoryVisible: false})
@@ -130,7 +130,6 @@ class OutfitDetail extends Component {
   render() {
     const detail = this.props.outfitDetail;
     // User Access Not Yet
-    console.log(detail);
     if(detail) {
       return (
         <View style={styles.root}>
@@ -156,6 +155,8 @@ class OutfitDetail extends Component {
 
               <View style={styles.socialContainer}>
                 <SocialBar
+                  isLiked={detail.liked}
+                  isStarred={detail.starred}
                   handleCommentPress={this._handleCommentPress}
                   showModal={this.showModal}
                 />
@@ -210,7 +211,7 @@ class OutfitDetail extends Component {
 }
 
 function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail}}) {
-  return { token, hType, outfitDetail}
+  return { token, hType, outfitDetail }
 }
 
 let styles = RkStyleSheet.create(theme => ({

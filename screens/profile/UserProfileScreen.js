@@ -57,7 +57,6 @@ class UserProfileScreen extends Component {
   }
 
   _renderItem = ({item}) => {
-    // detail -> item
     return (
       <RkCard rkType='article'>
         <View style={styles.profileSeperator} />

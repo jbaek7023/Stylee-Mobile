@@ -240,8 +240,8 @@ let styles = RkStyleSheet.create(theme => ({
     height: width(100)
   },
   rowImage:{
-    width: threeImageWidth,
-    height: threeImageWidth,
+    width: (threeImageWidth+15),
+    height: (threeImageWidth+15),
     marginRight: 2,
     marginTop: 2
   },

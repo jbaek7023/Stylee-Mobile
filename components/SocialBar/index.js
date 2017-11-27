@@ -14,8 +14,8 @@ export class SocialBar extends RkComponent {
   componentName = 'SocialBar';
 
   state = {
-    like: false,
-    star: false
+    like: this.props.isLiked,
+    star: this.props.isStarred
   }
 
   typeMapping = {
@@ -27,17 +27,18 @@ export class SocialBar extends RkComponent {
 
   _handleLikePress = () => {
     if(this.state.like) {
-      this.setState({like:false})
+      this.setState({like: false})
     } else {
-      this.setState({like:true})
+      this.setState({like: true})
     }
   }
 
   _handleBookmarkPress = () => {
+    console.log(this.state.star)
     if(this.state.star) {
-      this.setState({star:false})
+      this.setState({star: false})
     } else {
-      this.setState({star:true})
+      this.setState({star: true})
     }
   }
 
@@ -61,8 +62,6 @@ export class SocialBar extends RkComponent {
         </RkButton>
       </View>
     );
-    // Like 일때 글자수 맞춰야함. 'Like ''이렇게 스페이스로 넣던지해야함.
-    // container와 buttonStyle 에 파랑핑크로 테스트해보면 암
   }
 
   _renderStar = (star) => {
@@ -90,7 +89,6 @@ export class SocialBar extends RkComponent {
 
   render() {
     let {container, section, icon, label} = this.defineStyles();
-
     return (
       <View style={styles.container}>
         {this._renderHeart(this.state.like)}
