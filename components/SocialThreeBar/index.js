@@ -14,8 +14,8 @@ export class SocialThreeBar extends RkComponent {
   componentName = 'SocialBar';
 
   state = {
-    like: false,
-    star: false
+    like: this.props.isLiked,
+    star: this.props.isStarred
   }
 
   typeMapping = {

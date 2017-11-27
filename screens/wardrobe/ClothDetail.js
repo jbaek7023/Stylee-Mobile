@@ -148,7 +148,11 @@ class ClothDetail extends Component {
                 </View>
               </View>
               <View style={{marginTop: 10, marginBottom: 10}}>
-                <SocialThreeBar handleCommentPress={this._handleCommentPress}/>
+                <SocialThreeBar
+                  isLiked={detail.liked}
+                  isStarred={detail.starred}
+                  handleCommentPress={this._handleCommentPress}
+                />
               </View>
               <View rkCardContent>
                 <View>
