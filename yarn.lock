@@ -5085,6 +5085,10 @@ react-native-scalable-image@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/react-native-scalable-image/-/react-native-scalable-image-0.2.1.tgz#2900dfd9753c09773d0a7f84fccd0d1b3e76fee4"
 
+react-native-simple-toast@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-simple-toast/-/react-native-simple-toast-0.0.7.tgz#2ef51bdafd3e98df718f74fdd0bc0ce08608dff8"
+
 react-native-svg@5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-5.3.0.tgz#0d2ca98bee6726d627c2ca31617ac9c5f7d42daf"

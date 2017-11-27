@@ -16,6 +16,7 @@ import {FontAwesome} from '../../assets/icons';
 import { width, height, totalSize } from 'react-native-dimension';
 import { threeImageWidth } from '../../utils/scale';
 import DetailRender from '../../components/DetailRender';
+import Toast from 'react-native-simple-toast';
 
 class ClothDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
@@ -124,6 +125,22 @@ class ClothDetail extends Component {
     );
   }
 
+  _renderPrivacy = (onlyMe) => {
+    if(onlyMe) {
+      return (
+        <TouchableWithoutFeedback onPress={() => {Toast.show('Who can see this post? Only Me', Toast.BOTTOM);}}>
+          <RkText rkType="awesome">{FontAwesome.onlyMe}</RkText>
+        </TouchableWithoutFeedback>
+      );
+    } else {
+      return (
+        <TouchableWithoutFeedback onPress={() => {Toast.show('Who can see this post? All', Toast.BOTTOM);}}>
+          <RkText rkType="awesome">{FontAwesome.all}</RkText>
+        </TouchableWithoutFeedback>
+      );
+    }
+  }
+
   render () {
     const detail = this.props.clothDetail;
     if(detail) {
@@ -137,14 +154,21 @@ class ClothDetail extends Component {
                 resizeMode="cover"
                 source={{uri: detail.cloth_image}} />
 
-              <View style={{marginLeft:20, marginRight: 20}}>
-                <View style={{marginTop: 10}}>
-                    <RkText rkType="header3">{detail.content}</RkText>
+              <View style={{ marginLeft:20, marginRight: 20, flexDirection: 'row', flex:1, justifyContent: 'space-between' }}>
+                <View>
+                  <View style={{ marginTop: 10 }}>
+                      <RkText rkType="header3">{detail.content}</RkText>
+                  </View>
+              		<View style={{
+                    marginTop: 10,
+                    marginBottom: 10,
+                    flexDirection: 'row',
+                  }}>
+            				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
+            				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
+                  </View>
                 </View>
-            		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-          				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
-          				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
-                </View>
+                <View style={{justifyContent: 'center'}}>{this._renderPrivacy(detail.only_me)}</View>
               </View>
               <View style={{marginTop: 10, marginBottom: 10}}>
                 <SocialThreeBar
