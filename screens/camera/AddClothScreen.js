@@ -28,7 +28,6 @@ import * as actions from '../../actions';
 
 class AddClothScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: '옷 올리기',
     gesturesEnabled: false,
     tabBarVisible: false,
     header: null

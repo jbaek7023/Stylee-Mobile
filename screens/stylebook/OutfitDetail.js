@@ -111,15 +111,17 @@ class OutfitDetail extends Component {
           }}>
             <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
           </RkButton>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}>
             {this._renderAvatar(detail.user.image)}
           </TouchableOpacity>
-          <View style={styles.content}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}
+            style={styles.content}>
             <View style={styles.contentHeader}>
               <RkText rkType='header5'>{detail.user.username}</RkText>
               <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.right}>
           <RkText><RkText rkType='header5' style={{color: 'blue'}}>Follow</RkText></RkText>

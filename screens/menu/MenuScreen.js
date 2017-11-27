@@ -82,7 +82,7 @@ class MenuScreen extends Component {
     AsyncStorage.removeItem('stylee_token');
     AsyncStorage.removeItem('fb_token');
     this.setState({ isModalVisible: false })
-    this.props.setToken(undefined, undefined);
+    this.props.setToken(undefined, undefined, undefined);
   }
 
   _changePassword = () => {
@@ -93,7 +93,7 @@ class MenuScreen extends Component {
     // https://www.iconfinder.com/search/?q=user
     if(this.props.currentUser) {
       return (
-        <ListItem onPress={this._handleProfilePress}>
+        <ListItem onPress={() => this._handleProfilePress(this.props.currentUser.id)}>
           <Avatar rkType='circle'
             style={styles.avatar}
             img={{ uri: this.props.currentUser.image }}/>
@@ -107,8 +107,8 @@ class MenuScreen extends Component {
     return (<ListItem><Text>Not Found</Text></ListItem>);
   }
 
-  _handleProfilePress = () => {
-    this.props.navigation.navigate('Profile', {username:this.props.currentUser.username});
+  _handleProfilePress = (id) => {
+    this.props.navigation.navigate('Profile', {userPk: id});
   }
 
   _handleEditProfile = () => {

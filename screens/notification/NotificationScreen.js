@@ -23,34 +23,29 @@ class NotificationScreen extends Component {
 
   _keyExtractor = (item, index) => item.id;
 
-  _renderRow = (row) => {
-    let username = `${row.user.firstName} ${row.user.lastName}`;
-    let hasAttachment = row.attach !== undefined;
-    let attachment = <View/>;
-
-    let mainContentStyle;
-    if (hasAttachment) {
-      mainContentStyle = styles.mainContent;
-      attachment =
-        <Image style={styles.attachment} source={row.attach}/>
+  _renderAvatar = (uri, badge) => {
+    if(_.isNil(uri)) {
+      return (<Avatar badge={badge} rkType='circle' style={styles.avatar} img={require('../../assets/images/robot-dev.png')}/>)
     }
     return (
+      <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+    );
+  }
+
+  _renderRow = (row) => {
+    return (
       <View style={styles.container}>
-        <Avatar img={row.user.photo}
-                rkType='circle'
-                style={styles.avatar}
-                badge={row.type}/>
+        {this._renderAvatar(null, row.item.type)}
         <View style={styles.content}>
-          <View style={mainContentStyle}>
+          <View style={styles.mainContent}>
             <View style={styles.text}>
               <RkText>
-                <RkText rkType='header6'>{username}</RkText>
-                <RkText rkType='primary2'> {row.description}</RkText>
+                <RkText rkType='header6'>jbaek7023</RkText>
+                <RkText rkType='primary3'> {row.item.description}</RkText>
               </RkText>
             </View>
-            <RkText rkType='secondary5 hintColor'>{moment().add(row.time, 'seconds').fromNow()}</RkText>
+            <RkText rkType='secondary5 hintColor'>3 min</RkText>
           </View>
-          {attachment}
         </View>
       </View>
     )
@@ -58,10 +53,28 @@ class NotificationScreen extends Component {
 
   // Put the Data Srouce Here! notification.photo, type(comment,like), description, time
   render() {
+    let mocDataSource = [
+      {
+        id:1,
+        user: {
+          photo: 'https://stylee-bucket.s3.amazonaws.com:443/media/profiles/8f69_e540_4816ec121bdf958_999c_d26911.jpeg?Signature=QMcZS0ic6H0uDL%2BVrC3ATuFXB%2Bw%3D&Expires=1511760335&AWSAccessKeyId=AKIAJPOEI4BSXTLWZGMQ'
+        },
+        type: 'like',
+        description:  `liked your 'Blue Jean-Nordstrom' cloth`
+      },
+      {
+        id:2,
+        user: {
+          photo: 'https://stylee-bucket.s3.amazonaws.com:443/media/profiles/8f69_e540_4816ec121bdf958_999c_d26911.jpeg?Signature=QMcZS0ic6H0uDL%2BVrC3ATuFXB%2Bw%3D&Expires=1511760335&AWSAccessKeyId=AKIAJPOEI4BSXTLWZGMQ'
+        },
+        type: 'comment',
+        description:  `commented your 'Blue Jean-Nordstrom' cloth`
+      }
+    ]
     return (
       <FlatList
         style={styles.root}
-        data={null}
+        data={mocDataSource}
         renderItem={this._renderRow}
         keyExtractor={this._keyExtractor}
       />

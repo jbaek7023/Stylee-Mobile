@@ -65,7 +65,7 @@ export const doAuthLogin = ( username, password ) => async dispatch => {
   if (response.status === 200) {
     // fb is type 2
     AsyncStorage.setItem('stylee_token', response.data.token);
-    dispatch({ type: AUTH_LOGIN_SUCCESS, payload: response.data.token });
+    dispatch({ type: AUTH_LOGIN_SUCCESS, payload: response.data.token});
   } else {
     if(response.status === 400) {
       console.log('Not authorized. ');

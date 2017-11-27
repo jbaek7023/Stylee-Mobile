@@ -18,48 +18,79 @@ class FeedScreen extends Component {
 
   _keyExtractor = (item, index) => item.id;
 
-  _renderRow = (row) => {
+  _renderAvatar = (uri) => {
+    if(_.isNil(uri)) {
+      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/robot-dev.png')}/>)
+    }
     return (
-      <RkCard style={styles.card}>
-        <View rkCardHeader>
-          <Avatar rkType='small'
-                  style={styles.avatar}
-                  img={require('../../assets/images/styleeicon.png')}/>
-          <View>
-            <RkText rkType='header4'>Firstname LastName</RkText>
-            <RkText rkType='secondary2 hintColor'>20 hrs ago</RkText>
+      <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+    );
+  }
+
+  _renderPostHeader = (item) => {
+    return (
+      <View style={styles.headerLayout}>
+        <View rkCardHeader style={styles.left}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: item.user.id})}>
+            {this._renderAvatar(null)}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Profile', {userPk: item.user.id})}
+            style={styles.content}>
+            <View style={styles.contentHeader}>
+              <RkText rkType='header5'>haeunbaek</RkText>
+              <RkText rkType='secondary2 hintColor'>3 hr ago</RkText>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  _renderComments = (comments) => {
+    if(_.isNil(comments)) return <Text><Text style={{fontWeight: 'bold'}}>jbaek7023</Text> I love this Outfit!</Text>;
+    let result = comments.map(( obj, index ) => {
+      return (<Text key={index}><Text style={{fontWeight: 'bold'}}>{obj.user.username}</Text> {obj.content}</Text>);
+    });
+
+    return result;
+    // obj.id, obj.user.image, obj.user.id, obj.content, obj.publish, obj.updated, obj.reply_count
+  }
+
+  _renderRow = (item) => {
+    return (
+      <RkCard rkType='article'>
+        <View style={styles.profileSeperator} />
+          {this._renderPostHeader(item)}
+      	<Image style={styles.imgStyle} source={require('../../assets/images/72383351.1.jpg')}/>
+        <View style={{marginLeft:20, marginRight: 20}}>
+          <View style={{marginTop: 10}}>
+              <RkText rkType="header5">Black Suit Style</RkText>
+          </View>
+      		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+    				<RkText rkType="secondary2 hintColor">64 Likes</RkText>
+    				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>8 Comments</RkText>
           </View>
         </View>
-        <Image style={styles.imgStyle} source={require('../../assets/images/72383351.1.jpg')}/>
-        <View rkCardContent>
-          <RkText rkType='primary3'>TextoTextoTextoTextoTextoTextoTextoTextoTextoTextoTextoTexto</RkText>
+      	<View style={styles.socialContainer}>
+      		<SocialBar/>
+      	</View>
+        <View rkCardContent style={styles.commentContainer}>
+          <View style={{marginTop: 5}}>
+            {this._renderComments(null)}
+            <RkText
+              onPress={this._handleCommentPress}
+                rkType='secondary2 hintColor'>View All 4 Comments</RkText>
+          </View>
         </View>
-        <View rkCardFooter>
-          <SocialBar/>
-        </View >
       </RkCard>
     );
   }
 
-  // <TouchableOpacity style={[styles.wrapper, this.props.style]} onPress={this.props.onPress}>
-  //   <View style={styles.container}>
-  //     <View style={styles.text}>
-  //       <RkText rkType='awesome' style={[styles.icon, color]}>{this.props.icon}</RkText>
-  //       <RkText rkType='header6' style={color}>{`Find Friends With ${this.props.text}`}</RkText>
-  //     </View>
-  //     <RkText rkType='awesome small' style={color}>{FontAwesome.chevronRight}</RkText>
-  //   </View>
-  // </TouchableOpacity>
-
-  // <FindFriends color={RkTheme.current.colors.google} text='Google' icon={FontAwesome.google}
-  //                        selected={this.state.googleEnabled} onPress={() => {
-  //             this.setState({googleEnabled: !this.state.googleEnabled})
-  //           }}/>
-
   render() {
     return (
       <FlatList
-        data={null}
+        data={[{id:1}, {id:2}, {id:3}, {id:4}]}
         renderItem={this._renderRow}
         keyExtractor={this._keyExtractor}
         ListHeaderComponent={this._renderHeader}
@@ -92,7 +123,37 @@ let styles = RkStyleSheet.create(theme => ({
   },
   searchBar: {
     backgroundColor: theme.colors.navbar,
-  }
+  },
+  left: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  headerLayout: {
+    height: 55,
+    alignItems: 'center',
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: theme.colors.screen.base
+  },
+  contentHeader: {
+    justifyContent: 'space-between',
+    paddingLeft: 10
+  },
+  content: {
+    flex: 1,
+  },
+  socialContainer: {
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  commentContainer: {
+    borderTopWidth: 1.5,
+    borderColor: '#e3e3e3',
+  },
+  profileSeperator: {
+    backgroundColor: '#D3D3D3',
+    height: 10
+  },
 }));
 
 export default FeedScreen;
