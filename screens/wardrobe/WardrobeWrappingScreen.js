@@ -109,7 +109,6 @@ class WardrobeWrappingScreen extends Component {
 
 let styles = RkStyleSheet.create(theme => ({
   tabStyle : {
-    // backgroundColor: theme.colors.navbar,
     backgroundColor: 'white',
     justifyContent: 'center',
     width: 120,

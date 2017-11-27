@@ -186,15 +186,15 @@ class OutfitDetail extends Component {
                   />
                 </ScrollView>
               </View>
-              <View>
+              <View style={{marginBottom: 10}}>
                 <View style={styles.headContainer}>
-                  <RkText rkType="header5">Style Detail</RkText>
+                  <RkText rkType="header5">Detail</RkText>
                 </View>
                 <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Male</RkText>
+                  <RkText rkType="primary2">Gender</RkText><RkText rkType="primary3">{detail.gender}</RkText>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.dContainer, styles.lastrow]}>
-                  <RkText rkType="primary3">Location</RkText><RkText rkType="primary2">USA</RkText>
+                  <RkText rkType="primary2">Location</RkText><RkText rkType="primary3">{detail.location}</RkText>
                 </TouchableOpacity>
               </View>
             </RkCard>

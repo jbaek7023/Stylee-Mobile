@@ -58,22 +58,21 @@ export const fetchClothesAll = (token, hType) => async dispatch => {
       shoes: [],
       etcs: []
     }
-
     response.data.forEach(item => {
       switch (item.big_cloth_type) {
-        case 't':
+        case 'Top':
           types.tops.push(item);
           break;
-        case 'o':
+        case 'Outwear':
           types.outwears.push(item);
           break;
-        case 'b':
+        case 'Bottom':
           types.bottoms.push(item);
           break;
-        case 's':
+        case 'Shoes':
           types.shoes.push(item);
           break;
-        case 'e':
+        case 'ETC':
           types.etcs.push(item);
           break;
         default:

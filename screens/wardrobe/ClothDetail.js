@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {FontAwesome} from '../../assets/icons';
 import { width, height, totalSize } from 'react-native-dimension';
 import { threeImageWidth } from '../../utils/scale';
-
+import DetailRender from '../../components/DetailRender';
 
 class ClothDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
@@ -52,7 +52,7 @@ class ClothDetail extends Component {
   }
 
   _handleImagePress = (id) => {
-    this.props.navigation.navigate('ClothDetail', {id})
+    this.props.navigation.navigate('OutfitDetail', {id})
   }
 
   _renderOutfitItem = ({item}) => {
@@ -126,7 +126,6 @@ class ClothDetail extends Component {
 
   render () {
     const detail = this.props.clothDetail;
-    console.log(detail);
     if(detail) {
       return (
         <View style={{flex:1}}>
@@ -164,7 +163,6 @@ class ClothDetail extends Component {
                   </View>
                 </View>
               </View>
-
               <View>
                 <View style={styles.headContainer}>
                   <RkText rkType="header5">Tagged Styles ({detail.tagged_outfits.length.toString()})</RkText>
@@ -181,39 +179,17 @@ class ClothDetail extends Component {
                   />
                 </ScrollView>
               </View>
-              <View>
-                <View style={styles.headContainer}>
-                  <RkText rkType="header5">Detail</RkText>
-                </View>
-                <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">T-Shirt</RkText>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary3">Seasons</RkText><RkText rkType="primary2">Fall, Spring</RkText>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Unisex</RkText>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary3">Size</RkText><RkText rkType="primary2">M(95)</RkText>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary3">Color</RkText><RkText rkType="primary2">#f64e59</RkText>
-                </TouchableOpacity>
-                <View style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary3">Brand</RkText><RkText rkType="primary2">Nike</RkText>
-                </View>
-                <View style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary3">Location</RkText><RkText rkType="primary2">USA</RkText>
-                </View>
-                <View style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary3">Link</RkText><RkText rkType="primary2">www.naver.com</RkText>
-                </View>
-                <View style={[styles.dContainer, styles.lastrow]}>
-                  <RkText rkType="primary3">In wardrobe</RkText>
-                  <RkText rkType="primary2">Yes</RkText>
-                </View>
-              </View>
+              <DetailRender
+                type={detail.cloth_type}
+                seasons={detail.detail.seasons}
+                gender={detail.detail.sex}
+                sizes={detail.detail.size}
+                colors={detail.detail.color}
+                brand={detail.detail.brand}
+                location={detail.detail.location}
+                link={detail.link}
+                inWardrobe={detail.in_wardrobe}
+                />
             </RkCard>
           </ScrollView>
         </View>
