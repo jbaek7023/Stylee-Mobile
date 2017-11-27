@@ -130,6 +130,7 @@ class OutfitDetail extends Component {
   render() {
     const detail = this.props.outfitDetail;
     // User Access Not Yet
+    console.log(detail);
     if(detail) {
       return (
         <View style={styles.root}>
@@ -173,12 +174,16 @@ class OutfitDetail extends Component {
                 <View style={styles.headContainer}>
                   <RkText rkType="header5">Tagged Clothes ({this.props.outfitDetail.tagged_clothes.length.toString()})</RkText>
                 </View>
-                <FlatList
-                  data={this.props.outfitDetail.tagged_clothes}
-                  renderItem={this._renderClothesItem}
-                  keyExtractor={this._keyExtractor}
-                  numColumns={3}
-                />
+                <ScrollView
+                  horizontal={true}
+                  style={{paddingBottom: 10}}>
+                  <FlatList
+                    horizontal
+                    data={this.props.outfitDetail.tagged_clothes}
+                    renderItem={this._renderClothesItem}
+                    keyExtractor={this._keyExtractor}
+                  />
+                </ScrollView>
               </View>
               <View>
                 <View style={styles.headContainer}>
@@ -240,8 +245,8 @@ let styles = RkStyleSheet.create(theme => ({
     height: width(100)
   },
   rowImage:{
-    width: threeImageWidth,
-    height: threeImageWidth,
+    width: (threeImageWidth+15),
+    height: (threeImageWidth+15),
     marginRight: 2,
     marginTop: 2
   },
@@ -250,8 +255,7 @@ let styles = RkStyleSheet.create(theme => ({
   },
   headContainer: {
     padding: 10,
-    borderTopWidth: 2,
-    borderColor: "#e3e3e3"
+    backgroundColor: '#f5f5f8'
   },
   menu: {
     width: 50

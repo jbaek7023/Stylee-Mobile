@@ -23,10 +23,11 @@ const RootTabNavigator = TabNavigator ({
     navigationOptions: () => ({
       headerTitleStyle: {
         fontWeight: 'normal',
-      },
+      },swipeEnabled: false,
       tabBarVisible: false,
 
     }),
+    swipeEnabled: false,
     lazy: true,
   }
 );

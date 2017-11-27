@@ -126,6 +126,7 @@ class ClothDetail extends Component {
 
   render () {
     const detail = this.props.clothDetail;
+    console.log(detail);
     if(detail) {
       return (
         <View style={{flex:1}}>
@@ -136,44 +137,49 @@ class ClothDetail extends Component {
                 style={styles.clothImage}
                 resizeMode="cover"
                 source={{uri: detail.cloth_image}} />
+
+              <View style={{marginLeft:20, marginRight: 20}}>
+                <View style={{marginTop: 10}}>
+                    <RkText rkType="header3">{detail.content}</RkText>
+                </View>
+            		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+          				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
+          				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
+                </View>
+              </View>
               <View style={{marginTop: 10, marginBottom: 10}}>
                 <SocialThreeBar handleCommentPress={this._handleCommentPress}/>
               </View>
               <View rkCardContent>
                 <View>
-                  <View>
-                    <Text style={{fontWeight: 'bold'}}>{detail.like_count.toString()} Likes</Text>
-                  </View>
                   <View style={{marginTop: 5}}>
-                    <Text><Text style={{fontWeight: 'bold'}}>{detail.user.username}</Text> {detail.content}</Text>
-                  </View>
-                  <View style={{marginTop: 5}}>
+                    {this._renderComments(detail.comments)}
                     <RkText
                       onPress={()=>this._handleCommentPress()}
-                      rkType='secondary2 hintColor'>댓글{detail.comment_count.toString()}개 모두보기</RkText>
-                      {this._renderComments(detail.comments)}
-                    <RkText style={{marginTop: 8}} rkType='secondary4 hintColor'>
-                      <TimeAgo time={detail.publish}/>
-                    </RkText>
+                      rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
                   </View>
                 </View>
               </View>
 
               <View>
                 <View style={styles.headContainer}>
-                  <RkText rkType="header4">Tagged Styles (2)</RkText>
+                  <RkText rkType="header5">Tagged Styles ({detail.tagged_outfits.length.toString()})</RkText>
                 </View>
-                <FlatList
-                  style={{marginTop:8}}
-                  data={this.props.clothDetail.tagged_outfits}
-                  renderItem={this._renderOutfitItem}
-                  keyExtractor={this._keyExtractor}
-                  numColumns={3}
-                />
+                <ScrollView
+                  horizontal={true}
+                  style={{paddingBottom: 10}}>
+                  <FlatList
+                    horizontal
+                    style={{paddingBottom: 10}}
+                    data={detail.tagged_outfits}
+                    renderItem={this._renderOutfitItem}
+                    keyExtractor={this._keyExtractor}
+                  />
+                </ScrollView>
               </View>
               <View>
                 <View style={styles.headContainer}>
-                  <RkText rkType="header4">Detail</RkText>
+                  <RkText rkType="header5">Detail</RkText>
                 </View>
                 <TouchableOpacity style={[styles.dContainer, styles.row]}>
                   <RkText rkType="primary3">Type</RkText><RkText rkType="primary2">T-Shirt</RkText>
