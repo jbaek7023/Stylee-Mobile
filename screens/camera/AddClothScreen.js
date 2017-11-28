@@ -90,7 +90,8 @@ class AddClothScreen extends Component {
     brand: '',
     location: '',
     link: '',
-    base64: undefined
+    base64: undefined,
+    content: ''
   }
 
   componentWillMount() {
@@ -454,39 +455,37 @@ class AddClothScreen extends Component {
   }
 
   render() {
+    console.log(this.state.onlyMe)
+    console.log(this.state.inWardrobe)
     return (
       <View style={{flex:1}}>
         {this._renderHeader()}
         <KeyboardAwareScrollView
           innerRef={ref => {this.scroll = ref}}
           style={styles.container}>
-
           <View style={styles.headContainer}>
-            <View style={styles.leftheadContainer}>
+            <View style={{alignItems: 'center'}}>
               <TouchableOpacity
                 style={[styles.imageContainer, {height: Math.max(70, this.state.textHeight)}]}
                 onPress={()=>{this.setState({isModalVisible:true})}}>
                 {this._renderClothImage()}
               </TouchableOpacity>
             </View>
-            <View style={styles.rightheadContainer}>
-              <TextInput
-                multiline
-                selectionColor='grey'
-                underlineColorAndroid='white'
-                placeholder="문구입력..."
-                style={[styles.inputStyle, {height: Math.max(70, this.state.textHeight)}]}
-                onChangeText={(text)=>{
-                  this._setText(text)
-                }}
-                onContentSizeChange={(event) => {
-                  this.setState({ textHeight: event.nativeEvent.contentSize.height });
-                }}
-                value={this.state.text}/>
-            </View>
           </View>
-
           <View>
+            <View style={[styles.dContainer, styles.titleRow]}>
+              <RkText rkType="header5">Cloth Title</RkText>
+              <TextInput
+                onFocus={(event: Event) => {
+                  this._scrollToInput(findNodeHandle(event.target))
+                }}
+                placeholder="My favorite T-Shirt"
+                style={[styles.moreDetailStyle]}
+                value={this.state.content}
+                underlineColorAndroid='white'
+                onChangeText={(content) => this.setState({content})}/>
+            </View>
+            <View style={styles.contextSeperator}/>
             <View style={styles.dContainer}>
               <RkText rkType="header5">Detail</RkText>
             </View>
@@ -532,7 +531,6 @@ class AddClothScreen extends Component {
               <RkText rkType="header5">Tagged Styles</RkText>
               {this._renderTagStyleButton()}
             </View>
-            <View />
 
             <View style={styles.contextSeperator}/>
 
@@ -578,11 +576,29 @@ class AddClothScreen extends Component {
                 style={styles.switch}
                 value={this.state.inWardrobe}
                 name="Push"
+                onPress={()=>{console.log('ssssssss')}}
                 onValueChange={(inWardrobe) => {console.log('helloworld')}}/>
             </View>
 
+            <View style={styles.rightheadContainer}>
+              <TextInput
+                onFocus={(event: Event) => {
+                  this._scrollToInput(findNodeHandle(event.target))
+                }}
+                multiline
+                selectionColor='grey'
+                underlineColorAndroid='white'
+                placeholder="Description"
+                style={[styles.inputStyle, {height: Math.max(30, this.state.textHeight), marginLeft: 20}]}
+                onChangeText={(text)=>{
+                  this._setText(text)
+                }}
+                onContentSizeChange={(event) => {
+                  this.setState({ textHeight: event.nativeEvent.contentSize.height });
+                }}
+                value={this.state.text}/>
+            </View>
             <View style={styles.contextSeperator}/>
-
             <View style={styles.dContainer}>
               <RkText rkType="header5">Privacy</RkText>
             </View>
@@ -590,9 +606,10 @@ class AddClothScreen extends Component {
               <RkText rkType="primary3">Only Me</RkText>
               <RkSwitch
                 style={styles.switch}
-                value={this.state.onlyMe}
+                value={this.state.inWardrobe}
                 name="Push"
-                onValueChange={(onlyMe) => {this._setOnlyMe(onlyMe); console.log('asd');}}/>
+                onValueChange={(inWardrobe) => {console.log('helloworld')}}/>
+
             </View>
             <View>
               {this._renderModal()}
@@ -601,6 +618,7 @@ class AddClothScreen extends Component {
               {this._renderSelectorModal()}
             </View>
           </View>
+
           <KeyboardSpacer />
         </KeyboardAwareScrollView>
       </View>
@@ -609,6 +627,20 @@ class AddClothScreen extends Component {
 }
 
 let styles = RkStyleSheet.create(theme => ({
+  switchStyle: {
+    width: 52,
+    height: 32,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: theme.colors.border.secondary,
+    // onColor: theme.colors.primary,
+    // offColor: {
+    //   android: theme.colors.screen.base,
+    //   ios: theme.colors.border.base
+    // }
+  },
   container: {
     backgroundColor: theme.colors.screen.base,
   },
@@ -622,6 +654,11 @@ let styles = RkStyleSheet.create(theme => ({
     paddingTop: 0,
     paddingLeft:20
   },
+  titleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   drow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -630,7 +667,8 @@ let styles = RkStyleSheet.create(theme => ({
   headContainer: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor: '#cfcfd6'
+    borderColor: '#cfcfd6',
+    justifyContent: 'center'
   },
   leftheadContainer: {
     width:90
@@ -644,7 +682,8 @@ let styles = RkStyleSheet.create(theme => ({
     marginBottom:10,
     flex: 1,
     fontSize: 15,
-    marginRight: 10
+    marginRight: 10,
+    textAlignVertical: "top",
   },
   headImageStyle: {
     width:70,
