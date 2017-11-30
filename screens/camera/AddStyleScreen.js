@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RkText, RkTextInput, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
-import { ImageEditor, ImageStore, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
+import { findNodeHandle, ImageEditor, ImageStore, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 import { threeImageWidth } from '../../utils/scale';
@@ -10,6 +10,8 @@ import Modal from 'react-native-modal';
 import { Button } from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
 import { ImagePicker } from 'expo';
+import StyleSelectorModal from '../../components/common/StyleSelectorModal';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import {
   RkSwitch
@@ -20,55 +22,51 @@ import {
 import { NavBar } from '../../components/navBar';
 import { withRkTheme } from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
+import { genders } from '../../utils/menuItems';
 
 class AddStyleScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Add Your Style',
     gesturesEnabled: false,
     tabBarVisible: false,
-    headerStyle: {height: 50},
-    headerLeft: (
-      <RkButton
-        rkType='clear'
-        style={{width: 50}}
-        onPress={() => {
-          navigation.goBack()
-        }}>
-        <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
-      </RkButton>
-    ),
-    headerRight: (
-      <RkButton
-        rkType='clear'
-        onPress={() => {
-          navigation.goBack()
-        }}>
-        <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
-      </RkButton>
-    ),
+    header: null
   })
 
   state = {
     isModalVisible: true,
-    onlyMe: false,
+
     myInfo: true,
     text: '',
     textHeight: 0,
-    isYou: true,
+
     image: null,
     width: null,
-    height: null
+    height: null,
+
+    items: [],
+
+    isSelectorVisible: false,
+
+    gender: 'Unisex',
+    location: '',
+    isYou: true,
+    selectedClothesIds: [],
+    taggedCategories: [],
+    newClothInstances: [],
+    onlyMe: false,
   }
   // END OF CAMEARA
   _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
-
+  _setGender = (gender) => {this.setState({gender})};
   _showModal = () => this.setState({ isModalVisible: true })
   _hideModal = () => this.setState({ isModalVisible: false })
   _showCategoryModal = () => this.setState({ isCategoryVisible: true });
   _hideCategoryModal = () => this.setState({ isCategoryVisible: false });
   _setWidth = (width) => this.setState({ width })
   _setHeight = (height) => this.setState({ height })
-
+  _showSelector = () => this.setState({ isSelectorVisible: true });
+  _hideSelector = () => this.setState({ isSelectorVisible: false });
+  _setLocation = (location) => this.setState({location})
   // CAMERA
   _handleCameraPress = async () => {
     this._hideModal();
@@ -105,9 +103,6 @@ class AddStyleScreen extends Component {
 
     if (!result.cancelled) {
       this._setClothImage(result.uri);
-      // console.log(result);
-      console.log(result.height);
-      console.log(result.width);
       this._setWidth(result.width);
       this._setHeight(result.height);
       this.props.navigation.setParams({base64: result.base64});
@@ -137,6 +132,11 @@ class AddStyleScreen extends Component {
         </View>
       </Modal>
     )
+  }
+
+  _selectAction = (value) => {
+    this._setGender(value);
+    this._hideSelector();
   }
 
   _openWardrobe = () => {
@@ -169,9 +169,6 @@ class AddStyleScreen extends Component {
   }
 
   tagFromPhoto = (taggedClothes) => {
-    // console.log(taggedClothes);
-    // Execute cropImage
-    // taggedClothes[0]
     let { left, top, thumbSize } = taggedClothes[0];
     let topData = top - thumbSize/2;
     let leftData = left - thumbSize/2;
@@ -225,99 +222,183 @@ class AddStyleScreen extends Component {
     }
   }
 
-  render() {
+  // Selector Modal
+  _renderStyleSelectorModal = () => {
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.headContainer}>
-          <View style={{alignItems: 'center'}}>
-            <TouchableOpacity
-              style={[styles.imageContainer]}
-              onPress={()=>{this.setState({isModalVisible:true})}}>
-              {this._renderClothImage()}
-            </TouchableOpacity>
+      <StyleSelectorModal
+        isSelectorVisible={this.state.isSelectorVisible}
+        items={this.state.items}
+        hideSelector={this._hideSelector}
+        selectAction={this._selectAction}
+        gender={this.state.gender}
+      />
+    );
+  }
+
+  _renderHeader = () => {
+    return (
+      <View style={styles.header}>
+        <View style={styles.headerLayout}>
+          <RkButton
+            rkType='clear'
+            style={styles.menu}
+            onPress={() => {
+            this.props.navigation.goBack()
+          }}>
+            <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+          </RkButton>
+          <View rkCardHeader style={styles.left}>
+            <View style={styles.content}>
+              <View style={styles.contentHeader}>
+                <RkText rkType='header3'>Add Your Style</RkText>
+              </View>
+            </View>
+          </View>
+          <View style={styles.right}>
+              <TouchableOpacity onPress={
+                () => {
+                  let {image, text, bigType, clothType, selectedSeasonIds,
+                    gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+                    brand, location, link, inWardrobe, onlyMe, base64 } = this.state;
+                  let {token, hType} = this.props;
+                  if(token) {
+                    this.props.createStyle(token, hType, {
+                      image, text, bigType, clothType, selectedSeasonIds,
+                      gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
+                      brand, location, link, inWardrobe, onlyMe, base64 });
+                  }
+                  this.props.navigation.goBack();
+                }}>
+                <RkText rkType="header3">SAVE</RkText>
+              </TouchableOpacity>
           </View>
         </View>
-        <View style={[styles.dContainer, styles.titleRow]}>
-          <RkText rkType="header5">Style Title</RkText>
-          <TextInput
-            multiline
-            selectionColor='grey'
-            underlineColorAndroid='white'
-            placeholder="Special Outfit For Special Day"
-            style={[styles.moreDetailStyle]}
-            onChangeText={(text)=>{
-              this.setState({text})
-            }}
-            onContentSizeChange={(event) => {
-              this.setState({ textHeight: event.nativeEvent.contentSize.height });
-            }}
-            value={this.state.text}/>
-        </View>
+      </View>
+    );
+  }
 
-        <View style={styles.contextSeperator}/>
+  _handleDetailPress = () => {
+    console.log('here')
+    this.setState({items: genders});
+    this._showSelector();
+  }
 
-        <View style={styles.dContainer}>
-          <RkText rkType="header5">Detail</RkText>
-        </View>
+  _scrollToInput = (reactNode: any) => {
+    this.scroll.props.scrollToFocusedInput(reactNode)
+  }
 
-        <TouchableOpacity style={[styles.dContainer, styles.row]}>
-          <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">Male</RkText>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.dContainer, styles.row]}>
-          <RkText rkType="primary3">Location</RkText><RkText rkType="primary2">USA</RkText>
-        </TouchableOpacity>
+  render() {
+    return (
+      <View style={{flex:1}}>
+        {this._renderHeader()}
+        <KeyboardAwareScrollView
+          innerRef={ref => {this.scroll = ref}}
+          style={styles.container}>
+          <View style={styles.headContainer}>
+            <View style={{alignItems: 'center'}}>
+              <TouchableOpacity
+                style={[styles.imageContainer]}
+                onPress={()=>{this.setState({isModalVisible:true})}}>
+                {this._renderClothImage()}
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={[styles.dContainer, styles.titleRow]}>
+            <RkText rkType="header5">Style Title</RkText>
+            <TextInput
+              multiline
+              selectionColor='grey'
+              underlineColorAndroid='white'
+              placeholder="Special Outfit For Special Day"
+              style={[styles.moreDetailStyle]}
+              onChangeText={(text)=>{
+                this.setState({text})
+              }}
+              onContentSizeChange={(event) => {
+                this.setState({ textHeight: event.nativeEvent.contentSize.height });
+              }}
+              value={this.state.text}/>
+          </View>
 
-        <View style={[styles.dContainer, styles.row]}>
-          <RkText rkType="primary3">Is it you in the picture?</RkText>
-          <RkSwitch
-            style={styles.switch}
-            value={this.state.isYou}
-            name="Push"
-            onValueChange={(isYou) => this.setState({isYou})}/>
-        </View>
-        <View style={styles.contextSeperator}/>
-        <TouchableOpacity
-         style={[styles.dContainer, styles.drow]}
-         onPress={this._openUserCategory}>
-            <RkText rkType="header5">Category</RkText>
-            <RkText rkType="header5 primary right">Add To Category</RkText>
-        </TouchableOpacity>
-        <View style={styles.contextSeperator}/>
-        <TouchableOpacity
-         style={[styles.dContainer, styles.drow]}
-         onPress={this._openWardrobe}>
-            <RkText rkType="header5">Tagged Clothes</RkText>
-            <RkText rkType="header5 primary right">From Wardrobe</RkText>
-        </TouchableOpacity>
-        <View style={styles.contextSeperator}/>
-        <TouchableOpacity
-         style={[styles.dContainer, styles.drow]}
-         onPress={this._tagFromPhoto}>
-            <RkText rkType="header5">New Clothes</RkText>
-            <RkText rkType="header5 primary right">Tag From Photo</RkText>
-        </TouchableOpacity>
-        <View style={styles.contextSeperator}/>
-        <View style={styles.dContainer}>
-          <RkText rkType="header5">Privacy</RkText>
-        </View>
-        <View style={[styles.dContainer, styles.row]}>
-          <RkText rkType="primary3">Only Me</RkText>
-          <RkSwitch
-            style={styles.switch}
-            value={this.state.onlyMe}
-            name="Push"
-            onValueChange={(onlyMe) => this.setState({onlyMe})}/>
-        </View>
-        <View>
-          {this._renderModal()}
-        </View>
-        <View>
-          <CategoryModal
-            isCategoryVisible={this.state.isCategoryVisible}
-            hideModal={this._hideCategoryModal}
-            />
-        </View>
-      </ScrollView>
+          <View style={styles.contextSeperator}/>
+
+          <View style={styles.dContainer}>
+            <RkText rkType="header5">Detail</RkText>
+          </View>
+
+          <TouchableOpacity
+            onPress={()=>{this._handleDetailPress()}}
+            style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Gender</RkText><RkText rkType="primary2">{this.state.gender}</RkText>
+          </TouchableOpacity>
+          <View style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Location</RkText>
+            <TextInput
+              onFocus={(event: Event) => {
+                this._scrollToInput(findNodeHandle(event.target))
+              }}
+              value={this.state.location}
+              style={styles.moreDetailStyle}
+              underlineColorAndroid='white'
+              onChangeText={(location) => this._setLocation(location)}/>
+          </View>
+
+          <View style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Is it you in the picture?</RkText>
+            <RkSwitch
+              style={styles.switch}
+              value={this.state.isYou}
+              name="Push"
+              onValueChange={(isYou) => this.setState({isYou})}/>
+          </View>
+
+          <View style={styles.contextSeperator}/>
+          <TouchableOpacity
+           style={[styles.dContainer, styles.drow]}
+           onPress={this._openWardrobe}>
+              <RkText rkType="header5">Tagged Clothes</RkText>
+              <RkText rkType="header5 primary right">From Wardrobe</RkText>
+          </TouchableOpacity>
+          <View style={styles.contextSeperator}/>
+          <TouchableOpacity
+           style={[styles.dContainer, styles.drow]}
+           onPress={this._tagFromPhoto}>
+              <RkText rkType="header5">New Clothes</RkText>
+              <RkText rkType="header5 primary right">Tag From Photo</RkText>
+          </TouchableOpacity>
+          <View style={styles.contextSeperator}/>
+          <TouchableOpacity
+           style={[styles.dContainer, styles.drow]}
+           onPress={this._openUserCategory}>
+              <RkText rkType="header5">Category</RkText>
+              <RkText rkType="header5 primary right">Add To Category</RkText>
+          </TouchableOpacity>
+          <View style={styles.contextSeperator}/>
+          <View style={styles.dContainer}>
+            <RkText rkType="header5">Privacy</RkText>
+          </View>
+          <View style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Only Me</RkText>
+            <RkSwitch
+              style={styles.switch}
+              value={this.state.onlyMe}
+              name="Push"
+              onValueChange={(onlyMe) => this.setState({onlyMe})}/>
+          </View>
+          <View>
+            {this._renderModal()}
+          </View>
+          <View>
+            <CategoryModal
+              isCategoryVisible={this.state.isCategoryVisible}
+              hideModal={this._hideCategoryModal}
+              />
+          </View>
+          <View>
+            {this._renderStyleSelectorModal()}
+          </View>
+        </KeyboardAwareScrollView>
+      </View>
     );
   }
 }
@@ -454,6 +535,48 @@ let styles = RkStyleSheet.create(theme => ({
     flex: 1,
     textAlign: 'right',
     fontSize: 15,
+  },
+  header: {
+    height: 55,
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderColor: '#CCC',
+    shadowColor: '#000',
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 2,
+    },
+    elevation: 4,
+    zIndex: 5,
+    overflow: 'visible'
+  },
+  headerLayout: {
+    height: 55,
+    alignItems: 'center',
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: theme.colors.screen.base
+  },
+  left: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  right: {
+    position: 'absolute',
+    right: 15,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+  },
+  menu: {
+    width: 50
+  },
+  content: {
+    flex: 1,
+  },
+  contentHeader: {
+    justifyContent: 'center',
   },
 }));
 

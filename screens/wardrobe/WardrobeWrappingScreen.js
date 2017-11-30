@@ -13,7 +13,7 @@ import ShoeScreen from './ShoeScreen';
 import EtcScreen from './EtcScreen';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 import { NavBar } from '../../components/navBar';
-import {withRkTheme, RkText, RkStyleSheet } from 'react-native-ui-kitten'
+import {withRkTheme, RkText, RkStyleSheet, TouchableOpacity, RkButton } from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
 import { Ionicons } from '@expo/vector-icons';
 
@@ -21,12 +21,19 @@ class WardrobeWrappingScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     title: 'Wardrobe',
     headerRight: (
-      <Ionicons
-        name='ios-contact'
-        size={32}
-        style={{ marginBottom: -3 }}
-        color="white"
-      />
+      <RkButton
+        rkType='clear'
+        style={{marginRight: 15}}
+        onPress={() => {
+          navigation.navigate('AddClotho')
+        }}>
+        <Ionicons
+          name='md-add'
+          size={32}
+          style={{ marginBottom: -3 }}
+          color="white"
+        />
+      </RkButton>
       ),
     header: (headerProps) => {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
@@ -101,7 +108,6 @@ class WardrobeWrappingScreen extends Component {
           </Tab>
         </Tabs>
         {this._renderModal()}
-        <FABs navigation={this.props.navigation}/>
       </View>
     )
   }

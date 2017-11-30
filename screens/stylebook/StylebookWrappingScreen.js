@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Tab, Tabs, TabHeading, Icon } from 'native-base';
 import StylebookAllScreen from './StylebookAllScreen';
 import StylebookCategoryScreen from './StylebookCategoryScreen';
 import StylebookStarScreen from './StylebookStarScreen';
 // Nav Bar
 import { NavBar } from '../../components/navBar';
-import {withRkTheme, RkText, RkStyleSheet} from 'react-native-ui-kitten';
+import {withRkTheme, RkText, RkStyleSheet, RkButton} from 'react-native-ui-kitten';
 import FABs from '../../components/common/FABs';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 let ThemedNavigationBar = withRkTheme(NavBar);
@@ -17,12 +17,19 @@ class StylebookWrappingScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     title: 'Stylebook',
     headerRight: (
+      <RkButton
+        rkType='clear'
+        style={{marginRight: 15}}
+        onPress={() => {
+          navigation.navigate('AddStyleo')
+        }}>
       <Ionicons
-        name='ios-contact'
-        size={32}
-        style={{ marginBottom: -3 }}
-        color="white"
-      />
+          name='md-add'
+          size={32}
+          style={{ marginBottom: -3 }}
+          color="white"
+        />
+      </RkButton>
     ),
     header: (headerProps) => {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
@@ -76,7 +83,6 @@ class StylebookWrappingScreen extends Component {
             <StylebookStarScreen navigation={this.props.navigation}/>
           </Tab>
         </Tabs>
-        <FABs navigation={this.props.navigation}/>
       </View>
     );
   }

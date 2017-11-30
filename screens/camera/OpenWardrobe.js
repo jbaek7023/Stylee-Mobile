@@ -18,11 +18,14 @@ import ShoeScreen from './ShoeScreen';
 import EtcScreen from './EtcScreen';
 
 import { Tabs, Tab, TabHeading } from 'native-base';
+import { NavBar } from '../../components/navBar';
+import {withRkTheme} from 'react-native-ui-kitten'
+let ThemedNavigationBar = withRkTheme(NavBar);
 
 class OpenWardrobe extends Component {
   // normal navigation
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Tag Your Style',
+  static navigationOptions = ({ navigation, screenProps }) => ({
+    title: 'Tag From Wardrobe',
     gesturesEnabled: false,
     tabBarVisible: false,
     headerStyle: {height: 50},
@@ -40,6 +43,7 @@ class OpenWardrobe extends Component {
       <RkButton
         rkType='clear'
         onPress={() => {
+          navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
           navigation.goBack();
         }}>
         <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
@@ -50,7 +54,7 @@ class OpenWardrobe extends Component {
   render() {
     return (
       <View style={{flex:1}}>
-        <Tabs initialPage={0} style={{backgroundColor: '#D5CFF2'}}>
+        <Tabs initialPage={0}>
           <Tab heading={<TabHeading style={styles.tabStyle}><Text style={styles.tabHeadingStyle}>Top</Text></TabHeading>}>
             <TopScreen clothes={this.props.tops} navigation={this.props.navigation}/>
           </Tab>
@@ -106,13 +110,13 @@ const styles = RkStyleSheet.create(theme => ({
     height: UIConstants.AppbarHeight,
   },
   tabHeadingStyle: {
-    color: 'white'
+
   },
   tabStyle : {
-    backgroundColor: '#6F3AB1',
+    backgroundColor: 'white',
   },
   activeTabStyle: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
   },
   textStyle: {
     color: 'white',

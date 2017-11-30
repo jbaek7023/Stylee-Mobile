@@ -24,7 +24,6 @@ export class NavBar extends React.Component {
     return headerRight && (
         <View style={[{width: 40}, styles.right]}>{headerRight}</View>
       );
-
   }
 
   _renderLeft(headerLeft) {

@@ -14,7 +14,7 @@ import {UIConstants} from '../../config/appConstants';
 class TagStyleScreen extends Component {
   // normal navigation
   static navigationOptions = ({ navigation, screenProps }) => ({
-    title: 'Tag Your Style',
+    title: 'Tag From Stylebook',
     gesturesEnabled: false,
     tabBarVisible: false,
     headerStyle: {height: 50},
