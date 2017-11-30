@@ -61,17 +61,17 @@ class AddStyleScreen extends Component {
   }
   // END OF CAMEARA
   _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
-  _setGender = (gender) => {this.setState({gender})};
+  _setGender = (gender) => {this.setState({gender})}
   _showModal = () => this.setState({ isModalVisible: true })
   _hideModal = () => this.setState({ isModalVisible: false })
-  _showCategoryModal = () => this.setState({ isCategoryVisible: true });
-  _hideCategoryModal = () => this.setState({ isCategoryVisible: false });
+  _showCategoryModal = () => this.setState({ isCategoryVisible: true })
+  _hideCategoryModal = () => this.setState({ isCategoryVisible: false })
   _setWidth = (width) => this.setState({ width })
   _setHeight = (height) => this.setState({ height })
-  _showSelector = () => this.setState({ isSelectorVisible: true });
-  _hideSelector = () => this.setState({ isSelectorVisible: false });
+  _showSelector = () => this.setState({ isSelectorVisible: true })
+  _hideSelector = () => this.setState({ isSelectorVisible: false })
   _setLocation = (location) => this.setState({location})
-
+  _setTaggedCategories = (taggedCategories) => this.setState({taggedCategories})
   _setOnlyMe = () => {
     if(this.state.onlyMe) {
       this.setState({onlyMe: false});
@@ -80,6 +80,13 @@ class AddStyleScreen extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // onAuthComplete Pass twice. so. it's
+    console.log(nextProps.list);
+    if ( this.props.list !== nextProps.list) {
+      this.setState({categoryList:nextProps.list});
+    }
+  }
   // CAMERA
   _handleCameraPress = async () => {
     this._hideModal();
@@ -307,11 +314,7 @@ class AddStyleScreen extends Component {
   }
 
   _renderTaggedClothes = () => {
-    console.log(this.state.selectedClothesIds);
     let ids = this.state.selectedClothesIds;
-    if(ids==undefined) {
-      return <View />;
-    }
     if(ids.length==0) {
       return (
         <RkText rkType="header5 primary right">Open Wardrobe</RkText>
@@ -329,6 +332,19 @@ class AddStyleScreen extends Component {
     }
   }
 
+  _selectCategory = (id) => {
+    let { taggedCategories } = this.state;
+    console.log(taggedCategories);
+    if(_.includes(taggedCategories, id)) {
+      let newTaggedCategories = _.filter(taggedCategories, (curObject) => {
+          return curObject !== id;
+      });
+      this._setTaggedCategories(newTaggedCategories);
+    } else {
+      let newTaggedCategories = [...this.state.taggedCategories, id];
+      this._setTaggedCategories(newTaggedCategories);
+    }
+  }
 
   render() {
     return (
@@ -437,6 +453,7 @@ class AddStyleScreen extends Component {
               hideModal={this._hideCategoryModal}
               taggedCategories={this.state.taggedCategories}
               categoryList={this.state.categoryList}
+              selectCategory={this._selectCategory}
               />
           </View>
           <View>

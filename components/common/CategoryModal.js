@@ -10,12 +10,28 @@ import {FontAwesome} from '../../assets/icons';
 
 class CategoryModal extends Component {
 
-  renderItem = ({item}) => {
-    return (
-      <TouchableOpacity style={styles.itemStyle}>
-        <CheckBox style={styles.checkboxStyle} checked={true} color="black"/>
-        <RkText rkType="primary1" style={styles.categoryText}>Hello</RkText>
+  _renderPrivacy = (onlyMe) => {
+    if(onlyMe) {
+      return (
         <RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText>
+      );
+    } else {
+      return (
+        <RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.all}</RkText>
+      );
+    }
+  }
+
+  renderItem = ({item}) => {
+    let selected = _.includes(this.props.taggedCategories, item.id)
+    return (
+      <TouchableOpacity
+        key={item.id}
+        style={styles.itemStyle}
+        onPress={()=>{this.props.selectCategory(item.id)}}>
+        <CheckBox style={styles.checkboxStyle} checked={selected} color="black"/>
+        <RkText rkType="primary1" style={styles.categoryText}>{item.name}</RkText>
+        {this._renderPrivacy(item.only_me)}
       </TouchableOpacity>
     );
   }
@@ -34,7 +50,6 @@ class CategoryModal extends Component {
           </View>
           <ScrollView style={styles.scrollViewStyle}>
             <FlatList
-              horizontal
               data={this.props.categoryList}
               renderItem={this.renderItem}
               keyExtractor={this._keyExtractor}
