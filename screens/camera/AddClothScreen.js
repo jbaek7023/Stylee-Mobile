@@ -31,39 +31,6 @@ class AddClothScreen extends Component {
     gesturesEnabled: false,
     tabBarVisible: false,
     header: null
-    // headerStyle: {height: 50},
-    // headerLeft: (
-    //   <RkButton
-    //     rkType='clear'
-    //     style={{width: 50}}
-    //     onPress={() => {
-    //       navigation.goBack()
-    //     }}>
-    //     <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
-    //   </RkButton>
-    // ),
-    // headerRight: (
-    //   <RkButton
-    //     rkType='clear'
-    //     onPress={() => {
-    //       let {image, text, bigType, clothType, selectedSeasonIds,
-    //         gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-    //         brand, location, link, inWardrobe, onlyMe, base64 } = navigation.state.params;
-    //       console.log('onsave');
-    //       console.log(navigation.state.params.selectedStyleIds);
-    //       console.log('done');
-    //       // send data
-    //       // navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
-    //       navigation.state.params.onSaveCloth({
-    //         base64, text, bigType, clothType, selectedSeasonIds,
-    //         gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-    //         brand, location, link, inWardrobe, onlyMe
-    //       });
-    //       navigation.goBack();
-    //     }}>
-    //     <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
-    //   </RkButton>
-    // ),
   })
 
   state = {
@@ -73,7 +40,6 @@ class AddClothScreen extends Component {
     text: '',
     textHeight: 0,
     inWardrobe: true,
-    image: undefined,
     isSelectorVisible: false,
     items: [],
     bigType: 'Top',
@@ -98,13 +64,6 @@ class AddClothScreen extends Component {
     let {image, text, bigType, clothType, selectedSeasonIds,
       gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
       brand, location, link, inWardrobe, onlyMe } = this.state;
-
-    // set params for everything
-    this.props.navigation.setParams({
-      image, text, bigType, clothType, selectedSeasonIds,
-      gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-      brand, location, link, inWardrobe, onlyMe
-    })
   }
 
   _showModal = () => this.setState({ isModalVisible: true });
@@ -113,30 +72,45 @@ class AddClothScreen extends Component {
   _hideSelector = () => this.setState({ isSelectorVisible: false });
   _setBigType = (bigType) => {
     this.setState({bigType});
-    this.props.navigation.setParams({bigType});
   };
   _setSelectionType = (selectionType) => this.setState({selectionType});
-  _setClothType = (clothType) => {this.setState({clothType});this.props.navigation.setParams({clothType});}
+  _setClothType = (clothType) => {this.setState({clothType});}
   _setSelectedStyleIds = (selectedStyleIds) => {
-    this.props.navigation.setParams({selectedStyleIds});
     this.setState({selectedStyleIds});
   }
 
   _setSelectedSizeIds = (selectedSizeIds) => {
-    this.props.navigation.setParams({selectedSizeIds});
     this.setState({selectedSizeIds});
   }
 
-  _setSelectedColorIds = (selectedColorIds) => {this.setState({selectedColorIds});this.props.navigation.setParams({selectedColorIds});}
-  _setSelectedSeasonIds = (selectedSeasonIds) => {this.setState({selectedSeasonIds});this.props.navigation.setParams({selectedSeasonIds});}
-  _setGender = (gender) => {this.setState({gender});this.props.navigation.setParams({gender});}
-  _setText = (text) => {this.setState({text}); this.props.navigation.setParams({text});}
-  _setBrand = (brand) => {this.setState({brand}); this.props.navigation.setParams({brand});}
-  _setLocation = (location) => {this.setState({location}); this.props.navigation.setParams({location});}
-  _setLink = (link) => {this.setState({link}); this.props.navigation.setParams({link});}
-  _setInWardrobe = (inWardrobe) => {this.setState({inWardrobe}); this.props.navigation.setParams({inWardrobe});}
-  _setOnlyMe = (onlyMe) => {this.setState({onlyMe}); this.props.navigation.setParams({onlyMe});}
-  _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
+  _setSelectedColorIds = (selectedColorIds) => {this.setState({selectedColorIds});}
+  _setSelectedSeasonIds = (selectedSeasonIds) => {this.setState({selectedSeasonIds});}
+  _setGender = (gender) => {this.setState({gender});}
+  _setText = (text) => {
+    this.setState({text});
+  }
+  _setBrand = (brand) => {
+    this.setState({brand});
+  }
+  _setLocation = (location) => {
+    this.setState({location});
+  }
+  _setLink = (link) => {
+    this.setState({link});
+  }
+  _setInWardrobe = () => {
+    this.setState({inWardrobe: !this.state.inWardrobe});
+  }
+
+  _setOnlyMe = () => {
+    if(this.state.onlyMe) {
+      this.setState({onlyMe: false});
+    } else {
+      this.setState({onlyMe: true});
+    }
+
+  }
+  _setClothImage = (image) => {this.setState({image});}
 
   // CAMERA
   _handleCameraPress = async () => {
@@ -433,7 +407,7 @@ class AddClothScreen extends Component {
           </View>
           <View style={styles.right}>
               <TouchableOpacity onPress={
-                ()=>{
+                () => {
                   let {image, text, bigType, clothType, selectedSeasonIds,
                     gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
                     brand, location, link, inWardrobe, onlyMe, base64 } = this.state;
@@ -455,8 +429,6 @@ class AddClothScreen extends Component {
   }
 
   render() {
-    console.log(this.state.onlyMe)
-    console.log(this.state.inWardrobe)
     return (
       <View style={{flex:1}}>
         {this._renderHeader()}
@@ -466,7 +438,7 @@ class AddClothScreen extends Component {
           <View style={styles.headContainer}>
             <View style={{alignItems: 'center'}}>
               <TouchableOpacity
-                style={[styles.imageContainer, {height: Math.max(70, this.state.textHeight)}]}
+                style={[styles.imageContainer]}
                 onPress={()=>{this.setState({isModalVisible:true})}}>
                 {this._renderClothImage()}
               </TouchableOpacity>
@@ -479,7 +451,7 @@ class AddClothScreen extends Component {
                 onFocus={(event: Event) => {
                   this._scrollToInput(findNodeHandle(event.target))
                 }}
-                placeholder="My favorite T-Shirt"
+                placeholder="My Favorite T-Shirt"
                 style={[styles.moreDetailStyle]}
                 value={this.state.content}
                 underlineColorAndroid='white'
@@ -576,8 +548,7 @@ class AddClothScreen extends Component {
                 style={styles.switch}
                 value={this.state.inWardrobe}
                 name="Push"
-                onPress={()=>{console.log('ssssssss')}}
-                onValueChange={(inWardrobe) => {console.log('helloworld')}}/>
+                onValueChange={() => {this._setInWardrobe()}}/>
             </View>
 
             <View style={styles.rightheadContainer}>
@@ -589,7 +560,7 @@ class AddClothScreen extends Component {
                 selectionColor='grey'
                 underlineColorAndroid='white'
                 placeholder="Description"
-                style={[styles.inputStyle, {height: Math.max(30, this.state.textHeight), marginLeft: 20}]}
+                style={[styles.inputStyle, {height: Math.max(40, this.state.textHeight), marginLeft: 20}]}
                 onChangeText={(text)=>{
                   this._setText(text)
                 }}
@@ -606,9 +577,12 @@ class AddClothScreen extends Component {
               <RkText rkType="primary3">Only Me</RkText>
               <RkSwitch
                 style={styles.switch}
-                value={this.state.inWardrobe}
+                value={this.state.onlyMe}
                 name="Push"
-                onValueChange={(inWardrobe) => {console.log('helloworld')}}/>
+                onValueChange={(toValue) => {
+                  this._setOnlyMe()
+                }}
+                />
 
             </View>
             <View>
@@ -675,6 +649,7 @@ let styles = RkStyleSheet.create(theme => ({
   },
   imageContainer: {
     margin:10,
+    height: 70,
     justifyContent: 'center'
   },
   inputStyle: {
@@ -683,7 +658,6 @@ let styles = RkStyleSheet.create(theme => ({
     flex: 1,
     fontSize: 15,
     marginRight: 10,
-    textAlignVertical: "top",
   },
   headImageStyle: {
     width:70,

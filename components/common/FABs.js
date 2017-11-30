@@ -14,14 +14,6 @@ class FABs extends Component {
 
   }
 
-  onSaveCloth = (clothObject) => {
-    // set the num of length
-    let {token, hType} = this.props;
-    if(token) {
-      this.props.createCloth(token, hType, clothObject);
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     // if we can new cloth,
     // Retrieve wardrobe // fetch Clothes

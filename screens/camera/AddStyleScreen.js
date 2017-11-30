@@ -229,50 +229,32 @@ class AddStyleScreen extends Component {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.headContainer}>
-          <View style={styles.leftheadContainer}>
+          <View style={{alignItems: 'center'}}>
             <TouchableOpacity
-              style={[styles.imageContainer, {height: Math.max(70, this.state.textHeight)}]}
+              style={[styles.imageContainer]}
               onPress={()=>{this.setState({isModalVisible:true})}}>
               {this._renderClothImage()}
             </TouchableOpacity>
           </View>
-          <View style={styles.rightheadContainer}>
-            <TextInput
-              multiline
-              selectionColor='grey'
-              underlineColorAndroid='white'
-              placeholder="문구입력..."
-              style={[styles.inputStyle, {height: Math.max(70, this.state.textHeight)}]}
-              onChangeText={(text)=>{
-                this.setState({text})
-              }}
-              onContentSizeChange={(event) => {
-                this.setState({ textHeight: event.nativeEvent.contentSize.height });
-              }}
-              value={this.state.text}/>
-          </View>
+        </View>
+        <View style={[styles.dContainer, styles.titleRow]}>
+          <RkText rkType="header5">Style Title</RkText>
+          <TextInput
+            multiline
+            selectionColor='grey'
+            underlineColorAndroid='white'
+            placeholder="Special Outfit For Special Day"
+            style={[styles.moreDetailStyle]}
+            onChangeText={(text)=>{
+              this.setState({text})
+            }}
+            onContentSizeChange={(event) => {
+              this.setState({ textHeight: event.nativeEvent.contentSize.height });
+            }}
+            value={this.state.text}/>
         </View>
 
-        <TouchableOpacity
-         style={[styles.dContainer, styles.drow]}
-         onPress={this._openUserCategory}>
-            <RkText rkType="header5">Category</RkText>
-            <RkText rkType="header5 primary right">Add To Category</RkText>
-        </TouchableOpacity>
-        <TouchableOpacity
-         style={[styles.dContainer, styles.drow]}
-         onPress={this._openWardrobe}>
-            <RkText rkType="header5">Tagged Clothes</RkText>
-            <RkText rkType="header5 primary right">From Wardrobe</RkText>
-        </TouchableOpacity>
-        <TouchableOpacity
-         style={[styles.dContainer, styles.drow]}
-         onPress={this._tagFromPhoto}>
-            <RkText rkType="header5">New Clothes</RkText>
-            <RkText rkType="header5 primary right">Tag From Photo</RkText>
-        </TouchableOpacity>
-
-
+        <View style={styles.contextSeperator}/>
 
         <View style={styles.dContainer}>
           <RkText rkType="header5">Detail</RkText>
@@ -293,7 +275,28 @@ class AddStyleScreen extends Component {
             name="Push"
             onValueChange={(isYou) => this.setState({isYou})}/>
         </View>
-
+        <View style={styles.contextSeperator}/>
+        <TouchableOpacity
+         style={[styles.dContainer, styles.drow]}
+         onPress={this._openUserCategory}>
+            <RkText rkType="header5">Category</RkText>
+            <RkText rkType="header5 primary right">Add To Category</RkText>
+        </TouchableOpacity>
+        <View style={styles.contextSeperator}/>
+        <TouchableOpacity
+         style={[styles.dContainer, styles.drow]}
+         onPress={this._openWardrobe}>
+            <RkText rkType="header5">Tagged Clothes</RkText>
+            <RkText rkType="header5 primary right">From Wardrobe</RkText>
+        </TouchableOpacity>
+        <View style={styles.contextSeperator}/>
+        <TouchableOpacity
+         style={[styles.dContainer, styles.drow]}
+         onPress={this._tagFromPhoto}>
+            <RkText rkType="header5">New Clothes</RkText>
+            <RkText rkType="header5 primary right">Tag From Photo</RkText>
+        </TouchableOpacity>
+        <View style={styles.contextSeperator}/>
         <View style={styles.dContainer}>
           <RkText rkType="header5">Privacy</RkText>
         </View>
@@ -343,6 +346,11 @@ class AddStyleScreen extends Component {
 // {this._renderModal}
 
 let styles = RkStyleSheet.create(theme => ({
+  titleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   container: {
     backgroundColor: theme.colors.screen.base,
   },
@@ -364,7 +372,8 @@ let styles = RkStyleSheet.create(theme => ({
   headContainer: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor: '#cfcfd6'
+    borderColor: '#cfcfd6',
+    justifyContent: 'center'
   },
   leftheadContainer: {
     width:90
@@ -440,6 +449,11 @@ let styles = RkStyleSheet.create(theme => ({
   },
   black: {
     color: 'black'
+  },
+  moreDetailStyle: {
+    flex: 1,
+    textAlign: 'right',
+    fontSize: 15,
   },
 }));
 

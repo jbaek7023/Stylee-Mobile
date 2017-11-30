@@ -88,11 +88,13 @@ export class RkSwitch extends RkComponent {
     let {toggleable} = this.state;
     let {disabled, onValueChange} = this.props;
 
+
     if (toggleable && !disabled) {
       if (onValueChange) {
         this.toggleSwitch(onValueChange)
       }
     }
+    this.props.onValueChange();
   };
 
   toggleSwitch = (result, callback = () => null) => {
