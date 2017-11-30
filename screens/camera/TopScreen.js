@@ -7,14 +7,11 @@ import { CheckBox } from 'native-base';
 class TopScreen extends Component {
   _keyExtractor = (item, index) => item.id;
 
-  _handleImagePress = (id) => {
-    // add selected one
-  }
-
   _renderItem = ({item}) => {
+    let isSelected = _.includes(this.props.selectedClothesIds, item.id);
     return (
       <TouchableWithoutFeedback
-        onPress={() => this._handleImagePress(item.id)}>
+        onPress={() => this.props.handleImagePress(item.id)}>
         <View style={styles.rowImage}>
           <Image
             key={item.id}
@@ -23,7 +20,7 @@ class TopScreen extends Component {
             resizeMode="cover"
           />
           <View style={{height:32, width:32, position:'absolute', top:0, right:0, marginTop:4, paddingRight:12}}>
-            <CheckBox checked={true} color="#f64e59" onPress={() => this._handleImagePress(item.id, null)}/>
+            <CheckBox checked={isSelected} color="#f64e59" onPress={() => this.props.handleImagePress(item.id)}/>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -49,6 +46,7 @@ class TopScreen extends Component {
             data={this.props.clothes}
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
+            extraData={this.props.selectedClothesIds}
             numColumns={3}
           />
         </ScrollView>

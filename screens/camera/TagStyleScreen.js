@@ -34,12 +34,13 @@ class TagStyleScreen extends Component {
         onPress={() => {
           navigation.state.params.onCheck({selectedStyleIds: navigation.state.params.selectedStyleIds});
           navigation.goBack();
-
         }}>
         <RkText rkType="header3" style={{marginRight:15, color:'#f64e59'}}>SAVE</RkText>
       </RkButton>
     ),
   })
+
+
 
   state = {
     selectedStyleIds: this.props.navigation.state.params.selectedStyleIds
@@ -48,7 +49,7 @@ class TagStyleScreen extends Component {
   _handleImagePress = (id) => {
     // add image to selected press
     // add id to the array.
-    let ids = this.state.selectedStyleIds
+    let ids = this.state.selectedStyleIdsc
     if(ids == undefined) {
       ids = [];
     }
@@ -67,7 +68,6 @@ class TagStyleScreen extends Component {
         selectedStyleIds: newSelectedStyleIds
       })
     }
-
   }
 
   _renderItem = ({item}) => {
@@ -129,7 +129,6 @@ class TagStyleScreen extends Component {
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           numColumns={3}
-
           />
         <View style={styles.footer}>
           <RkText rkType="primary2">{ids.length} Style Selected</RkText>

@@ -12,6 +12,8 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { ImagePicker } from 'expo';
 import StyleSelectorModal from '../../components/common/StyleSelectorModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
 import {
   RkSwitch
@@ -54,6 +56,8 @@ class AddStyleScreen extends Component {
     taggedCategories: [],
     newClothInstances: [],
     onlyMe: false,
+
+    categoryList: [],
   }
   // END OF CAMEARA
   _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
@@ -67,6 +71,15 @@ class AddStyleScreen extends Component {
   _showSelector = () => this.setState({ isSelectorVisible: true });
   _hideSelector = () => this.setState({ isSelectorVisible: false });
   _setLocation = (location) => this.setState({location})
+
+  _setOnlyMe = () => {
+    if(this.state.onlyMe) {
+      this.setState({onlyMe: false});
+    } else {
+      this.setState({onlyMe: true});
+    }
+  }
+
   // CAMERA
   _handleCameraPress = async () => {
     this._hideModal();
@@ -139,11 +152,18 @@ class AddStyleScreen extends Component {
     this._hideSelector();
   }
 
+  onCheck = (selectedClothesIds) => {
+    this.setState({selectedClothesIds});
+  }
+
   _openWardrobe = () => {
-    this.props.navigation.navigate('OpenWardrobe');
+    let { selectedClothesIds } = this.state;
+    this.props.navigation.navigate('OpenWardrobe', {onCheck: this.onCheck, selectedClothesIds});
   }
 
   _openUserCategory = () => {
+    let { token, hType } = this.props;
+    this.props.fetchUserCategories(token, hType);
     this._showCategoryModal();
   }
 
@@ -278,7 +298,6 @@ class AddStyleScreen extends Component {
   }
 
   _handleDetailPress = () => {
-    console.log('here')
     this.setState({items: genders});
     this._showSelector();
   }
@@ -286,6 +305,30 @@ class AddStyleScreen extends Component {
   _scrollToInput = (reactNode: any) => {
     this.scroll.props.scrollToFocusedInput(reactNode)
   }
+
+  _renderTaggedClothes = () => {
+    console.log(this.state.selectedClothesIds);
+    let ids = this.state.selectedClothesIds;
+    if(ids==undefined) {
+      return <View />;
+    }
+    if(ids.length==0) {
+      return (
+        <RkText rkType="header5 primary right">Open Wardrobe</RkText>
+      );
+
+    } else if(ids.length==1) {
+      return (
+        <RkText rkType="header5 primary right">{ids.length} Cloth From Wardrobe</RkText>
+      );
+
+    } else {
+      return (
+        <RkText rkType="header5 primary right">{ids.length} Clothes From Wardrobe</RkText>
+      );
+    }
+  }
+
 
   render() {
     return (
@@ -357,7 +400,7 @@ class AddStyleScreen extends Component {
            style={[styles.dContainer, styles.drow]}
            onPress={this._openWardrobe}>
               <RkText rkType="header5">Tagged Clothes</RkText>
-              <RkText rkType="header5 primary right">From Wardrobe</RkText>
+              {this._renderTaggedClothes()}
           </TouchableOpacity>
           <View style={styles.contextSeperator}/>
           <TouchableOpacity
@@ -383,7 +426,7 @@ class AddStyleScreen extends Component {
               style={styles.switch}
               value={this.state.onlyMe}
               name="Push"
-              onValueChange={(onlyMe) => this.setState({onlyMe})}/>
+              onValueChange={() => this._setOnlyMe()}/>
           </View>
           <View>
             {this._renderModal()}
@@ -392,6 +435,8 @@ class AddStyleScreen extends Component {
             <CategoryModal
               isCategoryVisible={this.state.isCategoryVisible}
               hideModal={this._hideCategoryModal}
+              taggedCategories={this.state.taggedCategories}
+              categoryList={this.state.categoryList}
               />
           </View>
           <View>
@@ -402,29 +447,6 @@ class AddStyleScreen extends Component {
     );
   }
 }
-
-// <View>
-//   <View><Image /></View>
-//   <RkTextInput />
-// </View>
-// <RkText>Clothes in this outfit</RkText>
-// <List></List>
-// <RkText>DETAIL</RkText>
-// <CheckBox
-//   style={{flex: 1, padding: 10}}
-//   onClick={(myInfo)=>this.setState({myInfo})}
-//   isChecked={this.state.myInfo}
-//   leftText={'User Info'}
-// />
-//
-// <RkText>Gender</RkText><RkTextInput />
-// <RkText>Location</RkText> <RkTextInput />
-// <RkText>Only Me </RkText>
-// <RkSwitch
-//   style={styles.switch}
-//   value={this.state.onlyMe}
-//   name="Push"/>
-// {this._renderModal}
 
 let styles = RkStyleSheet.create(theme => ({
   titleRow: {
@@ -580,4 +602,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-export default AddStyleScreen;
+function mapStateToProps({auth: {token, hType}, category: {list}}) {
+  return { token, hType, list }
+}
+
+export default connect(mapStateToProps, actions)(AddStyleScreen);

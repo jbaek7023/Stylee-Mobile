@@ -10,9 +10,20 @@ import {FontAwesome} from '../../assets/icons';
 
 class CategoryModal extends Component {
 
+  renderItem = ({item}) => {
+    return (
+      <TouchableOpacity style={styles.itemStyle}>
+        <CheckBox style={styles.checkboxStyle} checked={true} color="black"/>
+        <RkText rkType="primary1" style={styles.categoryText}>Hello</RkText>
+        <RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText>
+      </TouchableOpacity>
+    );
+  }
+
+  _keyExtractor = (item, index) => item.id;
+
   render() {
     let {isCategoryVisible} = this.props;
-
     return (
       <Modal
         isVisible={isCategoryVisible}
@@ -23,19 +34,12 @@ class CategoryModal extends Component {
           </View>
           <ScrollView style={styles.scrollViewStyle}>
             <FlatList
-
-
+              horizontal
+              data={this.props.categoryList}
+              renderItem={this.renderItem}
+              keyExtractor={this._keyExtractor}
+              extraData={this.props.taggedCategories}
             />
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.all}</RkText></TouchableOpacity>
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.all}</RkText></TouchableOpacity>
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.all}</RkText></TouchableOpacity>
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
-            <TouchableOpacity style={styles.itemStyle}><CheckBox style={styles.checkboxStyle} checked={true} color="black"/><RkText rkType="primary1" style={styles.categoryText}>Hello</RkText><RkText style={styles.iconStyle} rkType='awesome large'>{FontAwesome.onlyMe}</RkText></TouchableOpacity>
           </ScrollView>
           <View style={styles.categoryAdder}>
             <RkText rkType="header4"> + Create New Category</RkText>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import FABs from '../../components/common/FABs';
-import { Tabs, Tab, TabHeading } from 'native-base';
+import { Tabs, Tab, TabHeading, ScrollableTab } from 'native-base';
 
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
@@ -64,49 +64,50 @@ class WardrobeWrappingScreen extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Tabs initialPage={0}
-          tabBarUnderlineStyle={styles.tabBarUnderlineStyle}>
-          <Tab
-            heading="Top"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
-            activeTextStyle={styles.activeTextStyle}
-            textStyle={styles.textStyle}>
-            <TopScreen clothes={this.props.tops} navigation={this.props.navigation}/>
-          </Tab>
-          <Tab
-            heading="Outerwear"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
-            activeTextStyle={styles.activeTextStyle}
-            textStyle={styles.textStyle}>
-            <OutwearScreen clothes={this.props.outwears} navigation={this.props.navigation}/>
-          </Tab>
-          <Tab
-            heading="Bottom"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
-            activeTextStyle={styles.activeTextStyle}
-            textStyle={styles.textStyle}>
-           <BottomScreen clothes={this.props.bottoms} navigation={this.props.navigation}/>
-          </Tab>
-          <Tab
-            heading="Shoes"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
-            activeTextStyle={styles.activeTextStyle}
-            textStyle={styles.textStyle}>
-            <ShoeScreen clothes={this.props.shoes} navigation={this.props.navigation}/>
-          </Tab>
-          <Tab
-            heading="Others"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
-            activeTextStyle={styles.activeTextStyle}
-            textStyle={styles.textStyle}>
-            <EtcScreen clothes={this.props.etcs} navigation={this.props.navigation}/>
-          </Tab>
-        </Tabs>
+          <Tabs initialPage={0}
+            tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+            renderTabBar={()=> <ScrollableTab style={{height:40}}/>}>
+            <Tab
+              heading="Top"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+              <TopScreen clothes={this.props.tops} navigation={this.props.navigation}/>
+            </Tab>
+            <Tab
+              heading="Outerwear"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+              <OutwearScreen clothes={this.props.outwears} navigation={this.props.navigation}/>
+            </Tab>
+            <Tab
+              heading="Bottom"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+             <BottomScreen clothes={this.props.bottoms} navigation={this.props.navigation}/>
+            </Tab>
+            <Tab
+              heading="Shoes"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+              <ShoeScreen clothes={this.props.shoes} navigation={this.props.navigation}/>
+            </Tab>
+            <Tab
+              heading="Others"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+              <EtcScreen clothes={this.props.etcs} navigation={this.props.navigation}/>
+            </Tab>
+          </Tabs>
         {this._renderModal()}
       </View>
     )
@@ -117,7 +118,6 @@ let styles = RkStyleSheet.create(theme => ({
   tabStyle : {
     backgroundColor: 'white',
     justifyContent: 'center',
-    width: 120,
     height: 40
   },
   activeTabStyle: {
@@ -126,11 +126,11 @@ let styles = RkStyleSheet.create(theme => ({
   },
   textStyle: {
     color: "#6d6d6d",
-    fontSize: 12
+    fontSize: 14
   },
   activeTextStyle: {
     color: theme.colors.navbar,
-    fontSize: 12
+    fontSize: 14
   },
   tabBarUnderlineStyle: {
     backgroundColor: theme.colors.navbar,

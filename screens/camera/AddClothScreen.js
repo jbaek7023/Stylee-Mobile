@@ -27,7 +27,7 @@ import { NavigationActions } from 'react-navigation'
 import * as actions from '../../actions';
 
 class AddClothScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = () => ({
     gesturesEnabled: false,
     tabBarVisible: false,
     header: null
@@ -58,12 +58,6 @@ class AddClothScreen extends Component {
     link: '',
     base64: undefined,
     content: ''
-  }
-
-  componentWillMount() {
-    let {image, text, bigType, clothType, selectedSeasonIds,
-      gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-      brand, location, link, inWardrobe, onlyMe } = this.state;
   }
 
   _showModal = () => this.setState({ isModalVisible: true });
@@ -579,7 +573,7 @@ class AddClothScreen extends Component {
                 style={styles.switch}
                 value={this.state.onlyMe}
                 name="Push"
-                onValueChange={(toValue) => {
+                onValueChange={() => {
                   this._setOnlyMe()
                 }}
                 />

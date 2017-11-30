@@ -5,3 +5,4 @@ export * from './outfit_actions';
 export * from './cloth_actions';
 export * from './user_actions';
 export * from './comment_actions';
+export * from './category_actions';

@@ -232,9 +232,7 @@ class OutfitDetail extends Component {
   }
 }
 
-function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail}}) {
-  return { token, hType, outfitDetail }
-}
+
 
 let styles = RkStyleSheet.create(theme => ({
   root: {
@@ -338,5 +336,9 @@ let styles = RkStyleSheet.create(theme => ({
     justifyContent: 'center',
   },
 }));
+
+function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail}}) {
+  return { token, hType, outfitDetail }
+}
 
 export default connect(mapStateToProps, actions)(OutfitDetail);
