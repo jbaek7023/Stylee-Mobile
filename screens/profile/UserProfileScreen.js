@@ -22,6 +22,10 @@ class UserProfileScreen extends Component {
     header: null
   })
 
+  state = {
+    grid: true
+  }
+
   componentWillMount() {
     const { token, hType } = this.props;
     this.props.fetchMyProfile(token, hType, this.props.navigation.state.params.userPk);
@@ -76,7 +80,32 @@ class UserProfileScreen extends Component {
     );
   }
 
+
+  _renderHeader = (username) => {
+    return (
+      <View style={styles.headerLayout}>
+        <View rkCardHeader style={styles.left}>
+          <RkButton
+            rkType='clear'
+            style={styles.menu}
+            onPress={() => {
+            this.props.navigation.goBack()
+          }}>
+            <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+          </RkButton>
+          <View style={{justifyContent: 'center'}}>
+            <RkText rkType='header3'></RkText>
+          </View>
+        </View>
+        <View style={styles.right}>
+          <RkText rkType='header3' style={{color: 'blue'}}>Follow</RkText>
+        </View>
+      </View>
+    );
+  }
+
   _renderItem = ({item}) => {
+    console.log(item);
     return (
       <RkCard rkType='article'>
           {this._renderPostHeader(item)}
@@ -110,29 +139,60 @@ class UserProfileScreen extends Component {
     );
   }
 
-  _renderHeader = (username) => {
+
+  _renderGridItem = ({item}) => {
+    console.log(item);
     return (
-      <View style={styles.headerLayout}>
-        <View rkCardHeader style={styles.left}>
-          <RkButton
-            rkType='clear'
-            style={styles.menu}
-            onPress={() => {
-            this.props.navigation.goBack()
-          }}>
-            <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
-          </RkButton>
-          <View style={{justifyContent: 'center'}}>
-            <RkText rkType='header3'>{username}</RkText>
-          </View>
-        </View>
-        <View style={styles.right}>
-          <RkText rkType='heade3' style={{color: 'blue'}}>Follow</RkText>
-        </View>
-      </View>
+      <TouchableHighlight
+        style={styles.gridOutfitImage}
+        onPress={()=>{this._handleImagePress(item.id)}}>
+        <Image
+          style={styles.gridOutfitImage}
+          resizeMode="cover"
+          source={{uri: item.outfit_img}}/>
+      </TouchableHighlight>
     );
   }
 
+  _renderFlatList = (outfits) => {
+    return (
+      <FlatList
+        data={outfits}
+        renderItem={(this.state.grid) ? this._renderGridItem : this._renderItem }
+        keyExtractor={this._keyExtractor}
+        numColumns={(this.state.grid) ? 3 : 1}
+        key={(this.state.grid) ? 1 : 1}
+      />
+    );
+
+    // key={(this.state.grid) ? 1 : 0}
+  }
+
+  _renderSelection1 = () => {
+    if(this.state.grid) {
+      return (
+        <Ionicons name="ios-apps" color='#6F3AB1' size={30}/>
+      );
+    } else {
+      return (
+        <Ionicons name="ios-apps" color='grey' size={30}/>
+      );
+    }
+
+  }
+
+  _renderSelection2 = () => {
+    if(this.state.grid) {
+      return (
+        <Ionicons name="md-list" color='grey' size={30}/>
+      );
+    } else {
+      return (
+        <Ionicons name="md-list" color='#6F3AB1' size={30}/>
+      );
+    }
+
+  }
 
   _renderProfile = (profile) => {
     return (
@@ -141,7 +201,7 @@ class UserProfileScreen extends Component {
           {this._renderHeader(profile.username)}
         </View>
         <ScrollView style={styles.root}>
-          <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 20, marginRight: 20, marginTop: 20, marginBottom: 5}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 20, marginRight: 20, marginTop: 30, marginBottom: 5}}>
             <View style={{justifyContent: 'center', alignItems: 'center', width:90, height:90}}>
               <Avatar img={{uri:profile.image}} style={styles.mainAvatar}rkType='big'/>
             </View>
@@ -161,20 +221,28 @@ class UserProfileScreen extends Component {
           <View style={styles.styleSeparator}>
             <RkText rkType="primary2">{profile.outfit_count} Styles</RkText>
             <View style={{flexDirection: 'row', marginTop: -5}}>
-              <TouchableHighlight style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35}}>
-                <Ionicons name="ios-apps" color='#6F3AB1' size={30}/>
+              <TouchableHighlight
+                onPress={()=>{this.setState({grid:true})
+                  console.log(this.state.grid);
+                }}
+                style={{
+                  justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35
+                }}>
+                {this._renderSelection1()}
+
+
               </TouchableHighlight>
-              <TouchableHighlight style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35}}>
-                <Ionicons name="md-list" color='grey' size={30}/>
+              <TouchableHighlight
+                onPress={()=>{this.setState({grid:false})}}
+                style={{
+                  justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35
+                }}>
+                {this._renderSelection2()}
+
               </TouchableHighlight>
             </View>
           </View>
-          <FlatList
-            data={profile.outfits}
-            renderItem={this._renderItem}
-            keyExtractor={this._keyExtractor}
-            numColumns={1}
-          />
+          {this._renderFlatList(profile.outfits)}
         </ScrollView>
       </View>
     );
@@ -304,6 +372,12 @@ let styles = RkStyleSheet.create(theme => ({
   outfitImage: {
     width: width(100),
     height: width(100)
+  },
+  gridOutfitImage: {
+    width:width(33),
+    height:width(33),
+    borderWidth:.5,
+    borderColor:'#fff'
   },
   //header
   menu: {
