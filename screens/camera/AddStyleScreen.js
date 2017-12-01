@@ -131,26 +131,12 @@ class AddStyleScreen extends Component {
 
   _renderModal = () => {
     return (
-      <Modal
-        isVisible={this.state.isModalVisible}
-        onBackdropPress = {() => this._hideModal()}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalTitleTextContainer}>
-            <Text style={styles.modalTitleText}>Hello World</Text>
-          </View>
-          <View style={styles.modalContentTextContainer}>
-            <Text style={styles.modalContentText}></Text>
-          </View>
-          <View style={styles.modalButtonContainer}>
-            <Button transparent onPress={this._handleCameraPress}>
-              <Text style={[styles.modalText, styles.black]}>Camera</Text>
-            </Button>
-            <Button transparent onPress={this._handleAlbumPress}>
-              <Text style={styles.modalText}>Open Album</Text>
-            </Button>
-          </View>
-        </View>
-      </Modal>
+      <CameraImageSelectModal
+        isModalVisible={this.state.isModalVisible}
+        hideModal={this._hideModal}
+        handleCameraPress={this._handleCameraPress}
+        handleAlbumPress={this._handleAlbumPress}
+      />
     )
   }
 
@@ -178,19 +164,22 @@ class AddStyleScreen extends Component {
     let {image} = this.state;
     if(!_.isNil(image)) {
       return (
-        <Image
-          source={{uri: image}}
-          style={styles.headImageStyle}
-          resizeMode="cover"
-        />
+
+          <Image
+            source={{uri: image}}
+            style={styles.headValidStyle}
+            resizeMode="cover"
+          />
       );
     } else {
       return (
-        <Image
-          source={require('../../assets/images/robot-dev.png')}
-          resizeMode="cover"
-          style={styles.headImageStyle}
-        />
+        <View style={{padding: 15}}>
+          <Image
+            source={require('../../assets/images/add_icon.png')}
+            resizeMode="cover"
+            style={styles.headImageStyle}
+          />
+        </View>
       );
     }
   }
@@ -509,8 +498,12 @@ let styles = RkStyleSheet.create(theme => ({
     marginRight: 10
   },
   headImageStyle: {
+    width:40,
+    height: 40,
+  },
+  headValidStyle: {
     width:70,
-    height: 70
+    height: 70,
   },
   rightheadContainer: {
     alignItems: 'stretch',
@@ -533,11 +526,34 @@ let styles = RkStyleSheet.create(theme => ({
     height: 0.5
   },
   modalContainer: {
-    justifyContent: 'center',
+    flexDirection: 'row',
     backgroundColor: 'white',
     width: width(90),
-    height: height(30),
-    padding: 16
+    height: width(45),
+  },
+  modalRow: {
+    width: width(45),
+    height: width(50),
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 10,
+  },
+  subMargin: {
+    marginTop: 5,
+  },
+  separator: {
+    backgroundColor: theme.colors.border.base,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    flex: 0,
+    width: 1,
+    height: width(40),
+    backgroundColor: '#DCDCDC'
+  },
+  thumbImageStyle: {
+    paddingBottom: 5,
+    width: width(25),
+    height: width(25),
   },
   modalTitleTextContainer: {
     flexDirection: 'row',

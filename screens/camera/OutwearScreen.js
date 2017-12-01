@@ -3,33 +3,30 @@ import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFe
 import { connect } from 'react-redux';
 import { width, height, totalSize } from 'react-native-dimension';
 import * as actions from '../../actions';
-
+import { CheckBox } from 'native-base';
 class OutwearScreen extends Component {
   _keyExtractor = (item, index) => item.id;
 
-  _handleImagePress = (id) => {
-    // this.props.navigation.navigate('ClothDetail', {id})
-  }
-
   _renderItem = ({item}) => {
+    let isSelected = _.includes(this.props.selectedClothesIds, item.id);
     return (
       <TouchableWithoutFeedback
-        onPress={() => this._handleImagePress(item.id)}>
-        <Image
-          key={item.id}
-          source={{uri: item.cloth_image}}
-          style={styles.rowImage}
-          resizeMode="cover"
-        />
+        onPress={() => this.props.handleImagePress(item.id)}>
+        <View style={styles.rowImage}>
+          <Image
+            key={item.id}
+            source={{uri: item.cloth_image}}
+            style={styles.rowImage}
+            resizeMode="cover"
+          />
+          <View style={{height:32, width:32, position:'absolute', top:0, right:0, marginTop:4, paddingRight:12}}>
+            <CheckBox checked={isSelected} color="#f64e59" onPress={() => this.props.handleImagePress(item.id)}/>
+          </View>
+        </View>
       </TouchableWithoutFeedback>
     );
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
-
-  // ToDo: AppLoading
   render() {
     if(this.props.clothes && this.props.clothes.length==0) {
       return (
@@ -45,6 +42,7 @@ class OutwearScreen extends Component {
             data={this.props.clothes}
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
+            extraData={this.props.selectedClothesIds}
             numColumns={3}
           />
         </ScrollView>

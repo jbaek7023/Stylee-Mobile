@@ -27,16 +27,25 @@ class OutfitDetail extends Component {
 
   state = {
     isCategoryVisible: false,
+    isFollowing: false,
   }
-
-  hideModal = () => this.setState({isCategoryVisible: false})
-  showModal = () => this.setState({isCategoryVisible: true})
 
   componentWillMount() {
     const { id } = this.props.navigation.state.params;
     const { token, hType} = this.props;
     this.props.fetchOutfitDetail(token, hType, id);
   }
+
+  componentWillReceiveProps(nextProps) {
+    let isFollowing = nextProps.outfitDetail.is_following;
+    if(this.state.isFollowing!=isFollowing) {
+      this.setState({isFollowing});
+    }
+  }
+
+  hideModal = () => this.setState({isCategoryVisible: false})
+  showModal = () => this.setState({isCategoryVisible: true})
+
 
   _renderComments = (comments) => {
     let result = comments.map(( obj, index ) => {
@@ -99,6 +108,36 @@ class OutfitDetail extends Component {
 
   _keyExtractor = (item, index) => item.id;
 
+  _renderFollow = (isOwner, isFollowing, userPk) => {
+    let { token, hType } = this.props;
+    if(!isOwner) {
+      // only if this is not owner
+      if(this.state.isFollowing) {
+        return (
+          <TouchableOpacity
+            onPress={()=>{
+              this.props.unfollow(token, hType, userPk);
+              this.setState({isFollowing:false});
+            }}>
+            <RkText rkType='header3' style={{color: 'black'}}>Following</RkText>
+          </TouchableOpacity>
+        );
+      } else {
+        return (
+          <TouchableOpacity
+            onPress={()=>{
+              this.props.follow(token, hType, userPk);
+              this.setState({isFollowing:true});
+            }}>
+            <RkText rkType='header3' style={{color: 'blue'}}>Follow</RkText>
+          </TouchableOpacity>
+        )
+      }
+    } else {
+      return <View />
+    }
+  }
+
   _renderHeader = (detail) => {
     return (
       <View style={styles.headerLayout}>
@@ -124,7 +163,7 @@ class OutfitDetail extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.right}>
-          <RkText><RkText rkType='header5' style={{color: 'blue'}}>Follow</RkText></RkText>
+          {this._renderFollow(detail.is_owner, detail.is_following, detail.user.id)}
         </View>
       </View>
     );

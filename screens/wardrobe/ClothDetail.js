@@ -24,10 +24,21 @@ class ClothDetail extends Component {
     header: null
   });
 
+  state = {
+    isFollowing: false,
+  }
+
   componentWillMount() {
     const { id } = this.props.navigation.state.params;
     const { token, hType} = this.props;
     this.props.fetchClothDetail(token, hType, id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let isFollowing = nextProps.clothDetail.is_following;
+    if(this.state.isFollowing!=isFollowing) {
+      this.setState({isFollowing});
+    }
   }
 
   _renderComments = (comments) => {
@@ -94,6 +105,34 @@ class ClothDetail extends Component {
     );
   }
 
+  _renderFollow = (isOwner, isFollowing, userPk) => {
+    let { token, hType } = this.props;
+    if(!isOwner) {
+      if(this.state.isFollowing) {
+        return (
+          <TouchableOpacity
+            onPress={()=>{
+              this.props.unfollow(token, hType, userPk);
+              this.setState({isFollowing:false});
+            }}>
+            <RkText rkType='header3' style={{color: 'black'}}>Following</RkText>
+          </TouchableOpacity>
+        );
+      } else {
+        return (
+          <TouchableOpacity
+            onPress={()=>{
+              this.props.follow(token, hType, this.props.navigation.state.params.userPk);
+              this.setState({isFollowing:true});
+            }}>
+            <RkText rkType='header3' style={{color: 'blue'}}>Follow</RkText>
+          </TouchableOpacity>
+        )
+      }
+    }
+    return <View />
+  }
+
   _renderHeader = (detail) => {
     return (
       <View style={styles.header}>
@@ -120,7 +159,7 @@ class ClothDetail extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.right}>
-            <RkText><RkText rkType='header5' style={{color: 'blue'}}>Follow</RkText></RkText>
+            {this._renderFollow(detail.is_owner, detail.is_following, detail.user.id)}
           </View>
         </View>
       </View>

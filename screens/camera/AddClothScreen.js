@@ -151,26 +151,12 @@ class AddClothScreen extends Component {
   // Camera or Roll mode Modal
   _renderModal = () => {
     return (
-      <Modal
-        isVisible={this.state.isModalVisible}
-        onBackdropPress = {() => this._hideModal()}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalTitleTextContainer}>
-            <Text style={styles.modalTitleText}>Hello World</Text>
-          </View>
-          <View style={styles.modalContentTextContainer}>
-            <Text style={styles.modalContentText}></Text>
-          </View>
-          <View style={styles.modalButtonContainer}>
-            <Button transparent onPress={this._handleCameraPress}>
-              <Text style={[styles.modalText, styles.black]}>Camera</Text>
-            </Button>
-            <Button transparent onPress={this._handleAlbumPress}>
-              <Text style={styles.modalText}>Open Album</Text>
-            </Button>
-          </View>
-        </View>
-      </Modal>
+      <CameraImageSelectModal
+        isModalVisible={this.state.isModalVisible}
+        hideModal={this._hideModal}
+        handleCameraPress={this._handleCameraPress}
+        handleAlbumPress={this._handleAlbumPress}
+      />
     )
   }
 
@@ -365,17 +351,19 @@ class AddClothScreen extends Component {
       return (
         <Image
           source={{uri: image}}
-          style={styles.headImageStyle}
+          style={styles.headValidStyle}
           resizeMode="cover"
         />
       );
     } else {
       return (
-        <Image
-          source={require('../../assets/images/robot-dev.png')}
-          resizeMode="cover"
-          style={styles.headImageStyle}
-        />
+        <View style={{padding: 15}}>
+          <Image
+            source={require('../../assets/images/add_icon.png')}
+            resizeMode="cover"
+            style={styles.headImageStyle}
+          />
+        </View>
       );
     }
   }
@@ -653,9 +641,13 @@ let styles = RkStyleSheet.create(theme => ({
     fontSize: 15,
     marginRight: 10,
   },
-  headImageStyle: {
-    width:70,
+  headValidStyle: {
+    width: 70,
     height: 70
+  },
+  headImageStyle: {
+    width:45,
+    height: 45
   },
   rightheadContainer: {
     alignItems: 'stretch',

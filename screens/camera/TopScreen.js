@@ -27,10 +27,6 @@ class TopScreen extends Component {
     );
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
-
   render() {
     if(this.props.clothes && this.props.clothes.length==0) {
       return (

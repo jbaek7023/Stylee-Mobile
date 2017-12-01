@@ -37,6 +37,7 @@ export const CATEGORY_DETAIL_LOAD_SUCCESS = 'category_detail_load_success';
 export const CATEGORY_DETAIL_LOAD_FAIL = 'category_detail_load_fail';
 export const STAR_OUTFIT_LOAD_SUCCESS = 'star_outfit_load_success';
 export const STAR_OUTFIT_LOAD_FAIL = 'star_outfit_load_fail';
+
 // POST Create style
 export const CREATE_STYLE_SUCCESS = 'create_style_success';
 export const CREATE_STYLE_FAIL = 'create_style_fail';
@@ -50,9 +51,13 @@ export const C_DETAIL_LOAD_FAIL = 'clothes_detail_fail';
 export const CREATE_CLOTH_SUCCESS = 'create_cloth_success';
 export const CREATE_CLOTH_FAIL = 'create_cloth_fail';
 
-// User Profile
+// User Profile, Follow
 export const USER_PAGE_FETCH_SUCCESS = 'user_page_fetch_success';
 export const USER_PAGE_FETCH_FAIL = 'user_page_fetch_fail';
+export const USER_FOLLOW_SUCCESS = 'user_follow_success';
+export const USER_FOLLOW_FAIL = 'user_follow_fail';
+export const USER_UNFOLLOW_SUCCESS = 'user_unfollow_success';
+export const USER_UNFOLLOW_FAIL = 'user_unfollow_fail';
 
 // Comments
 export const FETCH_COMMENTS_SUCCESS = 'fetch_comments_success';

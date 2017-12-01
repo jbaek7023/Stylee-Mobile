@@ -24,12 +24,20 @@ class UserProfileScreen extends Component {
 
   state = {
     grid: true,
-    scrollY: 0
+    scrollY: 0,
+    isFollowing: false,
   }
 
   componentWillMount() {
     const { token, hType } = this.props;
     this.props.fetchMyProfile(token, hType, this.props.navigation.state.params.userPk);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let isFollowing = nextProps.cUserProfile.is_following;
+    if(this.state.isFollowing!=isFollowing) {
+      this.setState({isFollowing});
+    }
   }
 
   _renderAvatar = (uri) => {
@@ -58,6 +66,7 @@ class UserProfileScreen extends Component {
 
   _handleCommentPress = () => {
     const { id } = this.props.navigation.state.params;
+    // ???
     this.props.navigation.navigate('Comments', {id, postType: 1});
   }
 
@@ -99,7 +108,35 @@ class UserProfileScreen extends Component {
     }
   }
 
-  _renderHeader = (username) => {
+  _renderOwner = (isOwner, isFollowing) => {
+    let { token, hType } = this.props;
+    if(!isOwner) {
+      if(this.state.isFollowing) {
+        return (
+          <TouchableOpacity
+            onPress={()=>{
+              this.props.unfollow(token, hType, this.props.navigation.state.params.userPk);
+              this.setState({isFollowing:false});
+            }}>
+            <RkText rkType='header3' style={{color: 'black'}}>Following</RkText>
+          </TouchableOpacity>
+        );
+      } else {
+        return (
+          <TouchableOpacity
+            onPress={()=>{
+              this.props.follow(token, hType, this.props.navigation.state.params.userPk);
+              this.setState({isFollowing:true});
+            }}>
+            <RkText rkType='header3' style={{color: 'blue'}}>Follow</RkText>
+          </TouchableOpacity>
+        )
+      }
+    }
+    return <View />
+  }
+
+  _renderHeader = (username, isOwner, isFollowing) => {
     return (
       <View style={styles.headerLayout}>
         <View rkCardHeader style={styles.left}>
@@ -113,11 +150,10 @@ class UserProfileScreen extends Component {
           </RkButton>
           <View style={{justifyContent: 'center'}}>
             {this._renderUsername(username)}
-
           </View>
         </View>
         <View style={styles.right}>
-          <RkText rkType='header3' style={{color: 'blue'}}>Follow</RkText>
+          {this._renderOwner(isOwner, isFollowing)}
         </View>
       </View>
     );
@@ -215,12 +251,11 @@ class UserProfileScreen extends Component {
     return (
       <View style={{flex:1}}>
         <View style={styles.header}>
-          {this._renderHeader(profile.username)}
+          {this._renderHeader(profile.username, profile.is_owner, profile.is_following)}
         </View>
         <ScrollView
           ref={ref => this.scroll = ref}
           onScroll={(event)=>{
-            console.log(event.nativeEvent.contentOffset.y);
             this.setState({scrollY: event.nativeEvent.contentOffset.y})}}
           style={styles.root}>
           <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 20, marginRight: 20, marginTop: 30, marginBottom: 5}}>

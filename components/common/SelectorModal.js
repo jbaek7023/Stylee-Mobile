@@ -72,7 +72,7 @@ class SelectorModal extends Component {
       <TouchableOpacity
         style={styles.itemStyle}
         onPress={() => this.props.selectAction(value, id)}>
-        <RkText>{value}</RkText>
+        <RkText rkType="primary2">{value}</RkText>
         { this._renderCheck(id, value) }
 
       </TouchableOpacity>
@@ -126,7 +126,7 @@ class SelectorModal extends Component {
           style={styles.itemStyle}
           onPress={() => {this._handleMultipleItemPress(id)}}>
 
-          <RkText>{value}</RkText>
+          <RkText rkType="primary3">{value}</RkText>
           { this._renderCheck(id, value) }
 
         </TouchableOpacity>
@@ -138,7 +138,7 @@ class SelectorModal extends Component {
          onPress={() => this._handleMultipleItemPress(id)}>
 
          <View style={colorCircleStyle(value)} />
-         <RkText>{name}</RkText>
+         <RkText rkType="primary3">{name}</RkText>
          { this._renderCheck(id, value) }
 
        </TouchableOpacity>
@@ -155,7 +155,9 @@ class SelectorModal extends Component {
         <Modal
           isVisible={isSelectorVisible}
           onBackdropPress = {() => this.props.hideSelector()}
-          animationInTiming={1}>
+          animationInTiming={1}
+          style={styles.modalStyle}
+          >
           <View style={styles.modalContainer}>
             <FlatList
               style={styles.root}
@@ -171,7 +173,8 @@ class SelectorModal extends Component {
         <Modal
           isVisible={isSelectorVisible}
           onBackdropPress = {() => this.props.hideSelector()}
-          animationInTiming={1}>
+          animationInTiming={1}
+          style={styles.modalStyle}>
           <View style={styles.modalContainer}>
             <FlatList
               style={styles.root}
@@ -200,9 +203,13 @@ const styles = RkStyleSheet.create(theme => ({
   root: {
     backgroundColor: theme.colors.screen.base
   },
+  modalStyle: {
+    borderRadius: 10,
+  },
   modalContainer: {
     justifyContent: 'center',
     backgroundColor: 'white',
+
   },
   seperator: {
     backgroundColor: 'black',

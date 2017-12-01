@@ -39,8 +39,6 @@ class OpenWardrobe extends Component {
   }
 
   _handleImagePress = (id) => {
-    console.log('hey!');
-    console.log(id);
     // add image to selected press
     // add id to the array.
     let ids = this.state.selectedClothesIds;
@@ -109,7 +107,6 @@ class OpenWardrobe extends Component {
             textStyle={styles.textStyle}>
             <TopScreen
               clothes={this.props.tops}
-              navigation={this.props.navigation}
               selectedClothesIds={this.state.selectedClothesIds}
               handleImagePress={this._handleImagePress}
               />
@@ -120,7 +117,11 @@ class OpenWardrobe extends Component {
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
-            <OutwearScreen clothes={this.props.outwears} navigation={this.props.navigation}/>
+            <OutwearScreen
+              clothes={this.props.outwears}
+              selectedClothesIds={this.state.selectedClothesIds}
+              handleImagePress={this._handleImagePress}
+            />
           </Tab>
           <Tab
             heading="Bottom"
@@ -128,7 +129,11 @@ class OpenWardrobe extends Component {
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
-           <BottomScreen clothes={this.props.bottoms} navigation={this.props.navigation}/>
+           <BottomScreen
+            clothes={this.props.bottoms}
+            selectedClothesIds={this.state.selectedClothesIds}
+            handleImagePress={this._handleImagePress}
+            />
           </Tab>
           <Tab
             heading="Shoes"
@@ -136,7 +141,11 @@ class OpenWardrobe extends Component {
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
-            <ShoeScreen clothes={this.props.shoes} navigation={this.props.navigation}/>
+            <ShoeScreen
+              clothes={this.props.shoes}
+              selectedClothesIds={this.state.selectedClothesIds}
+              handleImagePress={this._handleImagePress}
+            />
           </Tab>
           <Tab
             heading="ETC"
@@ -144,7 +153,11 @@ class OpenWardrobe extends Component {
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
-            <EtcScreen clothes={this.props.etcs} navigation={this.props.navigation}/>
+            <EtcScreen
+              clothes={this.props.etcs}
+              selectedClothesIds={this.state.selectedClothesIds}
+              handleImagePress={this._handleImagePress}
+            />
           </Tab>
         </Tabs>
         <View style={styles.footer}>

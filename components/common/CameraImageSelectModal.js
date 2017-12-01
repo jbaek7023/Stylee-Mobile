@@ -1,33 +1,12 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Image } from 'react-native';
 import Modal from 'react-native-modal';
 import { Text, Button } from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
 import { ImagePicker } from 'expo';
+import { RkText } from 'react-native-ui-kitten';
 
 class CameraImageSelectModal extends Component {
-  state = {
-    image: undefined,
-  }
-
-  _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [3, 3],
-    });
-    console.log(result);
-    this.props.hideModal();
-
-    if (!result.cancelled) {
-      this.setState({ image: result.uri });
-    }
-  };
-
-  _handleAlbumPress = async () => {
-    this.props.hideModal();
-    this._pickImage();
-  }
-
   render() {
     let { isModalVisible } = this.props;
     return (
@@ -35,23 +14,25 @@ class CameraImageSelectModal extends Component {
         isVisible={isModalVisible}
         onBackdropPress = {() => this.props.hideModal()}>
         <View style={styles.modalContainer}>
-          <View style={styles.modalTitleTextContainer}>
-            <Text style={styles.modalTitleText}>Hello World</Text>
-          </View>
-          <View style={styles.modalContentTextContainer}>
-            <Text style={styles.modalContentText}></Text>
-          </View>
-          <View style={styles.modalButtonContainer}>
-            <Button transparent onPress={this._handleCameraPress}>
-              <Text style={[styles.modalText, styles.black]}>Camera</Text>
-            </Button>
-            <Button transparent onPress={this._handleAlbumPress}>
-              <Text style={styles.modalText}>Open Album</Text>
-            </Button>
-          </View>
+          <TouchableOpacity onPress={this.props.handleCameraPress} style={styles.modalRow}>
+            <Image
+              source={require('../../assets/images/camera_icon.png')}
+              resizeMode="cover"
+              style={styles.thumbImageStyle}
+            />
+            <RkText style={styles.subMargin} rkType="header3">Open Camera</RkText>
+          </TouchableOpacity>
+          <View style={styles.separator}/>
+          <TouchableOpacity onPress={this.props.handleAlbumPress} style={styles.modalRow}>
+            <Image
+              source={require('../../assets/images/album_image.png')}
+              resizeMode="cover"
+              style={styles.thumbImageStyle}
+            />
+            <RkText style={styles.subMargin} rkType="header3">Open Album</RkText>
+          </TouchableOpacity>
         </View>
       </Modal>
-
     );
   }
 };
@@ -60,42 +41,35 @@ class CameraImageSelectModal extends Component {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    justifyContent: 'center',
+    flexDirection: 'row',
     backgroundColor: 'white',
     width: width(90),
-    height: height(30),
-    padding: 16
+    height: width(45),
   },
-  modalTitleTextContainer: {
+  modalRow: {
+    width: width(45),
+    height: width(50),
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 10,
+  },
+  subMargin: {
+    marginTop: 5,
+  },
+  separator: {
+    backgroundColor: '#f2f2f2',
+    alignSelf: 'center',
     flexDirection: 'row',
-    flex:1
+    flex: 0,
+    width: 1,
+    height: width(40),
+    backgroundColor: '#DCDCDC'
   },
-  modalTitleText: {
-    fontSize: totalSize(3),
+  thumbImageStyle: {
+    paddingBottom: 5,
+    width: width(20),
+    height: width(20),
   },
-  modalContentTextContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    padding: 10
-  },
-  modalContentText: {
-    fontSize: totalSize(2),
-    flex: 1,
-    color: '#696969'
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    flex: 1,
-    overflow: 'hidden'
-  },
-  modalButtonText: {
-    fontSize: totalSize(2),
-    flex: 1
-  },
-  black: {
-    color: 'black'
-  }
 });
 
 export default CameraImageSelectModal;
