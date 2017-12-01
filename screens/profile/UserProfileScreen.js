@@ -23,7 +23,8 @@ class UserProfileScreen extends Component {
   })
 
   state = {
-    grid: true
+    grid: true,
+    scrollY: 0
   }
 
   componentWillMount() {
@@ -80,6 +81,23 @@ class UserProfileScreen extends Component {
     );
   }
 
+  _renderUsername = (username) => {
+    let show = (this.state.scrollY > 180) ? true : false;
+    if(show) {
+      return (
+        <TouchableOpacity
+          onPress={
+            () => {
+              this.scroll.scrollTo({y:0, animated:true});
+            }
+          }>
+          <RkText rkType='header3'>{username}</RkText>
+        </TouchableOpacity>
+      );
+    } else {
+      return <View />
+    }
+  }
 
   _renderHeader = (username) => {
     return (
@@ -94,7 +112,8 @@ class UserProfileScreen extends Component {
             <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
           </RkButton>
           <View style={{justifyContent: 'center'}}>
-            <RkText rkType='header3'></RkText>
+            {this._renderUsername(username)}
+
           </View>
         </View>
         <View style={styles.right}>
@@ -105,7 +124,6 @@ class UserProfileScreen extends Component {
   }
 
   _renderItem = ({item}) => {
-    console.log(item);
     return (
       <RkCard rkType='article'>
           {this._renderPostHeader(item)}
@@ -141,7 +159,6 @@ class UserProfileScreen extends Component {
 
 
   _renderGridItem = ({item}) => {
-    console.log(item);
     return (
       <TouchableHighlight
         style={styles.gridOutfitImage}
@@ -161,7 +178,7 @@ class UserProfileScreen extends Component {
         renderItem={(this.state.grid) ? this._renderGridItem : this._renderItem }
         keyExtractor={this._keyExtractor}
         numColumns={(this.state.grid) ? 3 : 1}
-        key={(this.state.grid) ? 1 : 1}
+        key={(this.state.grid) ? 1 : 0}
       />
     );
 
@@ -200,7 +217,12 @@ class UserProfileScreen extends Component {
         <View style={styles.header}>
           {this._renderHeader(profile.username)}
         </View>
-        <ScrollView style={styles.root}>
+        <ScrollView
+          ref={ref => this.scroll = ref}
+          onScroll={(event)=>{
+            console.log(event.nativeEvent.contentOffset.y);
+            this.setState({scrollY: event.nativeEvent.contentOffset.y})}}
+          style={styles.root}>
           <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 20, marginRight: 20, marginTop: 30, marginBottom: 5}}>
             <View style={{justifyContent: 'center', alignItems: 'center', width:90, height:90}}>
               <Avatar img={{uri:profile.image}} style={styles.mainAvatar}rkType='big'/>
@@ -214,8 +236,8 @@ class UserProfileScreen extends Component {
           <View style={styles.buttons}>
             <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.followed_count}</RkText><RkText rkType="secondary2 hintColor">Follower</RkText></RkButton>
             <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.following_count}</RkText><RkText rkType="secondary2 hintColor">Following</RkText></RkButton>
-            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">1</RkText><RkText rkType="secondary2 hintColor">Category</RkText></RkButton>
-            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">1</RkText><RkText rkType="secondary2 hintColor">Clothes</RkText></RkButton>
+            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.category_count}</RkText><RkText rkType="secondary2 hintColor">Category</RkText></RkButton>
+            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.clothes_count}</RkText><RkText rkType="secondary2 hintColor">Clothes</RkText></RkButton>
           </View>
 
           <View style={styles.styleSeparator}>
@@ -223,7 +245,6 @@ class UserProfileScreen extends Component {
             <View style={{flexDirection: 'row', marginTop: -5}}>
               <TouchableHighlight
                 onPress={()=>{this.setState({grid:true})
-                  console.log(this.state.grid);
                 }}
                 style={{
                   justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35
