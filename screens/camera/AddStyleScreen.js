@@ -334,7 +334,6 @@ class AddStyleScreen extends Component {
 
   _selectCategory = (id) => {
     let { taggedCategories } = this.state;
-    console.log(taggedCategories);
     if(_.includes(taggedCategories, id)) {
       let newTaggedCategories = _.filter(taggedCategories, (curObject) => {
           return curObject !== id;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, Text, ScrollView, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { TouchableHighlight, Image, View, Text, ScrollView, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import {
   RkText,
   RkButton, RkStyleSheet,
@@ -10,9 +10,10 @@ import { Avatar } from '../../components/Avatar';
 import { width, height, totalSize } from 'react-native-dimension';
 import _ from 'lodash';
 import * as actions from '../../actions';
-import { Button } from 'native-base';
+import { Button, Icon } from 'native-base';
 import TimeAgo from 'react-native-timeago';
 import { SocialBar } from '../../components/SocialBar';
+import { Ionicons } from '@expo/vector-icons';
 
 import {FontAwesome} from '../../assets/icons';
 class UserProfileScreen extends Component {
@@ -78,7 +79,6 @@ class UserProfileScreen extends Component {
   _renderItem = ({item}) => {
     return (
       <RkCard rkType='article'>
-        <View style={styles.profileSeperator} />
           {this._renderPostHeader(item)}
       	<Image
       		style={styles.outfitImage}
@@ -105,7 +105,7 @@ class UserProfileScreen extends Component {
                 rkType='secondary2 hintColor'>View All {item.comment_count.toString()} Comments</RkText>
           </View>
         </View>
-
+        <View style={styles.profileSeperator} />
       </RkCard>
     );
   }
@@ -127,7 +127,7 @@ class UserProfileScreen extends Component {
           </View>
         </View>
         <View style={styles.right}>
-          <RkText><RkText rkType='header5' style={{color: 'blue'}}></RkText></RkText>
+          <RkText rkType='heade3' style={{color: 'blue'}}>Follow</RkText>
         </View>
       </View>
     );
@@ -146,22 +146,19 @@ class UserProfileScreen extends Component {
               <Avatar img={{uri:profile.image}} rkType='big'/>
             </View>
             <View style={styles.specContainer}>
-              <View style={{flex:1, flexDirection:'row', justifyContent: 'space-around', alignItems: 'stretch'}}>
+              <View style={{flex:1, justifyContent: 'space-around', alignItems: 'flex-start'}}>
                 <View style={styles.section}>
-                  <RkText rkType='header4' style={styles.space}>{profile.outfit_count}</RkText>
-                  <RkText rkType='secondary2 hintColor'>Styles</RkText>
+                  <RkText rkType='header4' style={styles.space}>{profile.followed_count} Followers</RkText>
                 </View>
                 <View style={styles.section}>
-                  <RkText rkType='header4' style={styles.space}>{profile.followed_count}</RkText>
-                  <RkText rkType='secondary2 hintColor'>Followers</RkText>
+                  <RkText rkType='header4' style={styles.space}>{profile.following_count} Following</RkText>
                 </View>
                 <View style={styles.section}>
-                  <RkText rkType='header4' style={styles.space}>{profile.following_count}</RkText>
-                  <RkText rkType='secondary2 hintColor'>Following</RkText>
+                  <RkText rkType='header4' style={styles.space}>{profile.outfit_count} Category</RkText>
                 </View>
-              </View>
-              <View style={{flex:1, alignItems:'center'}}>
-                <Button block style={{height:30}}><Text style={{color:'white'}}>Follow</Text></Button>
+                <View style={styles.section}>
+                  <RkText rkType='header4' style={styles.space}>{profile.outfit_count} Clothes</RkText>
+                </View>
               </View>
             </View>
           </View>
@@ -169,12 +166,17 @@ class UserProfileScreen extends Component {
             <Text>{profile.title}</Text>
           </View>
 
-          <View style={styles.buttons}>
-            <RkButton style={styles.button} rkType='clear'><Text>Category</Text></RkButton>
-            <View style={styles.separator}/>
-            <RkButton style={styles.button} rkType='clear'><Text>Wardrobe</Text></RkButton>
-            <View style={styles.separator}/>
-            <RkButton style={styles.button} rkType='clear'><Text>About</Text></RkButton>
+
+          <View style={styles.styleSeparator}>
+            <RkText rkType="primary2">{profile.outfit_count} Styles</RkText>
+            <View style={{flexDirection: 'row', marginTop: -5}}>
+              <TouchableHighlight style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35}}>
+                <Ionicons name="ios-apps" color='#6F3AB1' size={30}/>
+              </TouchableHighlight>
+              <TouchableHighlight style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35}}>
+                <Ionicons name="md-list" color='grey' size={30}/>
+              </TouchableHighlight>
+            </View>
           </View>
           <FlatList
             data={profile.outfits}
@@ -232,11 +234,10 @@ let styles = RkStyleSheet.create(theme => ({
     borderColor: '#e3e3e3',
   },
   section: {
-    alignItems: 'center',
-    width: eachSpec,
+    // width: eachSpec,
   },
   space: {
-    marginBottom: 3,
+    // marginBottom: 3,
   },
   profileSeperator: {
     backgroundColor: '#D3D3D3',
@@ -250,6 +251,15 @@ let styles = RkStyleSheet.create(theme => ({
     width: 1,
     height: 42,
     backgroundColor: '#DCDCDC'
+  },
+  styleSeparator: {
+    backgroundColor: "#F0F0F0",
+    paddingLeft: 15,
+    paddingTop: 15,
+    paddingRight: 15,
+    paddingBottom: 7,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   buttons: {
     flexDirection: 'row',
