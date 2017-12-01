@@ -141,31 +141,22 @@ class UserProfileScreen extends Component {
           {this._renderHeader(profile.username)}
         </View>
         <ScrollView style={styles.root}>
-          <View style={{flexDirection: 'row', margin: 20}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 20, marginRight: 20, marginTop: 20, marginBottom: 5}}>
             <View style={{justifyContent: 'center', alignItems: 'center', width:90, height:90}}>
-              <Avatar img={{uri:profile.image}} rkType='big'/>
-            </View>
-            <View style={styles.specContainer}>
-              <View style={{flex:1, justifyContent: 'space-around', alignItems: 'flex-start'}}>
-                <View style={styles.section}>
-                  <RkText rkType='header4' style={styles.space}>{profile.followed_count} Followers</RkText>
-                </View>
-                <View style={styles.section}>
-                  <RkText rkType='header4' style={styles.space}>{profile.following_count} Following</RkText>
-                </View>
-                <View style={styles.section}>
-                  <RkText rkType='header4' style={styles.space}>{profile.outfit_count} Category</RkText>
-                </View>
-                <View style={styles.section}>
-                  <RkText rkType='header4' style={styles.space}>{profile.outfit_count} Clothes</RkText>
-                </View>
-              </View>
+              <Avatar img={{uri:profile.image}} style={styles.mainAvatar}rkType='big'/>
             </View>
           </View>
-          <View style={{marginLeft:20, marginRight:20, marginBottom:20}}>
-            <Text>{profile.title}</Text>
+          <View style={{marginLeft:20, marginRight:20, marginBottom:10, alignItems: 'center'}}>
+            <RkText rkType='header3' style={styles.space}>{profile.username}</RkText>
+            <RkText rkType='primary3' style={styles.space}>{profile.title}</RkText>
           </View>
 
+          <View style={styles.buttons}>
+            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.followed_count}</RkText><RkText rkType="secondary2 hintColor">Follower</RkText></RkButton>
+            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.following_count}</RkText><RkText rkType="secondary2 hintColor">Following</RkText></RkButton>
+            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">1</RkText><RkText rkType="secondary2 hintColor">Category</RkText></RkButton>
+            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">1</RkText><RkText rkType="secondary2 hintColor">Clothes</RkText></RkButton>
+          </View>
 
           <View style={styles.styleSeparator}>
             <RkText rkType="primary2">{profile.outfit_count} Styles</RkText>
@@ -209,9 +200,14 @@ function mapStateToProps({auth: {token, hType}, user: {cUserProfile}}) {
 }
 
 let specWidth = width(100)-150;
-let eachSpec = specWidth/3;
+let eachSpec = specWidth/4;
+let avatarLength = 90;
 
 let styles = RkStyleSheet.create(theme => ({
+  mainAvatar: {
+    width: avatarLength,
+    height: avatarLength
+  },
   root: {
     backgroundColor: theme.colors.screen.base
   },
@@ -237,23 +233,14 @@ let styles = RkStyleSheet.create(theme => ({
     // width: eachSpec,
   },
   space: {
-    // marginBottom: 3,
+
   },
   profileSeperator: {
     backgroundColor: '#D3D3D3',
     height: 10
   },
-  separator: {
-    backgroundColor: theme.colors.border.base,
-    alignSelf: 'center',
-    flexDirection: 'row',
-    flex: 0,
-    width: 1,
-    height: 42,
-    backgroundColor: '#DCDCDC'
-  },
   styleSeparator: {
-    backgroundColor: "#F0F0F0",
+    backgroundColor: "white",
     paddingLeft: 15,
     paddingTop: 15,
     paddingRight: 15,
@@ -263,16 +250,28 @@ let styles = RkStyleSheet.create(theme => ({
   },
   buttons: {
     flexDirection: 'row',
-    paddingVertical: 8,
     borderTopWidth: 1,
+    borderBottomWidth: 11,
     borderColor: '#DCDCDC',
-    borderBottomWidth: 1,
-    height: 40,
-    backgroundColor: '#F0F0F0'
+    paddingBottom: 10,
+    paddingTop: 10,
   },
   button: {
     flex: 1,
     alignSelf: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    backgroundColor: 'white',
+    height: 50
+  },
+  separator: {
+    backgroundColor: theme.colors.border.base,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    flex: 0,
+    width: 1,
+    height: 50,
+    backgroundColor: '#DCDCDC'
   },
   rowImage:{
     width:width(33),
