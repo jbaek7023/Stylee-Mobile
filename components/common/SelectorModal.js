@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
-import { Text, Button } from 'native-base';
+import { Text, Button, Radio } from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
 import { RkText, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import {FontAwesome} from '../../assets/icons';
 
 class SelectorModal extends Component {
   state = {
@@ -30,30 +31,30 @@ class SelectorModal extends Component {
 
     if(selectionType===1) {
       if(this.props.bigType===value) {
-        return (<RkText>Check</RkText>)
+        return (<Radio selected={true} />)
       }
     } else if(selectionType===2) {
       if(_.includes(selectedSeasonIds, id)) {
-          return (<RkText>Check</RkText>)
+          return (<Radio selected={true} />)
       }
     } else if(selectionType===3) {
       if(this.props.gender===value) {
-        return (<RkText>Check</RkText>)
+        return (<Radio selected={true} />)
       }
     } else if(selectionType===4) {
       if(_.includes(selectedSizeIds, id)) {
-        return (<RkText>Check </RkText>);
+        return (<Radio selected={true} />);
       }
     } else if(selectionType===5) {
       if(_.includes(selectedColorIds, id)) {
-        return (<RkText>Check </RkText>);
+        return (<Radio selected={true} />);
       }
     } else if(selectionType===6){
       if(this.props.clothType===value) {
-        return (<RkText>Check</RkText>)
+        return (<Radio selected={true} />)
       }
     }
-    return (<RkText></RkText>);
+    return (<Radio selected={false} />);
   }
 
   _getColorStyle = (color) => {
@@ -67,15 +68,20 @@ class SelectorModal extends Component {
 
   _renderItem = ({item}) => {
     let {value, id} = item;
+    let checked = false;
+    if(this.props.selectionType===1) {
+      checked = (this.props.bigType===value) ? true : false;
+    } else if (this.props.selectionType===3) {
+      checked = (this.props.gender===value) ? true : false;
+    }
     return (
       <View>
-      <TouchableOpacity
-        style={styles.itemStyle}
-        onPress={() => this.props.selectAction(value, id)}>
-        <RkText rkType="primary2">{value}</RkText>
-        { this._renderCheck(id, value) }
-
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.itemStyle}
+          onPress={() => this.props.selectAction(value, id)}>
+          <RkText rkType="primary3">{value}</RkText>
+          <Radio selected={checked} />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -121,29 +127,53 @@ class SelectorModal extends Component {
   _renderItemForMultiple = ({item}) => {
     let {id, value, name} = item;
     if(this.props.selectionType!==5) {
+      let checked = false;
+      if(this.props.selectionType===2) {
+        checked = (_.includes(this.state.selectedSeasonIds, id)) ? true : false;
+      } else if(this.props.selectionType===4) {
+        checked = (_.includes(this.state.selectedSizeIds, id)) ? true : false;
+      }
       return (
         <TouchableOpacity
           style={styles.itemStyle}
           onPress={() => {this._handleMultipleItemPress(id)}}>
-
           <RkText rkType="primary3">{value}</RkText>
-          { this._renderCheck(id, value) }
-
+          <Radio selected={checked} />
         </TouchableOpacity>
       );
     } else {
+      let checked = (_.includes(this.state.selectedColorIds, id)) ? true : false;
       return (
        <TouchableOpacity
          style={styles.itemStyle}
          onPress={() => this._handleMultipleItemPress(id)}>
-
          <View style={colorCircleStyle(value)} />
          <RkText rkType="primary3">{name}</RkText>
-         { this._renderCheck(id, value) }
-
+         <Radio selected={checked} />
        </TouchableOpacity>
       );
     }
+  }
+
+  _renderHeader = (selectionType) => {
+    let text = 'Type';
+    if (selectionType==2) {
+      text = 'Season';
+    } else if (selectionType==3) {
+      text = 'Gender';
+    } else if (selectionType==4) {
+      text = 'Size';
+    } else if (selectionType==5) {
+      text = 'Color';
+    }
+    return (
+      <View style={{height:40, alignItems: 'center'}}>
+        <RkText rkType="header3">{text}</RkText>
+        <TouchableOpacity style={{position: 'absolute', right:5}} onPress={()=>this.props.hideSelector()}>
+          <RkText rkType="awesome modalClose">{FontAwesome.delete}</RkText>
+        </TouchableOpacity>
+      </View>
+    )
   }
 
   render() {
@@ -160,6 +190,7 @@ class SelectorModal extends Component {
           >
           <View style={styles.modalContainer}>
             <FlatList
+              ListHeaderComponent={this._renderHeader(selectionType)}
               style={styles.root}
               data={this.props.items}
               ItemSeparatorComponent={this._renderSeparator}
@@ -177,6 +208,7 @@ class SelectorModal extends Component {
           style={styles.modalStyle}>
           <View style={styles.modalContainer}>
             <FlatList
+              ListHeaderComponent={this._renderHeader(selectionType)}
               style={styles.root}
               data={this.props.items}
               extraData={[this.state.selectedSeasonIds, this.state.selectedColorIds, this.state.selectedSizeIds]}
@@ -209,7 +241,7 @@ const styles = RkStyleSheet.create(theme => ({
   modalContainer: {
     justifyContent: 'center',
     backgroundColor: 'white',
-
+    borderRadius: 10,
   },
   seperator: {
     backgroundColor: 'black',
@@ -219,7 +251,10 @@ const styles = RkStyleSheet.create(theme => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBottom: 5
+    paddingBottom: 10,
+    paddingTop: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
   }
 }));
 

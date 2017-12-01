@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
-import { Text, Button } from 'native-base';
+import { Text, Button, Radio } from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
 import { RkText, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
@@ -27,14 +27,14 @@ class SelectorModal extends Component {
 
   _renderItem = ({item}) => {
     let {value, id} = item;
+    let checked = (this.props.gender==value) ? true : false;
     return (
       <View>
         <TouchableOpacity
           style={styles.itemStyle}
           onPress={() => this.props.selectAction(value)}>
           <RkText>{value}</RkText>
-          { this._renderCheck(id, value) }
-
+          <Radio selected={checked} />
         </TouchableOpacity>
       </View>
     );
@@ -68,6 +68,7 @@ const styles = RkStyleSheet.create(theme => ({
   modalContainer: {
     justifyContent: 'center',
     backgroundColor: 'white',
+    borderRadius: 10,
   },
   seperator: {
     backgroundColor: 'black',
@@ -77,7 +78,10 @@ const styles = RkStyleSheet.create(theme => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBottom: 5
+    paddingBottom: 10,
+    paddingTop: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
   }
 }));
 

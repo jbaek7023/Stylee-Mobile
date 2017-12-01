@@ -46,6 +46,9 @@ export let bootstrap = () => {
   RkTheme.setType('RkText', 'hero', {
     fontSize: scale(33)
   });
+  RkTheme.setType('RkText', 'modalClose', {
+    fontSize: scale(29)
+  });
 
   RkTheme.setType('RkText', 'tag', {
     fontSize: scale(25)
