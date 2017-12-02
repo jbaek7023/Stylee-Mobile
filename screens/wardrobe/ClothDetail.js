@@ -79,7 +79,7 @@ class ClothDetail extends Component {
 
   _handleCommentPress = () => {
     const { id } = this.props.navigation.state.params;
-    this.props.navigation.navigate('Comments', {id, postType: 1});
+    this.props.navigation.navigate('Comments', {id, postType: 2});
   }
 
   _renderAvatar = (uri) => {

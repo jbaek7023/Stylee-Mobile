@@ -39,6 +39,20 @@ class CommentsScreen extends Component {
     message: ''
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(this.props.addedComment !== nextProps.addedComment) {
+      // fetch things
+      const { token, hType} = this.props;
+      const { id, postType } = this.props.navigation.state.params;
+
+      InteractionManager.runAfterInteractions(() => {
+        this.refs.list.scrollToEnd();
+      });
+
+      this.props.fetchComments(token, hType, id, postType);
+    }
+  }
+
   _keyExtractor(item, index) {
     return item.id;
   }
@@ -111,8 +125,6 @@ class CommentsScreen extends Component {
     let { id: userId, image: uri, username } = row.item.user;
     let { id: commentId, content, publish, reply_count: replyCount } = row.item;
     // userId, uri, username, content, publish <- reply
-
-
     return (
       <View>
         <View style={styles.container}>
@@ -129,7 +141,7 @@ class CommentsScreen extends Component {
             <RkText rkType='primary3 mediumLine'>{content}</RkText>
           </View>
         </View>
-        {this._renderReplies(commentId, replyCount, 1, uri,'jbaek7023',  'hello world', publish)}
+        {this._renderReplies(commentId, replyCount, 1, uri, 'jbaek7023',  'hello world', publish)}
       </View>
     )
   }
@@ -141,6 +153,14 @@ class CommentsScreen extends Component {
     } else {
       _.delay(() => this.refs.list.scrollToEnd(), 100);
     }
+  }
+
+  _pushMessage = () => {
+    let { token, hType } = this.props;
+    let { id, postType } = this.props.navigation.state.params;
+    let { message } = this.state;
+    this.props.createComment(token, hType, postType, id, message);
+    this.setState({message: ''});
   }
 
   _renderKeyboard = () => {
@@ -234,8 +254,8 @@ let styles = RkStyleSheet.create(theme => ({
   }
 }));
 
-function mapStateToProps({auth: {token, hType}, comment: {comments}}) {
-  return { token, hType, comments }
+function mapStateToProps({auth: {token, hType}, comment: {comments, addedComment}}) {
+  return { token, hType, comments, addedComment }
 }
 
 export default connect(mapStateToProps, actions)(CommentsScreen);

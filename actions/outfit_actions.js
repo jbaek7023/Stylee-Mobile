@@ -33,7 +33,7 @@ export const likeOutfit = (token, hType, outfitId) => async dispatch => {
   let response = await axios.post(`${ROOT_URL}/likes/create/?type=outfit&id=${outfitId}`, {
   }, {headers});
 
-  if (response.status === 200) {
+  if (response.status === 201) {
     dispatch({ type: LIKE_OUTFIT_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: LIKE_OUTFIT_FAIL })
@@ -50,7 +50,7 @@ export const unlikeOutfit = (token, hType, outfitId) => async dispatch => {
   let response = await axios.post(`${ROOT_URL}/likes/delete/?type=outfit&id=${outfitId}`, {
   }, {headers});
 
-  if (response.status === 200) {
+  if (response.status === 201) {
     dispatch({ type: UNLIKE_OUTFIT_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: UNLIKE_OUTFIT_FAIL })
@@ -67,7 +67,7 @@ export const bookmarkOutfit = (token, hType, outfitId) => async dispatch => {
   let response = await axios.post(`${ROOT_URL}/stars/create/?type=outfit&id=${outfitId}`, {
   }, {headers});
 
-  if (response.status === 200) {
+  if (response.status === 201) {
     dispatch({ type: BOOKMARK_OUTFIT_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: BOOKMARK_OUTFIT_FAIL })
@@ -84,7 +84,7 @@ export const unbookmarkOutfit = (token, hType, outfitId) => async dispatch => {
   let response = await axios.post(`${ROOT_URL}/stars/delete/?type=outfit&id=${outfitId}`, {
   }, {headers});
 
-  if (response.status === 200) {
+  if (response.status === 201) {
     dispatch({ type: UNBOOKMARK_OUTFIT_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: UNBOOKMARK_OUTFIT_FAIL })

@@ -71,12 +71,12 @@ export class SocialThreeBar extends RkComponent {
 
   render() {
     let {container, section, icon, label} = this.defineStyles();
-
+    let {cid} = this.props;
     return (
       <View style={container}>
         {this._renderHeart(this.props.liked)}
         <View style={section}>
-          <RkButton rkType='clear' onPress={()=>{this.props.handleCommentPress()}}>
+          <RkButton rkType='clear' onPress={()=>{this.props.handleCommentPress(cid)}}>
             <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.comment}</RkText>
             <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>Comment</RkText>
           </RkButton>

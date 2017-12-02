@@ -60,7 +60,3 @@ export const registerUser = ( username, email, password ) => async dispatch => {
     dispatch({ type: REGISTER_FAIL, payload: response.data })
   }
 }
-
-export const setFullName = (fullname) => async dispatch => {
-  let response = await axios.post({})
-}

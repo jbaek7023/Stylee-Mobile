@@ -72,6 +72,8 @@ export const FETCH_COMMENTS_SUCCESS = 'fetch_comments_success';
 export const FETCH_COMMENTS_FAIL = 'fetch_comments_fail';
 export const COMMENT_DETAIL_SUCCESS = 'comment_detail_success';
 export const COMMENT_DETAIL_FAIL = 'comment_detail_fail';
+export const CREATE_COMMENT_SUCCESS = 'create_comment_success';
+export const CREATE_COMMENT_FAIL = 'create_comment_fail';
 
 // Category
 export const CATEGORIES_LOAD_SUCCESS = 'categories_load_success';
