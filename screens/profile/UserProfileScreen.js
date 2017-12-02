@@ -14,11 +14,11 @@ import { Button, Icon } from 'native-base';
 import TimeAgo from 'react-native-timeago';
 import SocialBar from '../../components/SocialBar';
 import { Ionicons } from '@expo/vector-icons';
-
 import {FontAwesome} from '../../assets/icons';
+import OutfitSimpleItem from '../../components/common/OutfitSimpleItem';
+
 class UserProfileScreen extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
-    tabBarVisible: false,
     header: null
   })
 
@@ -62,32 +62,6 @@ class UserProfileScreen extends Component {
 
     return result;
     // obj.id, obj.user.image, obj.user.id, obj.content, obj.publish, obj.updated, obj.reply_count
-  }
-
-  _handleCommentPress = () => {
-    const { id } = this.props.navigation.state.params;
-    // ???
-    this.props.navigation.navigate('Comments', {id, postType: 1});
-  }
-
-  _renderPostHeader = (item) => {
-    return (
-      <View style={styles.headerLayout}>
-        <View rkCardHeader style={styles.left}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: item.user.id})}>
-            {this._renderAvatar(item.user.image)}
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Profile', {userPk: item.user.id})}
-            style={styles.content}>
-            <View style={styles.contentHeader}>
-              <RkText rkType='header5'>{item.user.username}</RkText>
-              <RkText rkType='secondary2 hintColor'><TimeAgo time={item.publish}/></RkText>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
   }
 
   _renderUsername = (username) => {
@@ -161,35 +135,7 @@ class UserProfileScreen extends Component {
 
   _renderItem = ({item}) => {
     return (
-      <RkCard rkType='article'>
-          {this._renderPostHeader(item)}
-      	<Image
-      		style={styles.outfitImage}
-      		resizeMode="cover"
-      		source={{uri: item.outfit_img}}
-          onPress={()=>{this._handleImagePress(item.id)}}/>
-        <View style={{marginLeft:20, marginRight: 20}}>
-          <View style={{marginTop: 10}}>
-              <RkText rkType="header3">{item.content}</RkText>
-          </View>
-      		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-    				<RkText rkType="secondary2 hintColor">{item.like_count.toString()} Likes</RkText>
-    				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{item.comment_count.toString()} Comments</RkText>
-          </View>
-        </View>
-      	<View style={styles.socialContainer}>
-      		<SocialBar/>
-      	</View>
-        <View rkCardContent style={styles.commentContainer}>
-          <View style={{marginTop: 5}}>
-            {this._renderComments(item.comments)}
-            <RkText
-              onPress={this._handleCommentPress}
-                rkType='secondary2 hintColor'>View All {item.comment_count.toString()} Comments</RkText>
-          </View>
-        </View>
-        <View style={styles.profileSeperator} />
-      </RkCard>
+      <OutfitSimpleItem item={item} navigation={this.props.navigation}/>
     );
   }
 
@@ -423,7 +369,8 @@ let styles = RkStyleSheet.create(theme => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 6
+    marginBottom: 6,
+    paddingLeft: 10
   },
   outfitImage: {
     width: width(100),
@@ -441,10 +388,6 @@ let styles = RkStyleSheet.create(theme => ({
   },
   content: {
     flex: 1,
-  },
-  contentHeader: {
-    justifyContent: 'space-between',
-    paddingLeft: 10
   },
   header: {
     height: 55,

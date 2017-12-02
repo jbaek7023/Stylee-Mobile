@@ -20,7 +20,6 @@ import Toast from 'react-native-simple-toast';
 
 class ClothDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
-    tabBarVisible: false,
     header: null
   });
 
