@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten';
-import { SocialBar } from '../../components/SocialBar';
+import SocialBar from '../../components/SocialBar';
 import { Ionicons } from '@expo/vector-icons';
 import {FontAwesome} from '../../assets/icons';
 

@@ -10,7 +10,7 @@ import {
 } from 'react-native-ui-kitten';
 
 import { Avatar } from '../../components/Avatar';
-import { SocialBar } from '../../components/SocialBar';
+import SocialBar from '../../components/SocialBar';
 class PopularPostScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     title: 'Popular'

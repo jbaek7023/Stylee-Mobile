@@ -46,7 +46,10 @@ class CategoryModal extends Component {
         onBackdropPress = {() => this.props.hideModal()}>
         <View style={styles.modalContainer}>
           <View style={styles.categoryHeader}>
-            <RkText rkType="header3">Add To Category</RkText>
+            <RkText rkType="header4">Add To Category</RkText>
+            <TouchableOpacity style={{position: 'absolute', right:17, top: 17}} onPress={()=>this.props.hideModal()}>
+              <RkText rkType="header4">Done</RkText>
+            </TouchableOpacity>
           </View>
           <ScrollView style={styles.scrollViewStyle}>
             <FlatList
@@ -102,7 +105,7 @@ const styles = RkStyleSheet.create(theme => ({
     right: 20
   },
   scrollViewStyle: {
-    maxHeight: height(60)
+    maxHeight: 237
   }
 }));
 

@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 import {
   View
 } from 'react-native';
@@ -10,13 +12,9 @@ import {
 } from 'react-native-ui-kitten';
 import { FontAwesome } from '../../assets/icons';
 import { width, height } from 'react-native-dimension';
-export class SocialBar extends RkComponent {
-  componentName = 'SocialBar';
 
-  state = {
-    like: this.props.isLiked,
-    star: this.props.isStarred
-  }
+class SocialBar extends RkComponent {
+  componentName = 'SocialBar';
 
   typeMapping = {
     container: {},
@@ -25,29 +23,14 @@ export class SocialBar extends RkComponent {
     label: {}
   };
 
-  _handleLikePress = () => {
-    if(this.state.like) {
-      this.setState({like: false})
-    } else {
-      this.setState({like: true})
-    }
-  }
-
-  _handleBookmarkPress = () => {
-    console.log(this.state.star)
-    if(this.state.star) {
-      this.setState({star: false})
-    } else {
-      this.setState({star: true})
-    }
-  }
-
   _renderHeart = (like) => {
     let {section, icon, label} = this.defineStyles();
+    let { oid } = this.props;
+
     if (like) {
       return (
         <View style={section}>
-          <RkButton rkType='clear' style={styles.buttonStyle} onPress={this._handleLikePress}>
+          <RkButton rkType='clear' style={styles.buttonStyle} onPress={()=>this.props.handleUnlikePress(oid)}>
             <RkText rkType='awesome primary' style={icon}>{FontAwesome.heart}</RkText>
             <RkText rkType='primary4 primary' style={{marginTop: 5}}>Like</RkText>
           </RkButton>
@@ -56,7 +39,7 @@ export class SocialBar extends RkComponent {
     }
     return (
       <View style={section}>
-        <RkButton rkType='clear' style={styles.buttonStyle} onPress={this._handleLikePress}>
+        <RkButton rkType='clear' style={styles.buttonStyle} onPress={()=>this.props.handleLikePress(oid)}>
           <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.hearto}</RkText>
           <RkText rkType='primary4 hintColor' style={{marginTop: 5}}>Like</RkText>
         </RkButton>
@@ -66,10 +49,11 @@ export class SocialBar extends RkComponent {
 
   _renderStar = (star) => {
     let {section, icon, label} = this.defineStyles();
+    let { oid } = this.props;
     if (star) {
       return (
         <View style={section}>
-          <RkButton rkType='clear' style={styles.buttonStyle} onPress={this._handleBookmarkPress}>
+          <RkButton rkType='clear' style={styles.buttonStyle} onPress={()=>this.props.handleUnbookmarkPress(oid)}>
             <RkText rkType='awesome' style={[icon, {color: '#FF8F00'}]}>{FontAwesome.bookmark}</RkText>
             <RkText rkType='primary4' style={[{marginTop: 5}, {color: '#FF8F00'}]}>Bookmark</RkText>
           </RkButton>
@@ -78,20 +62,19 @@ export class SocialBar extends RkComponent {
     }
     return (
       <View style={section}>
-        <RkButton rkType='clear' style={styles.buttonStyle} onPress={this._handleBookmarkPress}>
+        <RkButton rkType='clear' style={styles.buttonStyle} onPress={()=>this.props.handleBookmarkPress(oid)}>
           <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.bookmarko}</RkText>
           <RkText rkType='primary4 hintColor' style={{marginTop: 5}}>Bookmark</RkText>
         </RkButton>
       </View>
     );
-
   }
 
   render() {
     let {container, section, icon, label} = this.defineStyles();
     return (
       <View style={styles.container}>
-        {this._renderHeart(this.state.like)}
+        {this._renderHeart(this.props.isLiked)}
         <View style={section}>
           <RkButton rkType='clear' style={styles.buttonStyle}
             onPress={()=>this.props.handleCommentPress()}>
@@ -106,7 +89,7 @@ export class SocialBar extends RkComponent {
             <RkText rkType='primary4 hintColor' style={{marginTop: 5}}>Categorize</RkText>
           </RkButton>
         </View>
-        {this._renderStar(this.state.star)}
+        {this._renderStar(this.props.isStarred)}
       </View>
     )
   }
@@ -125,3 +108,9 @@ let styles = RkStyleSheet.create(theme => ({
     justifyContent: 'center',
   }
 }));
+
+function mapStateToProps({auth: {token, hType}}) {
+  return { token, hType }
+}
+
+export default connect(mapStateToProps, actions)(SocialBar);

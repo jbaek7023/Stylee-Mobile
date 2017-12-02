@@ -186,7 +186,6 @@ class SelectorModal extends Component {
           isVisible={isSelectorVisible}
           onBackdropPress = {() => this.props.hideSelector()}
           animationInTiming={1}
-          style={styles.modalStyle}
           >
           <View style={styles.modalContainer}>
             <FlatList
@@ -204,8 +203,7 @@ class SelectorModal extends Component {
         <Modal
           isVisible={isSelectorVisible}
           onBackdropPress = {() => this.props.hideSelector()}
-          animationInTiming={1}
-          style={styles.modalStyle}>
+          animationInTiming={1}>
           <View style={styles.modalContainer}>
             <FlatList
               ListHeaderComponent={this._renderHeader(selectionType)}
@@ -234,9 +232,6 @@ function colorCircleStyle(colorCode) {
 const styles = RkStyleSheet.create(theme => ({
   root: {
     backgroundColor: theme.colors.screen.base
-  },
-  modalStyle: {
-    borderRadius: 10,
   },
   modalContainer: {
     justifyContent: 'center',

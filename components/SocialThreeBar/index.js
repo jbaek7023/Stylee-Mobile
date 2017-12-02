@@ -13,11 +13,6 @@ import { FontAwesome } from '../../assets/icons';
 export class SocialThreeBar extends RkComponent {
   componentName = 'SocialBar';
 
-  state = {
-    like: this.props.isLiked,
-    star: this.props.isStarred
-  }
-
   typeMapping = {
     container: {},
     section: {},
@@ -25,28 +20,13 @@ export class SocialThreeBar extends RkComponent {
     label: {}
   };
 
-  _handleLikePress = () => {
-    if(this.state.like) {
-      this.setState({like:false})
-    } else {
-      this.setState({like:true})
-    }
-  }
-
-  _handleBookmarkPress = () => {
-    if(this.state.star) {
-      this.setState({star:false})
-    } else {
-      this.setState({star:true})
-    }
-  }
-
   _renderHeart = (like) => {
     let {section, icon, label} = this.defineStyles();
+    let { cid } = this.props;
     if (like) {
       return (
         <View style={section}>
-          <RkButton rkType='clear' onPress={this._handleLikePress}>
+          <RkButton rkType='clear' onPress={()=>this.props.handleUnlikePress(cid)}>
             <RkText rkType='awesome primary' style={icon}>{FontAwesome.heart}</RkText>
             <RkText rkType='primary4 primary' style={[label, {marginTop: 5}]}>Like</RkText>
           </RkButton>
@@ -55,7 +35,7 @@ export class SocialThreeBar extends RkComponent {
     }
     return (
       <View style={section}>
-        <RkButton rkType='clear' onPress={this._handleLikePress}>
+        <RkButton rkType='clear' onPress={()=>this.props.handleLikePress(cid)}>
           <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.hearto}</RkText>
           <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>Like</RkText>
         </RkButton>
@@ -67,10 +47,11 @@ export class SocialThreeBar extends RkComponent {
 
   _renderStar = (star) => {
     let {section, icon, label} = this.defineStyles();
+    let { cid } = this.props;
     if (star) {
       return (
         <View style={section}>
-          <RkButton rkType='clear'  onPress={this._handleBookmarkPress}>
+          <RkButton rkType='clear'  onPress={()=>this.props.handleUnbookmarkPress(cid)}>
             <RkText rkType='awesome' style={[icon, {color: '#FF8F00'}]}>{FontAwesome.bookmark}</RkText>
             <RkText rkType='primary4' style={[label, {marginTop: 5, color: '#FF8F00'}]}>Bookmark</RkText>
           </RkButton>
@@ -79,7 +60,7 @@ export class SocialThreeBar extends RkComponent {
     }
     return (
       <View style={section}>
-        <RkButton rkType='clear' onPress={this._handleBookmarkPress}>
+        <RkButton rkType='clear' onPress={()=>this.props.handleBookmarkPress(cid)}>
           <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.bookmarko}</RkText>
           <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>Bookmark</RkText>
         </RkButton>
@@ -93,14 +74,14 @@ export class SocialThreeBar extends RkComponent {
 
     return (
       <View style={container}>
-        {this._renderHeart(this.state.like)}
+        {this._renderHeart(this.props.liked)}
         <View style={section}>
           <RkButton rkType='clear' onPress={()=>{this.props.handleCommentPress()}}>
             <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.comment}</RkText>
             <RkText rkType='primary4 hintColor' style={[label, {marginTop: 5}]}>Comment</RkText>
           </RkButton>
         </View>
-        {this._renderStar(this.state.star)}
+        {this._renderStar(this.props.starred)}
       </View>
     )
   }

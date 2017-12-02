@@ -6,6 +6,7 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { RkText, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import {FontAwesome} from '../../assets/icons';
 
 class SelectorModal extends Component {
 
@@ -40,6 +41,17 @@ class SelectorModal extends Component {
     );
   }
 
+  _renderHeader = () => {
+    return (
+      <View style={{height:40, alignItems: 'center'}}>
+        <RkText rkType="header3">Gender</RkText>
+        <TouchableOpacity style={{position: 'absolute', right:5}} onPress={()=>this.props.hideSelector()}>
+          <RkText rkType="awesome modalClose">{FontAwesome.delete}</RkText>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   render() {
     let { isSelectorVisible } = this.props;
     return (
@@ -49,6 +61,7 @@ class SelectorModal extends Component {
         animationInTiming={1}>
         <View style={styles.modalContainer}>
           <FlatList
+            ListHeaderComponent={this._renderHeader}
             style={styles.root}
             data={this.props.items}
             ItemSeparatorComponent={this._renderSeparator}

@@ -37,6 +37,14 @@ export const CATEGORY_DETAIL_LOAD_SUCCESS = 'category_detail_load_success';
 export const CATEGORY_DETAIL_LOAD_FAIL = 'category_detail_load_fail';
 export const STAR_OUTFIT_LOAD_SUCCESS = 'star_outfit_load_success';
 export const STAR_OUTFIT_LOAD_FAIL = 'star_outfit_load_fail';
+export const LIKE_OUTFIT_SUCCESS = 'like_outfit_success';
+export const LIKE_OUTFIT_FAIL = 'like_outfit_fail';
+export const UNLIKE_OUTFIT_SUCCESS = 'unlike_outfit_success';
+export const UNLIKE_OUTFIT_FAIL = 'unlike_outfit_fail';
+export const BOOKMARK_OUTFIT_SUCCESS = 'bookmark_outfit_success';
+export const BOOKMARK_OUTFIT_FAIL = 'bookmark_outfit_fail';
+export const UNBOOKMARK_OUTFIT_SUCCESS = 'unbookmark_outift_success';
+export const UNBOOKMARK_OUTFIT_FAIL = 'unbookmark_outfit_fail';
 
 // POST Create style
 export const CREATE_STYLE_SUCCESS = 'create_style_success';

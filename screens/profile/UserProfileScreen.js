@@ -12,7 +12,7 @@ import _ from 'lodash';
 import * as actions from '../../actions';
 import { Button, Icon } from 'native-base';
 import TimeAgo from 'react-native-timeago';
-import { SocialBar } from '../../components/SocialBar';
+import SocialBar from '../../components/SocialBar';
 import { Ionicons } from '@expo/vector-icons';
 
 import {FontAwesome} from '../../assets/icons';

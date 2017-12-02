@@ -12,7 +12,7 @@ import {
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
-import { SocialBar } from '../../components/SocialBar';
+import SocialBar from '../../components/SocialBar';
 import { FontAwesome } from '../../assets/icons';
 let ThemedNavigationBar = withRkTheme(NavBar);
 

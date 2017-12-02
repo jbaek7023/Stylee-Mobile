@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   subMargin: {
-    marginTop: 5,
+    marginTop: 10,
   },
   separator: {
     backgroundColor: '#f2f2f2',

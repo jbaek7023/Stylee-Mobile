@@ -9,7 +9,7 @@ import {
   RkButton,
 } from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
-import { SocialBar } from '../../components/SocialBar';
+import SocialBar from '../../components/SocialBar';
 import TimeAgo from 'react-native-timeago';
 import {FontAwesome} from '../../assets/icons';
 
@@ -28,6 +28,8 @@ class OutfitDetail extends Component {
   state = {
     isCategoryVisible: false,
     isFollowing: false,
+    liked: false,
+    starred: false
   }
 
   componentWillMount() {
@@ -38,14 +40,40 @@ class OutfitDetail extends Component {
 
   componentWillReceiveProps(nextProps) {
     let isFollowing = nextProps.outfitDetail.is_following;
-    if(this.state.isFollowing!=isFollowing) {
-      this.setState({isFollowing});
+    let liked = nextProps.outfitDetail.liked;
+    let starred = nextProps.outfitDetail.starred;
+    let condition = (this.state.isFollowing!=isFollowing || this.state.liked!=liked || this.state.starred!=starred) ? true : false;
+    if(condition) {
+      this.setState({isFollowing, liked, starred});
     }
   }
 
   hideModal = () => this.setState({isCategoryVisible: false})
   showModal = () => this.setState({isCategoryVisible: true})
 
+  _handleLikePress = (oid) => {
+    let { token, hType } = this.props;
+    this.setState({liked: true})
+    this.props.likeOutfit(token, hType, oid)
+  }
+
+  _handleUnlikePress = (oid) => {
+    let { token, hType } = this.props;
+    this.setState({liked: false})
+    this.props.unlikeOutfit(token, hType, oid)
+  }
+
+  _handleBookmarkPress = (oid) => {
+    let { token, hType } = this.props;
+    this.setState({starred: true})
+    this.props.bookmarkOutfit(token, hType, oid)
+  }
+
+  _handleUnbookmarkPress = (oid) => {
+    let { token, hType } = this.props;
+    this.setState({starred: false})
+    this.props.unbookmarkOutfit(token, hType, oid)
+  }
 
   _renderComments = (comments) => {
     let result = comments.map(( obj, index ) => {
@@ -55,11 +83,6 @@ class OutfitDetail extends Component {
     return result;
     // obj.id, obj.user.image, obj.user.id, obj.content, obj.publish, obj.updated, obj.reply_count
   }
-
-  // categories, comment_count,
-  //   comments, content, gender, id,
-  //   like_count, liked, location, outfit_img,
-  //   publish, tagged_clothes, updated, user
 
   _handleCommentPress = () => {
     const { id } = this.props.navigation.state.params;
@@ -200,11 +223,10 @@ class OutfitDetail extends Component {
                 style={styles.outfitImage}
                 resizeMode="cover"
                 source={{uri: detail.outfit_img}} />
-
               <View style={{ marginLeft:20, marginRight: 20, flexDirection: 'row', flex:1, justifyContent: 'space-between' }}>
                 <View>
                   <View style={{marginTop: 10}}>
-                      <RkText rkType="header3">{detail.content}</RkText>
+                      <RkText rkType="header4">{detail.content}</RkText>
                   </View>
               		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
             				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
@@ -216,10 +238,15 @@ class OutfitDetail extends Component {
 
               <View style={styles.socialContainer}>
                 <SocialBar
-                  isLiked={detail.liked}
-                  isStarred={detail.starred}
+                  isLiked={this.state.liked}
+                  isStarred={this.state.starred}
+                  handleLikePress={this._handleLikePress}
+                  handleUnlikePress={this._handleUnlikePress}
+                  handleBookmarkPress={this._handleBookmarkPress}
+                  handleUnbookmarkPress={this._handleUnbookmarkPress}
                   handleCommentPress={this._handleCommentPress}
                   showModal={this.showModal}
+                  oid={detail.id}
                 />
               </View>
               <View rkCardContent style={styles.commentContainer}>

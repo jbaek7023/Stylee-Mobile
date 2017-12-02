@@ -26,6 +26,8 @@ class ClothDetail extends Component {
 
   state = {
     isFollowing: false,
+    liked: false,
+    starred: false
   }
 
   componentWillMount() {
@@ -36,9 +38,36 @@ class ClothDetail extends Component {
 
   componentWillReceiveProps(nextProps) {
     let isFollowing = nextProps.clothDetail.is_following;
-    if(this.state.isFollowing!=isFollowing) {
-      this.setState({isFollowing});
+    let liked = nextProps.clothDetail.liked;
+    let starred = nextProps.clothDetail.starred;
+    let condition = (this.state.isFollowing!=isFollowing || this.state.liked!=liked || this.state.starred!=starred) ? true : false;
+    if(condition) {
+      this.setState({isFollowing, liked, starred});
     }
+  }
+
+  _handleLikePress = (cid) => {
+    let { token, hType } = this.props;
+    this.setState({liked: true})
+    this.props.likeCloth(token, hType, cid)
+  }
+
+  _handleUnlikePress = (cid) => {
+    let { token, hType } = this.props;
+    this.setState({liked: false})
+    this.props.unlikeCloth(token, hType, cid)
+  }
+
+  _handleBookmarkPress = (cid) => {
+    let { token, hType } = this.props;
+    this.setState({starred: true})
+    this.props.bookmarkCloth(token, hType, cid)
+  }
+
+  _handleUnbookmarkPress = (cid) => {
+    let { token, hType } = this.props;
+    this.setState({starred: false})
+    this.props.unbookmarkCloth(token, hType, cid)
   }
 
   _renderComments = (comments) => {
@@ -198,7 +227,7 @@ class ClothDetail extends Component {
               <View style={{ marginLeft:20, marginRight: 20, flexDirection: 'row', flex:1, justifyContent: 'space-between' }}>
                 <View>
                   <View style={{ marginTop: 10 }}>
-                      <RkText rkType="header3">{detail.content}</RkText>
+                      <RkText rkType="header4">{detail.content}</RkText>
                   </View>
               		<View style={{
                     marginTop: 10,
@@ -213,9 +242,14 @@ class ClothDetail extends Component {
               </View>
               <View style={{marginTop: 10, marginBottom: 10}}>
                 <SocialThreeBar
-                  isLiked={detail.liked}
-                  isStarred={detail.starred}
+                  liked={this.state.liked}
+                  starred={this.state.starred}
+                  handleLikePress={this._handleLikePress}
+                  handleUnlikePress={this._handleUnlikePress}
+                  handleBookmarkPress={this._handleBookmarkPress}
+                  handleUnbookmarkPress={this._handleUnbookmarkPress}
                   handleCommentPress={this._handleCommentPress}
+                  cid={detail.id}
                 />
               </View>
               <View rkCardContent>
