@@ -229,12 +229,13 @@ class OutfitDetail extends Component {
                   </View>
               		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
             				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
-            				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
+                    <TouchableOpacity onPress={()=>this._handleCommentPress()}>
+            				  <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
+                    </TouchableOpacity>
                   </View>
                 </View>
                 <View style={{justifyContent: 'center'}}>{this._renderPrivacy(detail.only_me)}</View>
               </View>
-
               <View style={styles.socialContainer}>
                 <SocialBar
                   isLiked={this.state.liked}
@@ -249,13 +250,12 @@ class OutfitDetail extends Component {
                 />
               </View>
               <View rkCardContent style={styles.commentContainer}>
-                <View style={{marginTop: 5}}>
+                <TouchableOpacity onPress={()=>{this._handleCommentPress()}} style={{marginTop: 5}}>
                   {this._renderComments(detail.comments)}
-                  <RkText
-                    onPress={this._handleCommentPress}
-                    rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
-                </View>
-
+                  <View>
+                    <RkText rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
+                  </View>
+                </TouchableOpacity>
               </View>
 
               <View>

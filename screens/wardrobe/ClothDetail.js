@@ -252,14 +252,12 @@ class ClothDetail extends Component {
                 />
               </View>
               <View rkCardContent>
-                <View>
+                <TouchableOpacity onPress={()=>this._handleCommentPress()}>
                   <View style={{marginTop: 5}}>
                     {this._renderComments(detail.comments)}
-                    <RkText
-                      onPress={()=>this._handleCommentPress()}
-                      rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
+                    <RkText rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
               <View>
                 <View style={styles.headContainer}>

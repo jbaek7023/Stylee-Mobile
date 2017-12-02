@@ -49,8 +49,8 @@ class OutfitSimpleItem extends Component {
     );
   }
 
-  _handleCommentPress = (id) => {
-    // postType : 1 outfit ; postType:2 => Cloth
+  _handleCommentPress = () => {
+    let { id } = this.props.item;
     this.props.navigation.navigate('Comments', {id, postType: 1});
   }
 
@@ -105,7 +105,9 @@ class OutfitSimpleItem extends Component {
               </View>
           		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
         				<RkText rkType="secondary2 hintColor">{item.like_count.toString()} Likes</RkText>
-        				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{item.comment_count.toString()} Comments</RkText>
+                <TouchableOpacity onPress={()=>this._handleCommentPress}>
+        				 <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{item.comment_count.toString()} Comments</RkText>
+                </TouchableOpacity>
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -123,12 +125,12 @@ class OutfitSimpleItem extends Component {
             />
         	</View>
           <View rkCardContent style={styles.commentContainer}>
-            <View style={{marginTop: 5}}>
+            <TouchableOpacity onPress={()=>this._handleCommentPress} style={{marginTop: 5}}>
               {this._renderComments(item.comments)}
-              <RkText
-                onPress={this._handleCommentPress}
-                  rkType='secondary2 hintColor'>View All {item.comment_count.toString()} Comments</RkText>
-            </View>
+              <View>
+                <RkText rkType='secondary2 hintColor'>View All {item.comment_count.toString()} Comments</RkText>
+              </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.profileSeperator} />
         </RkCard>

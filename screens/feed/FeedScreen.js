@@ -13,7 +13,7 @@ import { Avatar } from '../../components/Avatar';
 import SocialBar from '../../components/SocialBar';
 class FeedScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    title: 'Feed'
+    title: 'StyleFeed'
   })
 
   _keyExtractor = (item, index) => item.id;
@@ -57,6 +57,10 @@ class FeedScreen extends Component {
     // obj.id, obj.user.image, obj.user.id, obj.content, obj.publish, obj.updated, obj.reply_count
   }
 
+  _handleCommentPress = (id) => {
+    this.props.navigation.navigate('Comments', {id, postType: 1});
+  }
+
   _renderRow = (item) => {
     return (
       <RkCard rkType='article'>
@@ -78,9 +82,9 @@ class FeedScreen extends Component {
         <View rkCardContent style={styles.commentContainer}>
           <View style={{marginTop: 5}}>
             {this._renderComments(null)}
-            <RkText
-              onPress={this._handleCommentPress}
-                rkType='secondary2 hintColor'>View All 4 Comments</RkText>
+            <TouchableOpacity onPress={()=>this._handleCommentPress(item.id)}>
+              <RkText rkType='secondary2 hintColor'>View All 4 Comments</RkText>
+            </TouchableOpacity>
           </View>
         </View>
       </RkCard>

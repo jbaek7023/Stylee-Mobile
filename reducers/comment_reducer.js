@@ -7,7 +7,7 @@ import {
   CREATE_COMMENT_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { comments: [], replyComment: []}
+const INITIAL_STATE = { comments: [], replyComment: [], addedComment: {id:0}}
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -20,7 +20,6 @@ export default function(state = INITIAL_STATE, action) {
     case COMMENT_DETAIL_FAIL:
       return { ...state, }
     case CREATE_COMMENT_SUCCESS:
-      console.log(action.payload);
       return { ...state,  addedComment: action.payload }
     case CREATE_COMMENT_FAIL:
       return { ...state, }

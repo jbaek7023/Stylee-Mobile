@@ -40,16 +40,18 @@ class CommentsScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.addedComment !== nextProps.addedComment) {
+    if(this.props.addedComment.id !== nextProps.addedComment.id) {
       // fetch things
       const { token, hType} = this.props;
       const { id, postType } = this.props.navigation.state.params;
 
-      InteractionManager.runAfterInteractions(() => {
-        this.refs.list.scrollToEnd();
-      });
-
       this.props.fetchComments(token, hType, id, postType);
+    }
+
+    if(this.props.comments.length != nextProps.comments.length) {
+      InteractionManager.runAfterInteractions(() => {
+        this.scrollC.scrollToEnd();
+      });
     }
   }
 
@@ -149,9 +151,9 @@ class CommentsScreen extends Component {
   // Keyboard Setup
   _scroll() {
     if (Platform.OS === 'ios') {
-      this.refs.list.scrollToEnd();
+      this.scrollC.scrollToEnd();
     } else {
-      _.delay(() => this.refs.list.scrollToEnd(), 100);
+      _.delay(() => this.scrollC.scrollToEnd(), 100);
     }
   }
 
@@ -160,15 +162,18 @@ class CommentsScreen extends Component {
     let { id, postType } = this.props.navigation.state.params;
     let { message } = this.state;
     this.props.createComment(token, hType, postType, id, message);
+    Keyboard.dismiss();
     this.setState({message: ''});
+
+
   }
 
   _renderKeyboard = () => {
     return (
       <View style={styles.footer}>
         <RkTextInput
-          onFocus={() => this._scroll(true)}
-          onBlur={() => this._scroll(true)}
+          onFocus={() => this._scroll(false)}
+          onBlur={() => this._scroll(false)}
           onChangeText={(message) => this.setState({message})}
           value={this.state.message}
           rkType='row sticker'
@@ -185,7 +190,7 @@ class CommentsScreen extends Component {
     return (
       <View style={{flex:1}}>
         <FlatList
-          ref='list'
+          ref={(focus) => {this.scrollC = focus}}
           style={styles.root}
           data={this.props.comments}
           ItemSeparatorComponent={this._renderSeparator}
@@ -202,9 +207,8 @@ class CommentsScreen extends Component {
     const { id, postType } = this.props.navigation.state.params;
 
     InteractionManager.runAfterInteractions(() => {
-      this.refs.list.scrollToEnd();
+      this.scrollC.scrollToEnd();
     });
-
     this.props.fetchComments(token, hType, id, postType);
   }
 }
