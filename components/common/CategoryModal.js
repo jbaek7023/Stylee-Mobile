@@ -25,7 +25,6 @@ class CategoryModal extends Component {
   }
 
   renderItem = ({item}) => {
-    console.log(item);
     let selected = _.includes(this.props.taggedCategories, item.id)
     return (
       <TouchableOpacity
@@ -103,7 +102,7 @@ class CategoryModal extends Component {
             <RkButton
               rkType='clear'
               onPress={()=>this.props.setToCreateScreen(true)}>
-              <RkText rkType='primary1'>+ Create New Category</RkText>
+              <RkText rkType='primary1'>+ Add To New Category</RkText>
             </RkButton>
           </View>
         </View>

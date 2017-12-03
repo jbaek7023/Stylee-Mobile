@@ -18,8 +18,7 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { threeImageWidth } from '../../utils/scale';
 import CategoryModal from '../../components/common/CategoryModal';
 import Toast from 'react-native-simple-toast';
-import Snackbar from '@prince8verma/react-native-snackbar';
-import {showSnackBar} from '@prince8verma/react-native-snackbar';
+import SnackBar from 'react-native-snackbar-dialog'
 
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
@@ -59,33 +58,14 @@ class OutfitDetail extends Component {
     if(categoryUpdateCondition) {
       this.setState({listOnOutfit})
     }
-
     let newCategoryCondition = (this.props.name != nextProps.name) ? true: false;
-    console.log('tru?e');
-    console.log(newCategoryCondition);
     if (newCategoryCondition) {
-      console.log('hey!')
-      showSnackBar({
-            message: nextProps.name,
-            position: 'bottom',
-            confirmText: 'OK',
-            backgroundColor: "#323232",
-            duration: 6000,
-        });
+      SnackBar.show(('Added to '+nextProps.name), { duration: 2500 })
     }
   }
 
   hideModal = () => this.setState({isCategoryVisible: false})
-  showModal = () => this.setState({isCategoryVisible: true})
-  _test = () => {
-    showSnackBar({
-          message: 'Hello World',
-          position: 'top',
-          confirmText: 'OK',
-          backgroundColor: "#323232",
-          duration: 6000,
-      });
-  }
+  showModal = () => this.setState({isCategoryVisible: true});
   _handleLikePress = (oid) => {
     let { token, hType } = this.props;
     this.setState({liked: true})
@@ -266,7 +246,6 @@ class OutfitDetail extends Component {
 
   // Category Modal Functions
   _setToCreateScreen = (newScreen) => {
-    console.log(newScreen);
     this.setState({newScreen});
   }
 
@@ -376,8 +355,6 @@ class OutfitDetail extends Component {
             </RkCard>
             {this._renderCategoryModal(detail.id)}
           </ScrollView>
-          <TouchableOpacity onPress={()=>this._test()}><Text>asdad</Text></TouchableOpacity>
-          <Snackbar id={"root_app"}/>
         </View>
       );
     }
@@ -394,7 +371,6 @@ let styles = RkStyleSheet.create(theme => ({
   },
   rootScroll: {
     backgroundColor: theme.colors.screen.base,
-    marginBottom: 50
   },
   socialContainer: {
     paddingTop: 10,

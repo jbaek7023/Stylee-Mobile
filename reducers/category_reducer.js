@@ -7,7 +7,7 @@ import {
   CREATE_CATEGORY_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { list: [], listOnOutfit: []}
+const INITIAL_STATE = { list: [], listOnOutfit: [], name: ''}
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -20,6 +20,8 @@ export default function(state = INITIAL_STATE, action) {
     case OUTFIT_CATEGORIES_LOAD_FAIL:
       return { ...state }
     case CREATE_CATEGORY_SUCCESS:
+      console.log(action.payload);
+      console.log(action.payload.name);
       return { ...state, name: action.payload.name}
     case CREATE_CATEGORY_FAIL:
       return { ...state }

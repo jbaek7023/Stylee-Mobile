@@ -298,7 +298,7 @@ axios@^0.16.2:
     follow-redirects "^1.2.3"
     is-buffer "^1.1.5"
 
-babel-cli@^6.26.0:
+babel-cli@^6.18.0, babel-cli@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-cli/-/babel-cli-6.26.0.tgz#502ab54874d7db88ad00b887a06383ce03d002f1"
   dependencies:
@@ -327,7 +327,7 @@ babel-code-frame@^6.26.0:
     esutils "^2.0.2"
     js-tokens "^3.0.2"
 
-babel-core@^6.0.0, babel-core@^6.24.1, babel-core@^6.26.0, babel-core@^6.7.2:
+babel-core@^6.0.0, babel-core@^6.18.0, babel-core@^6.24.1, babel-core@^6.26.0, babel-core@^6.7.2:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-6.26.0.tgz#af32f78b31a6fcef119c87b0fd8d9753f03a0bb8"
   dependencies:
@@ -498,6 +498,15 @@ babel-plugin-external-helpers@^6.18.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-external-helpers/-/babel-plugin-external-helpers-6.22.0.tgz#2285f48b02bd5dede85175caf8c62e86adccefa1"
   dependencies:
     babel-runtime "^6.22.0"
+
+babel-plugin-flow-react-proptypes@^2.2.0:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-flow-react-proptypes/-/babel-plugin-flow-react-proptypes-2.2.1.tgz#3ece12a024360a11cfcfac96bdd87e7b93ba7015"
+  dependencies:
+    babel-core "^6.18.0"
+    babel-template "^6.16.0"
+    babel-traverse "^6.18.0"
+    babel-types "^6.18.0"
 
 babel-plugin-istanbul@^4.0.0:
   version "4.1.5"
@@ -886,6 +895,12 @@ babel-preset-es2015@^6.24.1:
     babel-plugin-transform-es2015-unicode-regex "^6.24.1"
     babel-plugin-transform-regenerator "^6.24.1"
 
+babel-preset-es2016@^6.16.0:
+  version "6.24.1"
+  resolved "https://registry.yarnpkg.com/babel-preset-es2016/-/babel-preset-es2016-6.24.1.tgz#f900bf93e2ebc0d276df9b8ab59724ebfd959f8b"
+  dependencies:
+    babel-plugin-transform-exponentiation-operator "^6.24.1"
+
 babel-preset-expo@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/babel-preset-expo/-/babel-preset-expo-3.0.0.tgz#b15abf298ae3187bb61180d41d8d4e60553d0972"
@@ -963,6 +978,40 @@ babel-preset-jest@^20.0.3:
   resolved "https://registry.yarnpkg.com/babel-preset-jest/-/babel-preset-jest-20.0.3.tgz#cbacaadecb5d689ca1e1de1360ebfc66862c178a"
   dependencies:
     babel-plugin-jest-hoist "^20.0.3"
+
+babel-preset-react-native@^1.9.1:
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/babel-preset-react-native/-/babel-preset-react-native-1.9.2.tgz#b22addd2e355ff3b39671b79be807e52dfa145f2"
+  dependencies:
+    babel-plugin-check-es2015-constants "^6.5.0"
+    babel-plugin-react-transform "2.0.2"
+    babel-plugin-syntax-async-functions "^6.5.0"
+    babel-plugin-syntax-class-properties "^6.5.0"
+    babel-plugin-syntax-flow "^6.5.0"
+    babel-plugin-syntax-jsx "^6.5.0"
+    babel-plugin-syntax-trailing-function-commas "^6.5.0"
+    babel-plugin-transform-class-properties "^6.5.0"
+    babel-plugin-transform-es2015-arrow-functions "^6.5.0"
+    babel-plugin-transform-es2015-block-scoping "^6.5.0"
+    babel-plugin-transform-es2015-classes "^6.5.0"
+    babel-plugin-transform-es2015-computed-properties "^6.5.0"
+    babel-plugin-transform-es2015-destructuring "^6.5.0"
+    babel-plugin-transform-es2015-for-of "^6.5.0"
+    babel-plugin-transform-es2015-function-name "^6.5.0"
+    babel-plugin-transform-es2015-literals "^6.5.0"
+    babel-plugin-transform-es2015-modules-commonjs "^6.5.0"
+    babel-plugin-transform-es2015-parameters "^6.5.0"
+    babel-plugin-transform-es2015-shorthand-properties "^6.5.0"
+    babel-plugin-transform-es2015-spread "^6.5.0"
+    babel-plugin-transform-es2015-template-literals "^6.5.0"
+    babel-plugin-transform-flow-strip-types "^6.5.0"
+    babel-plugin-transform-object-assign "^6.5.0"
+    babel-plugin-transform-object-rest-spread "^6.5.0"
+    babel-plugin-transform-react-display-name "^6.5.0"
+    babel-plugin-transform-react-jsx "^6.5.0"
+    babel-plugin-transform-react-jsx-source "^6.5.0"
+    babel-plugin-transform-regenerator "^6.5.0"
+    react-transform-hmr "^1.0.4"
 
 babel-preset-react-native@^2.0.0, babel-preset-react-native@^2.1.0:
   version "2.1.0"
@@ -4955,6 +5004,13 @@ react-dom-factories@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-dom-factories/-/react-dom-factories-1.0.1.tgz#c50692ac5ff1adb39d86dfe6dbe3485dacf58455"
 
+react-mixin@^3.0.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/react-mixin/-/react-mixin-3.1.1.tgz#68749756bfe32699e561372a4aeecb926db72b7f"
+  dependencies:
+    object-assign "^4.0.1"
+    smart-mixin "^2.0.0"
+
 react-native-action-button@^2.8.0:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/react-native-action-button/-/react-native-action-button-2.8.0.tgz#8446388f722c1a95619f28ab33b91bf9488075e9"
@@ -5081,6 +5137,12 @@ react-native-platform-touchable@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-native-platform-touchable/-/react-native-platform-touchable-1.1.1.tgz#fde4acc65eea585d28b164d0c3716a42129a68e4"
 
+react-native-root-siblings@^1.1.2:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-root-siblings/-/react-native-root-siblings-1.3.0.tgz#46e40634a5ed84737965863b4dc551fa0e251c68"
+  dependencies:
+    static-container "^1.0.0"
+
 react-native-safe-module@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-module/-/react-native-safe-module-1.2.0.tgz#a23824ca24edc2901913694a76646475113d570d"
@@ -5099,9 +5161,19 @@ react-native-simple-toast@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/react-native-simple-toast/-/react-native-simple-toast-0.0.7.tgz#2ef51bdafd3e98df718f74fdd0bc0ce08608dff8"
 
-react-native-snackbar@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/react-native-snackbar/-/react-native-snackbar-0.4.4.tgz#46d35c171dd28189c60eab0998b88d1c37e9f14e"
+react-native-snackbar-dialog@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-snackbar-dialog/-/react-native-snackbar-dialog-1.4.0.tgz#50cc3fb7f03e9e92e47fdc7903842d0664cbe62f"
+  dependencies:
+    babel-cli "^6.18.0"
+    babel-plugin-flow-react-proptypes "^2.2.0"
+    babel-preset-es2016 "^6.16.0"
+    babel-preset-react-native "^1.9.1"
+    prop-types "^15.5.10"
+    react-mixin "^3.0.0"
+    react-native-root-siblings "^1.1.2"
+    react-timer-mixin "^0.13.3"
+    rimraf "^2.5.4"
 
 react-native-svg@5.3.0:
   version "5.3.0"
@@ -5864,6 +5936,10 @@ smart-buffer@^1.0.13:
   version "1.1.15"
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-1.1.15.tgz#7f114b5b65fab3e2a35aa775bb12f0d1c649bf16"
 
+smart-mixin@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/smart-mixin/-/smart-mixin-2.0.0.tgz#a34a1055e32a75b30d2b4e3ca323dc99cb53f437"
+
 sntp@2.x.x:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/sntp/-/sntp-2.0.2.tgz#5064110f0af85f7cfdb7d6b67a40028ce52b4b2b"
@@ -5960,6 +6036,10 @@ stack-trace@0.0.x:
 stacktrace-parser@^0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/stacktrace-parser/-/stacktrace-parser-0.1.4.tgz#01397922e5f62ecf30845522c95c4fe1d25e7d4e"
+
+static-container@^1.0.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/static-container/-/static-container-1.2.0.tgz#1c6e92b869da47d32abe47f45f50bf39661d9c2f"
 
 statuses@1:
   version "1.3.1"
