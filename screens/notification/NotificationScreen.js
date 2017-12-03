@@ -25,7 +25,7 @@ class NotificationScreen extends Component {
 
   _renderAvatar = (uri, badge) => {
     if(_.isNil(uri)) {
-      return (<Avatar badge={badge} rkType='circle' style={styles.avatar} img={require('../../assets/images/robot-dev.png')}/>)
+      return (<Avatar badge={badge} rkType='circle' style={styles.avatar} img={require('../../assets/images/default_profile.png')}/>)
     }
     return (
       <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>

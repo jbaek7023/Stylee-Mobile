@@ -178,7 +178,7 @@ class TagFromPhoto extends Component {
     } else {
       return (
         <Image
-          source={require('../../assets/images/robot-dev.png')}
+          source={require('../../assets/images/default_profile.png')}
           resizeMode="cover"
           style={styles.headImageStyle}
         />

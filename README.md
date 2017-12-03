@@ -16,6 +16,9 @@ recommended outfit (2) followers' posts
 ## Menu
 1) Profile 2) invite friends from facebook 3) your wardrobe stats 4) Setting > Language
 
+
+
+
 ---
 
 ## Sign Up

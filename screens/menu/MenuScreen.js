@@ -89,14 +89,21 @@ class MenuScreen extends Component {
     this.props.navigation.navigate('ChangePassword');
   }
 
+  _renderAvatar = (uri) => {
+    if(_.isNil(uri)) {
+      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/default_profile.png')}/>)
+    }
+    return (
+      <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+    );
+  }
+
   _renderProfile = () => {
     // https://www.iconfinder.com/search/?q=user
     if(this.props.currentUser) {
       return (
         <ListItem onPress={() => this._handleProfilePress(this.props.currentUser.id)}>
-          <Avatar rkType='circle'
-            style={styles.avatar}
-            img={{ uri: this.props.currentUser.image }}/>
+            {this._renderAvatar(this.props.currentUser.image)}
             <View>
               <RkText rkType='header4'>{this.props.currentUser.username}</RkText>
               <RkText rkType='secondary2 hintColor'>View Profile</RkText>

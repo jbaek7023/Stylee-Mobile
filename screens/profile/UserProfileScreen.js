@@ -42,10 +42,10 @@ class UserProfileScreen extends Component {
 
   _renderAvatar = (uri) => {
     if(_.isNil(uri)) {
-      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/robot-dev.png')}/>)
+      return (<Avatar rkType='big' style={styles.mainAvatar} img={require('../../assets/images/default_profile.png')}/>)
     }
     return (
-      <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+      <Avatar rkType='big' style={styles.avatar} img={{uri}}/>
     );
   }
 
@@ -206,7 +206,7 @@ class UserProfileScreen extends Component {
           style={styles.root}>
           <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 20, marginRight: 20, marginTop: 30, marginBottom: 5}}>
             <View style={{justifyContent: 'center', alignItems: 'center', width:90, height:90}}>
-              <Avatar img={{uri:profile.image}} style={styles.mainAvatar}rkType='big'/>
+              {this._renderAvatar(profile.image)}
             </View>
           </View>
           <View style={{marginLeft:20, marginRight:20, marginBottom:10, alignItems: 'center'}}>

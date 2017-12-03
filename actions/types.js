@@ -86,3 +86,15 @@ export const ADD_TO_CATEGORY_SUCCESS = 'add_to_category_sucess';
 export const ADD_TO_CATEGORY_FAIL = 'add_to_category_fail';
 export const DELTE_FROM_CATEGORY_SUCCESS = 'delete_from_category_success';
 export const DELTE_FROM_CATEGORY_FAIL = 'delete_from_category_fail';
+
+// LIKE
+export const LIKE_CLOTH_SUCCESS = 'like_cloth_success';
+export const LIKE_CLOTH_FAIL = 'like_cloth_fail';
+export const UNLIKE_CLOTH_SUCCESS = 'unlike_cloth_success';
+export const UNLIKE_CLOTH_FAIL = 'unlike_cloth_fail';
+
+// BOOKMARK
+export const BOOKMARK_CLOTH_SUCCESS = 'bookmark_cloth_success';
+export const BOOKMARK_CLOTH_FAIL = 'bookmark_cloth_fail';
+export const UNBOOKMARK_CLOTH_SUCCESS = 'unbookmark_cloth_success';
+export const UNBOOKMARK_CLOTH_FAIL ='unbookmark_cloth_fail';

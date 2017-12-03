@@ -4,6 +4,7 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { Fab, Icon, Button } from 'native-base';
 import { connect } from 'react-redux';
 import { threeImageWidth } from '../../utils/scale';
+import { RkText } from 'react-native-ui-kitten';
 
 import * as actions from '../../actions';
 
@@ -54,6 +55,16 @@ class StylebookAllScreen extends Component {
   }
 
   render() {
+    if(this.props.outfits && this.props.outfits.length==0) {
+      return (
+        <View style={{flex:1, alignItems: 'center'}}>
+          <View style={styles.defaultContainer}>
+            <Image style={styles.imageStyle} source={require('../../assets/images/styles.png')}/>
+            <RkText style={styles.imageBottomText} rkType="header5 hintColor">Upload your outfit style!</RkText>
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={{ flex:1 }}>
         <ScrollView automaticallyAdjustContentInsets={false}>
@@ -75,7 +86,21 @@ const styles = StyleSheet.create({
     height:threeImageWidth,
     marginRight:2,
     marginTop:2
-  }
+  },
+  imageStyle: {
+    width: width(30),
+    height: width(30),
+  },
+  imageBottomText: {
+    textAlign: 'center',
+    marginTop: 13,
+  },
+  defaultContainer: {
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width(70),
+  },
 });
 
 // var width = Dimensions.get('window').width;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, View, Text, FlatList, TouchableOpacity } from 'react-native';
-
+import { width, height, totalSize } from 'react-native-dimension';
 import {
   RkCard,
   RkText,
@@ -20,7 +20,7 @@ class FeedScreen extends Component {
 
   _renderAvatar = (uri) => {
     if(_.isNil(uri)) {
-      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/robot-dev.png')}/>)
+      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/default_profile.png')}/>)
     }
     return (
       <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
@@ -93,6 +93,14 @@ class FeedScreen extends Component {
 
   render() {
     return (
+      <View style={{flex:1, alignItems: 'center'}}>
+        <View style={styles.defaultContainer}>
+          <Image style={styles.imageStyle} source={require('../../assets/images/follow.png')}/>
+          <RkText style={styles.imageBottomText} rkType="header5 hintColor">Follow someone to see your feed</RkText>
+        </View>
+      </View>
+    );
+    return (
       <FlatList
         data={[{id:1}, {id:2}, {id:3}, {id:4}]}
         renderItem={this._renderRow}
@@ -104,6 +112,20 @@ class FeedScreen extends Component {
 }
 
 let styles = RkStyleSheet.create(theme => ({
+  imageStyle: {
+    width: width(30),
+    height: width(30),
+  },
+  imageBottomText: {
+    textAlign: 'center',
+    marginTop: 13,
+  },
+  defaultContainer: {
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width(70),
+  },
   container: {
     backgroundColor: theme.colors.screen.scroll,
     paddingVertical: 8,

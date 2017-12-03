@@ -73,6 +73,16 @@ class StylebookCategoryScreen extends Component {
   }
 
   render() {
+    if(this.props.categories && this.props.categories.length==0) {
+      return (
+        <View style={{flex:1, alignItems: 'center'}}>
+          <View style={styles.defaultContainer}>
+            <Image style={styles.imageStyle} source={require('../../assets/images/category.png')}/>
+            <RkText style={styles.imageBottomText} rkType="header5 hintColor">You can create your own category with your outfit styles</RkText>
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={{ flex:1 }}>
         <ScrollView automaticallyAdjustContentInsets={false}>
@@ -91,17 +101,31 @@ class StylebookCategoryScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    rowImage:{
-      width:width(44),
-      height:width(44),
-      borderWidth:1,
-      borderColor:'#DCDCDC',
+  rowImage:{
+    width:width(44),
+    height:width(44),
+    borderWidth:1,
+    borderColor:'#DCDCDC',
 
-    },
-    rowContainer: {
-      marginLeft:width(4),
-      marginTop: 12
-    }
+  },
+  rowContainer: {
+    marginLeft:width(4),
+    marginTop: 12
+  },
+  imageStyle: {
+    width: width(30),
+    height: width(30),
+  },
+  imageBottomText: {
+    textAlign: 'center',
+    marginTop: 13,
+  },
+  defaultContainer: {
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width(70),
+  },
 });
 
 function mapStateToProps({auth: {token, hType}, outfit: {categories}}) {

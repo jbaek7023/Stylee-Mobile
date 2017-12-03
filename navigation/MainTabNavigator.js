@@ -41,31 +41,22 @@ export default TabNavigator(
         let iconName;
         switch (routeName) {
           case 'Feed':
-            iconName = Platform.OS === 'ios'
-              ? `ios-information-circle${focused ? '' : '-outline'}`
-              : 'md-list-box';
+            iconName = 'ios-contacts';
             break;
           case 'Stylebook':
-            iconName = Platform.OS === 'ios'
-              ? `ios-link${focused ? '' : '-outline'}`
-              : 'md-body';
+            iconName = 'ios-body';
             break;
           case 'Wardrobe':
-            iconName = Platform.OS === 'ios'
-              ? `ios-link${focused ? '' : '-outline'}`
-              : 'md-shirt';
+            iconName = 'ios-shirt';
             break;
           case 'Noti':
-            iconName = Platform.OS === 'ios'
-              ? `ios-options${focused ? '' : '-outline'}`
-              : 'md-notifications';
+            iconName = 'ios-notifications';
             break;
           case 'Menu':
-            iconName = Platform.OS === 'ios'
-              ? `ios-options${focused ? '' : '-outline'}`
-              : 'md-menu';
+            iconName = 'ios-menu';
             break;
         }
+        // ios-menu, ios-body, ios-notifications, ios-shirt,
         return (
           <Ionicons
             name={iconName}
