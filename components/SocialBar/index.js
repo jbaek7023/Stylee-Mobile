@@ -85,7 +85,7 @@ class SocialBar extends RkComponent {
         </View>
         <View style={section}>
           <RkButton rkType='clear' style={styles.buttonStyle}
-            onPress={()=>this.props.showModal()}>
+            onPress={()=>this.props.handleCategoryPress(oid)}>
             <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.category}</RkText>
             <RkText rkType='primary4 hintColor' style={{marginTop: 5}}>Categorize</RkText>
           </RkButton>

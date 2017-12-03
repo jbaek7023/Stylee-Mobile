@@ -3,13 +3,15 @@ import { ScrollView, View, StyleSheet, TouchableWithoutFeedback, TouchableOpacit
 import Modal from 'react-native-modal';
 import { Text, Button, CheckBox } from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
-import { RkText, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
+import { RkText, RkStyleSheet, RkButton, RkTextInput } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import {FontAwesome} from '../../assets/icons';
+import {
+  RkSwitch
+} from '../../components/switch/index';
 
 class CategoryModal extends Component {
-
   _renderPrivacy = (onlyMe) => {
     if(onlyMe) {
       return (
@@ -23,6 +25,7 @@ class CategoryModal extends Component {
   }
 
   renderItem = ({item}) => {
+    console.log(item);
     let selected = _.includes(this.props.taggedCategories, item.id)
     return (
       <TouchableOpacity
@@ -38,17 +41,54 @@ class CategoryModal extends Component {
 
   _keyExtractor = (item, index) => item.id;
 
-  render() {
-    let {isCategoryVisible} = this.props;
-    return (
-      <Modal
-        isVisible={isCategoryVisible}
-        onBackdropPress = {() => this.props.hideModal()}>
+  _renderContent = () => {
+    if(this.props.newScreen) {
+      // Create New Category
+      return (
+        <View style={styles.modalContainer}>
+          <View style={styles.categoryHeaderTwo}>
+            <RkButton
+              rkType='clear'
+              style={styles.menu}
+              onPress={() => {
+                this.props.setToCreateScreen(false)
+            }}>
+              <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+            </RkButton>
+          </View>
+          <View style={styles.scrollViewStyle}>
+            <View style={[styles.nameContainer, styles.titleRow]}>
+              <RkTextInput
+                placeholder='New Category Name'
+                value={this.props.title}
+                onChangeText={(title) => {this.props.setTitle(title)}}/>
+            </View>
+            <View style={[styles.dContainerTwo, styles.titleRow]}>
+              <RkText rkType="header4">Only Me</RkText>
+              <RkSwitch
+                style={styles.switch}
+                value={this.props.onlyMe}
+                name="Push"
+                onValueChange={() => {
+                  this.props.setOnlyMe()
+                }}
+                />
+            </View>
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'flex-end', padding: 10, paddingRight: 20}}>
+            <TouchableOpacity onPress={()=>this.props.handleCreatePress(this.props.oid)} style={styles.categoryAdder, {marginLeft: 15}}>
+              <RkText rkType="header3" style={{color: 'blue'}}>Create</RkText>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    } else {
+      return (
         <View style={styles.modalContainer}>
           <View style={styles.categoryHeader}>
-            <RkText rkType="header4">Add To Category</RkText>
-            <TouchableOpacity style={{position: 'absolute', right:17, top: 17}} onPress={()=>this.props.hideModal()}>
-              <RkText rkType="header4">Done</RkText>
+            <RkText rkType="header4">Categorize</RkText>
+            <TouchableOpacity onPress={()=>this.props.hideModal()}>
+              <RkText rkType="primary1">Done</RkText>
             </TouchableOpacity>
           </View>
           <ScrollView style={styles.scrollViewStyle}>
@@ -59,16 +99,35 @@ class CategoryModal extends Component {
               extraData={this.props.taggedCategories}
             />
           </ScrollView>
-          <View style={styles.categoryAdder}>
-            <RkText rkType="header4"> + Create New Category</RkText>
+          <View style={styles.addButton}>
+            <RkButton
+              rkType='clear'
+              onPress={()=>this.props.setToCreateScreen(true)}>
+              <RkText rkType='primary1'>+ Create New Category</RkText>
+            </RkButton>
           </View>
         </View>
+      );
+    }
+  }
+
+  render() {
+    let {isCategoryVisible} = this.props;
+    return (
+      <Modal
+        isVisible={isCategoryVisible}
+        onBackdropPress = {() => this.props.hideModal()}>
+        {this._renderContent()}
       </Modal>
     );
   }
 };
 
 const styles = RkStyleSheet.create(theme => ({
+  addButton: {
+    padding: 15,
+    alignItems: 'flex-end'
+  },
   root: {
     backgroundColor: theme.colors.screen.base
   },
@@ -80,7 +139,22 @@ const styles = RkStyleSheet.create(theme => ({
   categoryHeader: {
     borderColor: '#e6e6ee',
     borderBottomWidth: 1,
-    padding:17
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  categoryHeaderTwo: {
+    borderColor: '#e6e6ee',
+    borderBottomWidth: 1,
+    padding: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  categoryHeaderSecond: {
+    borderColor: '#e6e6ee',
+    borderBottomWidth: 1,
+    padding: 5
   },
   categoryAdder: {
     borderColor: '#e6e6ee',
@@ -106,6 +180,38 @@ const styles = RkStyleSheet.create(theme => ({
   },
   scrollViewStyle: {
     maxHeight: 237
+  },
+  titleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  dContainer: {
+    paddingTop: 5,
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingBottom: 10,
+  },
+  dContainerTwo: {
+    paddingTop: 0,
+    paddingLeft: 15,
+    paddingRight: 10,
+    paddingBottom: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 0,
+    paddingLeft:20
+  },
+  moreDetailStyle: {
+    flex: 1,
+    textAlign: 'right',
+    fontSize: 15,
+  },
+  menu: {
+    width: 30,
   }
 }));
 

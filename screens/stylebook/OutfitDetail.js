@@ -18,6 +18,8 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { threeImageWidth } from '../../utils/scale';
 import CategoryModal from '../../components/common/CategoryModal';
 import Toast from 'react-native-simple-toast';
+import Snackbar from '@prince8verma/react-native-snackbar';
+import {showSnackBar} from '@prince8verma/react-native-snackbar';
 
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
@@ -28,7 +30,11 @@ class OutfitDetail extends Component {
     isCategoryVisible: false,
     isFollowing: false,
     liked: false,
-    starred: false
+    starred: false,
+    newScreen: false,
+    listOnOutfit: [],
+    title: '',
+    onlyMe: false,
   }
 
   componentWillMount() {
@@ -45,11 +51,41 @@ class OutfitDetail extends Component {
     if(condition) {
       this.setState({isFollowing, liked, starred});
     }
+
+    let { listOnOutfit, name } = nextProps;
+    // compare current state and nextProps state? let's see
+    // compare different array vs array can be lagged
+    let categoryUpdateCondition = (this.state.listOnOutfit != listOnOutfit) ? true: false;
+    if(categoryUpdateCondition) {
+      this.setState({listOnOutfit})
+    }
+
+    let newCategoryCondition = (this.props.name != nextProps.name) ? true: false;
+    console.log('tru?e');
+    console.log(newCategoryCondition);
+    if (newCategoryCondition) {
+      console.log('hey!')
+      showSnackBar({
+            message: nextProps.name,
+            position: 'bottom',
+            confirmText: 'OK',
+            backgroundColor: "#323232",
+            duration: 6000,
+        });
+    }
   }
 
   hideModal = () => this.setState({isCategoryVisible: false})
   showModal = () => this.setState({isCategoryVisible: true})
-
+  _test = () => {
+    showSnackBar({
+          message: 'Hello World',
+          position: 'top',
+          confirmText: 'OK',
+          backgroundColor: "#323232",
+          duration: 6000,
+      });
+  }
   _handleLikePress = (oid) => {
     let { token, hType } = this.props;
     this.setState({liked: true})
@@ -207,6 +243,59 @@ class OutfitDetail extends Component {
     }
   }
 
+  // Category Actions
+  _setTitle = (title) => {
+    this.setState({title})
+  }
+
+  _setOnlyMe = () => {
+    if(this.state.onlyMe) {
+      this.setState({onlyMe: false});
+    } else {
+      this.setState({onlyMe: true});
+    }
+  }
+
+  _handleCategoryPress = (oid) => {
+    let { token, hType } = this.props;
+    // fetchCategory
+    this.props.fetchOutfitCategories(token, hType, oid);
+    this.setState({newScreen:false});
+    this.showModal();
+  }
+
+  // Category Modal Functions
+  _setToCreateScreen = (newScreen) => {
+    console.log(newScreen);
+    this.setState({newScreen});
+  }
+
+  _handleCreatePress = (oid) => {
+    let { title, onlyMe } = this.state;
+    let { token, hType } = this.props;
+    this.props.createNewCategory(token, hType, oid, title, onlyMe);
+    this.setState({newScreen:false});
+    this.hideModal();
+  }
+
+  _renderCategoryModal = (oid) => {
+    return (
+      <CategoryModal
+        newScreen={this.state.newScreen}
+        categoryList={this.state.listOnOutfit}
+        isCategoryVisible={this.state.isCategoryVisible}
+        hideModal={this.hideModal}
+        setToCreateScreen={this._setToCreateScreen}
+        handleCreatePress={this._handleCreatePress}
+        title={this.state.title}
+        onlyMe={this.state.onlyMe}
+        setTitle={this._setTitle}
+        setOnlyMe={this._setOnlyMe}
+        oid={oid}
+        />
+    );
+  }
+
   render() {
     const detail = this.props.outfitDetail;
     // User Access Not Yet
@@ -244,8 +333,8 @@ class OutfitDetail extends Component {
                   handleUnlikePress={this._handleUnlikePress}
                   handleBookmarkPress={this._handleBookmarkPress}
                   handleUnbookmarkPress={this._handleUnbookmarkPress}
+                  handleCategoryPress={this._handleCategoryPress}
                   handleCommentPress={this._handleCommentPress}
-                  showModal={this.showModal}
                   oid={detail.id}
                 />
               </View>
@@ -285,11 +374,10 @@ class OutfitDetail extends Component {
                 </TouchableOpacity>
               </View>
             </RkCard>
-            <CategoryModal
-              isCategoryVisible={this.state.isCategoryVisible}
-              hideModal={this.hideModal}
-              />
+            {this._renderCategoryModal(detail.id)}
           </ScrollView>
+          <TouchableOpacity onPress={()=>this._test()}><Text>asdad</Text></TouchableOpacity>
+          <Snackbar id={"root_app"}/>
         </View>
       );
     }
@@ -301,7 +389,8 @@ class OutfitDetail extends Component {
 
 let styles = RkStyleSheet.create(theme => ({
   root: {
-    backgroundColor: theme.colors.screen.base
+    backgroundColor: theme.colors.screen.base,
+    flex: 1
   },
   rootScroll: {
     backgroundColor: theme.colors.screen.base,
@@ -402,8 +491,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail}}) {
-  return { token, hType, outfitDetail }
+function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail}, category: {listOnOutfit, name}}) {
+  return { token, hType, outfitDetail, listOnOutfit, name }
 }
 
 export default connect(mapStateToProps, actions)(OutfitDetail);

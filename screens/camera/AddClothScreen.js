@@ -102,8 +102,8 @@ class AddClothScreen extends Component {
     } else {
       this.setState({onlyMe: true});
     }
-
   }
+
   _setClothImage = (image) => {this.setState({image});}
 
   // CAMERA

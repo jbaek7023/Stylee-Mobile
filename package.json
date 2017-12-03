@@ -14,6 +14,7 @@
   "dependencies": {
     "@expo/samples": "^2.0.2",
     "@expo/vector-icons": "^5.1.0",
+    "@prince8verma/react-native-snackbar": "^1.2.1",
     "axios": "^0.16.2",
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
@@ -37,6 +38,7 @@
     "react-native-modalbox": "^1.4.2",
     "react-native-scalable-image": "^0.2.1",
     "react-native-simple-toast": "^0.0.7",
+    "react-native-snackbar": "^0.4.4",
     "react-native-timeago": "^0.3.0",
     "react-native-ui-kitten": "^2.0.1",
     "react-navigation": "^1.0.0-beta.12",

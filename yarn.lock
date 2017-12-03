@@ -15,6 +15,12 @@
     lodash "^4.17.4"
     react-native-vector-icons "4.1.1"
 
+"@prince8verma/react-native-snackbar@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@prince8verma/react-native-snackbar/-/react-native-snackbar-1.2.1.tgz#2062a9a6c18f02ecbc28b5a674b56bb33d7e7a2a"
+  dependencies:
+    react-native-simple-events "^1.0.1"
+
 JSONStream@~1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/JSONStream/-/JSONStream-1.3.1.tgz#707f761e01dae9e16f1bcf93703b78c70966579a"
@@ -5085,9 +5091,17 @@ react-native-scalable-image@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/react-native-scalable-image/-/react-native-scalable-image-0.2.1.tgz#2900dfd9753c09773d0a7f84fccd0d1b3e76fee4"
 
+react-native-simple-events@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-simple-events/-/react-native-simple-events-1.0.1.tgz#7e636ccd1b7e03029cb78dc9d59d0009f73a3bd6"
+
 react-native-simple-toast@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/react-native-simple-toast/-/react-native-simple-toast-0.0.7.tgz#2ef51bdafd3e98df718f74fdd0bc0ce08608dff8"
+
+react-native-snackbar@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/react-native-snackbar/-/react-native-snackbar-0.4.4.tgz#46d35c171dd28189c60eab0998b88d1c37e9f14e"
 
 react-native-svg@5.3.0:
   version "5.3.0"

@@ -78,3 +78,7 @@ export const CREATE_COMMENT_FAIL = 'create_comment_fail';
 // Category
 export const CATEGORIES_LOAD_SUCCESS = 'categories_load_success';
 export const CATEGORIES_LOAD_FAIL = 'categories_load_fail';
+export const OUTFIT_CATEGORIES_LOAD_SUCCESS = 'outfit_categories_load_success';
+export const OUTFIT_CATEGORIES_LOAD_FAIL = 'outfit_categories_load_fail';
+export const CREATE_CATEGORY_SUCCESS = 'craete_category_success';
+export const CREATE_CATEGORY_FAIL = 'craete_category_fail';
