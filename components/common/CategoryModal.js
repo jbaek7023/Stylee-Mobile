@@ -24,13 +24,23 @@ class CategoryModal extends Component {
     }
   }
 
+
+
+  _handleSelectCategory = (categoryId, selected) => {
+    if(selected) {
+      this.props.unselectCategory(this.props.oid, categoryId)
+    } else {
+      this.props.selectCategory(this.props.oid, categoryId)
+    }
+  }
+
   renderItem = ({item}) => {
     let selected = _.includes(this.props.taggedCategories, item.id)
     return (
       <TouchableOpacity
         key={item.id}
         style={styles.itemStyle}
-        onPress={()=>{this.props.selectCategory(item.id)}}>
+        onPress={()=>{this._handleSelectCategory(item.id, selected)}}>
         <CheckBox style={styles.checkboxStyle} checked={selected} color="black"/>
         <RkText rkType="primary1" style={styles.categoryText}>{item.name}</RkText>
         {this._renderPrivacy(item.only_me)}

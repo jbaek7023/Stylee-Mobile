@@ -82,3 +82,7 @@ export const OUTFIT_CATEGORIES_LOAD_SUCCESS = 'outfit_categories_load_success';
 export const OUTFIT_CATEGORIES_LOAD_FAIL = 'outfit_categories_load_fail';
 export const CREATE_CATEGORY_SUCCESS = 'craete_category_success';
 export const CREATE_CATEGORY_FAIL = 'craete_category_fail';
+export const ADD_TO_CATEGORY_SUCCESS = 'add_to_category_sucess';
+export const ADD_TO_CATEGORY_FAIL = 'add_to_category_fail';
+export const DELTE_FROM_CATEGORY_SUCCESS = 'delete_from_category_success';
+export const DELTE_FROM_CATEGORY_FAIL = 'delete_from_category_fail';

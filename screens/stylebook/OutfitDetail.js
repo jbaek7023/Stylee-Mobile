@@ -34,30 +34,49 @@ class OutfitDetail extends Component {
     listOnOutfit: [],
     title: '',
     onlyMe: false,
+    taggedCategories: [],
   }
 
   componentWillMount() {
     const { id } = this.props.navigation.state.params;
-    const { token, hType} = this.props;
+    const { token, hType } = this.props;
     this.props.fetchOutfitDetail(token, hType, id);
   }
 
   componentWillReceiveProps(nextProps) {
     let isFollowing = nextProps.outfitDetail.is_following;
-    let liked = nextProps.outfitDetail.liked;
-    let starred = nextProps.outfitDetail.starred;
-    let condition = (this.state.isFollowing!=isFollowing || this.state.liked!=liked || this.state.starred!=starred) ? true : false;
+    let { liked, starred } = nextProps.outfitDetail;
+    let condition = (
+      this.state.isFollowing!=isFollowing ||
+      this.state.liked!=liked ||
+      this.state.starred!=starred
+    ) ? true : false;
     if(condition) {
       this.setState({isFollowing, liked, starred});
     }
 
     let { listOnOutfit, name } = nextProps;
-    // compare current state and nextProps state? let's see
-    // compare different array vs array can be lagged
     let categoryUpdateCondition = (this.state.listOnOutfit != listOnOutfit) ? true: false;
     if(categoryUpdateCondition) {
-      this.setState({listOnOutfit})
+      this.setState({listOnOutfit});
+      let taggedCategories = listOnOutfit.reduce((row, {id, added}) => {
+        if(added)
+          row.push(id);
+        return row;
+      }, []);
+      this.setState({ taggedCategories })
     }
+    let addedCondition = (this.props.added != nextProps.added) ? true : false;
+    console.log(addedCondition);
+    if(addedCondition) {
+      SnackBar.show(('Added to '+nextProps.removed), { duration: 2500 })
+    }
+    let removedCondition = (this.props.removed != nextProps.removed) ? true : false;
+    console.log(removedCondition);
+    if(removedCondition) {
+      SnackBar.show(('Removed From '+nextProps.removed), { duration: 2500 })
+    }
+
     let newCategoryCondition = (this.props.name != nextProps.name) ? true: false;
     if (newCategoryCondition) {
       SnackBar.show(('Added to '+nextProps.name), { duration: 2500 })
@@ -257,6 +276,22 @@ class OutfitDetail extends Component {
     this.hideModal();
   }
 
+  _unselectCategory = (oid, categoryId) => {
+    let taggedCategories = _.filter(this.state.taggedCategories, (curObject) => {
+        return curObject !== categoryId;
+    });
+    let { token, hType } = this.props;
+    this.setState({taggedCategories});
+    this.props.deleteFromCategory(token, hType, oid, categoryId);
+  }
+
+  _selectCategory = (oid, categoryId) => {
+    let taggedCategories = [...this.state.taggedCategories, categoryId];
+    let { token, hType } = this.props;
+    this.setState({taggedCategories});
+    this.props.addToCategory(token, hType, oid, categoryId);
+  }
+
   _renderCategoryModal = (oid) => {
     return (
       <CategoryModal
@@ -266,11 +301,14 @@ class OutfitDetail extends Component {
         hideModal={this.hideModal}
         setToCreateScreen={this._setToCreateScreen}
         handleCreatePress={this._handleCreatePress}
+        selectCategory={this._selectCategory}
+        unselectCategory={this._unselectCategory}
         title={this.state.title}
         onlyMe={this.state.onlyMe}
         setTitle={this._setTitle}
         setOnlyMe={this._setOnlyMe}
         oid={oid}
+        taggedCategories={this.state.taggedCategories}
         />
     );
   }
@@ -467,8 +505,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail}, category: {listOnOutfit, name}}) {
-  return { token, hType, outfitDetail, listOnOutfit, name }
+function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail}, category: {listOnOutfit, name, added, removed}}) {
+  return { token, hType, outfitDetail, listOnOutfit, name, added, removed }
 }
 
 export default connect(mapStateToProps, actions)(OutfitDetail);

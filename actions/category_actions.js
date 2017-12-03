@@ -7,6 +7,10 @@ import {
   OUTFIT_CATEGORIES_LOAD_FAIL,
   CREATE_CATEGORY_SUCCESS,
   CREATE_CATEGORY_FAIL,
+  ADD_TO_CATEGORY_SUCCESS,
+  ADD_TO_CATEGORY_FAIL,
+  DELTE_FROM_CATEGORY_SUCCESS,
+  DELTE_FROM_CATEGORY_FAIL,
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
@@ -41,6 +45,43 @@ export const fetchOutfitCategories = (token, hType, oid) => async dispatch => {
     dispatch({ type: OUTFIT_CATEGORIES_LOAD_SUCCESS, payload: response.data.categories })
   } else {
     dispatch({ type: OUTFIT_CATEGORIES_LOAD_FAIL })
+  }
+};
+
+export const addToCategory = (token, hType, oid, categoryId) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.post(`${ROOT_URL}/outfits/addto/`, {
+    outfit_id: oid,
+    category_id: categoryId
+  }, {headers});
+  if (response.status === 201) {
+    dispatch({ type: ADD_TO_CATEGORY_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: ADD_TO_CATEGORY_FAIL })
+  }
+};
+export const deleteFromCategory = (token, hType, oid, categoryId) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.post(`${ROOT_URL}/outfits/deletefrom/`, {
+    outfit_id: oid,
+    category_id: categoryId
+  }, {headers});
+  if (response.status === 200) {
+    dispatch({ type: DELTE_FROM_CATEGORY_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: DELTE_FROM_CATEGORY_FAIL })
   }
 };
 
