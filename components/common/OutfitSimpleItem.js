@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { width, height, totalSize } from 'react-native-dimension';
 import TimeAgo from 'react-native-timeago';
+import CategoryModal from '../../components/common/CategoryModal';
+import SnackBar from 'react-native-snackbar-dialog';
 
 import { Avatar } from '../../components/Avatar';
 
@@ -14,7 +16,39 @@ class OutfitSimpleItem extends Component {
     liked: false,
     starred: false,
     isCategoryVisible: false,
+    newScreen: false,
+    listOnOutfit: [],
+    title: '',
+    onlyMe: false,
+    taggedCategories: []
   }
+
+  componentWillReceiveProps(nextProps) {
+    let { liked, starred } = nextProps.item;
+    let condition = (
+      this.state.liked!=liked ||
+      this.state.starred!=starred
+    ) ? true : false;
+    if(condition) {
+      this.setState({liked, starred});
+    }
+
+    let { listOnOutfit, name } = nextProps;
+    let categoryUpdateCondition = (this.state.listOnOutfit != listOnOutfit) ? true: false;
+    if(categoryUpdateCondition) {
+      this.setState({listOnOutfit});
+      let taggedCategories = listOnOutfit.reduce((row, {id, added}) => {
+        if(added)
+          row.push(id);
+        return row;
+      }, []);
+      this.setState({ taggedCategories })
+    }
+    // Snackbar disabled
+  }
+
+  hideModal = () => this.setState({isCategoryVisible: false})
+  showModal = () => this.setState({isCategoryVisible: true});
 
   _handleLikePress = (oid) => {
     let { token, hType } = this.props;
@@ -62,6 +96,46 @@ class OutfitSimpleItem extends Component {
     // obj.id, obj.user.image, obj.user.id, obj.content, obj.publish, obj.updated, obj.reply_count
   }
 
+  _setTitle = (title) => {
+    this.setState({title})
+  }
+
+  _setOnlyMe = () => {
+    if(this.state.onlyMe) {
+      this.setState({onlyMe: false});
+    } else {
+      this.setState({onlyMe: true});
+    }
+  }
+
+  _setToCreateScreen = (newScreen) => {
+    this.setState({newScreen});
+  }
+
+  _handleCreatePress = (oid) => {
+    let { title, onlyMe } = this.state;
+    let { token, hType } = this.props;
+    this.props.createNewCategory(token, hType, oid, title, onlyMe);
+    this.setState({newScreen:false});
+    this.hideModal();
+  }
+
+  _unselectCategory = (oid, categoryId) => {
+    let taggedCategories = _.filter(this.state.taggedCategories, (curObject) => {
+        return curObject !== categoryId;
+    });
+    let { token, hType } = this.props;
+    this.setState({taggedCategories});
+    this.props.deleteFromCategory(token, hType, oid, categoryId);
+  }
+
+  _selectCategory = (oid, categoryId) => {
+    let taggedCategories = [...this.state.taggedCategories, categoryId];
+    let { token, hType } = this.props;
+    this.setState({taggedCategories});
+    this.props.addToCategory(token, hType, oid, categoryId);
+  }
+
   _renderPostHeader = (item) => {
     return (
       <View style={styles.headerLayout}>
@@ -84,6 +158,37 @@ class OutfitSimpleItem extends Component {
 
   _handleImagePress = (id) => {
     this.props.navigation.navigate('OutfitDetail', {id})
+  }
+
+  hideModal = () => this.setState({isCategoryVisible: false})
+
+  _renderCategoryModal = (oid) => {
+    return (
+      <CategoryModal
+        newScreen={this.state.newScreen}
+        categoryList={this.state.listOnOutfit}
+        isCategoryVisible={this.state.isCategoryVisible}
+        hideModal={this.hideModal}
+        setToCreateScreen={this._setToCreateScreen}
+        handleCreatePress={this._handleCreatePress}
+        selectCategory={this._selectCategory}
+        unselectCategory={this._unselectCategory}
+        title={this.state.title}
+        onlyMe={this.state.onlyMe}
+        setTitle={this._setTitle}
+        setOnlyMe={this._setOnlyMe}
+        oid={oid}
+        taggedCategories={this.state.taggedCategories}
+        />
+    );
+  }
+
+  _handleCategoryPress = (oid) => {
+    let { token, hType } = this.props;
+    // fetchCategory
+    this.props.fetchOutfitCategories(token, hType, oid);
+    this.setState({newScreen:false});
+    this.showModal();
   }
 
   render() {
@@ -119,6 +224,7 @@ class OutfitSimpleItem extends Component {
               handleUnlikePress={this._handleUnlikePress}
               handleBookmarkPress={this._handleBookmarkPress}
               handleUnbookmarkPress={this._handleUnbookmarkPress}
+              handleCategoryPress={this._handleCategoryPress}
               handleCommentPress={this._handleCommentPress}
               showModal={this.showModal}
               oid={item.id}
@@ -133,6 +239,7 @@ class OutfitSimpleItem extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.profileSeperator} />
+          {this._renderCategoryModal(item.id)}
         </RkCard>
     );
   }
@@ -209,8 +316,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}}) {
-  return { token, hType }
+function mapStateToProps({auth: {token, hType}, category: {listOnOutfit, name, added, removed}}) {
+  return { token, hType, listOnOutfit, name, added, removed }
 }
 
 export default connect(mapStateToProps, actions)(OutfitSimpleItem);

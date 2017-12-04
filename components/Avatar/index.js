@@ -29,14 +29,14 @@ export class Avatar extends RkComponent {
     if(_.isNil(this.props.img)) {
       return (
         <View>
-          <Image style={image} source={require('../../assets/images/default_profile.png')}/>
+          <Image fadeDuration={0} style={image} source={require('../../assets/images/default_profile.png')}/>
           { this.props.badge && this.renderBadge(badge, badgeText)}
         </View>
       )
     } else {
       return (
         <View>
-          <Image style={image} source={this.props.img}/>
+          <Image fadeDuration={0} style={image} source={this.props.img}/>
           { this.props.badge && this.renderBadge(badge, badgeText)}
         </View>
       )

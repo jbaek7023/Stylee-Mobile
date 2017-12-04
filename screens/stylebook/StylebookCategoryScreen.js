@@ -46,7 +46,7 @@ class StylebookCategoryScreen extends Component {
     return (
       <Image
         key={item.id}
-        source={require('../../assets/images/robot-dev.png')}
+        source={require('../../assets/images/styles.png')}
         style={styles.rowImage}
         resizeMode="cover"
       />
@@ -60,7 +60,7 @@ class StylebookCategoryScreen extends Component {
         <View style={styles.rowContainer}>
           {this._renderImage(item)}
           <RkText rkType="primary3">{item.name}</RkText>
-          <RkText rkType="secondary2 hintColor">3 Styles</RkText>
+          <RkText rkType="secondary2 hintColor">{item.length} Style</RkText>
         </View>
       </TouchableWithoutFeedback>
     );

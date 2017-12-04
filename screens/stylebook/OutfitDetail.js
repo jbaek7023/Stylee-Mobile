@@ -18,7 +18,7 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { threeImageWidth } from '../../utils/scale';
 import CategoryModal from '../../components/common/CategoryModal';
 import Toast from 'react-native-simple-toast';
-import SnackBar from 'react-native-snackbar-dialog'
+import SnackBar from 'react-native-snackbar-dialog';
 
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
@@ -67,12 +67,10 @@ class OutfitDetail extends Component {
       this.setState({ taggedCategories })
     }
     let addedCondition = (this.props.added != nextProps.added) ? true : false;
-    console.log(addedCondition);
     if(addedCondition) {
       SnackBar.show(('Added to '+nextProps.removed), { duration: 2500 })
     }
     let removedCondition = (this.props.removed != nextProps.removed) ? true : false;
-    console.log(removedCondition);
     if(removedCondition) {
       SnackBar.show(('Removed From '+nextProps.removed), { duration: 2500 })
     }
