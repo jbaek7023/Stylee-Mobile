@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RkText, RkTextInput, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
-import { findNodeHandle, ImageEditor, ImageStore, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
+import { FlatList, findNodeHandle, ImageEditor, ImageStore, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 import { threeImageWidth } from '../../utils/scale';
@@ -56,8 +56,9 @@ class AddStyleScreen extends Component {
     taggedCategories: [],
     newClothInstances: [],
     onlyMe: false,
-
     categoryList: [],
+
+    newClothes: {},
   }
   // END OF CAMEARA
   _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
@@ -82,7 +83,6 @@ class AddStyleScreen extends Component {
 
   componentWillReceiveProps(nextProps) {
     // onAuthComplete Pass twice. so. it's
-    console.log(nextProps.list);
     if ( this.props.list !== nextProps.list) {
       this.setState({categoryList:nextProps.list});
     }
@@ -160,11 +160,10 @@ class AddStyleScreen extends Component {
     this._showCategoryModal();
   }
 
-  _renderClothImage = () => {
+  _renderStyleImage = () => {
     let {image} = this.state;
     if(!_.isNil(image)) {
       return (
-
           <Image
             source={{uri: image}}
             style={styles.headValidStyle}
@@ -185,48 +184,50 @@ class AddStyleScreen extends Component {
   }
 
   tagFromPhoto = (taggedClothes) => {
-    let { left, top, thumbSize } = taggedClothes[0];
-    let topData = top - thumbSize/2;
-    let leftData = left - thumbSize/2;
+    let imageDataArray = [];
+    let taggedClothesArray = Object.values(taggedClothes);
+    let length = taggedClothesArray.length;
 
-    console.log(this.state.height);
-    //480 480
-    console.log(topData);
-    console.log(thumbSize); //347
-    console.log(width(100));
-    let realThumbSize = thumbSize/width(100)*(this.state.width);
-    let realTop = topData/width(100)*(this.state.height);
-    let realLeft = leftData/width(100)*(this.state.width);
-    console.log(realThumbSize);
-
-    let imageData = {
-      offset: {
-        x: realLeft,
-        y: realTop
-      },
-      size: {
-        width: realThumbSize,
-        height: realThumbSize
-      },
-      resizeMode: 'contain'
+    for(var index in taggedClothesArray) {
+      let { left, top, thumbSize, id } = taggedClothesArray[index];
+      let topData = top - thumbSize/2;
+      let leftData = left - thumbSize/2;
+      let realThumbSize = thumbSize/width(100)*(this.state.width);
+      let realTop = topData/width(100)*(this.state.height);
+      let realLeft = leftData/width(100)*(this.state.width);
+      let imageData = {
+        offset: {
+          x: realLeft,
+          y: realTop
+        },
+        size: {
+          width: realThumbSize,
+          height: realThumbSize
+        },
+        resizeMode: 'contain'
+      }
+      ImageEditor.cropImage(
+        this.state.image,
+        imageData,
+        (successURI) => {
+          ImageStore.getBase64ForTag(successURI,
+            (base64Data) => {
+              imageDataArray.push({id:id, image: successURI, base64: base64Data});
+              taggedClothesArray = Object.values(taggedClothes);
+              const merged = taggedClothesArray.map((tagged, i) => {
+                return {
+                  ...tagged,
+                  ...imageDataArray[i]
+                };
+              });
+              this.setState({taggedClothes: merged});
+            },
+            (failure) => {console.log('failed to load')}
+          ); // end of get Base64
+        },
+        (error) => { console.log('ERROR: ', error)}
+      )
     }
-    ImageEditor.cropImage(
-      this.state.image,
-      imageData,
-      (successURI) => {
-        ImageStore.getBase64ForTag(successURI,
-          (base64Data) => {
-            // console.log(base64Data);
-            // set this base data to the cropped datas
-          },
-          (failure) => {console.log('failed to load')});
-        console.log(successURI);
-        let removeResult = ImageStore.removeImageForTag(successURI);
-        console.log(removeResult);
-      },
-      (error) => { console.log('ERROR: ', error)}
-    )
-    // Saved success uri goes to setState to tagged Clothes.
   }
 
   _tagFromPhoto = () => {
@@ -302,7 +303,7 @@ class AddStyleScreen extends Component {
     this.scroll.props.scrollToFocusedInput(reactNode)
   }
 
-  _renderTaggedClothes = () => {
+  _renderOpenWardrobe = () => {
     let ids = this.state.selectedClothesIds;
     if(ids.length==0) {
       return (
@@ -334,6 +335,77 @@ class AddStyleScreen extends Component {
     }
   }
 
+  _renderImageFromURI = (image) => {
+    // TAGGED CLOTHES
+    if(image) {
+      return (
+        <Image
+          source={{uri: image}}
+          style={styles.headValidStyle}
+          resizeMode="cover"
+        />
+      );
+    } else {
+      return (
+        <Image
+          source={require('../../assets/images/default_profile.png')}
+          resizeMode="cover"
+          style={styles.headValidStyle}
+        />
+      );
+    }
+  }
+
+  _renderSeasons = (seasons) => {
+    if(seasons.length==0) {
+      return '-'
+    }
+    let seasonList = seasons.map((season) => {
+      return ' '+season;
+    })
+    return seasonList
+  }
+
+  // tagged CLOTHES!!!
+  _renderItemForTag = ({item}) => {
+    let { id, image, type, seasons } = item;
+    return (
+      <View
+        key={id}
+        style={styles.headContainer}>
+        <View style={styles.aleftheadContainer}>
+          <View
+            style={styles.aimageContainer}>
+            {this._renderImageFromURI(image)}
+          </View>
+        </View>
+        <View style={styles.arightheadContainer}>
+          <RkText rkType="header5">{type}</RkText>
+          <RkText rkType="header5">{this._renderSeasons(seasons)}</RkText>
+        </View>
+        <View style={styles.editDeleteContainer}>
+          <TouchableOpacity style={styles.editContainer}>
+            <RkText rkType='awesome'>{FontAwesome.edit}</RkText>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.deleteContainer}>
+            <RkText rkType='awesome'>{FontAwesome.delete}</RkText>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  _keyExtractor = (item, index) => item.id;
+  _renderFlatListForTag = () => {
+    return (
+      <FlatList
+        data={this.state.taggedClothes}
+        renderItem={this._renderItemForTag}
+        keyExtractor={this._keyExtractor}
+      />
+    );
+  }
+
   render() {
     return (
       <View style={{flex:1}}>
@@ -346,7 +418,7 @@ class AddStyleScreen extends Component {
               <TouchableOpacity
                 style={[styles.imageContainer]}
                 onPress={()=>{this.setState({isModalVisible:true})}}>
-                {this._renderClothImage()}
+                {this._renderStyleImage()}
               </TouchableOpacity>
             </View>
           </View>
@@ -404,7 +476,7 @@ class AddStyleScreen extends Component {
            style={[styles.dContainer, styles.drow]}
            onPress={this._openWardrobe}>
               <RkText rkType="header5">Tagged Clothes</RkText>
-              {this._renderTaggedClothes()}
+              {this._renderOpenWardrobe()}
           </TouchableOpacity>
           <View style={styles.contextSeperator}/>
           <TouchableOpacity
@@ -413,6 +485,7 @@ class AddStyleScreen extends Component {
               <RkText rkType="header5">New Clothes</RkText>
               <RkText rkType="header5 primary right">Tag From Photo</RkText>
           </TouchableOpacity>
+          {this._renderFlatListForTag()}
           <View style={styles.contextSeperator}/>
           <TouchableOpacity
            style={[styles.dContainer, styles.drow]}
@@ -479,8 +552,6 @@ let styles = RkStyleSheet.create(theme => ({
   },
   headContainer: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#cfcfd6',
     justifyContent: 'center'
   },
   leftheadContainer: {
@@ -631,6 +702,38 @@ let styles = RkStyleSheet.create(theme => ({
   },
   contentHeader: {
     justifyContent: 'center',
+  },
+  aContainer: {
+   flexDirection: 'row',
+   backgroundColor: theme.colors.screen.base
+  },
+  aleftheadContainer: {
+     width: 90
+  },
+  editDeleteContainer: {
+     flexDirection: 'row',
+     paddingRight: 15,
+  },
+  editContainer: {
+     width: 50,
+     justifyContent: 'center',
+     alignItems: 'center'
+  },
+  deleteContainer:{
+     width: 50,
+     alignItems: 'center',
+     justifyContent: 'center'
+  },
+  arightheadContainer: {
+     alignItems: 'stretch',
+     flex: 1,
+     padding: 10
+  },
+  aimageContainer: {
+     margin:10,
+     justifyContent: 'center',
+     height: 70,
+     width: 70
   },
 }));
 

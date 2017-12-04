@@ -20,8 +20,8 @@ class TagFromPhoto extends Component {
     left: width(100) / 2,
     top: height(100) / 2,
     taggedClothes: {
-      // 0: {id:0, left:100, top:100, thumbSize:100, type: 'A', seasons: ['All', 'All']},
-      // 1: {id:1, left:200, top:200, thumbSize:100, type: 'B', seasons: ['All', 'All']},
+      0: {id:0, left:100, top:100, thumbSize:100, type: 'T-Shirt', seasons: ['Fall', 'Spring'], image: null},
+      1: {id:1, left:200, top:200, thumbSize:100, type: 'Coat', seasons: ['Spring', 'Fall'], image: null},
     },
     selectedClothId : 0,
   }
@@ -216,7 +216,7 @@ class TagFromPhoto extends Component {
         selectedClothId:length,
         taggedClothes: {
           ...taggedClothes,
-          [length]: {id:length, left:200, top:200, thumbSize:100, type: 'a', seasons: ['All']}
+          [length]: { id:length, left:200, top:200, thumbSize:100, type: 'a', seasons: ['All'], image: null }
         }
     })
   }
