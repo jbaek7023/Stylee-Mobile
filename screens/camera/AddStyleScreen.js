@@ -15,7 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-
+import SnackBar from 'react-native-snackbar-dialog';
 import {
   RkSwitch
 } from '../../components/switch/index';
@@ -91,6 +91,7 @@ class AddStyleScreen extends Component {
 
     if(this.props.categoryId !== nextProps.categoryId) {
       this._selectCategory(0, nextProps.categoryId);
+      SnackBar.show((nextProps.newName + ' has been creted'), { duration: 2500 })
     }
   }
   // CAMERA
@@ -811,8 +812,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, category: {list, id}}) {
-  return { token, hType, list, categoryId: id }
+function mapStateToProps({auth: {token, hType}, category: {list, id, name}}) {
+  return { token, hType, list, categoryId: id, newName: name }
 }
 
 export default connect(mapStateToProps, actions)(AddStyleScreen);

@@ -7,6 +7,7 @@ import {FontAwesome} from '../../assets/icons';
 import {createResponder} from 'react-native-gesture-responder';
 import _ from 'lodash';
 import CroppedImage from '../../components/CroppedImage';
+import SnackBar from 'react-native-snackbar-dialog';
 
 class TagFromPhoto extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -128,8 +129,7 @@ class TagFromPhoto extends Component {
               borderColor: 'yellow',
               alignItems: 'center',
               justifyContent: 'center'
-            }}
-          >
+            }}>
             <Text style={{color:'yellow', fontWeight: 'bold'}}>Move or Pinch</Text>
           </View>
         );
@@ -154,6 +154,7 @@ class TagFromPhoto extends Component {
   }
 
   _renderTaggedClothImage = (image) => {
+    console.log(image)
     let { selectedClothId } = this.state;
     if(selectedClothId) {
       // style={selectedStyle(left, top, thumbSize)}
@@ -200,13 +201,8 @@ class TagFromPhoto extends Component {
   _createTag = () => {
     let { taggedClothes } = this.state;
     let length = Object.keys(taggedClothes).length;
-    if(length>6) {
-      // Sorry, we're not allowing more than 6 clothes on this photo
-
-      // You can tag more later
-
-      // OK
-
+    if(length>3) {
+      SnackBar.show("Sorry we're not allowing more than four clothes to tag", { duration: 2500 })
       return; // break the function
     }
     while(taggedClothes[length]) {
@@ -216,7 +212,7 @@ class TagFromPhoto extends Component {
         selectedClothId:length,
         taggedClothes: {
           ...taggedClothes,
-          [length]: { id:length, left:200, top:200, thumbSize:100, type: 'a', seasons: ['All'], image: null }
+          [length]: { id:length, left:200, top:200, thumbSize:100, type: 'Top', seasons: [6], image: null }
         }
     })
   }
