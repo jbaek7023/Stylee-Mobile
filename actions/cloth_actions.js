@@ -11,7 +11,6 @@ import {
 const ROOT_URL = 'http://10.0.2.2:8000';
 
 export const createCloth = (token, hType, clothObject) => async dispatch => {
-  console.log(clothObject);
   let headers = { 'Authorization': `JWT ${token}`};
   if(hType==1) {
     headers = { 'Authorization': `JWT ${token}`};
@@ -19,20 +18,18 @@ export const createCloth = (token, hType, clothObject) => async dispatch => {
     headers = { 'Authorization': `Bearer ${token}`};
   }
 
-  let {base64, text, bigType, clothType, selectedSeasonIds,
+  let {base64, name, bigType, clothType, selectedSeasonIds,
     gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-    brand, location, link, inWardrobe, onlyMe} = clothObject;
+    brand, location, link, inWardrobe, onlyMe, description} = clothObject;
 
   let image = base64;
 
   let response = await axios.post(`${ROOT_URL}/clothes/create/`, {
     image,
-    text, bigType, clothType, selectedSeasonIds,
+    name, bigType, clothType, selectedSeasonIds,
     gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-    brand, location, link, inWardrobe, onlyMe
+    brand, location, link, inWardrobe, onlyMe, description
   }, {headers});
-
-  console.log(response.data);
 
   if(response.data) {
     dispatch({ type: CREATE_CLOTH_SUCCESS, payload: response.data })

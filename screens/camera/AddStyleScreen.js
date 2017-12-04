@@ -12,6 +12,7 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { ImagePicker } from 'expo';
 import StyleSelectorModal from '../../components/common/StyleSelectorModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
@@ -35,32 +36,34 @@ class AddStyleScreen extends Component {
   })
 
   state = {
+    isCategoryVisible: false,
+    newScreen: false,
+    title: '',
+    categoryOnlyMe: false,
+
     isModalVisible: true,
-
-    myInfo: true,
-    text: '',
+    name: '',
     textHeight: 0,
-
     image: null,
     width: null,
     height: null,
-
     items: [],
-
     isSelectorVisible: false,
-
     gender: 'Unisex',
     location: '',
     isYou: true,
     selectedClothesIds: [],
     taggedCategories: [],
-    newClothInstances: [],
     onlyMe: false,
     categoryList: [],
-
-    newClothes: {},
+    description: '',
+    taggedClothes: []
   }
-  // END OF CAMEARA
+
+  _setTitle = (title) => {this.setState({title})}
+  _setCategoryOnlyMe = () => {
+    this.setState({categoryOnlyMe: !this.state.categoryOnlyMe})
+  }
   _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
   _setGender = (gender) => {this.setState({gender})}
   _showModal = () => this.setState({ isModalVisible: true })
@@ -71,7 +74,6 @@ class AddStyleScreen extends Component {
   _setHeight = (height) => this.setState({ height })
   _showSelector = () => this.setState({ isSelectorVisible: true })
   _hideSelector = () => this.setState({ isSelectorVisible: false })
-  _setLocation = (location) => this.setState({location})
   _setTaggedCategories = (taggedCategories) => this.setState({taggedCategories})
   _setOnlyMe = () => {
     if(this.state.onlyMe) {
@@ -85,6 +87,10 @@ class AddStyleScreen extends Component {
     // onAuthComplete Pass twice. so. it's
     if ( this.props.list !== nextProps.list) {
       this.setState({categoryList:nextProps.list});
+    }
+
+    if(this.props.categoryId !== nextProps.categoryId) {
+      this._selectCategory(0, nextProps.categoryId);
     }
   }
   // CAMERA
@@ -223,7 +229,7 @@ class AddStyleScreen extends Component {
               this.setState({taggedClothes: merged});
             },
             (failure) => {console.log('failed to load')}
-          ); // end of get Base64
+          );
         },
         (error) => { console.log('ERROR: ', error)}
       )
@@ -274,15 +280,17 @@ class AddStyleScreen extends Component {
           <View style={styles.right}>
               <TouchableOpacity onPress={
                 () => {
-                  let {image, text, bigType, clothType, selectedSeasonIds,
-                    gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-                    brand, location, link, inWardrobe, onlyMe, base64 } = this.state;
+                  let {
+                    name, image, gender, location, isYou, description, selectedClothesIds,
+                    taggedClothes, taggedCategories, onlyMe } = this.state;
                   let {token, hType} = this.props;
                   if(token) {
-                    this.props.createStyle(token, hType, {
-                      image, text, bigType, clothType, selectedSeasonIds,
-                      gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-                      brand, location, link, inWardrobe, onlyMe, base64 });
+                    // this.props.createStyle(token, hType, {
+                    //   name, image, gender, location, isYou, description,
+                    //   selectedClothesIds, taggedClothes, taggedCategories, onlyMe });
+                    console.log(token, hType, {
+                      name, image, gender, location, isYou, description,
+                      selectedClothesIds, taggedClothes, taggedCategories, onlyMe });
                   }
                   this.props.navigation.goBack();
                 }}>
@@ -322,15 +330,20 @@ class AddStyleScreen extends Component {
     }
   }
 
-  _selectCategory = (id) => {
+  _selectCategory = (oid, id) => {
+    let { taggedCategories } = this.state;
+    if(!_.includes(taggedCategories, id)) {
+      let newTaggedCategories = [...this.state.taggedCategories, id];
+      this._setTaggedCategories(newTaggedCategories);
+    }
+  }
+
+  _unselectCategory = (oid, id) => {
     let { taggedCategories } = this.state;
     if(_.includes(taggedCategories, id)) {
       let newTaggedCategories = _.filter(taggedCategories, (curObject) => {
           return curObject !== id;
       });
-      this._setTaggedCategories(newTaggedCategories);
-    } else {
-      let newTaggedCategories = [...this.state.taggedCategories, id];
       this._setTaggedCategories(newTaggedCategories);
     }
   }
@@ -369,30 +382,37 @@ class AddStyleScreen extends Component {
   // tagged CLOTHES!!!
   _renderItemForTag = ({item}) => {
     let { id, image, type, seasons } = item;
-    return (
-      <View
-        key={id}
-        style={styles.headContainer}>
-        <View style={styles.aleftheadContainer}>
-          <View
-            style={styles.aimageContainer}>
-            {this._renderImageFromURI(image)}
+    if(image) {
+      return (
+        <View
+          key={id}
+          style={styles.headContainer}>
+          <View style={styles.aleftheadContainer}>
+            <View
+              style={styles.aimageContainer}>
+              {this._renderImageFromURI(image)}
+            </View>
+          </View>
+          <View style={styles.arightheadContainer}>
+            <RkText rkType="header5">{type}</RkText>
+            <RkText rkType="header5">{this._renderSeasons(seasons)}</RkText>
+          </View>
+          <View style={styles.editDeleteContainer}>
+            <TouchableOpacity style={styles.editContainer}>
+              <RkText rkType='awesome'>{FontAwesome.edit}</RkText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.deleteContainer}>
+              <RkText rkType='awesome'>{FontAwesome.delete}</RkText>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.arightheadContainer}>
-          <RkText rkType="header5">{type}</RkText>
-          <RkText rkType="header5">{this._renderSeasons(seasons)}</RkText>
-        </View>
-        <View style={styles.editDeleteContainer}>
-          <TouchableOpacity style={styles.editContainer}>
-            <RkText rkType='awesome'>{FontAwesome.edit}</RkText>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.deleteContainer}>
-            <RkText rkType='awesome'>{FontAwesome.delete}</RkText>
-          </TouchableOpacity>
-        </View>
+      );
+    } else {
+      <View style={styles.emptyContainer}>
+        <RkText rkType="primary3">Error - Could not save it from the image</RkText>
       </View>
-    );
+    }
+
   }
 
   _keyExtractor = (item, index) => item.id;
@@ -403,6 +423,45 @@ class AddStyleScreen extends Component {
         renderItem={this._renderItemForTag}
         keyExtractor={this._keyExtractor}
       />
+    );
+  }
+
+  _setIsYou = () => {
+    this.setState({isYou: !this.state.isYou})
+  }
+
+  _handleCreatePress = () => {
+    let { title, categoryOnlyMe } = this.state;
+    let { token, hType } = this.props;
+    this.props.createNewCategory(token, hType, 0, title, categoryOnlyMe);
+    this.setState({newScreen: false, categoryOnlyMe:false, title: ''});
+    this._hideCategoryModal();
+
+  }
+
+  _setToCreateScreen = (newScreen) => {
+    this.setState({newScreen});
+    console.log(this.state.taggedCategories);
+  }
+
+  _renderCategoryModal = () => {
+    return (
+      <CategoryModal
+        newScreen={this.state.newScreen}
+        categoryList={this.state.categoryList}
+        isCategoryVisible={this.state.isCategoryVisible}
+        hideModal={this._hideCategoryModal}
+        setToCreateScreen={this._setToCreateScreen}
+        handleCreatePress={this._handleCreatePress}
+        selectCategory={this._selectCategory}
+        unselectCategory={this._unselectCategory}
+        title={this.state.title}
+        onlyMe={this.state.categoryOnlyMe}
+        setTitle={this._setTitle}
+        setOnlyMe={this._setCategoryOnlyMe}
+        oid={0}
+        taggedCategories={this.state.taggedCategories}
+        />
     );
   }
 
@@ -423,22 +482,34 @@ class AddStyleScreen extends Component {
             </View>
           </View>
           <View style={[styles.dContainer, styles.titleRow]}>
-            <RkText rkType="header5">Style Title</RkText>
+            <RkText rkType="header5">Style Name</RkText>
             <TextInput
               multiline
               selectionColor='grey'
               underlineColorAndroid='white'
               placeholder="Special Outfit For Special Day"
               style={[styles.moreDetailStyle]}
-              onChangeText={(text)=>{
-                this.setState({text})
+              onChangeText={(name)=>{
+                this.setState({name})
               }}
-              onContentSizeChange={(event) => {
-                this.setState({ textHeight: event.nativeEvent.contentSize.height });
-              }}
-              value={this.state.text}/>
+              value={this.state.name}/>
           </View>
 
+          <View style={styles.contextSeperator}/>
+          <TouchableOpacity
+           style={[styles.dContainer, styles.drow]}
+           onPress={this._openWardrobe}>
+              <RkText rkType="header5">Tagged Clothes</RkText>
+              {this._renderOpenWardrobe()}
+          </TouchableOpacity>
+          <View style={styles.contextSeperator}/>
+          <TouchableOpacity
+           style={[styles.dContainer, styles.drow]}
+           onPress={this._tagFromPhoto}>
+              <RkText rkType="header5">New Clothes</RkText>
+              <RkText rkType="header5 primary right">Tag From Photo</RkText>
+          </TouchableOpacity>
+          {this._renderFlatListForTag()}
           <View style={styles.contextSeperator}/>
 
           <View style={styles.dContainer}>
@@ -459,7 +530,7 @@ class AddStyleScreen extends Component {
               value={this.state.location}
               style={styles.moreDetailStyle}
               underlineColorAndroid='white'
-              onChangeText={(location) => this._setLocation(location)}/>
+              onChangeText={(location) => this.setState({location})}/>
           </View>
 
           <View style={[styles.dContainer, styles.row]}>
@@ -468,24 +539,26 @@ class AddStyleScreen extends Component {
               style={styles.switch}
               value={this.state.isYou}
               name="Push"
-              onValueChange={(isYou) => this.setState({isYou})}/>
+              onValueChange={() => this._setIsYou()}/>
           </View>
-
-          <View style={styles.contextSeperator}/>
-          <TouchableOpacity
-           style={[styles.dContainer, styles.drow]}
-           onPress={this._openWardrobe}>
-              <RkText rkType="header5">Tagged Clothes</RkText>
-              {this._renderOpenWardrobe()}
-          </TouchableOpacity>
-          <View style={styles.contextSeperator}/>
-          <TouchableOpacity
-           style={[styles.dContainer, styles.drow]}
-           onPress={this._tagFromPhoto}>
-              <RkText rkType="header5">New Clothes</RkText>
-              <RkText rkType="header5 primary right">Tag From Photo</RkText>
-          </TouchableOpacity>
-          {this._renderFlatListForTag()}
+          <View style={styles.arightheadContainer}>
+            <TextInput
+              onFocus={(event: Event) => {
+                this._scrollToInput(findNodeHandle(event.target))
+              }}
+              multiline
+              selectionColor='grey'
+              underlineColorAndroid='white'
+              placeholder="Description"
+              style={[styles.inputStyle, {height: Math.max(40, this.state.textHeight), marginLeft: 20}]}
+              onChangeText={(description)=>{
+                this.setState({ description })
+              }}
+              onContentSizeChange={(event) => {
+                this.setState({ textHeight: event.nativeEvent.contentSize.height });
+              }}
+              value={this.state.description}/>
+          </View>
           <View style={styles.contextSeperator}/>
           <TouchableOpacity
            style={[styles.dContainer, styles.drow]}
@@ -509,17 +582,12 @@ class AddStyleScreen extends Component {
             {this._renderModal()}
           </View>
           <View>
-            <CategoryModal
-              isCategoryVisible={this.state.isCategoryVisible}
-              hideModal={this._hideCategoryModal}
-              taggedCategories={this.state.taggedCategories}
-              categoryList={this.state.categoryList}
-              selectCategory={this._selectCategory}
-              />
+            {this._renderCategoryModal()}
           </View>
           <View>
             {this._renderStyleSelectorModal()}
           </View>
+          <KeyboardSpacer />
         </KeyboardAwareScrollView>
       </View>
     );
@@ -527,6 +595,12 @@ class AddStyleScreen extends Component {
 }
 
 let styles = RkStyleSheet.create(theme => ({
+  emptyContainer: {
+    height: 90,
+    backgroundColor: theme.colors.screen.base,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   titleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -737,8 +811,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, category: {list}}) {
-  return { token, hType, list }
+function mapStateToProps({auth: {token, hType}, category: {list, id}}) {
+  return { token, hType, list, categoryId: id }
 }
 
 export default connect(mapStateToProps, actions)(AddStyleScreen);

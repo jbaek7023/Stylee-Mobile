@@ -24,6 +24,9 @@ export default function(state = INITIAL_STATE, action) {
     case OUTFIT_CATEGORIES_LOAD_FAIL:
       return { ...state }
     case CREATE_CATEGORY_SUCCESS:
+      if(action.payload.id) {
+        return { ...state, name: action.payload.name, id: action.payload.id}
+      }
       return { ...state, name: action.payload.name}
     case CREATE_CATEGORY_FAIL:
       return { ...state }

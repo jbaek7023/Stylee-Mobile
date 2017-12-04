@@ -10,6 +10,7 @@ import Modal from 'react-native-modal';
 import { width, height, totalSize } from 'react-native-dimension';
 import { Button } from 'native-base';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   RkSwitch
 } from '../../components/switch/index';
@@ -22,7 +23,7 @@ import SelectedSeasonsSelector from '../../selectors/selected_seasons';
 import SelectedColorsSelector from '../../selectors/selected_colors';
 import SelectedSizesSelector from '../../selectors/selected_sizes';
 import { connect } from 'react-redux';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { NavigationActions } from 'react-navigation'
 import * as actions from '../../actions';
 
@@ -37,7 +38,6 @@ class AddClothScreen extends Component {
     image: null,
     isModalVisible: true,
     onlyMe: false,
-    text: '',
     textHeight: 0,
     inWardrobe: true,
     isSelectorVisible: false,
@@ -57,7 +57,8 @@ class AddClothScreen extends Component {
     location: '',
     link: '',
     base64: undefined,
-    content: ''
+    name: '',
+    description: '',
   }
 
   _showModal = () => this.setState({ isModalVisible: true });
@@ -390,15 +391,15 @@ class AddClothScreen extends Component {
           <View style={styles.right}>
               <TouchableOpacity onPress={
                 () => {
-                  let {image, text, bigType, clothType, selectedSeasonIds,
+                  let {image, name, bigType, clothType, selectedSeasonIds,
                     gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-                    brand, location, link, inWardrobe, onlyMe, base64 } = this.state;
+                    brand, location, link, inWardrobe, onlyMe, base64, description } = this.state;
                   let {token, hType} = this.props;
                   if(token) {
                     this.props.createCloth(token, hType, {
-                      image, text, bigType, clothType, selectedSeasonIds,
+                      image, name, bigType, clothType, selectedSeasonIds,
                       gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-                      brand, location, link, inWardrobe, onlyMe, base64 });
+                      brand, location, link, inWardrobe, onlyMe, base64, description });
                   }
                   this.props.navigation.goBack();
                 }}>
@@ -428,16 +429,16 @@ class AddClothScreen extends Component {
           </View>
           <View>
             <View style={[styles.dContainer, styles.titleRow]}>
-              <RkText rkType="header5">Cloth Title</RkText>
+              <RkText rkType="header5">Cloth Name</RkText>
               <TextInput
                 onFocus={(event: Event) => {
                   this._scrollToInput(findNodeHandle(event.target))
                 }}
                 placeholder="My Favorite T-Shirt"
                 style={[styles.moreDetailStyle]}
-                value={this.state.content}
+                value={this.state.name}
                 underlineColorAndroid='white'
-                onChangeText={(content) => this.setState({content})}/>
+                onChangeText={(name) => this.setState({name})}/>
             </View>
             <View style={styles.contextSeperator}/>
             <View style={styles.dContainer}>
@@ -543,13 +544,13 @@ class AddClothScreen extends Component {
                 underlineColorAndroid='white'
                 placeholder="Description"
                 style={[styles.inputStyle, {height: Math.max(40, this.state.textHeight), marginLeft: 20}]}
-                onChangeText={(text)=>{
-                  this._setText(text)
+                onChangeText={(description)=>{
+                  this.setState({description})
                 }}
                 onContentSizeChange={(event) => {
                   this.setState({ textHeight: event.nativeEvent.contentSize.height });
                 }}
-                value={this.state.text}/>
+                value={this.state.description}/>
             </View>
             <View style={styles.contextSeperator}/>
             <View style={styles.dContainer}>
