@@ -110,15 +110,28 @@ class SelectorModal extends Component {
         this.setState({selectedColorIds : newSelectedColorIds});
       }
     } else {
-      if(_.includes(this.state.selectedSeasonIds, id)) {
-        let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
-            return curObject !== id;
-        });
-        this.setState({selectedSeasonIds : newSelectedSeasonIds});
+      if(id==6) {
+        if(_.includes(this.state.selectedSeasonIds, id)) {
+          this.setState({selectedSeasonIds: []})
+        } else {
+          this.setState({selectedSeasonIds : [6]});
+        }
       } else {
-        let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
-        this.setState({selectedSeasonIds : newSelectedSeasonIds});
+        if(_.includes(this.state.selectedSeasonIds, id)) {
+          let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
+            return curObject !== id;
+          });
+          this.setState({selectedSeasonIds : newSelectedSeasonIds});
+        } else {
+          let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
+          newSelectedSeasonIds = _.filter(newSelectedSeasonIds, (curObject) => {
+            console.log(curObject !== 6);
+            return curObject !== 6;
+          });
+          this.setState({selectedSeasonIds : newSelectedSeasonIds});
+        }
       }
+
     }
     // season Select Action
     this.props.seasonSelectAction(id);

@@ -35,23 +35,22 @@ class EditTaggedItem extends Component {
   })
 
   state = {
-    onlyMe: false,
+    onlyMe: this.props.navigation.state.params.taggedItem.onlyMe,
     textHeight: 0,
     inWardrobe: true,
     isSelectorVisible: false,
     items: [],
     bigType: this.props.navigation.state.params.taggedItem.bigType,
-    clothType: 'T-Shirt',
+    clothType: this.props.navigation.state.params.taggedItem.clothType,
     selectionType: 5,
-    selectedStyleIds: [],
-    selectedSeasonIds: [],
+    selectedSeasonIds: this.props.navigation.state.params.taggedItem.selectedSeasonIds,
     seasons: seasons,
-    selectedSizeIds: [],
+    selectedSizeIds: this.props.navigation.state.params.taggedItem.selectedSizeIds,
     clothSize: topSize,
-    selectedColorIds: [],
+    selectedColorIds: this.props.navigation.state.params.taggedItem.selectedColorIds,
     clothColor: clothColors,
-    gender: 'Unisex',
-    name: '',
+    gender: this.props.navigation.state.params.taggedItem.gender,
+    name: this.props.navigation.state.params.taggedItem.name,
   }
 
   _showSelector = () => this.setState({ isSelectorVisible: true });
@@ -191,14 +190,25 @@ class EditTaggedItem extends Component {
         this._setSelectedColorIds(newSelectedColorIds);
       }
     } else if(this.state.selectionType===2){
-      if(_.includes(this.state.selectedSeasonIds, id)) {
-        let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
-            return curObject !== id;
-        });
-        this._setSelectedSeasonIds(newSelectedSeasonIds);
+      if(id==6) {
+        if(_.includes(this.state.selectedSeasonIds, id)) {
+          this.setState({selectedSeasonIds: []})
+        } else {
+          this.setState({selectedSeasonIds : [6]});
+        }
       } else {
-        let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
-        this._setSelectedSeasonIds(newSelectedSeasonIds);
+        if(_.includes(this.state.selectedSeasonIds, id)) {
+          let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
+              return curObject !== id;
+          });
+          this._setSelectedSeasonIds(newSelectedSeasonIds);
+        } else {
+          let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
+          newSelectedSeasonIds = _.filter(newSelectedSeasonIds, (curObject) => {
+            return curObject !== 6;
+          });
+          this._setSelectedSeasonIds(newSelectedSeasonIds);
+        }
       }
     }
   }
@@ -363,23 +373,19 @@ class EditTaggedItem extends Component {
           <View rkCardHeader style={styles.left}>
             <View style={styles.content}>
               <View style={styles.contentHeader}>
-                <RkText rkType='header3'>Add Your Cloth</RkText>
+                <RkText rkType='header3'>Edit Your Tagged Item</RkText>
               </View>
             </View>
           </View>
           <View style={styles.right}>
               <TouchableOpacity onPress={
                 () => {
-                  let {image, name, bigType, clothType, selectedSeasonIds,
-                    gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-                    brand, location, link, inWardrobe, onlyMe, base64, description } = this.state;
-                  let {token, hType} = this.props;
-                  if(token) {
-                    this.props.createCloth(token, hType, {
-                      image, name, bigType, clothType, selectedSeasonIds,
-                      gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-                      brand, location, link, inWardrobe, onlyMe, base64, description });
-                  }
+                  let { name, bigType, clothType, selectedSeasonIds, gender,
+                    selectedSizeIds, selectedColorIds, inWardrobe, onlyMe } = this.state;
+                  let { id } = this.props.navigation.state.params.taggedItem;
+                  this.props.navigation.state.params.editTaggedItem(
+                    name, bigType, clothType, selectedSeasonIds, gender,
+                    selectedSizeIds, selectedColorIds, inWardrobe, onlyMe, id);
                   this.props.navigation.goBack();
                 }}>
                 <RkText rkType="header3">SAVE</RkText>
@@ -473,7 +479,9 @@ class EditTaggedItem extends Component {
                   this._setOnlyMe()
                 }}
                 />
-
+            </View>
+            <View style={{alignItems: 'center', marginTop: 8, }}>
+              <RkText style={{textAlign: 'center'}} rkType="primary4">You will be able to add more detail from your Wardrobe</RkText>
             </View>
             <View>
               {this._renderSelectorModal()}

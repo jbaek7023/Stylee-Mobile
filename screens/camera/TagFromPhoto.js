@@ -23,10 +23,36 @@ class TagFromPhoto extends Component {
     thumbSize: 100,
     left: width(100) / 2,
     top: height(100) / 2,
+
     taggedClothes: {
-      0: {id:0, left:100, top:100, thumbSize:100, clothType: 'T-Shirt', seasons: [7 , 8, 9, 10],
+      //for debuggin purposes
+      0: {
+        id:0,
+        left:100,
+        top:100,
+        thumbSize:100,
+        bigType: 'Top',
+        clothType: 'T-Shirt',
+        selectedSeasonIds: [7, 8, 9, 10],
+        selectedSizeIds: [27],
+        gender: 'Unisex',
+        selectedColorIds: [],
+        onlyMe: false,
+        name: ''
         },
-      1: {id:1, left:200, top:200, thumbSize:100, clothType: 'Coat', seasons: [9, 10],
+      1: {
+        id:0,
+        left:200,
+        top:200,
+        thumbSize:100,
+        bigType: 'Top',
+        clothType: 'T-Shirt',
+        selectedSeasonIds: [7 , 8, 9, 10],
+        selectedSizeIds: [27],
+        gender: 'Unisex',
+        selectedColorIds: [],
+        onlyMe: false,
+        name: ''
       },
     },
     selectedClothId : 30,
@@ -48,45 +74,44 @@ class TagFromPhoto extends Component {
       onResponderMove: (evt, gestureState) => {
         let { taggedClothes } = this.state;
         let tag = taggedClothes[this.state.selectedClothId];
+        if(tag) {
+          // pinch
+          let thumbSize = tag.thumbSize;
+          if (gestureState.pinch && gestureState.previousPinch) {
+            thumbSize *= (gestureState.pinch / gestureState.previousPinch)
+          }
 
-        // pinch
-        let thumbSize = tag.thumbSize;
-        if (gestureState.pinch && gestureState.previousPinch) {
-          thumbSize *= (gestureState.pinch / gestureState.previousPinch)
+          let {left, top, style} = tag;
+          left += (gestureState.moveX - gestureState.previousMoveX);
+          top += (gestureState.moveY - gestureState.previousMoveY);
+
+          let topbby = top - thumbSize/2;
+          let lefty = left - thumbSize/2;
+          let righty = left + thumbSize/2;
+          let bottomy = top + thumbSize/2;
+
+          // reposition Image for mirror Tag.
+          let marLeft = 35-(left)*70/thumbSize;
+          let marTop = 35-(topbby-thumbSize/2)*70/thumbSize;
+
+          if (topbby>=0 && bottomy <= width(100) && righty <= width(100) && lefty >= 0) {
+            var deep = _.cloneDeep(tag);
+            deep.left = left
+            deep.top = top
+            deep.thumbSize = thumbSize
+            this.setState({
+              gestureState: {
+                ...gestureState
+              },
+              taggedClothes: {
+                ...taggedClothes,
+                [this.state.selectedClothId]: deep
+              }
+            })
+          } else {
+            console.log('do nothing')
+          }
         }
-
-        let {left, top, style} = tag;
-        left += (gestureState.moveX - gestureState.previousMoveX);
-        top += (gestureState.moveY - gestureState.previousMoveY);
-
-        let topbby = top - thumbSize/2;
-        let lefty = left - thumbSize/2;
-        let righty = left + thumbSize/2;
-        let bottomy = top + thumbSize/2;
-
-        // reposition Image for mirror Tag.
-        let marLeft = 35-(left)*70/thumbSize;
-        let marTop = 35-(topbby-thumbSize/2)*70/thumbSize;
-
-        if (topbby>=0 && bottomy <= width(100) && righty <= width(100) && lefty >= 0) {
-          var deep = _.cloneDeep(tag);
-          deep.left = left
-          deep.top = top
-          deep.thumbSize = thumbSize
-          this.setState({
-            gestureState: {
-              ...gestureState
-            },
-            taggedClothes: {
-              ...taggedClothes,
-              [this.state.selectedClothId]: deep
-            }
-          })
-
-        } else {
-          console.log('do nothing')
-        }
-
       },
       onResponderTerminationRequest: (evt, gestureState) => true,
       onResponderRelease: (evt, gestureState) => {
@@ -195,7 +220,20 @@ class TagFromPhoto extends Component {
         selectedClothId:length,
         taggedClothes: {
           ...taggedClothes,
-          [length]: { id:length, left:200, top:200, thumbSize:100, clothType: 'Top', seasons: [6], image: null }
+          [length]: {
+            id:length,
+            left:100,
+            top:100,
+            thumbSize:100,
+            bigType: 'Top',
+            clothType: 'T-Shirt',
+            selectedSeasonIds: [7, 8, 9, 10],
+            selectedSizeIds: [27],
+            gender: 'Unisex',
+            selectedColorIds: [],
+            onlyMe: false,
+            name: ''
+            },
         }
     })
   }
@@ -223,14 +261,33 @@ class TagFromPhoto extends Component {
 
   }
 
+  editTaggedItem = (name, bigType, clothType, selectedSeasonIds, gender, selectedSizeIds, selectedColorIds, inWardrobe, onlyMe, id) => {
+    let tag = this.state.taggedClothes[id];
+    var deep = _.cloneDeep(tag);
+    deep.name = name
+    deep.bigType = bigType
+    deep.clothType = clothType
+    deep.selectedSeasonIds = selectedSeasonIds
+    deep.gender = gender
+    deep.selectedSizeIds = selectedSizeIds
+    deep.selectedColorIds = selectedColorIds
+    deep.inWardrobe = inWardrobe
+    deep.onlyMe = onlyMe
+
+    this.setState({
+      taggedClothes: {
+        ...this.state.taggedClothes,
+        [this.state.selectedClothId]: deep
+      }
+    })
+  }
+
   _handleEditPress = (id) =>{
-    this.props.navigation.navigate('EditTaggedItem', {taggedItem: this.state.taggedClothes[id]});
+    this.props.navigation.navigate('EditTaggedItem', {editTaggedItem: this.editTaggedItem, taggedItem: this.state.taggedClothes[id]});
   }
 
   _handleDeletePress = (id) =>{
-    //
     let taggedClothes = _.omit(this.state.taggedClothes, id)
-
     this.setState({ taggedClothes });
   }
 
@@ -245,7 +302,7 @@ class TagFromPhoto extends Component {
             <View style={styles.rightheadContainer}>
               <View style={{flexDirection:'row', alignItems: 'center'}}>
                 {this._renderColorCircle()}
-                <RkText rkType="header5">{selectedCloth.clothType} {this._renderSeasons(selectedCloth.seasons)}</RkText>
+                <RkText rkType="header5">{selectedCloth.clothType} {this._renderSeasons(selectedCloth.selectedSeasonIds)}</RkText>
               </View>
             </View>
             <View style={styles.editDeleteContainer}>

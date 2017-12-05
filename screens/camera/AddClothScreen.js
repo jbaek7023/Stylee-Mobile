@@ -212,14 +212,25 @@ class AddClothScreen extends Component {
         this._setSelectedColorIds(newSelectedColorIds);
       }
     } else if(this.state.selectionType===2){
-      if(_.includes(this.state.selectedSeasonIds, id)) {
-        let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
-            return curObject !== id;
-        });
-        this._setSelectedSeasonIds(newSelectedSeasonIds);
+      if(id==6) {
+        if(_.includes(this.state.selectedSeasonIds, id)) {
+          this.setState({selectedSeasonIds: []})
+        } else {
+          this.setState({selectedSeasonIds : [6]});
+        }
       } else {
-        let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
-        this._setSelectedSeasonIds(newSelectedSeasonIds);
+        if(_.includes(this.state.selectedSeasonIds, id)) {
+          let newSelectedSeasonIds = _.filter(this.state.selectedSeasonIds, (curObject) => {
+            return curObject !== id;
+          });
+          this._setSelectedSeasonIds(newSelectedSeasonIds);
+        } else {
+          let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
+          newSelectedSeasonIds = _.filter(newSelectedSeasonIds, (curObject) => {
+            return curObject !== 6;
+          });
+          this._setSelectedSeasonIds(newSelectedSeasonIds);
+        }
       }
     }
   }
