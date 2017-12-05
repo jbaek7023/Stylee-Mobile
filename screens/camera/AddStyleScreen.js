@@ -26,6 +26,7 @@ import { NavBar } from '../../components/navBar';
 import { withRkTheme } from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
 import { genders } from '../../utils/menuItems';
+import { items } from '../../utils/items';
 
 class AddStyleScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -238,10 +239,24 @@ class AddStyleScreen extends Component {
   }
 
   _tagFromPhoto = () => {
-    let { image } = this.state;
-
+    let { image, taggedClothes } = this.state;
+    // send without image and base64.
+    taggedClothes = taggedClothes.map((item) => ({
+      id:item.id,
+      left:item.left,
+      top:item.top,
+      thumbSize:item.thumbSize,
+      bigType: item.bigType,
+      clothType: item.clothType,
+      selectedSeasonIds: item.selectedSeasonIds,
+      selectedSizeIds: item.selectedSizeIds,
+      gender: item.gender,
+      selectedColorIds: item.selectedColorIds,
+      onlyMe: item.onlyme,
+      name: item.name
+    }));
     if(image) {
-      this.props.navigation.navigate('TagFromPhoto', {image, tagFromPhoto: this.tagFromPhoto});
+      this.props.navigation.navigate('TagFromPhoto', {image, tagFromPhoto: this.tagFromPhoto, taggedClothes});
     } else {
       this._showModal();
     }
@@ -376,14 +391,15 @@ class AddStyleScreen extends Component {
       return '-'
     }
     let seasonList = seasons.map((season) => {
-      return ' '+season;
+      return ' '+items[season].value;
     })
     return seasonList
   }
 
   // tagged CLOTHES!!!
   _renderItemForTag = ({item}) => {
-    let { id, image, type, seasons } = item;
+    let { id, image, type, selectedSeasonIds,  } = item;
+
     if(image) {
       return (
         <View
@@ -397,7 +413,7 @@ class AddStyleScreen extends Component {
           </View>
           <View style={styles.arightheadContainer}>
             <RkText rkType="header5">{type}</RkText>
-            <RkText rkType="header5">{this._renderSeasons(seasons)}</RkText>
+            <RkText rkType="header5">{this._renderSeasons(selectedSeasonIds)}</RkText>
           </View>
           <View style={styles.editDeleteContainer}>
             <TouchableOpacity style={styles.editContainer}>
@@ -417,7 +433,7 @@ class AddStyleScreen extends Component {
 
   }
 
-  _keyExtractor = (item, index) => item.id;
+  _keyExtractor = (item, index) => index;
   _renderFlatListForTag = () => {
     return (
       <FlatList

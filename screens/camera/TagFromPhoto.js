@@ -41,7 +41,7 @@ class TagFromPhoto extends Component {
         name: ''
         },
       1: {
-        id:0,
+        id:1,
         left:200,
         top:200,
         thumbSize:100,
@@ -59,9 +59,11 @@ class TagFromPhoto extends Component {
   }
 
   componentWillMount() {
-    // if params.parameter,
-      //
-    // this.setState({taggedClothes});
+    let { taggedClothes } = this.props.navigation.state.params;
+    this.setState({taggedClothes});
+
+
+
 
     this.gestureResponder = createResponder({
       onStartShouldSetResponder: (evt, gestureState) => true,
@@ -213,9 +215,12 @@ class TagFromPhoto extends Component {
       SnackBar.show("Sorry we're not allowing more than four clothes to tag this time", { duration: 3000 })
       return; // break the function
     }
+    console.log(taggedClothes[length]);
+    console.log(length);
     while(taggedClothes[length]) {
       length++;
     }
+    console.log(length);
     this.setState({
         selectedClothId:length,
         taggedClothes: {
@@ -332,6 +337,9 @@ class TagFromPhoto extends Component {
 
   _saveTagging = () => {
     this.props.navigation.state.params.tagFromPhoto(this.state.taggedClothes);
+    console.log('tagged Clothes');
+    console.log(this.state.taggedClothes);
+    console.log('tagged Clothes EMD');
     this.props.navigation.goBack();
   }
 
