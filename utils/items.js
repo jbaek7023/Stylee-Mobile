@@ -184,7 +184,7 @@ const items = {
   },
   6: {
     // seasons starts
-    value: 'All',
+    value: 'All Seasons',
   },
   7: {
     value: 'Spring',

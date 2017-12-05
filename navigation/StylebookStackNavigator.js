@@ -13,6 +13,7 @@ import TagStyleScreen from '../screens/camera/TagStyleScreen';
 import OpenWardrobe from '../screens/camera/OpenWardrobe';
 import FABs from '../components/common/FABs';
 import TagFromPhoto from '../screens/camera/TagFromPhoto';
+import EditTaggedItem from '../screens/camera/EditTaggedItem';
 
 export default StackNavigator ({
   Stylebooko: {
@@ -53,6 +54,9 @@ export default StackNavigator ({
   },
   TagFromPhoto: {
     screen: TagFromPhoto
+  },
+  EditTaggedItem: {
+    screen: EditTaggedItem
   }
 }, {
     lazy: true

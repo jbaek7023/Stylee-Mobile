@@ -20,7 +20,7 @@ const bigType = [{
 //select 2
 const seasons = [{
   id: 6,
-  value: 'All',
+  value: 'All Seasons',
 }, {
   id: 7,
   value: 'Spring',

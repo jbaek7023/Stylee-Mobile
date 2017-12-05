@@ -9,6 +9,9 @@ import _ from 'lodash';
 import CroppedImage from '../../components/CroppedImage';
 import SnackBar from 'react-native-snackbar-dialog';
 
+
+import { items } from '../../utils/items';
+
 class TagFromPhoto extends Component {
   static navigationOptions = ({ navigation }) => ({
     tabBarVisible: false,
@@ -21,13 +24,19 @@ class TagFromPhoto extends Component {
     left: width(100) / 2,
     top: height(100) / 2,
     taggedClothes: {
-      0: {id:0, left:100, top:100, thumbSize:100, type: 'T-Shirt', seasons: ['Fall', 'Spring'], image: null},
-      1: {id:1, left:200, top:200, thumbSize:100, type: 'Coat', seasons: ['Spring', 'Fall'], image: null},
+      0: {id:0, left:100, top:100, thumbSize:100, clothType: 'T-Shirt', seasons: [7 , 8, 9, 10],
+        },
+      1: {id:1, left:200, top:200, thumbSize:100, clothType: 'Coat', seasons: [9, 10],
+      },
     },
-    selectedClothId : 0,
+    selectedClothId : 30,
   }
 
   componentWillMount() {
+    // if params.parameter,
+      //
+    // this.setState({taggedClothes});
+
     this.gestureResponder = createResponder({
       onStartShouldSetResponder: (evt, gestureState) => true,
       onStartShouldSetResponderCapture: (evt, gestureState) => true,
@@ -46,7 +55,7 @@ class TagFromPhoto extends Component {
           thumbSize *= (gestureState.pinch / gestureState.previousPinch)
         }
 
-        let {left, top} = tag;
+        let {left, top, style} = tag;
         left += (gestureState.moveX - gestureState.previousMoveX);
         top += (gestureState.moveY - gestureState.previousMoveY);
 
@@ -54,6 +63,10 @@ class TagFromPhoto extends Component {
         let lefty = left - thumbSize/2;
         let righty = left + thumbSize/2;
         let bottomy = top + thumbSize/2;
+
+        // reposition Image for mirror Tag.
+        let marLeft = 35-(left)*70/thumbSize;
+        let marTop = 35-(topbby-thumbSize/2)*70/thumbSize;
 
         if (topbby>=0 && bottomy <= width(100) && righty <= width(100) && lefty >= 0) {
           var deep = _.cloneDeep(tag);
@@ -69,9 +82,11 @@ class TagFromPhoto extends Component {
               [this.state.selectedClothId]: deep
             }
           })
+
         } else {
           console.log('do nothing')
         }
+
       },
       onResponderTerminationRequest: (evt, gestureState) => true,
       onResponderRelease: (evt, gestureState) => {
@@ -130,7 +145,7 @@ class TagFromPhoto extends Component {
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-            <Text style={{color:'yellow', fontWeight: 'bold'}}>Move or Pinch</Text>
+            <Text style={{color:'#FFD700', fontWeight: 'bold'}}>Move or Pinch</Text>
           </View>
         );
       } else {
@@ -153,39 +168,7 @@ class TagFromPhoto extends Component {
     return output;
   }
 
-  _renderTaggedClothImage = (image) => {
-    console.log(image)
-    let { selectedClothId } = this.state;
-    if(selectedClothId) {
-      // style={selectedStyle(left, top, thumbSize)}
-      let { left, top, thumbSize } = this.state.taggedClothes[this.state.selectedClothId];
-      let realTop = top - thumbSize/2;
-      let realLeft = left - thumbSize/2;
-      // left,
-      // top,
-      // width:70,
-      // height: 70
-      return (
-        <CroppedImage
-          source={{uri: image}}
-          cropTop={realTop}
-          cropLeft={realLeft}
-          cropWidth={thumbSize}
-          cropHeight={thumbSize}
-          width={width(100)}
-          height={width(100)}
-          resizeMode="contain" />
-      );
-    } else {
-      return (
-        <Image
-          source={require('../../assets/images/default_profile.png')}
-          resizeMode="cover"
-          style={styles.headImageStyle}
-        />
-      );
-    }
-  }
+
 
   _renderPhotoImage = (image) => {
     return (
@@ -202,7 +185,7 @@ class TagFromPhoto extends Component {
     let { taggedClothes } = this.state;
     let length = Object.keys(taggedClothes).length;
     if(length>3) {
-      SnackBar.show("Sorry we're not allowing more than four clothes to tag", { duration: 2500 })
+      SnackBar.show("Sorry we're not allowing more than four clothes to tag this time", { duration: 3000 })
       return; // break the function
     }
     while(taggedClothes[length]) {
@@ -212,51 +195,80 @@ class TagFromPhoto extends Component {
         selectedClothId:length,
         taggedClothes: {
           ...taggedClothes,
-          [length]: { id:length, left:200, top:200, thumbSize:100, type: 'Top', seasons: [6], image: null }
+          [length]: { id:length, left:200, top:200, thumbSize:100, clothType: 'Top', seasons: [6], image: null }
         }
     })
   }
 
   _renderSeasons = (seasons) => {
     if(seasons.length==0) {
-      return '-'
+      return ''
     }
     let seasonList = seasons.map((season) => {
-      return ' '+season;
+      return ' '+items[season].value;
     })
-    return seasonList
+    return " - "+seasonList
   }
 
+  _renderColorCircle = (id) => {
+    if(id) {
+      return (
+        <View style={{backgroundColor: '#FFD700', width: 10, height: 10, borderRadius: 5, marginRight: 8}}/>
+      );
+
+    }
+    return (
+      <View style={{marginLeft: 10}}/>
+    );
+
+  }
+
+  _handleEditPress = (id) =>{
+    this.props.navigation.navigate('EditTaggedItem', {taggedItem: this.state.taggedClothes[id]});
+  }
+
+  _handleDeletePress = (id) =>{
+    //
+    let taggedClothes = _.omit(this.state.taggedClothes, id)
+
+    this.setState({ taggedClothes });
+  }
+
+  //Selected Item
   _renderTaggedItem = (image) => {
     let selectedCloth = this.state.taggedClothes[this.state.selectedClothId]
     if(selectedCloth) {
       return (
-        <View
-          style={styles.headContainer}>
-          <View style={styles.leftheadContainer}>
-            <TouchableOpacity
-              style={styles.imageContainer}>
-              {this._renderTaggedClothImage(image)}
-            </TouchableOpacity>
+        <View>
+          <View
+            style={styles.headContainer}>
+            <View style={styles.rightheadContainer}>
+              <View style={{flexDirection:'row', alignItems: 'center'}}>
+                {this._renderColorCircle()}
+                <RkText rkType="header5">{selectedCloth.clothType} {this._renderSeasons(selectedCloth.seasons)}</RkText>
+              </View>
+            </View>
+            <View style={styles.editDeleteContainer}>
+              <TouchableOpacity style={styles.editContainer}
+                onPress={()=>{this._handleEditPress(this.state.selectedClothId)}}>
+                <RkText rkType='awesome'>{FontAwesome.edit}</RkText>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={()=>{this._handleDeletePress(this.state.selectedClothId)}}
+                style={styles.deleteContainer}>
+                <RkText rkType='awesome'>{FontAwesome.delete}</RkText>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.rightheadContainer}>
-            <RkText rkType="header5">{selectedCloth.type}</RkText>
-            <RkText rkType="header5">{this._renderSeasons(selectedCloth.seasons)}</RkText>
-          </View>
-          <View style={styles.editDeleteContainer}>
-            <TouchableOpacity style={styles.editContainer}>
-              <RkText rkType='awesome'>{FontAwesome.edit}</RkText>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteContainer}>
-              <RkText rkType='awesome'>{FontAwesome.delete}</RkText>
-            </TouchableOpacity>
+          <View style={{alignItems: 'center', marginTop: 8, }}>
+            <RkText style={{textAlign: 'center'}} rkType="primary4">Items will be posted on your wardrobe</RkText>
           </View>
         </View>
       );
     }
     return (
       <View style={styles.emptyContainer}>
-        <RkText rkType="primary3">Press plus sign or tab the image</RkText>
+        <RkText rkType="primary3">Press plus sign to tag</RkText>
       </View>
     );
   }
@@ -316,12 +328,15 @@ class TagFromPhoto extends Component {
             </View>
             <View style={styles.clothSeparator}/>
             <View style={styles.dContainer}>
-              <RkText rkType="header4">Selected Cloth</RkText>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <RkText rkType="header4">Selected Cloth</RkText>
+              </View>
               <TouchableOpacity
                 style={[styles.right, {right: 20}]}
                 onPress={()=>{this._createTag()}}>
                 <RkText rkType="awesome">{FontAwesome.plus}</RkText>
               </TouchableOpacity>
+
             </View>
             <View>
               {this._renderTaggedItem(image)}
@@ -338,14 +353,15 @@ class TagFromPhoto extends Component {
   }
 }
 
-function selectedStyle(left, top, thumbSize) {
+function selectedStyle(thumbSize) {
+  //width: thumbSize is correct answer for debugging, we set to 70 (Double checked)
   return {
-    left,
-    top,
-    width:70,
-    height: 70
+    width: thumbSize,
+    height: thumbSize
   };
 }
+
+
 
 let styles = RkStyleSheet.create(theme => ({
   emptyContainer: {
@@ -391,7 +407,8 @@ let styles = RkStyleSheet.create(theme => ({
     margin:10,
     justifyContent: 'center',
     height: 70,
-    width: 70
+    width: 70,
+    overflow: 'hidden'
   },
   rightheadContainer: {
     alignItems: 'stretch',

@@ -64,7 +64,7 @@ class AddStyleScreen extends Component {
   _setCategoryOnlyMe = () => {
     this.setState({categoryOnlyMe: !this.state.categoryOnlyMe})
   }
-  _setClothImage = (image) => {this.setState({image}); this.props.navigation.setParams({image});}
+  _setClothImage = (image) => {this.setState({image});}
   _setGender = (gender) => {this.setState({gender})}
   _showModal = () => this.setState({ isModalVisible: true })
   _hideModal = () => this.setState({ isModalVisible: false })
@@ -239,6 +239,7 @@ class AddStyleScreen extends Component {
 
   _tagFromPhoto = () => {
     let { image } = this.state;
+
     if(image) {
       this.props.navigation.navigate('TagFromPhoto', {image, tagFromPhoto: this.tagFromPhoto});
     } else {
