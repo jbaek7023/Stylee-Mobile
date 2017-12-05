@@ -58,7 +58,8 @@ class AddStyleScreen extends Component {
     onlyMe: false,
     categoryList: [],
     description: '',
-    taggedClothes: []
+    taggedClothes: [],
+    manualTrigger: true,
   }
 
   _setTitle = (title) => {this.setState({title})}
@@ -396,10 +397,42 @@ class AddStyleScreen extends Component {
     return seasonList
   }
 
+  editTaggedItem = (name, bigType, clothType, selectedSeasonIds, gender, selectedSizeIds, selectedColorIds, inWardrobe, onlyMe, id) => {
+    let {taggedClothes} = this.state;
+    const index = taggedClothes.findIndex(i=>i.id===id);
+    taggedClothes[index].name=name
+    taggedClothes[index].bigType = bigType
+    taggedClothes[index].clothType = clothType
+    taggedClothes[index].selectedSeasonIds = selectedSeasonIds
+    taggedClothes[index].gender = gender
+    taggedClothes[index].selectedSizeIds = selectedSizeIds
+    taggedClothes[index].selectedColorIds = selectedColorIds
+    taggedClothes[index].inWardrobe = inWardrobe
+    taggedClothes[index].onlyMe = onlyMe
+    console.log(taggedClothes);
+    this.setState({
+      taggedClothes,
+      manualTrigger: !this.state.manualTrigger
+    });
+  }
+
+  _handleEditPress = (id) =>{
+    let taggedItem = this.state.taggedClothes.find(item => item.id === id);
+    if(taggedItem) {
+      this.props.navigation.navigate('EditTaggedItem', {editTaggedItem: this.editTaggedItem, taggedItem});
+    }
+  }
+
+  _handleDeletePress = (id) =>{
+    let taggedClothes = _.filter(this.state.taggedClothes, (curObject) => {
+        return curObject.id !== id;
+    });
+    this.setState({ taggedClothes });
+  }
+
   // tagged CLOTHES!!!
   _renderItemForTag = ({item}) => {
-    let { id, image, type, selectedSeasonIds,  } = item;
-
+    let { id, image, clothType } = item;
     if(image) {
       return (
         <View
@@ -412,14 +445,16 @@ class AddStyleScreen extends Component {
             </View>
           </View>
           <View style={styles.arightheadContainer}>
-            <RkText rkType="header5">{type}</RkText>
-            <RkText rkType="header5">{this._renderSeasons(selectedSeasonIds)}</RkText>
+            <RkText rkType="header5">{clothType}</RkText>
           </View>
           <View style={styles.editDeleteContainer}>
-            <TouchableOpacity style={styles.editContainer}>
+            <TouchableOpacity
+              onPress={()=>{this._handleEditPress(id)}}
+              style={styles.editContainer}>
               <RkText rkType='awesome'>{FontAwesome.edit}</RkText>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteContainer}>
+            <TouchableOpacity style={styles.deleteContainer}
+              onPress={()=>{this._handleDeletePress(id)}}>
               <RkText rkType='awesome'>{FontAwesome.delete}</RkText>
             </TouchableOpacity>
           </View>
@@ -439,6 +474,7 @@ class AddStyleScreen extends Component {
       <FlatList
         data={this.state.taggedClothes}
         renderItem={this._renderItemForTag}
+        extraData={this.state.manualTrigger}
         keyExtractor={this._keyExtractor}
       />
     );

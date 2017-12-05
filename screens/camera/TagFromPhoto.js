@@ -215,12 +215,9 @@ class TagFromPhoto extends Component {
       SnackBar.show("Sorry we're not allowing more than four clothes to tag this time", { duration: 3000 })
       return; // break the function
     }
-    console.log(taggedClothes[length]);
-    console.log(length);
     while(taggedClothes[length]) {
       length++;
     }
-    console.log(length);
     this.setState({
         selectedClothId:length,
         taggedClothes: {
@@ -253,12 +250,12 @@ class TagFromPhoto extends Component {
     return " - "+seasonList
   }
 
-  _renderColorCircle = (id) => {
-    if(id) {
+  _renderColorCircle = (ids) => {
+    if(ids.length>0) {
+      let color = items[ids[0]].value;
       return (
-        <View style={{backgroundColor: '#FFD700', width: 10, height: 10, borderRadius: 5, marginRight: 8}}/>
+        <View style={[colorDrawStyle(color), {width: 10, height: 10, borderRadius: 5, marginRight: 8}]}/>
       );
-
     }
     return (
       <View style={{marginLeft: 10}}/>
@@ -306,7 +303,7 @@ class TagFromPhoto extends Component {
             style={styles.headContainer}>
             <View style={styles.rightheadContainer}>
               <View style={{flexDirection:'row', alignItems: 'center'}}>
-                {this._renderColorCircle()}
+                {this._renderColorCircle(selectedCloth.selectedColorIds)}
                 <RkText rkType="header5">{selectedCloth.clothType} {this._renderSeasons(selectedCloth.selectedSeasonIds)}</RkText>
               </View>
             </View>
@@ -337,9 +334,6 @@ class TagFromPhoto extends Component {
 
   _saveTagging = () => {
     this.props.navigation.state.params.tagFromPhoto(this.state.taggedClothes);
-    console.log('tagged Clothes');
-    console.log(this.state.taggedClothes);
-    console.log('tagged Clothes EMD');
     this.props.navigation.goBack();
   }
 
@@ -418,11 +412,9 @@ class TagFromPhoto extends Component {
   }
 }
 
-function selectedStyle(thumbSize) {
-  //width: thumbSize is correct answer for debugging, we set to 70 (Double checked)
+function colorDrawStyle(color) {
   return {
-    width: thumbSize,
-    height: thumbSize
+    backgroundColor: color
   };
 }
 
