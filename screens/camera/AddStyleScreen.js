@@ -40,8 +40,8 @@ class AddStyleScreen extends Component {
     isCategoryVisible: false,
     newScreen: false,
     title: '',
+    base64: undefined,
     categoryOnlyMe: false,
-
     isModalVisible: true,
     name: '',
     textHeight: 0,
@@ -60,6 +60,7 @@ class AddStyleScreen extends Component {
     description: '',
     taggedClothes: [],
     manualTrigger: true,
+    link: '',
   }
 
   _setTitle = (title) => {this.setState({title})}
@@ -108,12 +109,9 @@ class AddStyleScreen extends Component {
     if (!result.cancelled) {
       // this.setState({ image: result.uri });
       this._setClothImage(result.uri);
-      console.log(result);
-      console.log(result.height);
-      console.log(result.width);
       this._setWidth(result.width);
       this._setHeight(result.height);
-      this.props.navigation.setParams({base64: result.base64});
+      this.setState({base64: result.base64});
     }
   }
 
@@ -134,7 +132,7 @@ class AddStyleScreen extends Component {
       this._setClothImage(result.uri);
       this._setWidth(result.width);
       this._setHeight(result.height);
-      this.props.navigation.setParams({base64: result.base64});
+      this.setState({base64: result.base64});
     }
   };
 
@@ -254,7 +252,8 @@ class AddStyleScreen extends Component {
       gender: item.gender,
       selectedColorIds: item.selectedColorIds,
       onlyMe: item.onlyme,
-      name: item.name
+      name: item.name,
+      link: item.link
     }));
     if(image) {
       this.props.navigation.navigate('TagFromPhoto', {image, tagFromPhoto: this.tagFromPhoto, taggedClothes});
@@ -299,16 +298,14 @@ class AddStyleScreen extends Component {
               <TouchableOpacity onPress={
                 () => {
                   let {
-                    name, image, gender, location, isYou, description, selectedClothesIds,
-                    taggedClothes, taggedCategories, onlyMe } = this.state;
+                    name, base64, gender,
+                      location, isYou, description,
+                    selectedClothesIds, taggedClothes, taggedCategories, onlyMe, link } = this.state;
                   let {token, hType} = this.props;
                   if(token) {
-                    // this.props.createStyle(token, hType, {
-                    //   name, image, gender, location, isYou, description,
-                    //   selectedClothesIds, taggedClothes, taggedCategories, onlyMe });
-                    console.log(token, hType, {
-                      name, image, gender, location, isYou, description,
-                      selectedClothesIds, taggedClothes, taggedCategories, onlyMe });
+                    this.props.createStyle(token, hType, { name, base64, gender,
+                      location, isYou, description,
+                    selectedClothesIds, taggedClothes, taggedCategories, onlyMe, link  });
                   }
                   this.props.navigation.goBack();
                 }}>
@@ -409,7 +406,6 @@ class AddStyleScreen extends Component {
     taggedClothes[index].selectedColorIds = selectedColorIds
     taggedClothes[index].inWardrobe = inWardrobe
     taggedClothes[index].onlyMe = onlyMe
-    console.log(taggedClothes);
     this.setState({
       taggedClothes,
       manualTrigger: !this.state.manualTrigger
@@ -495,7 +491,6 @@ class AddStyleScreen extends Component {
 
   _setToCreateScreen = (newScreen) => {
     this.setState({newScreen});
-    console.log(this.state.taggedCategories);
   }
 
   _renderCategoryModal = () => {
@@ -585,6 +580,17 @@ class AddStyleScreen extends Component {
               style={styles.moreDetailStyle}
               underlineColorAndroid='white'
               onChangeText={(location) => this.setState({location})}/>
+          </View>
+          <View style={[styles.dContainer, styles.row]}>
+            <RkText rkType="primary3">Link</RkText>
+            <TextInput
+              onFocus={(event: Event) => {
+                this._scrollToInput(findNodeHandle(event.target))
+              }}
+              value={this.state.link}
+              style={styles.moreDetailStyle}
+              underlineColorAndroid='white'
+              onChangeText={(link) => this.setState({link})}/>
           </View>
 
           <View style={[styles.dContainer, styles.row]}>

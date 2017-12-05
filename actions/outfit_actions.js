@@ -9,6 +9,9 @@ import {
   CATEGORY_LIST_LOAD_FAIL,
   CATEGORY_DETAIL_LOAD_SUCCESS,
   CATEGORY_DETAIL_LOAD_FAIL,
+  CREATE_STYLE_SUCCESS,
+  CREATE_STYLE_FAIL,
+
   STAR_OUTFIT_LOAD_SUCCESS,
   STAR_OUTFIT_LOAD_FAIL,
   LIKE_OUTFIT_SUCCESS,
@@ -22,6 +25,29 @@ import {
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
+
+export const createStyle = (token, hType, styleObject) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let { name, base64, gender, location, isYou, description,
+  selectedClothesIds, taggedClothes, taggedCategories, onlyMe, link } = styleObject;
+
+  let response = await axios.post(`${ROOT_URL}/outfits/create/`, {
+    name, base64, gender, location, isYou, description,
+    selectedClothesIds, taggedClothes, taggedCategories, onlyMe
+  }, {headers});
+
+  if(response.data) {
+    dispatch({ type: CREATE_STYLE_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: CREATE_STYLE_FAIL })
+  }
+}
 
 export const likeOutfit = (token, hType, outfitId) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};

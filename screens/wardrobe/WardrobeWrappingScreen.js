@@ -48,6 +48,12 @@ class WardrobeWrappingScreen extends Component {
     this.props.fetchClothesAll(this.props.token, this.props.hType);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(this.props.created !== nextProps.created) {
+      this.props.fetchClothesAll(this.props.token, this.props.hType);
+    }
+  }
+
   _showModal = () => this.setState({ isModalVisible: true })
   _hideModal = () => this.setState({ isModalVisible: false })
 
@@ -141,7 +147,7 @@ let styles = RkStyleSheet.create(theme => ({
 
 function mapStateToProps({
     auth: {token, hType},
-    wardrobe: { clothesList: {tops, bottoms, outwears, shoes, etcs} }
+    wardrobe: { created, clothesList: {tops, bottoms, outwears, shoes, etcs} }
   }) {
   return { token, hType, tops, outwears, bottoms, shoes, etcs };
 }

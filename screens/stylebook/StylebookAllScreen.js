@@ -52,6 +52,11 @@ class StylebookAllScreen extends Component {
         this.props.loadOutfitAll(this.props.token, this.props.hType);
       }
     }
+
+    if(this.props.created !== nextProps.created) {
+      this.props.loadOutfitAll(this.props.token, this.props.hType);
+      this.props.fetchClothesAll(this.props.token, this.props.hType);
+    }
   }
 
   render() {
@@ -104,9 +109,9 @@ const styles = StyleSheet.create({
 });
 
 // var width = Dimensions.get('window').width;
-function mapStateToProps({auth: {token, hType}, outfit: {outfits} }) {
+function mapStateToProps({auth: {token, hType}, outfit: {outfits, created} }) {
   return {
-    token, hType, outfits
+    token, hType, outfits, created
   }
 }
 

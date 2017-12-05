@@ -5,7 +5,7 @@ const bigType = [{
   value: 'Top',
 }, {
   id: 2,
-  value: 'Outwear',
+  value: 'Outerwear',
 }, {
   id: 3,
   value: 'Bottom',

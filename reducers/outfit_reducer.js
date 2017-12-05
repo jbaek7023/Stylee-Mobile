@@ -7,6 +7,9 @@ import {
   CATEGORY_LIST_LOAD_FAIL,
   CATEGORY_DETAIL_LOAD_SUCCESS,
   CATEGORY_DETAIL_LOAD_FAIL,
+  CREATE_STYLE_SUCCESS,
+  CREATE_STYLE_FAIL,
+
   STAR_OUTFIT_LOAD_SUCCESS,
   STAR_OUTFIT_LOAD_FAIL,
   LIKE_OUTFIT_SUCCESS,
@@ -19,7 +22,7 @@ import {
   UNBOOKMARK_OUTFIT_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { categories:null, outfits: null, outfitDetail: null, categoryDetail: null, starOutfits: null }
+const INITIAL_STATE = { categories:null, outfits: null, outfitDetail: null, categoryDetail: null, starOutfits: null, created: null }
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -43,6 +46,10 @@ export default function(state = INITIAL_STATE, action) {
      return { ...state, starOutfits: action.payload }
     case STAR_OUTFIT_LOAD_FAIL:
      return { ...state, starOutfits: null }
+    case CREATE_STYLE_SUCCESS:
+     return { ...state, created: action.payload.created }
+    case CREATE_STYLE_FAIL:
+     return { ...state, created: null }
 
     //  I assume like or bookmark can't be failed on the server side.
     // we don't care about the edge case

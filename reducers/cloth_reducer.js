@@ -7,7 +7,7 @@ import {
   CREATE_CLOTH_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { clothesList: [], clothDetail: null, cloth: undefined}
+const INITIAL_STATE = { clothesList: [], clothDetail: null, created: null}
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -20,10 +20,9 @@ export default function(state = INITIAL_STATE, action) {
     case C_DETAIL_LOAD_FAIL:
       return { ...state }
     case CREATE_CLOTH_SUCCESS:
-      console.log(action.payload);
-      return { ...state, cloth: action.payload }
+      return { ...state, created: action.payload }
     case CREATE_CLOTH_FAIL:
-      return { ...state, cloth: null }
+      return { ...state, created: null }
     default:
       return state;
   }

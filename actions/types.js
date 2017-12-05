@@ -35,6 +35,9 @@ export const CATEGORY_LIST_LOAD_SUCCESS = 'category_list_load_success';
 export const CATEGORY_LIST_LOAD_FAIL = 'category_list_load_fail';
 export const CATEGORY_DETAIL_LOAD_SUCCESS = 'category_detail_load_success';
 export const CATEGORY_DETAIL_LOAD_FAIL = 'category_detail_load_fail';
+export const CREATE_STYLE_SUCCESS = 'create_style_success';
+export const CREATE_STYLE_FAIL = 'create_style_fail';
+
 export const STAR_OUTFIT_LOAD_SUCCESS = 'star_outfit_load_success';
 export const STAR_OUTFIT_LOAD_FAIL = 'star_outfit_load_fail';
 export const LIKE_OUTFIT_SUCCESS = 'like_outfit_success';
