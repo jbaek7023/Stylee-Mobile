@@ -34,11 +34,11 @@ export const createStyle = (token, hType, styleObject) => async dispatch => {
     headers = { 'Authorization': `Bearer ${token}`};
   }
 
-  let { name, base64, gender, location, isYou, description,
+  let { name, base64, gender, location, description,
   selectedClothesIds, taggedClothes, taggedCategories, onlyMe, link } = styleObject;
 
   let response = await axios.post(`${ROOT_URL}/outfits/create/`, {
-    name, base64, gender, location, isYou, description,
+    name, base64, gender, location, description,
     selectedClothesIds, taggedClothes, taggedCategories, onlyMe
   }, {headers});
 

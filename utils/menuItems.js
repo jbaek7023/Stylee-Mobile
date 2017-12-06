@@ -84,7 +84,7 @@ const outwearType = [{
   value: 'Vest',
 }, {
   id: 98,
-  value: 'Other Outwear',
+  value: 'Other Outerwear',
 }];
 
 const etcType = [{
@@ -312,6 +312,10 @@ const shoeSize = [{
 
 // 5
 const clothColors = [{
+  id: 117,
+  value: '#ededed',
+  name: 'white'
+}, {
   id: 29,
   value: '#FF0000',
   name: 'red'
@@ -356,12 +360,8 @@ const clothColors = [{
   value: '#8B4513',
   name: 'brown'
 }, {
-  id: 114,
-  value: '#301226',
-  name: 'White'
-}, {
   id: 115,
-  value: '#301226',
+  value: '#8b0000',
   name: 'Dark Red'
 }, {
   id: 116,

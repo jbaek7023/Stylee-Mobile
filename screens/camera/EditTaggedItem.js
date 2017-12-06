@@ -154,7 +154,7 @@ class EditTaggedItem extends Component {
         this.setState({items:topType});
       } else if(value==='ETC') {
         this.setState({items:etcType});
-      } else if(value==='Outwear') {
+      } else if(value==='Outerwear') {
         this.setState({items:outwearType})
       }
       this.setState({selectionType:6});

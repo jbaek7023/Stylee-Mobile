@@ -153,7 +153,7 @@ class SelectorModal extends Component {
     return (
       <View style={{height:40, alignItems: 'center'}}>
         <RkText rkType="header3">{text}</RkText>
-        <TouchableOpacity style={{position: 'absolute', right:5}} onPress={()=>this.props.hideSelector()}>
+        <TouchableOpacity style={{position: 'absolute', right:5}} onPress={()=>this.props.handleBackdrop(this.props.selectionType)}>
           <RkText rkType="awesome modalClose">{FontAwesome.delete}</RkText>
         </TouchableOpacity>
       </View>
@@ -168,7 +168,7 @@ class SelectorModal extends Component {
       return (
         <Modal
           isVisible={isSelectorVisible}
-          onBackdropPress = {() => this.props.hideSelector()}
+          onBackdropPress = {() => this.props.handleBackdrop(selectionType)}
           animationInTiming={1}
           >
           <View style={styles.modalContainer}>
@@ -186,11 +186,11 @@ class SelectorModal extends Component {
       return (
         <Modal
           isVisible={isSelectorVisible}
-          onBackdropPress = {() => this.props.hideSelector()}
+          onBackdropPress = {() => this.props.handleBackdrop(selectionType)}
           animationInTiming={1}>
           <View style={styles.modalContainer}>
+            {this._renderHeader(selectionType)}
             <FlatList
-              ListHeaderComponent={this._renderHeader(selectionType)}
               style={styles.root}
               data={this.props.items}
               extraData={[this.state.selectedSeasonIds, this.state.selectedColorIds, this.state.selectedSizeIds]}
@@ -220,7 +220,7 @@ const styles = RkStyleSheet.create(theme => ({
   modalContainer: {
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderRadius: 10,
+    maxHeight: 332,
   },
   seperator: {
     backgroundColor: 'black',

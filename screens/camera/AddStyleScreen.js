@@ -52,7 +52,6 @@ class AddStyleScreen extends Component {
     isSelectorVisible: false,
     gender: 'Unisex',
     location: '',
-    isYou: true,
     selectedClothesIds: [],
     taggedCategories: [],
     onlyMe: false,
@@ -299,12 +298,12 @@ class AddStyleScreen extends Component {
                 () => {
                   let {
                     name, base64, gender,
-                      location, isYou, description,
+                      location, description,
                     selectedClothesIds, taggedClothes, taggedCategories, onlyMe, link } = this.state;
                   let {token, hType} = this.props;
                   if(token) {
                     this.props.createStyle(token, hType, { name, base64, gender,
-                      location, isYou, description,
+                      location, description,
                     selectedClothesIds, taggedClothes, taggedCategories, onlyMe, link  });
                   }
                   this.props.navigation.goBack();
@@ -335,12 +334,12 @@ class AddStyleScreen extends Component {
 
     } else if(ids.length==1) {
       return (
-        <RkText rkType="header5 primary right">{ids.length} Cloth From Wardrobe</RkText>
+        <RkText rkType="header5 hintColor right">{ids.length} Cloth From Wardrobe</RkText>
       );
 
     } else {
       return (
-        <RkText rkType="header5 primary right">{ids.length} Clothes From Wardrobe</RkText>
+        <RkText rkType="header5 hintColor right">{ids.length} Clothes From Wardrobe</RkText>
       );
     }
   }
@@ -476,10 +475,6 @@ class AddStyleScreen extends Component {
     );
   }
 
-  _setIsYou = () => {
-    this.setState({isYou: !this.state.isYou})
-  }
-
   _handleCreatePress = () => {
     let { title, categoryOnlyMe } = this.state;
     let { token, hType } = this.props;
@@ -611,14 +606,6 @@ class AddStyleScreen extends Component {
               onChangeText={(link) => this.setState({link})}/>
           </View>
 
-          <View style={[styles.dContainer, styles.row]}>
-            <RkText rkType="primary3">Is it you in the picture?</RkText>
-            <RkSwitch
-              style={styles.switch}
-              value={this.state.isYou}
-              name="Push"
-              onValueChange={() => this._setIsYou()}/>
-          </View>
           <View style={styles.arightheadContainer}>
             <TextInput
               onFocus={(event: Event) => {

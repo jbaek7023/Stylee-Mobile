@@ -176,7 +176,7 @@ class AddClothScreen extends Component {
         this.setState({items:topType});
       } else if(value==='ETC') {
         this.setState({items:etcType});
-      } else if(value==='Outwear') {
+      } else if(value==='Outerwear') {
         this.setState({items:outwearType})
       }
       this.setState({selectionType:6});
@@ -187,6 +187,24 @@ class AddClothScreen extends Component {
       this._setClothType(value);
       this._hideSelector();
     }
+  }
+
+  _handleBackdrop = (selectionType) => {
+    if (selectionType===6) {
+      let { bigType } = this.state;
+      if (bigType ==='Top') {
+        this._setClothType('Other Top');
+      } else if (bigType ==='Outerwear') {
+        this._setClothType('Other Outerwear');
+      } else if (bigType ==='Bottom') {
+        this._setClothType('Other Bottoms');
+      } else if (bigType ==='Shoes') {
+        this._setClothType('Other Shoes');
+      } else if (bigType ==='ETC') {
+        this._setClothType('Others');
+      }
+    }
+    this._hideSelector();
   }
 
   //  this is single action (selectionType: 2, 4, 5}
@@ -241,6 +259,7 @@ class AddClothScreen extends Component {
       <SelectorModal
         isSelectorVisible={this.state.isSelectorVisible}
         items={this.state.items}
+        handleBackdrop = {this._handleBackdrop}
         hideSelector={this._hideSelector}
         selectAction={this._selectAction}
         seasonSelectAction={this._seasonSelectAction}
