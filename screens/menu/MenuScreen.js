@@ -23,6 +23,7 @@ import {
 import {
   FindFriends,
 } from '../../components/FindFriends';
+import SnackBar from 'react-native-snackbar-dialog';
 // Nav Bar
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
@@ -122,6 +123,10 @@ class MenuScreen extends Component {
     this.props.navigation.navigate('EditProfile')
   }
 
+  _handleLanguagePress = () => {
+    SnackBar.show('We will consider additional languages for the Stylee app soon :)', { duration: 2500 })
+  }
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -141,7 +146,7 @@ class MenuScreen extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.row}>
-            <TouchableOpacity style={styles.rowButton}>
+            <TouchableOpacity style={styles.rowButton} onPress={()=>{this._handleLanguagePress()}}>
               <RkText rkType='header6'>Language Setting</RkText>
             </TouchableOpacity>
           </View>

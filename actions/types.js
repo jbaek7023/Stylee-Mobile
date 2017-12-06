@@ -10,13 +10,17 @@ export const FACEBOOK_LOGIN_CANCEL = 'facebook_login_cancel';
 export const SET_DEFAULT_ALL = 'set_default_all';
 export const FB_AUTH_LOGIN_SUCCESS = 'fb_auth_login_success';
 export const FB_AUTH_LOGIN_FAIL = 'fb_auth_login_fail';
+export const CHANGE_PASSWORD_SUCCESS = 'change_password_success';
+export const CHANGE_PASSWORD_FAIL = 'change_password_fail';
 
 // Menu
 export const RETRIEVE_CUR_USER = 'retrieve_current_user';
 export const NETWORK_ERROR = 'network_error';
 export const RETRIEVE_CUR_USER_FAILED = 'retrieve_cur_user_failed';
-export const EDIT_PROFILE_SUCCESS = 'retrieve_profile_success';
-export const EDIT_PROFILE_FAIL = 'retrieve_profile_fail';
+export const RETRIEVE_PROFILE_SUCCESS = 'retrieve_profile_success';
+export const RETRIEVE_PROFILE_FAIL = 'retrieve_profile_fail';
+export const EDIT_PROFILE_SUCCESS = 'edit_profile_success';
+export const EDIT_PROFILE_FAIL = 'edit_profile_fail';
 
 // Create new User
 export const ADD_BIO_AND_PASSWORD = 'add_bio_and_password';

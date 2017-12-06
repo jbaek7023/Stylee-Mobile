@@ -30,7 +30,6 @@ import { items } from '../../utils/items';
 
 class AddStyleScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Add Your Style',
     gesturesEnabled: false,
     tabBarVisible: false,
     header: null
@@ -222,6 +221,7 @@ class AddStyleScreen extends Component {
             (base64Data) => {
               imageDataArray.push({id:id, image: successURI, base64: base64Data});
               taggedClothesArray = Object.values(taggedClothes);
+              console.log(taggedClothes);
               const merged = taggedClothesArray.map((tagged, i) => {
                 return {
                   ...tagged,

@@ -1,6 +1,8 @@
 import {
   RETRIEVE_CUR_USER,
   RETRIEVE_CUR_USER_FAILED,
+  RETRIEVE_PROFILE_SUCCESS,
+  RETRIEVE_PROFILE_FAIL,
   EDIT_PROFILE_SUCCESS,
   EDIT_PROFILE_FAIL,
 } from '../actions/types';
@@ -13,10 +15,14 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, currentUser: action.payload[0].user }
     case RETRIEVE_CUR_USER_FAILED:
       return { ...state, username: 'Not Loaded', bio: 'Not Loaded' }
-    case EDIT_PROFILE_SUCCESS:
+    case RETRIEVE_PROFILE_SUCCESS:
       return { ...state, profile: action.payload }
-    case EDIT_PROFILE_FAIL:
+    case RETRIEVE_PROFILE_FAIL:
       return { ...state, profile: {} }
+    case EDIT_PROFILE_SUCCESS:
+      return { ...state, }
+    case EDIT_PROFILE_FAIL:
+      return { ...state, }
     default:
       return state;
   }

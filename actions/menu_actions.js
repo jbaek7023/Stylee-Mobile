@@ -3,6 +3,8 @@ import axios from 'axios';
 import {
   RETRIEVE_CUR_USER,
   RETRIEVE_CUR_USER_FAILED,
+  RETRIEVE_PROFILE_SUCCESS,
+  RETRIEVE_PROFILE_FAIL,
   EDIT_PROFILE_SUCCESS,
   EDIT_PROFILE_FAIL,
 } from './types';
@@ -40,6 +42,26 @@ export const fetchEditProfile = (token, hType) => async dispatch => {
   }
 
   let response = await axios.get(`${ROOT_URL}/profile/update/`, { headers });
+  if (response.status === 200) {
+    dispatch({ type: RETRIEVE_PROFILE_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: RETRIEVE_PROFILE_FAIL })
+  }
+}
+
+export const editProfile = (token, hType, username, title, gender) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.put(`${ROOT_URL}/profile/update/`, {
+    username,
+    title,
+    gender
+  }, { headers });
   if (response.status === 200) {
     dispatch({ type: EDIT_PROFILE_SUCCESS, payload: response.data })
   } else {

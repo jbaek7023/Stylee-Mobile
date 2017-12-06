@@ -12,7 +12,9 @@ import {
   SET_DEFAULT_ALL,
   FB_AUTH_LOGIN_SUCCESS,
   FB_AUTH_LOGIN_FAIL,
-  EMPTY_ERROR_MSG
+  EMPTY_ERROR_MSG,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_FAIL,
 } from './types';
 
 // AsyncStorage.setItem('fb_token', token); <- returns a promise
@@ -20,6 +22,35 @@ import {
 
 // localhost -> 10.0.2.2:YOUR_PORT
 const ROOT_URL = 'http://10.0.2.2:8000'
+
+
+export const changePassword = ( token, hType, currentPassword, passwordOne, passwordTwo ) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.post(`${ROOT_URL}/password/change/`, {
+    old_password: currentPassword,
+    new_password1: passwordOne,
+    new_password2: passwordTwo,
+  }, {
+    headers
+  });
+
+  if (response.status === 200) {
+    dispatch({ type: CHANGE_PASSWORD_SUCCESS, payload: response.data });
+  } else {
+    if(response.status === 400) {
+      console.log('Not authorized. ');
+    } else if (response.status === 403){
+      console.log('You are not suposed to see this message. Contact Administrator');
+    }
+    dispatch({ type: CHANGE_PASSWORD_FAIL});
+  }
+};
 
 // Getting dispatch as a parameter because we want to access to the dispatch from the parent function
 export const doFacebookLogin = () => async dispatch => {

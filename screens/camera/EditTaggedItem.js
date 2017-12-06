@@ -15,16 +15,12 @@ import {
   RkSwitch
 } from '../../components/switch/index';
 import SelectorModal from '../../components/common/SelectorModal';
-import { NavBar } from '../../components/navBar';
-import {withRkTheme} from 'react-native-ui-kitten'
-let ThemedNavigationBar = withRkTheme(NavBar);
 import { seasons, genders, outwearType, topType, bigType, topSize, clothColors, bottomSize, shoeSize, bottomType, shoeType, etcType } from '../../utils/menuItems';
 import SelectedSeasonsSelector from '../../selectors/selected_seasons';
 import SelectedColorsSelector from '../../selectors/selected_colors';
 import SelectedSizesSelector from '../../selectors/selected_sizes';
 import { connect } from 'react-redux';
 
-import { NavigationActions } from 'react-navigation'
 import * as actions from '../../actions';
 
 class EditTaggedItem extends Component {
@@ -213,6 +209,24 @@ class EditTaggedItem extends Component {
     }
   }
 
+  _handleBackdrop = (selectionType) => {
+    if (selectionType===6) {
+      let { bigType } = this.state;
+      if (bigType ==='Top') {
+        this._setClothType('Other Top');
+      } else if (bigType ==='Outerwear') {
+        this._setClothType('Other Outerwear');
+      } else if (bigType ==='Bottom') {
+        this._setClothType('Other Bottoms');
+      } else if (bigType ==='Shoes') {
+        this._setClothType('Other Shoes');
+      } else if (bigType ==='ETC') {
+        this._setClothType('Others');
+      }
+    }
+    this._hideSelector();
+  }
+
   // Selector Modal
   _renderSelectorModal = () => {
     return (
@@ -220,6 +234,7 @@ class EditTaggedItem extends Component {
         isSelectorVisible={this.state.isSelectorVisible}
         items={this.state.items}
         hideSelector={this._hideSelector}
+        handleBackdrop={this._handleBackdrop}
         selectAction={this._selectAction}
         seasonSelectAction={this._seasonSelectAction}
         selectionType={this.state.selectionType}

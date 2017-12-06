@@ -7,7 +7,9 @@ import { width, height, totalSize } from 'react-native-dimension';
 const LogOutConfirmationModal = ({ title, _hideModal, isModalVisible, _doLogOut }) => {
   return (
     <View>
-      <Modal isVisible={isModalVisible}>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress = {() => _hideModal()}>
         <View style={styles.modalContainer}>
           <View style={styles.modalTitleTextContainer}>
             <Text style={styles.modalTitleText}>{ title }</Text>

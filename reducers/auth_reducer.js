@@ -10,7 +10,9 @@ import {
   REGISTER_FAIL,
   FB_AUTH_LOGIN_SUCCESS,
   FB_AUTH_LOGIN_FAIL,
-  EMPTY_ERROR_MSG
+  EMPTY_ERROR_MSG,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_FAIL,
 } from '../actions/types';
 
 const INITIAL_STATE = { token: null, errorMsg: undefined }
@@ -41,6 +43,11 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, token: null, errorMsg: undefined }
     case EMPTY_ERROR_MSG:
       return { ...state, errorMsg: undefined}
+    case CHANGE_PASSWORD_SUCCESS:
+      //incomplete: we should send data later
+      return { ...state }
+    case  CHANGE_PASSWORD_FAIL:
+      return { ...state }
     default:
       return state;
   }
