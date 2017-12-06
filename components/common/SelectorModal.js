@@ -25,38 +25,6 @@ class SelectorModal extends Component {
     )
   }
 
-  _renderCheck = (id, value) => {
-    let { selectionType } = this.props;
-    let { selectedSeasonIds, selectedSizeIds, selectedColorIds } = this.state;
-
-    if(selectionType===1) {
-      if(this.props.bigType===value) {
-        return (<Radio selected={true} />)
-      }
-    } else if(selectionType===2) {
-      if(_.includes(selectedSeasonIds, id)) {
-          return (<Radio selected={true} />)
-      }
-    } else if(selectionType===3) {
-      if(this.props.gender===value) {
-        return (<Radio selected={true} />)
-      }
-    } else if(selectionType===4) {
-      if(_.includes(selectedSizeIds, id)) {
-        return (<Radio selected={true} />);
-      }
-    } else if(selectionType===5) {
-      if(_.includes(selectedColorIds, id)) {
-        return (<Radio selected={true} />);
-      }
-    } else if(selectionType===6){
-      if(this.props.clothType===value) {
-        return (<Radio selected={true} />)
-      }
-    }
-    return (<Radio selected={false} />);
-  }
-
   _getColorStyle = (color) => {
     return {
       width: 30,
@@ -80,7 +48,7 @@ class SelectorModal extends Component {
           style={styles.itemStyle}
           onPress={() => this.props.selectAction(value, id)}>
           <RkText rkType="primary3">{value}</RkText>
-          <Radio selected={checked} />
+          <Radio selected={checked} onPress={() => this.props.selectAction(value, id)}/>
         </TouchableOpacity>
       </View>
     );
@@ -125,7 +93,6 @@ class SelectorModal extends Component {
         } else {
           let newSelectedSeasonIds = [...this.state.selectedSeasonIds, id];
           newSelectedSeasonIds = _.filter(newSelectedSeasonIds, (curObject) => {
-            console.log(curObject !== 6);
             return curObject !== 6;
           });
           this.setState({selectedSeasonIds : newSelectedSeasonIds});
@@ -151,7 +118,9 @@ class SelectorModal extends Component {
           style={styles.itemStyle}
           onPress={() => {this._handleMultipleItemPress(id)}}>
           <RkText rkType="primary3">{value}</RkText>
-          <Radio selected={checked} />
+          <Radio
+            onPress={() => {this._handleMultipleItemPress(id)}}
+            selected={checked} />
         </TouchableOpacity>
       );
     } else {
@@ -162,7 +131,9 @@ class SelectorModal extends Component {
          onPress={() => this._handleMultipleItemPress(id)}>
          <View style={colorCircleStyle(value)} />
          <RkText rkType="primary3">{name}</RkText>
-         <Radio selected={checked} />
+         <Radio
+           onPress={() => {this._handleMultipleItemPress(id)}}
+         selected={checked} />
        </TouchableOpacity>
       );
     }

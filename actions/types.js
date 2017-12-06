@@ -49,9 +49,6 @@ export const BOOKMARK_OUTFIT_FAIL = 'bookmark_outfit_fail';
 export const UNBOOKMARK_OUTFIT_SUCCESS = 'unbookmark_outift_success';
 export const UNBOOKMARK_OUTFIT_FAIL = 'unbookmark_outfit_fail';
 
-// POST Create style
-export const CREATE_STYLE_SUCCESS = 'create_style_success';
-export const CREATE_STYLE_FAIL = 'create_style_fail';
 
 // Wardrobe
 export const CLOTHES_LIST_SUCCESS = 'clothes_list_success';
