@@ -514,6 +514,24 @@ class AddStyleScreen extends Component {
     );
   }
 
+  _renderCategoryText = () => {
+    let length = this.state.taggedCategories.length;
+    if(length==0) {
+      return (
+        <RkText rkType="header5 primary right">Add To Category</RkText>
+      );
+    } else if(length==1) {
+      return (
+        <RkText rkType="header5 hintColor right">Added To 1 Category</RkText>
+      );
+    } else {
+      return (
+        <RkText rkType="header5 hintColor right">Added To {length} Categories</RkText>
+      );
+    }
+  }
+
+
   render() {
     return (
       <View style={{flex:1}}>
@@ -624,7 +642,7 @@ class AddStyleScreen extends Component {
            style={[styles.dContainer, styles.drow]}
            onPress={this._openUserCategory}>
               <RkText rkType="header5">Category</RkText>
-              <RkText rkType="header5 primary right">Add To Category</RkText>
+              {this._renderCategoryText()}
           </TouchableOpacity>
           <View style={styles.contextSeperator}/>
           <View style={styles.dContainer}>
