@@ -146,6 +146,7 @@ class UserProfileScreen extends Component {
         style={styles.gridOutfitImage}
         onPress={()=>{this._handleImagePress(item.id)}}>
         <Image
+          fadeDuration={0}
           style={styles.gridOutfitImage}
           resizeMode="cover"
           source={{uri: item.outfit_img}}/>

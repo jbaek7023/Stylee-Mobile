@@ -171,6 +171,7 @@ class AddStyleScreen extends Component {
     if(!_.isNil(image)) {
       return (
           <Image
+            fadeDuration={0}
             source={{uri: image}}
             style={styles.headValidStyle}
             resizeMode="cover"
@@ -180,6 +181,7 @@ class AddStyleScreen extends Component {
       return (
         <View style={{padding: 15}}>
           <Image
+            fadeDuration={0}
             source={require('../../assets/images/add_icon.png')}
             resizeMode="cover"
             style={styles.headImageStyle}
@@ -367,6 +369,7 @@ class AddStyleScreen extends Component {
     if(image) {
       return (
         <Image
+          fadeDuration={0}
           source={{uri: image}}
           style={styles.headValidStyle}
           resizeMode="cover"
@@ -375,6 +378,7 @@ class AddStyleScreen extends Component {
     } else {
       return (
         <Image
+          fadeDuration={0}
           source={require('../../assets/images/default_profile.png')}
           resizeMode="cover"
           style={styles.headValidStyle}

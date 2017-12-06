@@ -14,6 +14,7 @@ class OutwearScreen extends Component {
         onPress={() => this.props.handleImagePress(item.id)}>
         <View style={styles.rowImage}>
           <Image
+            fadeDuration={0}
             key={item.id}
             source={{uri: item.cloth_image}}
             style={styles.rowImage}

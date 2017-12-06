@@ -140,6 +140,7 @@ class OutfitDetail extends Component {
         <TouchableWithoutFeedback
           onPress={() => this._handleImagePress(item.id)}>
           <Image
+            fadeDuration={0}
             key={item.id}
             source={{uri: item.cloth_image}}
             style={styles.rowImage}
@@ -323,6 +324,7 @@ class OutfitDetail extends Component {
           <ScrollView style={styles.rootScroll}>
             <RkCard rkType='article'>
               <Image
+                fadeDuration={0}
                 style={styles.outfitImage}
                 resizeMode="cover"
                 source={{uri: detail.outfit_img}} />

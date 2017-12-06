@@ -96,6 +96,7 @@ class AuthScreen extends Component {
         <KeyboardAvoidingView behavior="padding" style={styles.formAndLogoContainer}>
           <View style={styles.logoContainer}>
             <Image
+              fadeDuration={0}
               style={styles.logo}
               source={require('../../assets/images/styleeicon.png')}
             />

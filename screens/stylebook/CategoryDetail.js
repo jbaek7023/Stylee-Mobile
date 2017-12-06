@@ -45,6 +45,7 @@ class CategoryDetail extends Component {
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.id)}>
         <Image
+          fadeDuration={0}
           key={item.id}
           source={{uri: item.outfit_img}}
           style={styles.rowImage}

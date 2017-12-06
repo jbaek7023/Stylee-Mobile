@@ -36,6 +36,7 @@ class StylebookStarScreen extends Component {
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.content_type, item.object_id)}>
         <Image
+          fadeDuration={0}
           key={item.object_id}
           source={{uri: item.mobject.image}}
           style={styles.rowImage}
@@ -62,7 +63,9 @@ class StylebookStarScreen extends Component {
       return (
         <View style={{flex:1, alignItems: 'center'}}>
           <View style={styles.defaultContainer}>
-            <Image style={styles.imageStyle} source={require('../../assets/images/bookmark.png')}/>
+            <Image
+              fadeDuration={0}
+              style={styles.imageStyle} source={require('../../assets/images/bookmark.png')}/>
             <RkText style={styles.imageBottomText} rkType="header5 hintColor">No bookmarked style or clothes yet</RkText>
           </View>
         </View>

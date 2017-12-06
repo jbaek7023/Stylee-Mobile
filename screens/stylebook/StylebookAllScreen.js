@@ -33,6 +33,7 @@ class StylebookAllScreen extends Component {
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.id)}>
         <Image
+          fadeDuration={0}
           key={item.id}
           source={{uri: item.outfit_img}}
           style={styles.rowImage}
@@ -64,7 +65,9 @@ class StylebookAllScreen extends Component {
       return (
         <View style={{flex:1, alignItems: 'center'}}>
           <View style={styles.defaultContainer}>
-            <Image style={styles.imageStyle} source={require('../../assets/images/styles.png')}/>
+            <Image
+              fadeDuration={0}
+              style={styles.imageStyle} source={require('../../assets/images/styles.png')}/>
             <RkText style={styles.imageBottomText} rkType="header5 hintColor">Upload your outfit style!</RkText>
           </View>
         </View>

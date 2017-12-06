@@ -25,6 +25,7 @@ export default class HomeScreen extends React.Component {
           contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
             <Image
+              fadeDuration={0}
               source={
                 __DEV__
                   ? require('../assets/images/robot-dev.png')

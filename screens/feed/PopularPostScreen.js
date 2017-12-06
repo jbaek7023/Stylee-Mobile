@@ -30,7 +30,9 @@ class PopularPostScreen extends Component {
             <RkText rkType='secondary2 hintColor'>20 hrs ago</RkText>
           </View>
         </View>
-        <Image style={styles.imgStyle} source={require('../../assets/images/72383351.1.jpg')}/>
+        <Image
+          fadeDuration={0}
+          style={styles.imgStyle} source={require('../../assets/images/72383351.1.jpg')}/>
         <View rkCardContent>
           <RkText rkType='primary3'>TextoTextoTextoTextoTextoTextoTextoTextoTextoTextoTextoTexto</RkText>
         </View>

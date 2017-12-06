@@ -179,7 +179,9 @@ class CommentsScreen extends Component {
           rkType='row sticker'
           placeholder="Add a comment..."/>
         <RkButton onPress={() => this._pushMessage()} style={styles.send} rkType='circle'>
-          <Image source={require('../../assets/icons/sendIcon.png')}/>
+          <Image
+            fadeDuration={0}
+            source={require('../../assets/icons/sendIcon.png')}/>
         </RkButton>
       </View>
     );

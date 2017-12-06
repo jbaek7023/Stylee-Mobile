@@ -18,6 +18,7 @@ class BottomScreen extends Component {
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.id)}>
         <Image
+          fadeDuration={0}
           key={item.id}
           source={{uri: item.cloth_image}}
           style={styles.rowImage}
@@ -35,7 +36,9 @@ class BottomScreen extends Component {
     if(this.props.clothes && this.props.clothes.length==0) {
       return (
         <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          <Image style={styles.imageStyle} source={require('../../assets/images/bottom.png')}/>
+          <Image
+            fadeDuration={0}
+            style={styles.imageStyle} source={require('../../assets/images/bottom.png')}/>
           <RkText style={styles.imageBottomText} rkType="header5 hintColor">Your Bottom will be stored here</RkText>
         </View>
       );

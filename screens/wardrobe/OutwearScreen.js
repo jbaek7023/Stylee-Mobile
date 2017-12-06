@@ -17,6 +17,7 @@ class OutwearScreen extends Component {
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.id)}>
         <Image
+          fadeDuration={0}
           key={item.id}
           source={{uri: item.cloth_image}}
           style={styles.rowImage}
@@ -35,7 +36,9 @@ class OutwearScreen extends Component {
     if(this.props.clothes && this.props.clothes.length==0) {
       return (
         <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          <Image style={styles.imageStyle} source={require('../../assets/images/outerwear.png')}/>
+          <Image
+            fadeDuration={0}
+            style={styles.imageStyle} source={require('../../assets/images/outerwear.png')}/>
           <RkText style={styles.imageBottomText} rkType="header5 hintColor">Your Outwerwear will be stored here</RkText>
         </View>
       );

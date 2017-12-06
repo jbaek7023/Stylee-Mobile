@@ -81,6 +81,7 @@ class TagStyleScreen extends Component {
           onPress={() => this._handleImagePress(item.id, item.outfit_img)}>
           <View style={styles.rowImage}>
             <Image
+              fadeDuration={0}
               key={item.id}
               source={{uri: item.outfit_img}}
               style={styles.rowImage}
@@ -99,6 +100,7 @@ class TagStyleScreen extends Component {
           onPress={() => this._handleImagePress(item.id, null)}>
           <View style={styles.rowImage}>
             <Image
+              fadeDuration={0}
               key={item.id}
               source={require('../../assets/images/robot-dev.png')}
               style={styles.rowImage}

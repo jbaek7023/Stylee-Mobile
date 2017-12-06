@@ -340,6 +340,7 @@ class EditTaggedItem extends Component {
     if(!_.isNil(image)) {
       return (
         <Image
+          fadeDuration={0}
           source={{uri: image}}
           style={styles.headValidStyle}
           resizeMode="cover"
@@ -349,6 +350,7 @@ class EditTaggedItem extends Component {
       return (
         <View style={{padding: 15}}>
           <Image
+            fadeDuration={0}
             source={require('../../assets/images/add_icon.png')}
             resizeMode="cover"
             style={styles.headImageStyle}

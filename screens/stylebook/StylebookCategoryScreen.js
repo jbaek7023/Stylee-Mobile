@@ -36,6 +36,7 @@ class StylebookCategoryScreen extends Component {
     if(item.image) {
       return (
         <Image
+          fadeDuration={0}
           key={item.id}
           source={{uri: item.image}}
           style={styles.rowImage}
@@ -45,6 +46,7 @@ class StylebookCategoryScreen extends Component {
     }
     return (
       <Image
+        fadeDuration={0}
         key={item.id}
         source={require('../../assets/images/styles.png')}
         style={styles.rowImage}
@@ -77,7 +79,9 @@ class StylebookCategoryScreen extends Component {
       return (
         <View style={{flex:1, alignItems: 'center'}}>
           <View style={styles.defaultContainer}>
-            <Image style={styles.imageStyle} source={require('../../assets/images/category.png')}/>
+            <Image
+              fadeDuration={0}
+              style={styles.imageStyle} source={require('../../assets/images/category.png')}/>
             <RkText style={styles.imageBottomText} rkType="header5 hintColor">You can create your own category with your outfit styles</RkText>
           </View>
         </View>

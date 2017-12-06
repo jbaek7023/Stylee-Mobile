@@ -66,7 +66,9 @@ class FeedScreen extends Component {
       <RkCard rkType='article'>
         <View style={styles.profileSeperator} />
           {this._renderPostHeader(item)}
-      	<Image style={styles.imgStyle} source={require('../../assets/images/72383351.1.jpg')}/>
+      	<Image
+          fadeDuration={0}
+          style={styles.imgStyle} source={require('../../assets/images/72383351.1.jpg')}/>
         <View style={{marginLeft:20, marginRight: 20}}>
           <View style={{marginTop: 10}}>
               <RkText rkType="header5">Black Suit Style</RkText>
@@ -95,7 +97,9 @@ class FeedScreen extends Component {
     return (
       <View style={{flex:1, alignItems: 'center'}}>
         <View style={styles.defaultContainer}>
-          <Image style={styles.imageStyle} source={require('../../assets/images/follow.png')}/>
+          <Image
+            fadeDuration={0}
+            style={styles.imageStyle} source={require('../../assets/images/follow.png')}/>
           <RkText style={styles.imageBottomText} rkType="header5 hintColor">Follow someone to see your feed</RkText>
         </View>
       </View>

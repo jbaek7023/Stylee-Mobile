@@ -16,6 +16,7 @@ class CameraImageSelectModal extends Component {
         <View style={styles.modalContainer}>
           <TouchableOpacity onPress={this.props.handleCameraPress} style={styles.modalRow}>
             <Image
+              fadeDuration={0}
               source={require('../../assets/images/camera_icon.png')}
               resizeMode="cover"
               style={styles.thumbImageStyle}
@@ -25,6 +26,7 @@ class CameraImageSelectModal extends Component {
           <View style={styles.separator}/>
           <TouchableOpacity onPress={this.props.handleAlbumPress} style={styles.modalRow}>
             <Image
+              fadeDuration={0}
               source={require('../../assets/images/album_image.png')}
               resizeMode="cover"
               style={styles.thumbImageStyle}

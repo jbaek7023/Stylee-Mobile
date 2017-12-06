@@ -198,6 +198,7 @@ class OutfitSimpleItem extends Component {
           {this._renderPostHeader(item)}
           <TouchableWithoutFeedback onPress={()=>{this._handleImagePress(item.id)}}>
           	<Image
+              fadeDuration={0}
           		style={styles.outfitImage}
           		resizeMode="cover"
           		source={{uri: item.outfit_img}}

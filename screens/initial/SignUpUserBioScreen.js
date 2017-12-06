@@ -28,6 +28,7 @@ class SignUpUserBioScreen extends Component {
       <View style={styles.container}>
         <View style={styles.logoContainer}>
           <Image
+            fadeDuration={0}
             style={styles.logo}
             source={require('../../assets/images/styleeicon.png')}
           />
