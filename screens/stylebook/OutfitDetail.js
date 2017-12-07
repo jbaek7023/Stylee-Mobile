@@ -22,7 +22,7 @@ import SnackBar from 'react-native-snackbar-dialog';
 import { Spinner } from 'native-base';
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
-    header: null
+    header: null,
   });
 
   state = {

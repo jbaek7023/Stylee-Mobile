@@ -5,6 +5,7 @@ import StylebookAllScreen from './StylebookAllScreen';
 import StylebookCategoryScreen from './StylebookCategoryScreen';
 import StylebookStarScreen from './StylebookStarScreen';
 // Nav Bar
+import { NavigationActions } from 'react-navigation'
 import { NavBar } from '../../components/navBar';
 import {withRkTheme, RkText, RkStyleSheet, RkButton} from 'react-native-ui-kitten';
 import FABs from '../../components/common/FABs';

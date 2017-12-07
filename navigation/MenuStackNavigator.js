@@ -1,4 +1,4 @@
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 
 import ChangePasswordScreen from '../screens/menu/ChangePasswordScreen';
 import MenuScreen from '../screens/menu/MenuScreen';
@@ -23,10 +23,16 @@ export default StackNavigator ({
     screen: EditProfileScreen
   }
 }, {
-    // header: null,
-    // headerMode: 'none',
-    // navigationOptions: {
-    //   header: null
-    // },
-    lazy: true
+  navigationOptions:({navigation, screenProps})=>({
+    tabBarOnPress: ({jumpToIndex, scene}) => {
+      jumpToIndex(scene.index);
+      navigation.dispatch(NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Menuo' }) // go to first screen of the StackNavigator
+        ]
+      }))
+    }
+  }),
+  lazy: true
 });

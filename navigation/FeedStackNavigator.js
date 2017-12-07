@@ -1,4 +1,4 @@
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 
 import FeedWrappingScreen from '../screens/feed/FeedWrappingScreen';
 import SearchScreen from '../screens/feed/SearchScreen';
@@ -12,5 +12,16 @@ export default StackNavigator ({
     screen: SearchScreen,
   }
 }, {
-    lazy: true
+  navigationOptions:({navigation, screenProps})=>({
+    tabBarOnPress: ({jumpToIndex, scene}) => {
+      jumpToIndex(scene.index);
+      navigation.dispatch(NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Feedo' }) // go to first screen of the StackNavigator
+        ]
+      }))
+    }
+  }),
+  lazy: true
 });

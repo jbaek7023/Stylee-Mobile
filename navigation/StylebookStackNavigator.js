@@ -1,4 +1,4 @@
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 
 import StylebookWrappingScreen from '../screens/stylebook/StylebookWrappingScreen';
 import OutfitDetail from '../screens/stylebook/OutfitDetail';
@@ -59,5 +59,16 @@ export default StackNavigator ({
     screen: EditTaggedItem
   }
 }, {
+    navigationOptions:({navigation, screenProps})=>({
+      tabBarOnPress: ({jumpToIndex, scene}) => {
+        jumpToIndex(scene.index);
+        navigation.dispatch(NavigationActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'Stylebooko' }) // go to first screen of the StackNavigator
+          ]
+        }))
+      }
+    }),
     lazy: true
 });

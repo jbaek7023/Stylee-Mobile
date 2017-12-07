@@ -1,4 +1,4 @@
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 
 import WardrobeWrappingScreen from '../screens/wardrobe/WardrobeWrappingScreen';
 import OutfitDetail from '../screens/stylebook/OutfitDetail';
@@ -55,5 +55,16 @@ export default StackNavigator ({
     screen: TagFromPhoto
   }
 }, {
-    lazy: true
+  navigationOptions:({navigation, screenProps})=>({
+    tabBarOnPress: ({jumpToIndex, scene}) => {
+      jumpToIndex(scene.index);
+      navigation.dispatch(NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Wardrobeo' }) // go to first screen of the StackNavigator
+        ]
+      }))
+    }
+  }),
+  lazy: true
 });
