@@ -8,6 +8,7 @@ import {
   RkStyleSheet,
   RkButton
 } from 'react-native-ui-kitten';
+import { Spinner } from 'native-base';
 import { Avatar } from '../../components/Avatar';
 import { SocialThreeBar } from '../../components/SocialThreeBar';
 import TimeAgo from 'react-native-timeago';
@@ -26,7 +27,8 @@ class ClothDetail extends Component {
   state = {
     isFollowing: false,
     liked: false,
-    starred: false
+    starred: false,
+    isLoading: true,
   }
 
   componentWillMount() {
@@ -36,6 +38,9 @@ class ClothDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if(this.props.clothDetail !== nextProps.clothDetail) {
+      this.setState({isLoading: false})
+    }
     let isFollowing = nextProps.clothDetail.is_following;
     let liked = nextProps.clothDetail.liked;
     let starred = nextProps.clothDetail.starred;
@@ -163,33 +168,50 @@ class ClothDetail extends Component {
   }
 
   _renderHeader = (detail) => {
+    if(detail) {
+      return (
+        <View style={styles.header}>
+          <View style={styles.headerLayout}>
+            <View rkCardHeader style={styles.left}>
+              <RkButton
+                rkType='clear'
+                style={styles.menu}
+                onPress={() => {
+                this.props.navigation.goBack()
+              }}>
+                <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+              </RkButton>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}>
+                {this._renderAvatar(detail.user.image)}
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}
+                style={styles.content}>
+                <View style={styles.contentHeader}>
+                  <RkText rkType='header5'>{detail.user.username}</RkText>
+                  <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.right}>
+              {this._renderFollow(detail.is_owner, detail.is_following, detail.user.id)}
+            </View>
+          </View>
+        </View>
+      );
+    }
+
     return (
-      <View style={styles.header}>
-        <View style={styles.headerLayout}>
-          <View rkCardHeader style={styles.left}>
-            <RkButton
-              rkType='clear'
-              style={styles.menu}
-              onPress={() => {
-              this.props.navigation.goBack()
-            }}>
-              <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
-            </RkButton>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}>
-              {this._renderAvatar(detail.user.image)}
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}
-              style={styles.content}>
-              <View style={styles.contentHeader}>
-                <RkText rkType='header5'>{detail.user.username}</RkText>
-                <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.right}>
-            {this._renderFollow(detail.is_owner, detail.is_following, detail.user.id)}
-          </View>
+      <View style={styles.headerLayout}>
+        <View rkCardHeader style={styles.left}>
+          <RkButton
+            rkType='clear'
+            style={styles.menu}
+            onPress={() => {
+            this.props.navigation.goBack()
+          }}>
+            <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+          </RkButton>
         </View>
       </View>
     );
@@ -211,9 +233,20 @@ class ClothDetail extends Component {
     }
   }
 
-  render () {
+  render() {
     const detail = this.props.clothDetail;
-    if(detail) {
+    if(this.state.isLoading) {
+      return (
+        <View style={styles.root}>
+          <View style={styles.header}>
+            {this._renderHeader(undefined)}
+          </View>
+          <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'  }}>
+            <Spinner color='#6F3AB1'/>
+          </View>
+        </View>
+      );
+    } else {
       return (
         <View style={{flex:1}}>
           {this._renderHeader(detail)}
@@ -230,13 +263,13 @@ class ClothDetail extends Component {
                   <View style={{ marginTop: 10 }}>
                       <RkText rkType="header4">{detail.content}</RkText>
                   </View>
-              		<View style={{
+                  <View style={{
                     marginTop: 10,
                     marginBottom: 10,
                     flexDirection: 'row',
                   }}>
-            				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
-            				<RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
+                    <RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
+                    <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
                   </View>
                 </View>
                 <View style={{justifyContent: 'center'}}>{this._renderPrivacy(detail.only_me)}</View>
@@ -293,9 +326,6 @@ class ClothDetail extends Component {
         </View>
       );
     }
-    return (<View><Text>Loading</Text></View>);
-
-
   }
 }
 
@@ -305,7 +335,8 @@ function mapStateToProps({auth: {token, hType}, wardrobe: {clothDetail}}) {
 
 let styles = RkStyleSheet.create(theme => ({
   root: {
-    backgroundColor: theme.colors.screen.base
+    backgroundColor: theme.colors.screen.base,
+    flex: 1
   },
   title: {
     marginBottom: 5

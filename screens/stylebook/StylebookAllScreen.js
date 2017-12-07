@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { width, height, totalSize } from 'react-native-dimension';
-import { Fab, Icon, Button } from 'native-base';
+import { Fab, Icon, Button, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { threeImageWidth } from '../../utils/scale';
 import { RkText } from 'react-native-ui-kitten';
@@ -9,9 +9,11 @@ import { RkText } from 'react-native-ui-kitten';
 import * as actions from '../../actions';
 
 class StylebookAllScreen extends Component {
-
   static navigationOptions = {
-  //  title:'All'
+  }
+
+  state = {
+    isLoading: true
   }
 
   componentWillMount() {
@@ -19,6 +21,27 @@ class StylebookAllScreen extends Component {
       // Auth Screen // set the
     } else {
       this.props.loadOutfitAll(this.props.token, this.props.hType);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // retrieve user data // add username and bio to props
+    if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
+      nextProps.navigation.navigate('Autho');
+    } else {
+      // if token is updated, retrieve current logged in user
+      if ( this.props.token !== nextProps.token) {
+        this.props.loadOutfitAll(this.props.token, this.props.hType);
+      }
+    }
+
+    if(this.props.created !== nextProps.created) {
+      this.props.loadOutfitAll(this.props.token, this.props.hType);
+      this.props.fetchClothesAll(this.props.token, this.props.hType);
+    }
+
+    if(this.props.outfits !== nextProps.outfits) {
+      this.setState({isLoading: false});
     }
   }
 
@@ -43,24 +66,15 @@ class StylebookAllScreen extends Component {
     );
   }
 
-  componentWillReceiveProps(nextProps) {
-    // retrieve user data // add username and bio to props
-    if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
-      nextProps.navigation.navigate('Autho');
-    } else {
-      // if token is updated, retrieve current logged in user
-      if ( this.props.token !== nextProps.token) {
-        this.props.loadOutfitAll(this.props.token, this.props.hType);
-      }
-    }
-
-    if(this.props.created !== nextProps.created) {
-      this.props.loadOutfitAll(this.props.token, this.props.hType);
-      this.props.fetchClothesAll(this.props.token, this.props.hType);
-    }
-  }
-
   render() {
+    if(this.state.isLoading) {
+      return (
+        <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+          <Spinner color='#6F3AB1'/>
+        </View>
+      );
+    }
+
     if(this.props.outfits && this.props.outfits.length==0) {
       return (
         <View style={{flex:1, alignItems: 'center'}}>

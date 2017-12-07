@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, View, Text, StyleSheet, TouchableWithoutFeedback, ScrollView, FlatList } from 'react-native';
-import { Card, CardItem, Body } from 'native-base';
+import { Card, CardItem, Body, Spinner } from 'native-base';
 import {
   RkText,
   RkCard, RkStyleSheet
@@ -12,6 +12,10 @@ import * as actions from '../../actions';
 class StylebookCategoryScreen extends Component {
   static navigationOptions = {
   //  title: 'Category'
+  }
+
+  state = {
+    isLoading: true,
   }
 
   componentWillMount() {
@@ -29,6 +33,10 @@ class StylebookCategoryScreen extends Component {
       if ( this.props.token !== nextProps.token) {
         this.props.loadCategoryAll(this.props.token, this.props.hType);
       }
+    }
+
+    if(this.props.categories !== nextProps.categories) {
+      this.setState({isLoading:false})
     }
   }
 
@@ -75,6 +83,14 @@ class StylebookCategoryScreen extends Component {
   }
 
   render() {
+    if(this.state.isLoading) {
+      return (
+        <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+          <Spinner color='#6F3AB1'/>
+        </View>
+      );
+    }
+
     if(this.props.categories && this.props.categories.length==0) {
       return (
         <View style={{flex:1, alignItems: 'center'}}>

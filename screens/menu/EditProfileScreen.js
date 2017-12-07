@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import {
   ScrollView,
   View,
@@ -17,7 +16,7 @@ import {
   RkStyleSheet,
   RkButton
 } from 'react-native-ui-kitten';
-
+import { Spinner } from 'native-base';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
 
@@ -44,6 +43,7 @@ class EditProfileScreen extends Component {
     uri: undefined,
     base64: undefined,
     profileChanged: false,
+    isLoading: true,
   }
 
   _hideModal = () => this.setState({isModalVisible: false});
@@ -105,12 +105,36 @@ class EditProfileScreen extends Component {
   componentWillReceiveProps(nextProps){
     if(this.props.profile !== nextProps.profile) {
       // API : add username and title.
+      console.log('we r here/')
       let { username, title, gender, profile_img } = nextProps.profile;
-      this.setState({username, title, gender, uri: profile_img});
+      this.setState({username, title, gender, uri: profile_img, isLoading: false});
     }
   }
 
   _renderHeader = () => {
+    if(this.state.isLoading) {
+      return (
+        <View style={styles.header}>
+          <View style={styles.headerLayout}>
+            <RkButton
+              rkType='clear'
+              style={styles.menu}
+              onPress={() => {
+              this.props.navigation.goBack()
+            }}>
+              <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+            </RkButton>
+            <View rkCardHeader style={styles.left}>
+              <View style={styles.content}>
+                <View style={styles.contentHeader}>
+                  <RkText rkType='header3'>Edit Profile</RkText>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={styles.header}>
         <View style={styles.headerLayout}>
@@ -144,9 +168,7 @@ class EditProfileScreen extends Component {
                 <RkText rkType="header3">SAVE</RkText>
               </TouchableOpacity>
           </View>
-          <View>
-            {this._renderModal()}
-          </View>
+
         </View>
       </View>
     );
@@ -196,51 +218,62 @@ class EditProfileScreen extends Component {
 
   render() {
     const profile = this.props.profile;
-    if(profile) {
+
+    if(this.state.isLoading) {
       return (
         <View style={{flex:1}}>
           {this._renderHeader()}
-          <ScrollView style={styles.root}>
-            <RkAvoidKeyboard>
-              {this._renderChangeImage()}
-              <View style={[styles.dContainer, styles.titleRow]}>
-                <RkText rkType="header5">Username</RkText>
-                <TextInput
-                  selectionColor='grey'
-                  underlineColorAndroid='white'
-                  placeholder="Username"
-                  style={[styles.moreDetailStyle]}
-                  onChangeText={(username)=>{
-                    this.setState({username, profileChanged: true});
-                  }}
-                  value={this.state.username}/>
-              </View>
-              <View style={[styles.dContainer, styles.titleRow]}>
-                <RkText rkType="header5">Intro</RkText>
-                <TextInput
-                  selectionColor='grey'
-                  underlineColorAndroid='white'
-                  placeholder="Username"
-                  style={[styles.moreDetailStyle]}
-                  onChangeText={(title)=>{
-                    this.setState({title, profileChanged: true})
-                  }}
-                  value={this.state.title}/>
-              </View>
-              <TouchableOpacity
-                onPress={()=>{this._handleGenderPress()}}
-                style={[styles.dContainer, styles.row]}>
-                <RkText rkType="header5">Gender</RkText><RkText rkType="primary2">{this.state.gender}</RkText>
-              </TouchableOpacity>
-            </RkAvoidKeyboard>
-          </ScrollView>
-          <View>
-            {this._renderSelectorModal()}
+          <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+            <Spinner color='#6F3AB1'/>
           </View>
         </View>
       );
     }
-    return (<View><Text>Loading</Text></View>);
+    return (
+      <View style={{flex:1}}>
+        {this._renderHeader()}
+        <ScrollView style={styles.root}>
+          <RkAvoidKeyboard>
+            {this._renderChangeImage()}
+            <View style={[styles.dContainer, styles.titleRow]}>
+              <RkText rkType="header5">Username</RkText>
+              <TextInput
+                selectionColor='grey'
+                underlineColorAndroid='white'
+                placeholder="Username"
+                style={[styles.moreDetailStyle]}
+                onChangeText={(username)=>{
+                  this.setState({username, profileChanged: true});
+                }}
+                value={this.state.username}/>
+            </View>
+            <View style={[styles.dContainer, styles.titleRow]}>
+              <RkText rkType="header5">Intro</RkText>
+              <TextInput
+                selectionColor='grey'
+                underlineColorAndroid='white'
+                placeholder="Username"
+                style={[styles.moreDetailStyle]}
+                onChangeText={(title)=>{
+                  this.setState({title, profileChanged: true})
+                }}
+                value={this.state.title}/>
+            </View>
+            <TouchableOpacity
+              onPress={()=>{this._handleGenderPress()}}
+              style={[styles.dContainer, styles.row]}>
+              <RkText rkType="header5">Gender</RkText><RkText rkType="primary2">{this.state.gender}</RkText>
+            </TouchableOpacity>
+          </RkAvoidKeyboard>
+        </ScrollView>
+        <View>
+          {this._renderSelectorModal()}
+        </View>
+        <View>
+          {this._renderModal()}
+        </View>
+      </View>
+    );
   }
 }
 

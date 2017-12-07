@@ -35,7 +35,7 @@ class OutfitDetail extends Component {
     title: '',
     onlyMe: false,
     taggedCategories: [],
-    loading: true,
+    isLoading: true,
   }
 
   componentWillMount() {
@@ -46,7 +46,7 @@ class OutfitDetail extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.outfitDetail && (this.props.outfitDetail !== nextProps.outfitDetail)) {
-      this.setState({loading: false});
+      this.setState({isLoading: false});
     }
 
     // check follonwing, liked, starred
@@ -339,7 +339,7 @@ class OutfitDetail extends Component {
   render() {
     const detail = this.props.outfitDetail;
     // User Access Not Yet
-    if(this.state.loading) {
+    if(this.state.isLoading) {
       return (
         <View style={styles.root}>
           <View style={styles.header}>

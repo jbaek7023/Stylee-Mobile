@@ -10,7 +10,7 @@ import { Avatar } from '../../components/Avatar';
 import { width, height, totalSize } from 'react-native-dimension';
 import _ from 'lodash';
 import * as actions from '../../actions';
-import { Button, Icon } from 'native-base';
+import { Button, Icon, Spinner } from 'native-base';
 import TimeAgo from 'react-native-timeago';
 import SocialBar from '../../components/SocialBar';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,6 +26,7 @@ class UserProfileScreen extends Component {
     grid: true,
     scrollY: 0,
     isFollowing: false,
+    isLoading: true
   }
 
   componentWillMount() {
@@ -37,6 +38,9 @@ class UserProfileScreen extends Component {
     let isFollowing = nextProps.cUserProfile.is_following;
     if(this.state.isFollowing!=isFollowing) {
       this.setState({isFollowing});
+    }
+    if(this.props.cUserProfile !== nextProps.cUserProfile) {
+      this.setState({isLoading: false});
     }
   }
 
@@ -111,6 +115,28 @@ class UserProfileScreen extends Component {
   }
 
   _renderHeader = (username, isOwner, isFollowing) => {
+    if(username) {
+      return (
+        <View style={styles.headerLayout}>
+          <View rkCardHeader style={styles.left}>
+            <RkButton
+              rkType='clear'
+              style={styles.menu}
+              onPress={() => {
+              this.props.navigation.goBack()
+            }}>
+              <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+            </RkButton>
+            <View style={{justifyContent: 'center'}}>
+              {this._renderUsername(username)}
+            </View>
+          </View>
+          <View style={styles.right}>
+            {this._renderOwner(isOwner, isFollowing)}
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={styles.headerLayout}>
         <View rkCardHeader style={styles.left}>
@@ -122,12 +148,6 @@ class UserProfileScreen extends Component {
           }}>
             <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
           </RkButton>
-          <View style={{justifyContent: 'center'}}>
-            {this._renderUsername(username)}
-          </View>
-        </View>
-        <View style={styles.right}>
-          {this._renderOwner(isOwner, isFollowing)}
         </View>
       </View>
     );
@@ -232,8 +252,6 @@ class UserProfileScreen extends Component {
                   justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35
                 }}>
                 {this._renderSelection1()}
-
-
               </TouchableHighlight>
               <TouchableHighlight
                 onPress={()=>{this.setState({grid:false})}}
@@ -253,16 +271,22 @@ class UserProfileScreen extends Component {
 
   render() {
     const profile = this.props.cUserProfile;
-    if(profile) {
+    if(this.state.isLoading) {
       return (
-        this._renderProfile(profile)
+        <View style={styles.root}>
+          <View style={styles.header}>
+            {this._renderHeader(undefined)}
+          </View>
+          <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+            <Spinner color='#6F3AB1'/>
+          </View>
+        </View>
       );
     }
     return (
-      <View>
-        <Text>Loading</Text>
-      </View>
+      this._renderProfile(profile)
     );
+
   }
 }
 
@@ -280,7 +304,8 @@ let styles = RkStyleSheet.create(theme => ({
     height: avatarLength
   },
   root: {
-    backgroundColor: theme.colors.screen.base
+    backgroundColor: theme.colors.screen.base,
+    flex: 1,
   },
   userInfo: {
     flexDirection: 'row',
