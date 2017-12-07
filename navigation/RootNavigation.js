@@ -25,7 +25,6 @@ const RootTabNavigator = TabNavigator ({
         fontWeight: 'normal',
       },swipeEnabled: false,
       tabBarVisible: false,
-
     }),
     swipeEnabled: false,
     lazy: true,

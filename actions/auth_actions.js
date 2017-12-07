@@ -88,21 +88,19 @@ const doSocialAuthLogin = async (dispatch, token) => {
 }
 
 export const doAuthLogin = ( username, password ) => async dispatch => {
-  let response = await axios.post(`${ROOT_URL}/rest-auth/login/`, {
-    username,
-    password,
-  });
+  try {
+    let response = await axios.post(`${ROOT_URL}/rest-auth/login/`, {
+      username,
+      password,
+    });
 
-  if (response.status === 200) {
-    // fb is type 2
-    AsyncStorage.setItem('stylee_token', response.data.token);
-    dispatch({ type: AUTH_LOGIN_SUCCESS, payload: response.data.token});
-  } else {
-    if(response.status === 400) {
-      console.log('Not authorized. ');
-    } else if (response.status === 403){
-      console.log('You are not suposed to see this message. Contact Administrator');
+    if (response.status === 200) {
+      // fb is type 2
+      AsyncStorage.setItem('stylee_token', response.data.token);
+      dispatch({ type: AUTH_LOGIN_SUCCESS, payload: response.data.token});
     }
+  } catch (error) {
+    console.log('fail');
     dispatch({ type: AUTH_LOGIN_FAIL});
   }
 };
@@ -111,7 +109,3 @@ export const setToken = ( token, hType ) => ({
   type: SET_TOKEN,
   payload: { token, hType }
 });
-
-export const emptyErrorMsg = () => ({
-  type: EMPTY_ERROR_MSG
-})

@@ -30,7 +30,8 @@ export default function(state = INITIAL_STATE, action) {
     case AUTH_LOGIN_SUCCESS:
       return { ...state, token: action.payload, errorMsg: undefined, hType: 1};
     case AUTH_LOGIN_FAIL:
-      return { ...state, token: null, errorMsg: `Can't Find Account` };
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, token: null, errorMsg: timeStamp.toString() };
     case SET_TOKEN:
       return { ...state, token: action.payload.token, hType: action.payload.hType, errorMsg: '' };
     case SET_DEFAULT_ALL:

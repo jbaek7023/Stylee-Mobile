@@ -12,7 +12,7 @@ import Hr from 'react-native-hr';
 import * as actions from '../../actions';
 
 import { AuthFieldInput } from '../../components/common/AuthFieldInput';
-import { CommonModal } from '../../components/common/CommonModal';
+import CommonModal from '../../components/common/CommonModal';
 
 import { AppLoading } from 'expo';
 
@@ -30,13 +30,7 @@ class AuthScreen extends Component {
     isReady: false,
   }
 
-  _showModal = () => this.setState({ isModalVisible: true })
 
-  _hideModal = () => {
-    // set error
-    this.props.emptyErrorMsg;
-    this.setState({ isModalVisible: false });
-  }
 
   async componentWillMount() {
     let token = await AsyncStorage.getItem('stylee_token');
@@ -51,22 +45,33 @@ class AuthScreen extends Component {
     this.setState({isLoading:true});
   }
 
-  componentDidMount() {
-
-  }
-
   // When we rerender,
-  componentWillReceiveProps(nextProps) {
-    // onAuthComplete Pass twice. so. it's
-    if(nextProps.errorMsg) {
+  async componentWillReceiveProps(nextProps) {
+    if(nextProps.errorMsg && (nextProps.errorMsg !== this.props.errorMsg)) {
       this._showModal();
     }
-    this.setState({isLoading:true});
+
+    let token = await AsyncStorage.getItem('stylee_token');
+    if(!_.isNull(token)) {
+      this.props.setToken(token, 1);
+    } else {
+      let fbToken = await AsyncStorage.getItem('fb_token');
+      if(!_.isNull(fbToken)) {
+        this.props.setToken(fbToken, 2);
+      }
+    }
 
     if (nextProps.hType == 1 || nextProps.hType == 2) {
       nextProps.navigation.navigate('Feed');
       this.setState({ password: ''})
     }
+  }
+
+  _showModal = () => this.setState({ isModalVisible: true })
+
+  _hideModal = () => {
+    // set error
+    this.setState({ isModalVisible: false });
   }
 
   _authClicked = () => {
@@ -82,13 +87,22 @@ class AuthScreen extends Component {
     this.props.navigation.navigate('SignUp');
   }
 
+  _renderCommonModal = () => {
+    return (
+      <CommonModal
+        username={this.state.username}
+        _hideModal={this._hideModal}
+        isModalVisible={this.state.isModalVisible}
+      />
+    );
+  }
+
   render() {
     if(!this.state.isLoading) {
       return <AppLoading />;
     }
     return (
       <View style={styles.container}>
-
         <KeyboardAvoidingView behavior="padding" style={styles.formAndLogoContainer}>
           <View style={styles.languageContainer}>
             <Button transparent>
@@ -126,16 +140,11 @@ class AuthScreen extends Component {
               <Text style={styles.buttonText}>Log in with the Facebook</Text>
             </Button>
           </View>
-          <View>
-            <CommonModal
-              username={this.state.username}
-              _hideModal={this._hideModal}
-              errorMsg={this.props.errorMsg}
-              isModalVisible={this.state.isModalVisible}
-            />
-          </View>
           <View style={styles.signUpContainer}>
             <Text onPress={this._goSignUp} >CREATE NEW STYLEE ACCOUNT</Text>
+          </View>
+          <View>
+            {this._renderCommonModal()}
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -187,7 +196,7 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({ auth: {token, hType,errorMsg} }) {
+function mapStateToProps({ auth: {token, hType, errorMsg} }) {
   // errorMsg != null : trueErrorMsg
   return { token, errorMsg, hType };
 }

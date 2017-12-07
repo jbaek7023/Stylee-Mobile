@@ -12,6 +12,7 @@ import {
   RkTheme,
   RkButton,
 } from 'react-native-ui-kitten';
+import { NavigationActions } from 'react-navigation';
 
 import {FontAwesome} from '../../assets/icons';
 import { Avatar } from '../../components/Avatar';
@@ -28,6 +29,8 @@ import SnackBar from 'react-native-snackbar-dialog';
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
+
+
 
 class MenuScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -55,7 +58,10 @@ class MenuScreen extends Component {
   componentWillReceiveProps(nextProps) {
     // retrieve user data // add username and bio to props
     if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
-      nextProps.navigation.navigate('Autho');
+      const backAction = NavigationActions.back({
+        key: null
+      })
+      nextProps.navigation.dispatch(backAction);
     } else {
       // if token is updated, retrieve current logged in user
       let condition = ( this.props.token !== nextProps.token) || (this.props.imageCreated !== nextProps.imageCreated)

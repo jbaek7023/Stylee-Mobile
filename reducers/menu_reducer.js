@@ -26,8 +26,6 @@ export default function(state = INITIAL_STATE, action) {
     case EDIT_PROFILE_FAIL:
       return { ...state, }
     case EDIT_PROFILE_IMG_SUCCESS:
-      console.log('in reducer')
-      console.log(action.payload.changed)
       return { ...state, imageCreated: action.payload.changed}
     case EDIT_PROFILE_IMG_FAIL:
       return { ...state, }

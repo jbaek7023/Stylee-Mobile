@@ -68,7 +68,6 @@ class CategoryDetail extends Component {
               <RkText rkType='h2'>{detail.name}</RkText>
               <RkText rkType='h5' style={styles.marginName}>username</RkText>
               <RkText rkType='secondary2 hintColor bigLine'>{detail.detail}This is one</RkText>
-
             </View>
             <View rkCardContent>
               <RkText rkType='secondary2'>{outfitCount} Styles</RkText>

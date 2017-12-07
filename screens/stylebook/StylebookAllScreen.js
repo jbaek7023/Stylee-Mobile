@@ -17,10 +17,10 @@ class StylebookAllScreen extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.token);
-    if(this.props.token == undefined) {
-      // Auth Screen // set the
-    } else {
+    if(this.props.token) {
+      console.log('are you loading outfit in componentWillMont?')
+      console.log(this.props.token);
+      console.log(this.props.hType);
       this.props.loadOutfitAll(this.props.token, this.props.hType);
     }
   }
@@ -29,16 +29,15 @@ class StylebookAllScreen extends Component {
     // retrieve user data // add username and bio to props
     if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
       nextProps.navigation.navigate('Autho');
-    } else {
-      // if token is updated, retrieve current logged in user
-      if ( this.props.token !== nextProps.token) {
-        this.props.loadOutfitAll(this.props.token, this.props.hType);
-      }
+    }
+    if ( nextProps.token && (this.props.token !== nextProps.token)) {
+      this.props.loadOutfitAll(nextProps.token, nextProps.hType);
     }
 
+
     if(this.props.created !== nextProps.created) {
-      this.props.loadOutfitAll(this.props.token, this.props.hType);
-      this.props.fetchClothesAll(this.props.token, this.props.hType);
+      this.props.loadOutfitAll(nextProps.token, nextProps.hType);
+      this.props.fetchClothesAll(nextProps.token, nextProps.hType);
     }
 
     if(this.props.outfits !== nextProps.outfits) {

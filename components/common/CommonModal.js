@@ -1,33 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { Text, Button } from 'native-base';
 import { width, height, totalSize } from 'react-native-dimension';
 
-const CommonModal = ({ username, _hideModal, errorMsg, isModalVisible }) => {
-  return (
-    <View>
-      <Modal isVisible={isModalVisible}>
+class CommonModal extends Component {
+  render() {
+    return (
+      <Modal isVisible={this.props.isModalVisible} onBackdropPress = {() => this.props._hideModal()}>
         <View style={styles.modalContainer}>
           <View style={styles.modalTitleTextContainer}>
-            <Text style={styles.modalTitleText}>{errorMsg}</Text>
+            <Text style={styles.modalTitleText}>{`Can't Find Account`}</Text>
           </View>
           <View style={styles.modalContentTextContainer}>
-            <Text style={styles.modalContentText} numberOfLines={4}>{`It looks like ${username} doesn't match an existing account. If you don't have a Stylee account, you can create one now `}</Text>
+            <Text style={styles.modalContentText} numberOfLines={4}>{`It looks like ${this.props.username} doesn't match an existing account. If you don't have a Stylee account, you can create one now `}</Text>
           </View>
           <View style={styles.modalButtonContainer}>
-            <Button transparent onPress={_hideModal}>
+            <Button transparent onPress={()=>this.props._hideModal()}>
               <Text style={[styles.modalText, styles.black]}>Find Account</Text>
             </Button>
-            <Button transparent onPress={_hideModal}>
+            <Button transparent onPress={()=>this.props._hideModal()}>
               <Text style={styles.modalText}>Try Again</Text>
             </Button>
           </View>
         </View>
       </Modal>
-    </View>
-  );
-};
+    );
+  }
+}
+
 
 const styles = StyleSheet.create({
   modalContainer: {
@@ -69,4 +70,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export { CommonModal };
+export default CommonModal;
