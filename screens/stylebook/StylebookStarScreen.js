@@ -25,21 +25,26 @@ class StylebookStarScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let { token, hType } = this.props;
     // retrieve user data // add username and bio to props
     if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
       nextProps.navigation.navigate('Autho');
     } else {
       // if token is updated, retrieve current logged in user
-      if ( this.props.token !== nextProps.token) {
-        this.props.fetchStarOutfitAll(this.props.token, this.props.hType);
+      if ( token !== nextProps.token) {
+        this.props.fetchStarOutfitAll(token, hType);
       }
     }
     if(this.props.starOutfits !== nextProps.starOutfits) {
       this.setState({isLoading: false});
     }
+
+    if(this.props.bookmarked !== nextProps.bookmarked) {
+      this.props.fetchStarOutfitAll(token, hType);
+    }
   }
 
-  _keyExtractor = (item, index) => item.id;
+  _keyExtractor = (item, index) => (item+index);
 
   _handleImagePress = (ctype, id) => {
     if(ctype == 26) {
@@ -51,12 +56,14 @@ class StylebookStarScreen extends Component {
   }
 
   _renderItem = ({item}) => {
+    console.log(item);
+    console.log(item.object_id);
     return (
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.content_type, item.object_id)}>
         <Image
           fadeDuration={0}
-          key={item.object_id}
+          key={item.object_id + item.user + item.content_type}
           source={{uri: item.mobject.image}}
           style={styles.rowImage}
           resizeMode="cover"
@@ -127,9 +134,9 @@ const styles = StyleSheet.create({
 });
 
 // var width = Dimensions.get('window').width;
-function mapStateToProps({auth: {token, hType}, outfit: { starOutfits} }) {
+function mapStateToProps({auth: {token, hType}, outfit: { starOutfits, bookmarked } }) {
   return {
-    token, hType, starOutfits
+    token, hType, starOutfits, bookmarked
   }
 }
 

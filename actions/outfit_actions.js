@@ -110,7 +110,7 @@ export const unbookmarkOutfit = (token, hType, outfitId) => async dispatch => {
   let response = await axios.post(`${ROOT_URL}/stars/delete/?type=outfit&id=${outfitId}`, {
   }, {headers});
 
-  if (response.status === 201) {
+  if (response.status === 200) {
     dispatch({ type: UNBOOKMARK_OUTFIT_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: UNBOOKMARK_OUTFIT_FAIL })

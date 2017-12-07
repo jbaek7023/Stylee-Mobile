@@ -88,12 +88,13 @@ class AuthScreen extends Component {
     }
     return (
       <View style={styles.container}>
-        <View style={styles.languageContainer}>
-          <Button transparent>
-            <Text>English</Text>
-          </Button>
-        </View>
+
         <KeyboardAvoidingView behavior="padding" style={styles.formAndLogoContainer}>
+          <View style={styles.languageContainer}>
+            <Button transparent>
+              <Text>English</Text>
+            </Button>
+          </View>
           <View style={styles.logoContainer}>
             <Image
               fadeDuration={0}

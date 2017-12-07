@@ -28,12 +28,16 @@ class StylebookCategoryScreen extends Component {
   componentWillReceiveProps(nextProps) {
     if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
       nextProps.navigation.navigate('Autho');
-    } else {
-      // if token is updated, retrieve current logged in user
-      if ( this.props.token !== nextProps.token) {
-        this.props.loadCategoryAll(this.props.token, this.props.hType);
-      }
     }
+    // if token is updated, retrieve current logged in user
+    let condition = (
+      this.props.token !== nextProps.token) ||
+      (this.props.added !== nextProps.added) ||
+      (this.props.removed !== nextProps.removed ) ? true : false;
+    if ( condition ) {
+      this.props.loadCategoryAll(this.props.token, this.props.hType);
+    }
+
 
     if(this.props.categories !== nextProps.categories) {
       this.setState({isLoading:false})
@@ -148,9 +152,9 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps({auth: {token, hType}, outfit: {categories}}) {
+function mapStateToProps({auth: {token, hType}, outfit: {categories}, category: {added, removed}}) {
   return {
-    token, hType, categories
+    token, hType, categories, added, removed
   }
 }
 

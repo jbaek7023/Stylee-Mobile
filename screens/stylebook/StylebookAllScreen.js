@@ -17,6 +17,7 @@ class StylebookAllScreen extends Component {
   }
 
   componentWillMount() {
+    console.log(this.props.token);
     if(this.props.token == undefined) {
       // Auth Screen // set the
     } else {

@@ -45,7 +45,10 @@ class WardrobeWrappingScreen extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchClothesAll(this.props.token, this.props.hType);
+    if(this.props.token) {
+      this.props.fetchClothesAll(this.props.token, this.props.hType);  
+    }
+
   }
 
   componentWillReceiveProps(nextProps) {

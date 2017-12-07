@@ -22,7 +22,7 @@ import {
   UNBOOKMARK_OUTFIT_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { categories:null, outfits: null, outfitDetail: null, categoryDetail: null, starOutfits: null, created: null }
+const INITIAL_STATE = { bookmarked: '', categories:null, outfits: null, outfitDetail: null, categoryDetail: null, starOutfits: null, created: null }
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -62,11 +62,13 @@ export default function(state = INITIAL_STATE, action) {
     case UNLIKE_OUTFIT_FAIL:
      return { ...state }
     case BOOKMARK_OUTFIT_SUCCESS:
-      return { ...state }
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, bookmarked: timeStamp.toString() }
     case BOOKMARK_OUTFIT_FAIL:
       return { ...state }
     case UNBOOKMARK_OUTFIT_SUCCESS:
-      return { ...state }
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, bookmarked: timeStamp.toString() }
     case UNBOOKMARK_OUTFIT_FAIL:
        return { ...state }
     default:
