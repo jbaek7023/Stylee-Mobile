@@ -21,6 +21,8 @@ export const RETRIEVE_PROFILE_SUCCESS = 'retrieve_profile_success';
 export const RETRIEVE_PROFILE_FAIL = 'retrieve_profile_fail';
 export const EDIT_PROFILE_SUCCESS = 'edit_profile_success';
 export const EDIT_PROFILE_FAIL = 'edit_profile_fail';
+export const EDIT_PROFILE_IMG_SUCCESS = 'edit_profile_img_success';
+export const EDIT_PROFILE_IMG_FAIL = 'edit_profile_img_fail';
 
 // Create new User
 export const ADD_BIO_AND_PASSWORD = 'add_bio_and_password';

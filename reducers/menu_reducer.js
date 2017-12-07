@@ -5,9 +5,11 @@ import {
   RETRIEVE_PROFILE_FAIL,
   EDIT_PROFILE_SUCCESS,
   EDIT_PROFILE_FAIL,
+  EDIT_PROFILE_IMG_SUCCESS,
+  EDIT_PROFILE_IMG_FAIL
 } from '../actions/types';
 
-const INITIAL_STATE = { username: '' }
+const INITIAL_STATE = { username: '', profile: undefined, imageCreated: '' }
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -22,6 +24,12 @@ export default function(state = INITIAL_STATE, action) {
     case EDIT_PROFILE_SUCCESS:
       return { ...state, }
     case EDIT_PROFILE_FAIL:
+      return { ...state, }
+    case EDIT_PROFILE_IMG_SUCCESS:
+      console.log('in reducer')
+      console.log(action.payload.changed)
+      return { ...state, imageCreated: action.payload.changed}
+    case EDIT_PROFILE_IMG_FAIL:
       return { ...state, }
     default:
       return state;

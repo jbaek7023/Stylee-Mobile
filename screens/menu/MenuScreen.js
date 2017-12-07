@@ -58,7 +58,8 @@ class MenuScreen extends Component {
       nextProps.navigation.navigate('Autho');
     } else {
       // if token is updated, retrieve current logged in user
-      if ( this.props.token !== nextProps.token) {
+      let condition = ( this.props.token !== nextProps.token) || (this.props.imageCreated !== nextProps.imageCreated)
+      if ( condition ) {
         this.props.retrieveCurrentUser(nextProps.token, this.props.hType);
       }
     }
@@ -236,9 +237,9 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({ auth: { token, hType }, menu:{ currentUser }}) {
+function mapStateToProps({ auth: { token, hType }, menu:{ currentUser, imageCreated }}) {
   return {
-    token, hType, currentUser
+    token, hType, currentUser, imageCreated
   }
 }
 

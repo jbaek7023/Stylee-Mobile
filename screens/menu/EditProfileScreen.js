@@ -25,6 +25,8 @@ import {Avatar} from '../../components/Avatar';
 import {SocialSetting} from '../../components/SocialSetting';
 import {FontAwesome} from '../../assets/icons';
 import ProfileEditModal from '../../components/common/ProfileEditModal';
+import { ImagePicker } from 'expo';
+import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
 
 class EditProfileScreen extends Component {
   static navigationOptions = {
@@ -38,7 +40,62 @@ class EditProfileScreen extends Component {
     title: '',
     gender: '',
     isSelectorVisible: false,
+    isModalVisible: false,
+    uri: undefined,
+    base64: undefined,
+    profileChanged: false,
   }
+
+  _hideModal = () => this.setState({isModalVisible: false});
+  _showModal = () => {
+    this.setState({isModalVisible: true});
+  }
+
+  // image
+  _handleCameraPress = async () => {
+    this._hideModal();
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [3, 3],
+      base64: true
+    });
+
+    if (!result.cancelled) {
+      this.setState({ uri: result.uri });
+      this.setState({base64: result.base64});
+    }
+  }
+
+  _handleAlbumPress = async () => {
+    this._hideModal();
+    this._pickImage();
+  }
+
+  _pickImage = async () => {
+    this._hideModal();
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [3, 3],
+      base64: true
+    });
+
+    if (!result.cancelled) {
+      this.setState({ uri: result.uri });
+      this.setState({base64: result.base64});
+    }
+  };
+
+  _renderModal = () => {
+    return (
+      <CameraImageSelectModal
+        isModalVisible={this.state.isModalVisible}
+        hideModal={this._hideModal}
+        handleCameraPress={this._handleCameraPress}
+        handleAlbumPress={this._handleAlbumPress}
+      />
+    )
+  }
+
 
   componentWillMount() {
     let { token, hType } = this.props;
@@ -48,8 +105,8 @@ class EditProfileScreen extends Component {
   componentWillReceiveProps(nextProps){
     if(this.props.profile !== nextProps.profile) {
       // API : add username and title.
-      let { username, title, gender } = nextProps.profile;
-      this.setState({username, title, gender});
+      let { username, title, gender, profile_img } = nextProps.profile;
+      this.setState({username, title, gender, uri: profile_img});
     }
   }
 
@@ -75,12 +132,20 @@ class EditProfileScreen extends Component {
           <View style={styles.right}>
               <TouchableOpacity onPress={()=>{
                 let { token, hType } = this.props;
-                let { username, title, gender } = this.state;
-                this.props.editProfile(token, hType, username, title, gender)
-                this.props.navigation.goBack()
+                let { username, title, gender, profileChanged } = this.state;
+                if(profileChanged) {
+                  this.props.editProfile(token, hType, username, title, gender);
+                }
+                if(this.state.base64) {
+                  this.props.editProfileImage(token, hType, this.state.base64);
+                }
+                this.props.navigation.goBack();
               }}>
                 <RkText rkType="header3">SAVE</RkText>
               </TouchableOpacity>
+          </View>
+          <View>
+            {this._renderModal()}
           </View>
         </View>
       </View>
@@ -88,7 +153,7 @@ class EditProfileScreen extends Component {
   }
 
   _selectAction = (gender) => {
-    this.setState({gender});
+    this.setState({gender, profileChanged: true});
     this.setState({isSelectorVisible:false});
   }
 
@@ -102,18 +167,27 @@ class EditProfileScreen extends Component {
         isSelectorVisible={this.state.isSelectorVisible}
         hideSelector={this._hideSelector}
         selectAction={this._selectAction}
-        gender={this.state.gender}
-      />
+        gender={this.state.gender}/>
     );
   }
 
-  _renderChangeImage = (uri) => {
-    return (
-      <View style={styles.headerImage}>
-        <Avatar img={{uri}} rkType='big'/>
-        <RkText rkType='header6' style={{textAlign:'center', marginTop:8, color:'#2897EB'}}>Change Profile Image</RkText>
-      </View>
-    );
+  _renderChangeImage = () => {
+    let { uri } = this.state;
+    if(uri) {
+      return (
+        <TouchableOpacity onPress={()=>{ this._showModal() }} style={styles.headerImage}>
+          <Avatar img={{uri}} rkType='big'/>
+          <RkText rkType='header6' style={{textAlign:'center', marginTop:8, color:'#2897EB'}}>Change Profile Image</RkText>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity onPress={()=>{ this._showModal() }} style={styles.headerImage}>
+          <Avatar rkType='big' img={require('../../assets/images/default_profile.png')}/>
+          <RkText rkType='header6' style={{textAlign:'center', marginTop:8, color:'#2897EB'}}>Add Profile Image</RkText>
+        </TouchableOpacity>
+      );
+    }
   }
 
   _handleGenderPress = () => {
@@ -128,7 +202,7 @@ class EditProfileScreen extends Component {
           {this._renderHeader()}
           <ScrollView style={styles.root}>
             <RkAvoidKeyboard>
-              {this._renderChangeImage(profile.profile_img)}
+              {this._renderChangeImage()}
               <View style={[styles.dContainer, styles.titleRow]}>
                 <RkText rkType="header5">Username</RkText>
                 <TextInput
@@ -137,7 +211,7 @@ class EditProfileScreen extends Component {
                   placeholder="Username"
                   style={[styles.moreDetailStyle]}
                   onChangeText={(username)=>{
-                    this.setState({username})
+                    this.setState({username, profileChanged: true});
                   }}
                   value={this.state.username}/>
               </View>
@@ -149,7 +223,7 @@ class EditProfileScreen extends Component {
                   placeholder="Username"
                   style={[styles.moreDetailStyle]}
                   onChangeText={(title)=>{
-                    this.setState({title})
+                    this.setState({title, profileChanged: true})
                   }}
                   value={this.state.title}/>
               </View>

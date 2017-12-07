@@ -19,7 +19,7 @@ import { threeImageWidth } from '../../utils/scale';
 import CategoryModal from '../../components/common/CategoryModal';
 import Toast from 'react-native-simple-toast';
 import SnackBar from 'react-native-snackbar-dialog';
-
+import { Spinner } from 'native-base';
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
     header: null
@@ -35,6 +35,7 @@ class OutfitDetail extends Component {
     title: '',
     onlyMe: false,
     taggedCategories: [],
+    loading: true,
   }
 
   componentWillMount() {
@@ -44,6 +45,11 @@ class OutfitDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if(nextProps.outfitDetail && (this.props.outfitDetail !== nextProps.outfitDetail)) {
+      this.setState({loading: false});
+    }
+
+    // check follonwing, liked, starred
     let isFollowing = nextProps.outfitDetail.is_following;
     let { liked, starred } = nextProps.outfitDetail;
     let condition = (
@@ -66,6 +72,7 @@ class OutfitDetail extends Component {
       }, []);
       this.setState({ taggedCategories })
     }
+
     let addedCondition = (this.props.added != nextProps.added) ? true : false;
     if(addedCondition) {
       SnackBar.show(('Added to '+nextProps.removed), { duration: 2500 })
@@ -195,6 +202,36 @@ class OutfitDetail extends Component {
   }
 
   _renderHeader = (detail) => {
+    if(detail) {
+      return (
+        <View style={styles.headerLayout}>
+          <View rkCardHeader style={styles.left}>
+            <RkButton
+              rkType='clear'
+              style={styles.menu}
+              onPress={() => {
+              this.props.navigation.goBack()
+            }}>
+              <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+            </RkButton>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}>
+              {this._renderAvatar(detail.user.image)}
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}
+              style={styles.content}>
+              <View style={styles.contentHeader}>
+                <RkText rkType='header5'>{detail.user.username}</RkText>
+                <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.right}>
+            {this._renderFollow(detail.is_owner, detail.is_following, detail.user.id)}
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={styles.headerLayout}>
         <View rkCardHeader style={styles.left}>
@@ -206,22 +243,9 @@ class OutfitDetail extends Component {
           }}>
             <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
           </RkButton>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}>
-            {this._renderAvatar(detail.user.image)}
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Profile', {userPk: detail.user.id})}
-            style={styles.content}>
-            <View style={styles.contentHeader}>
-              <RkText rkType='header5'>{detail.user.username}</RkText>
-              <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.right}>
-          {this._renderFollow(detail.is_owner, detail.is_following, detail.user.id)}
         </View>
       </View>
+
     );
   }
 
@@ -315,88 +339,97 @@ class OutfitDetail extends Component {
   render() {
     const detail = this.props.outfitDetail;
     // User Access Not Yet
-    if(detail) {
+    if(this.state.loading) {
       return (
         <View style={styles.root}>
           <View style={styles.header}>
-            {this._renderHeader(detail)}
+            {this._renderHeader(undefined)}
           </View>
-          <ScrollView style={styles.rootScroll}>
-            <RkCard rkType='article'>
-              <Image
-                fadeDuration={0}
-                style={styles.outfitImage}
-                resizeMode="cover"
-                source={{uri: detail.outfit_img}} />
-              <View style={{ marginLeft:20, marginRight: 20, flexDirection: 'row', flex:1, justifyContent: 'space-between' }}>
-                <View>
-                  <View style={{marginTop: 10}}>
-                      <RkText rkType="header4">{detail.content}</RkText>
-                  </View>
-              		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-            				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
-                    <TouchableOpacity onPress={()=>this._handleCommentPress()}>
-            				  <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={{justifyContent: 'center'}}>{this._renderPrivacy(detail.only_me)}</View>
-              </View>
-              <View style={styles.socialContainer}>
-                <SocialBar
-                  isLiked={this.state.liked}
-                  isStarred={this.state.starred}
-                  handleLikePress={this._handleLikePress}
-                  handleUnlikePress={this._handleUnlikePress}
-                  handleBookmarkPress={this._handleBookmarkPress}
-                  handleUnbookmarkPress={this._handleUnbookmarkPress}
-                  handleCategoryPress={this._handleCategoryPress}
-                  handleCommentPress={this._handleCommentPress}
-                  oid={detail.id}
-                />
-              </View>
-              <View rkCardContent style={styles.commentContainer}>
-                <TouchableOpacity onPress={()=>{this._handleCommentPress()}} style={{marginTop: 5}}>
-                  {this._renderComments(detail.comments)}
-                  <View>
-                    <RkText rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
-                  </View>
-                </TouchableOpacity>
-              </View>
-
-              <View>
-                <View style={styles.headContainer}>
-                  <RkText rkType="header5">Tagged Clothes ({this.props.outfitDetail.tagged_clothes.length.toString()})</RkText>
-                </View>
-                <ScrollView
-                  horizontal={true}
-                  style={{paddingBottom: 10}}>
-                  <FlatList
-                    horizontal
-                    data={this.props.outfitDetail.tagged_clothes}
-                    renderItem={this._renderClothesItem}
-                    keyExtractor={this._keyExtractor}
-                  />
-                </ScrollView>
-              </View>
-              <View style={{marginBottom: 10}}>
-                <View style={styles.headContainer}>
-                  <RkText rkType="header5">Detail</RkText>
-                </View>
-                <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                  <RkText rkType="primary2">Gender</RkText><RkText rkType="primary3">{detail.gender}</RkText>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.dContainer, styles.lastrow]}>
-                  <RkText rkType="primary2">Location</RkText><RkText rkType="primary3">{detail.location}</RkText>
-                </TouchableOpacity>
-              </View>
-            </RkCard>
-            {this._renderCategoryModal(detail.id)}
-          </ScrollView>
+          <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'  }}>
+            <Spinner color='#6F3AB1'/>
+          </View>
         </View>
       );
     }
-    return (<View><Text>Loading</Text></View>);
+    return (
+      <View style={styles.root}>
+        <View style={styles.header}>
+          {this._renderHeader(detail)}
+        </View>
+        <ScrollView style={styles.rootScroll}>
+          <RkCard rkType='article'>
+            <Image
+              fadeDuration={0}
+              style={styles.outfitImage}
+              resizeMode="cover"
+              source={{uri: detail.outfit_img}} />
+            <View style={{ marginLeft:20, marginRight: 20, flexDirection: 'row', flex:1, justifyContent: 'space-between' }}>
+              <View>
+                <View style={{marginTop: 10}}>
+                    <RkText rkType="header4">{detail.content}</RkText>
+                </View>
+            		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+          				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
+                  <TouchableOpacity onPress={()=>this._handleCommentPress()}>
+          				  <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={{justifyContent: 'center'}}>{this._renderPrivacy(detail.only_me)}</View>
+            </View>
+            <View style={styles.socialContainer}>
+              <SocialBar
+                isLiked={this.state.liked}
+                isStarred={this.state.starred}
+                handleLikePress={this._handleLikePress}
+                handleUnlikePress={this._handleUnlikePress}
+                handleBookmarkPress={this._handleBookmarkPress}
+                handleUnbookmarkPress={this._handleUnbookmarkPress}
+                handleCategoryPress={this._handleCategoryPress}
+                handleCommentPress={this._handleCommentPress}
+                oid={detail.id}
+              />
+            </View>
+            <View rkCardContent style={styles.commentContainer}>
+              <TouchableOpacity onPress={()=>{this._handleCommentPress()}} style={{marginTop: 5}}>
+                {this._renderComments(detail.comments)}
+                <View>
+                  <RkText rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <View style={styles.headContainer}>
+                <RkText rkType="header5">Tagged Clothes ({this.props.outfitDetail.tagged_clothes.length.toString()})</RkText>
+              </View>
+              <ScrollView
+                horizontal={true}
+                style={{paddingBottom: 10}}>
+                <FlatList
+                  horizontal
+                  data={this.props.outfitDetail.tagged_clothes}
+                  renderItem={this._renderClothesItem}
+                  keyExtractor={this._keyExtractor}
+                />
+              </ScrollView>
+            </View>
+            <View style={{marginBottom: 10}}>
+              <View style={styles.headContainer}>
+                <RkText rkType="header5">Detail</RkText>
+              </View>
+              <TouchableOpacity style={[styles.dContainer, styles.row]}>
+                <RkText rkType="primary2">Gender</RkText><RkText rkType="primary3">{detail.gender}</RkText>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.dContainer, styles.lastrow]}>
+                <RkText rkType="primary2">Location</RkText><RkText rkType="primary3">{detail.location}</RkText>
+              </TouchableOpacity>
+            </View>
+          </RkCard>
+          {this._renderCategoryModal(detail.id)}
+        </ScrollView>
+      </View>
+    );
   }
 }
 

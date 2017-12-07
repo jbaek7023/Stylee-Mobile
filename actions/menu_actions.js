@@ -7,6 +7,8 @@ import {
   RETRIEVE_PROFILE_FAIL,
   EDIT_PROFILE_SUCCESS,
   EDIT_PROFILE_FAIL,
+  EDIT_PROFILE_IMG_SUCCESS,
+  EDIT_PROFILE_IMG_FAIL
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
@@ -66,5 +68,23 @@ export const editProfile = (token, hType, username, title, gender) => async disp
     dispatch({ type: EDIT_PROFILE_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: EDIT_PROFILE_FAIL })
+  }
+}
+
+export const editProfileImage = (token, hType, base64) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.post(`${ROOT_URL}/profile/updateimg/`, {
+    base64
+  }, { headers });
+  if (response.status === 200) {
+    dispatch({ type: EDIT_PROFILE_IMG_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: EDIT_PROFILE_IMG_FAIL })
   }
 }
