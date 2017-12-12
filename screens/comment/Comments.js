@@ -65,7 +65,7 @@ class CommentsScreen extends Component {
     )
   }
 
-  _renderReplies = (id, replyCount, userId, uri, username, content, publish) => {
+  _renderReplies = (id, replyCount, userId, uri, username, content, created_at) => {
     if(replyCount==1) {
       return (
         <View style={[styles.container, {marginLeft: 25}]}>
@@ -76,7 +76,7 @@ class CommentsScreen extends Component {
             <View style={styles.contentHeader}>
               <RkText rkType='header5'>{username}</RkText>
               <RkText rkType='secondary4 hintColor'>
-                <TimeAgo time={publish}/>
+                <TimeAgo time={created_at}/>
               </RkText>
             </View>
             <RkText rkType='primary3 mediumLine'>{content}</RkText>
@@ -84,7 +84,6 @@ class CommentsScreen extends Component {
         </View>
       );
     } else if(replyCount>1) {
-      // userId, uri, username, content, publish <- reply
       return (
         <View>
           <TouchableOpacity
@@ -102,7 +101,7 @@ class CommentsScreen extends Component {
               <View style={styles.contentHeader}>
                 <RkText rkType='header5'>{username}</RkText>
                 <RkText rkType='secondary4 hintColor'>
-                  <TimeAgo time={publish}/>
+                  <TimeAgo time={created_at}/>
                 </RkText>
               </View>
               <RkText rkType='primary3 mediumLine'>{content}</RkText>
@@ -125,8 +124,7 @@ class CommentsScreen extends Component {
 
   _renderItem = (row) => {
     let { id: userId, image: uri, username } = row.item.user;
-    let { id: commentId, content, publish, reply_count: replyCount } = row.item;
-    // userId, uri, username, content, publish <- reply
+    let { id: commentId, content, created_at, reply_count: replyCount } = row.item;
     return (
       <View>
         <View style={styles.container}>
@@ -137,13 +135,13 @@ class CommentsScreen extends Component {
             <View style={styles.contentHeader}>
               <RkText rkType='header5'>{username}</RkText>
               <RkText rkType='secondary4 hintColor'>
-                <TimeAgo time={publish}/>
+                <TimeAgo time={created_at}/>
               </RkText>
             </View>
             <RkText rkType='primary3 mediumLine'>{content}</RkText>
           </View>
         </View>
-        {this._renderReplies(commentId, replyCount, 1, uri, 'jbaek7023',  'hello world', publish)}
+        {this._renderReplies(commentId, replyCount, 1, uri, 'jbaek7023',  'hello world', created_at)}
       </View>
     )
   }
@@ -187,7 +185,6 @@ class CommentsScreen extends Component {
     );
   }
 
-//id, replyCount, userId, uri, username, content, publish
   render() {
     return (
       <View style={{flex:1}}>

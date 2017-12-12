@@ -65,7 +65,6 @@ class UserProfileScreen extends Component {
     });
 
     return result;
-    // obj.id, obj.user.image, obj.user.id, obj.content, obj.publish, obj.updated, obj.reply_count
   }
 
   _renderUsername = (username) => {

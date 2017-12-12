@@ -19,10 +19,9 @@ class StylebookCategoryScreen extends Component {
   }
 
   componentWillMount() {
-    if(this.props.token == undefined) {
-      // Auth Screen // set the
+    if(this.props.token) {
+      this.props.loadCategoryAll(this.props.token, this.props.hType);
     }
-    this.props.loadCategoryAll(this.props.token, this.props.hType);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,14 +29,12 @@ class StylebookCategoryScreen extends Component {
       nextProps.navigation.navigate('Autho');
     }
     // if token is updated, retrieve current logged in user
-    let condition = (
-      this.props.token !== nextProps.token) ||
+    let condition = (nextProps.token && (this.props.token !== nextProps.token)) ||
       (this.props.added !== nextProps.added) ||
       (this.props.removed !== nextProps.removed ) ? true : false;
     if ( condition ) {
-      this.props.loadCategoryAll(this.props.token, this.props.hType);
+      this.props.loadCategoryAll(nextProps.token, nextProps.hType);
     }
-
 
     if(this.props.categories !== nextProps.categories) {
       this.setState({isLoading:false})

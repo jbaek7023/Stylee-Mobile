@@ -93,7 +93,6 @@ class OutfitSimpleItem extends Component {
       return (<Text key={index}><Text style={{fontWeight: 'bold'}}>{obj.user.username}</Text> {obj.content}</Text>);
     });
     return result;
-    // obj.id, obj.user.image, obj.user.id, obj.content, obj.publish, obj.updated, obj.reply_count
   }
 
   _setTitle = (title) => {
@@ -148,7 +147,7 @@ class OutfitSimpleItem extends Component {
             style={styles.content}>
             <View style={styles.contentHeader}>
               <RkText rkType='header5'>{item.user.username}</RkText>
-              <RkText rkType='secondary2 hintColor'><TimeAgo time={item.publish}/></RkText>
+              <RkText rkType='secondary2 hintColor'><TimeAgo time={item.created_at}/></RkText>
             </View>
           </TouchableOpacity>
         </View>

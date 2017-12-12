@@ -18,9 +18,6 @@ class StylebookAllScreen extends Component {
 
   componentWillMount() {
     if(this.props.token) {
-      console.log('are you loading outfit in componentWillMont?')
-      console.log(this.props.token);
-      console.log(this.props.hType);
       this.props.loadOutfitAll(this.props.token, this.props.hType);
     }
   }

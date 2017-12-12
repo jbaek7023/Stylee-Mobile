@@ -189,7 +189,7 @@ class ClothDetail extends Component {
                 style={styles.content}>
                 <View style={styles.contentHeader}>
                   <RkText rkType='header5'>{detail.user.username}</RkText>
-                  <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
+                  <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.created_at}/></RkText>
                 </View>
               </TouchableOpacity>
             </View>

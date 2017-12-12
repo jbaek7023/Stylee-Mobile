@@ -50,7 +50,7 @@ class CommentDetail extends Component {
     )
   }
 
-  _renderComment = (user, publish, content) => {
+  _renderComment = (user, created_at, content) => {
     if(user) {
       let { id, image:uri, username } = user;
       return (
@@ -62,7 +62,7 @@ class CommentDetail extends Component {
             <View style={styles.contentHeader}>
               <RkText rkType='header5'>{username}</RkText>
               <RkText rkType='secondary4 hintColor'>
-                <TimeAgo time={publish}/>
+                <TimeAgo time={created_at}/>
               </RkText>
             </View>
             <RkText rkType='primary3 mediumLine'>{content}</RkText>
@@ -76,7 +76,7 @@ class CommentDetail extends Component {
 
   _renderItem = ({item}) => {
     let { id, image: uri, username } = item.user;
-    let { content, publish } = item;
+    let { content, created_at } = item;
     return (
       <View style={[styles.container, styles.replyStyle]}>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id})}>
@@ -86,7 +86,7 @@ class CommentDetail extends Component {
           <View style={styles.contentHeader}>
             <RkText rkType='header5'>{username}</RkText>
             <RkText rkType='secondary4 hintColor'>
-              <TimeAgo time={publish}/>
+              <TimeAgo time={created_at}/>
             </RkText>
           </View>
           <RkText rkType='primary3 mediumLine'>{content}</RkText>
@@ -124,10 +124,10 @@ class CommentDetail extends Component {
   }
 
   render() {
-    let { user, publish, content } = this.props.replyComment;
+    let { user, created_at, content } = this.props.replyComment;
     return (
       <View style={[{flex:1}, styles.root]}>
-        {this._renderComment(user, publish, content)}
+        {this._renderComment(user, created_at, content)}
         <FlatList
           style={styles.root}
           data={this.props.replyComment.replies}

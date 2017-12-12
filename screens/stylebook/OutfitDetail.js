@@ -120,7 +120,6 @@ class OutfitDetail extends Component {
     });
 
     return result;
-    // obj.id, obj.user.image, obj.user.id, obj.content, obj.publish, obj.updated, obj.reply_count
   }
 
   _handleCommentPress = () => {
@@ -222,7 +221,7 @@ class OutfitDetail extends Component {
               style={styles.content}>
               <View style={styles.contentHeader}>
                 <RkText rkType='header5'>{detail.user.username}</RkText>
-                <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.publish}/></RkText>
+                <RkText rkType='secondary2 hintColor'><TimeAgo time={detail.created_at}/></RkText>
               </View>
             </TouchableOpacity>
           </View>
