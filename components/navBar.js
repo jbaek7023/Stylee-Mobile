@@ -81,24 +81,6 @@ export class NavBar extends React.Component {
       });
     };
 
-    if(title==="searchbar") {
-      return (
-          <RkTextInput
-            rkType='row'
-            ref="sbar"
-            autoCapitalize='none'
-            autoCorrect={false}
-            label={<RkText rkType='awesome' style={{color:'white'}}>{FontAwesome.search}</RkText>}
-            placeholder='검색'
-            underlineWidth="1"
-            underlineColor="white"
-            style={styles.searchBar}
-            inputStyle={{color:'white'}}
-            labelStyle={{marginRight:0}}
-          />
-      );
-    }
-
     return (
       <View style={styles.title} onLayout={onLayout}>
         <RkText style={styles.titleText}>{title}</RkText>

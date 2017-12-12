@@ -14,7 +14,10 @@ import {withRkTheme} from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
 import SocialBar from '../../components/SocialBar';
 import { FontAwesome } from '../../assets/icons';
+import _ from 'lodash';
 let ThemedNavigationBar = withRkTheme(NavBar);
+
+
 
 class SearchScreen extends Component {
   static navigationOptions = ({navigation}) => ({
@@ -24,8 +27,21 @@ class SearchScreen extends Component {
 
   state = {
     active: false,
-    inputText: ''
+    text: ''
   }
+
+  componentWillMount() {
+    this.handleDebounced = _.debounce(e => {
+      console.log(this.state.text);
+    }, 500);
+  }
+
+  onChangeText = (text) => {
+    this.setState({text});
+    this.handleDebounced();
+  }
+
+
 
   _keyExtractor = (item, index) => item.id;
 
@@ -54,6 +70,8 @@ class SearchScreen extends Component {
     );
   }
 
+
+
   _renderHeader = () => {
     // underline width doesn't work properly
     return (
@@ -63,15 +81,13 @@ class SearchScreen extends Component {
             rkType='row'
             autoCapitalize='none'
             autoCorrect={false}
-            label={<RkText rkType='awesome' style={{color:'white'}}>{FontAwesome.search}</RkText>}
-            placeholder='검색'
+            placeholder='Enter Username'
             underlineWidth="1"
             underlineColor="white"
             style={styles.searchBarheader}
             inputStyle={{color:'white'}}
-            labelStyle={{marginRight:0}}
-            value={this.state.inputText}
-            onChangeText={(inputText)=>{this.setState({inputText})}}
+            value={this.state.text}
+            onChangeText={(text) => { this.onChangeText(text) }}
             autoFocus={true}
           />
           <View style={styles.left}>
@@ -97,6 +113,7 @@ class SearchScreen extends Component {
         renderHeader={this._renderHeader}
         keyExtractor={this._keyExtractor}
         ListHeaderComponent={this._renderHeader}
+        extraData={this.state.text}
       />
     );
   }
@@ -131,26 +148,26 @@ let styles = RkStyleSheet.create(theme => ({
     backgroundColor: theme.colors.navbar,
     paddingTop: UIConstants.StatusbarHeight,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: theme.colors.border.base
+    borderBottomColor: theme.colors.border.base,
+    height: 40,
   },
   containerheader: {
     flexDirection: 'row',
     height: UIConstants.AppbarHeight,
   },
   menuheader: {
-    width: 40
+    width: 40,
   },
   searchBarheader: {
     backgroundColor: theme.colors.navbar,
-    marginLeft: 27,
+    marginLeft: 9,
+    height: 40,
   },
   titleText: {
     color: theme.colors.navbarText
   },
   left: {
     position: 'absolute',
-    top: 0,
-    bottom: 0,
     justifyContent: 'center'
   }
 

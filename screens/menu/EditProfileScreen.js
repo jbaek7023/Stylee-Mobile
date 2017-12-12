@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {
   RkText,
-  RkTextInput,
   RkAvoidKeyboard,
   RkTheme,
   RkStyleSheet,
