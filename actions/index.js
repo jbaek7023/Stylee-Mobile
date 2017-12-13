@@ -8,3 +8,4 @@ export * from './comment_actions';
 export * from './category_actions';
 export * from './bookmark_actions';
 export * from './like_actions';
+export * from './search_actions';

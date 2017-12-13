@@ -104,3 +104,7 @@ export const BOOKMARK_CLOTH_SUCCESS = 'bookmark_cloth_success';
 export const BOOKMARK_CLOTH_FAIL = 'bookmark_cloth_fail';
 export const UNBOOKMARK_CLOTH_SUCCESS = 'unbookmark_cloth_success';
 export const UNBOOKMARK_CLOTH_FAIL ='unbookmark_cloth_fail';
+
+// SEARCH
+export const SEARCH_SUCCESS = 'search_success';
+export const SEARCH_FAIL = 'search_fail';
