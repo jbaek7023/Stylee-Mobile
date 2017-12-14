@@ -9,3 +9,4 @@ export * from './category_actions';
 export * from './bookmark_actions';
 export * from './like_actions';
 export * from './search_actions';
+export * from './popular_actions';

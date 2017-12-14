@@ -8,6 +8,7 @@ import user from './user_reducer';
 import comment from './comment_reducer';
 import category from './category_reducer';
 import search from './search_reducer';
+import popular from './popular_reducer';
 
 export default combineReducers({
   auth,
@@ -19,4 +20,5 @@ export default combineReducers({
   comment,
   category,
   search,
+  popular
 });

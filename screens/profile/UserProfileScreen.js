@@ -183,8 +183,6 @@ class UserProfileScreen extends Component {
         key={(this.state.grid) ? 1 : 0}
       />
     );
-
-    // key={(this.state.grid) ? 1 : 0}
   }
 
   _renderSelection1 = () => {
@@ -289,9 +287,7 @@ class UserProfileScreen extends Component {
   }
 }
 
-function mapStateToProps({auth: {token, hType}, user: {cUserProfile}}) {
-  return {token, hType, cUserProfile}
-}
+
 
 let specWidth = width(100)-150;
 let eachSpec = specWidth/4;
@@ -448,5 +444,9 @@ let styles = RkStyleSheet.create(theme => ({
     justifyContent: 'center',
   },
 }));
+
+function mapStateToProps({auth: {token, hType}, user: {cUserProfile}}) {
+  return {token, hType, cUserProfile}
+}
 
 export default connect(mapStateToProps, actions)(UserProfileScreen);

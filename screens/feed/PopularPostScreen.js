@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, Text, FlatList, TouchableOpacity } from 'react-native';
-
+import { Image, View, Text, FlatList, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { width, height, totalSize } from 'react-native-dimension';
 import {
   RkCard,
   RkText,
@@ -8,69 +8,185 @@ import {
   RkTextInput,
   RkButton
 } from 'react-native-ui-kitten';
+import OutfitSimpleItem from '../../components/common/OutfitSimpleItem';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Avatar } from '../../components/Avatar';
 import SocialBar from '../../components/SocialBar';
+
 class PopularPostScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    title: 'Popular'
+    title: 'StyleFeed'
   })
+
+  state = {
+    grid: true,
+    popularStyles: [],
+    next: null
+  }
+
+  componentWillMount() {
+    let {token , hType} = this.props;
+    if(token) {
+      this.props.fetchFirstPopularFeed(token, hType);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if ( nextProps.token && (this.props.token !== nextProps.token)) {
+      this.props.fetchFirstPopularFeed(nextProps.token, nextProps.hType);
+    }
+    if(nextProps.page && (this.props.page!==nextProps.page)) {
+      this.setState({popularStyles: nextProps.page.results, next:nextProps.page.next});
+    }
+  }
 
   _keyExtractor = (item, index) => item.id;
 
-  _renderRow = (row) => {
+  _renderAvatar = (uri) => {
+    if(_.isNil(uri)) {
+      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/default_profile.png')}/>)
+    }
     return (
-      <RkCard style={styles.card}>
-        <View rkCardHeader>
-          <Avatar rkType='small'
-                  style={styles.avatar}
-                  img={require('../../assets/images/styleeicon.png')}/>
-          <View>
-            <RkText rkType='header4'>Firstname LastName</RkText>
-            <RkText rkType='secondary2 hintColor'>20 hrs ago</RkText>
-          </View>
-        </View>
-        <Image
-          fadeDuration={0}
-          style={styles.imgStyle} source={require('../../assets/images/72383351.1.jpg')}/>
-        <View rkCardContent>
-          <RkText rkType='primary3'>TextoTextoTextoTextoTextoTextoTextoTextoTextoTextoTextoTexto</RkText>
-        </View>
-        <View rkCardFooter>
-          <SocialBar/>
-        </View >
-      </RkCard>
+      <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
     );
   }
 
-  // <TouchableOpacity style={[styles.wrapper, this.props.style]} onPress={this.props.onPress}>
-  //   <View style={styles.container}>
-  //     <View style={styles.text}>
-  //       <RkText rkType='awesome' style={[styles.icon, color]}>{this.props.icon}</RkText>
-  //       <RkText rkType='header6' style={color}>{`Find Friends With ${this.props.text}`}</RkText>
-  //     </View>
-  //     <RkText rkType='awesome small' style={color}>{FontAwesome.chevronRight}</RkText>
-  //   </View>
-  // </TouchableOpacity>
+  _handleCommentPress = (id) => {
+    this.props.navigation.navigate('Comments', {id, postType: 1});
+  }
 
-  // <FindFriends color={RkTheme.current.colors.google} text='Google' icon={FontAwesome.google}
-  //                        selected={this.state.googleEnabled} onPress={() => {
-  //             this.setState({googleEnabled: !this.state.googleEnabled})
-  //           }}/>
+  _handleImagePress = (id) => {
+    this.props.navigation.navigate('OutfitDetail', {id})
+  }
+
+  _renderItem = ({item}) => {
+    return (
+      <OutfitSimpleItem item={item} navigation={this.props.navigation}/>
+    );
+  }
+
+  _renderGridItem = ({item}) => {
+    return (
+      <TouchableHighlight
+        style={styles.gridOutfitImage}
+        onPress={()=>{this._handleImagePress(item.id)}}>
+        <Image
+          fadeDuration={0}
+          style={styles.gridOutfitImage}
+          resizeMode="cover"
+          source={{uri: item.outfit_img}}/>
+      </TouchableHighlight>
+    );
+  }
+
+  _renderSelection1 = () => {
+    if(this.state.grid) {
+      return (
+        <Ionicons name="ios-apps" color='#6F3AB1' size={30}/>
+      );
+    } else {
+      return (
+        <Ionicons name="ios-apps" color='grey' size={30}/>
+      );
+    }
+
+  }
+
+  _renderSelection2 = () => {
+    if(this.state.grid) {
+      return (
+        <Ionicons name="md-list" color='grey' size={30}/>
+      );
+    } else {
+      return (
+        <Ionicons name="md-list" color='#6F3AB1' size={30}/>
+      );
+    }
+  }
+
+  renderFlatHeader = () => {
+    return (
+      <View style={styles.styleSeparator}>
+        <RkText rkType="primary2">Popular styles in this week</RkText>
+        <View style={{flexDirection: 'row', marginTop: -5}}>
+          <TouchableHighlight
+            onPress={()=>{this.setState({grid:true})
+            }}
+            style={{
+              justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35
+            }}>
+            {this._renderSelection1()}
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={()=>{this.setState({grid:false})}}
+            style={{
+              justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#d3d3d3', width: 35, height: 35
+            }}>
+            {this._renderSelection2()}
+          </TouchableHighlight>
+        </View>
+      </View>
+    );
+  }
+
+
+// ListHeaderComponent={this.renderFlatHeader}
+  _renderFlatList = () =>{
+    return (
+      <FlatList
+
+        data={this.state.popularStyles}
+        renderItem={(this.state.grid) ? this._renderGridItem : this._renderItem }
+        keyExtractor={this._keyExtractor}
+        numColumns={(this.state.grid) ? 3 : 1}
+        key={(this.state.grid) ? 1 : 0}
+      />
+    );
+  }
 
   render() {
     return (
-      <FlatList
-        data={null}
-        renderItem={this._renderRow}
-        keyExtractor={this._keyExtractor}
-        ListHeaderComponent={this._renderHeader}
-      />
+      <View>
+        {this._renderFlatList()}
+      </View>
+    );
+    return (
+      <View style={{flex:1, alignItems: 'center'}}>
+        <View style={styles.defaultContainer}>
+          <Image
+            fadeDuration={0}
+            style={styles.imageStyle} source={require('../../assets/images/follow.png')}/>
+          <RkText style={styles.imageBottomText} rkType="header5 hintColor">Follow someone to see your feed</RkText>
+        </View>
+      </View>
     );
   }
 }
 
 let styles = RkStyleSheet.create(theme => ({
+  gridOutfitImage: {
+    width:width(33),
+    height:width(33),
+    borderWidth:.5,
+    borderColor:'#fff'
+  },
+  imageStyle: {
+    width: width(30),
+    height: width(30),
+  },
+  imageBottomText: {
+    textAlign: 'center',
+    marginTop: 13,
+  },
+  defaultContainer: {
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width(70),
+  },
   container: {
     backgroundColor: theme.colors.screen.scroll,
     paddingVertical: 8,
@@ -94,7 +210,50 @@ let styles = RkStyleSheet.create(theme => ({
   },
   searchBar: {
     backgroundColor: theme.colors.navbar,
-  }
+  },
+  left: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  headerLayout: {
+    height: 55,
+    alignItems: 'center',
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: theme.colors.screen.base
+  },
+  contentHeader: {
+    justifyContent: 'space-between',
+    paddingLeft: 10
+  },
+  content: {
+    flex: 1,
+  },
+  socialContainer: {
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  commentContainer: {
+    borderTopWidth: 1.5,
+    borderColor: '#e3e3e3',
+  },
+  profileSeperator: {
+    backgroundColor: '#D3D3D3',
+    height: 10
+  },
+  styleSeparator: {
+    backgroundColor: "white",
+    paddingLeft: 15,
+    paddingTop: 15,
+    paddingRight: 15,
+    paddingBottom: 7,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
 }));
 
-export default PopularPostScreen;
+function mapStateToProps({auth: {token, hType}, popular: {page}}) {
+  return {token, hType, page}
+}
+
+export default connect(mapStateToProps, actions)(PopularPostScreen);

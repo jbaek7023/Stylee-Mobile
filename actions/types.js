@@ -108,3 +108,7 @@ export const UNBOOKMARK_CLOTH_FAIL ='unbookmark_cloth_fail';
 // SEARCH
 export const SEARCH_SUCCESS = 'search_success';
 export const SEARCH_FAIL = 'search_fail';
+
+// Popular
+export const FETCH_POPULAR_SUCCESS = 'fetch_popular_success';
+export const FETCH_POPULAR_FAIL = 'fetch_popular_fail';
