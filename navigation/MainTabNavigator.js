@@ -1,10 +1,9 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Text, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
-
+import IconBadge from 'react-native-icon-badge';
 import Colors from '../constants/Colors';
-
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -57,6 +56,29 @@ export default TabNavigator(
             break;
         }
         // ios-menu, ios-body, ios-notifications, ios-shirt,
+        if(iconName == 'ios-notifications') {
+          return (
+            <IconBadge
+              MainElement={
+                <Ionicons
+                  name={iconName}
+                  size={30}
+                  style={{ marginBottom: -3 }}
+                  color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}/>
+              }
+              BadgeElement={
+                <Text style={{color:'#FFFFFF'}}>3</Text>
+              }
+              IconBadgeStyle={{
+                backgroundColor: '#f64e59',
+                position: 'absolute',
+                right:-10,
+                top:0,
+                }}
+              Hidden={3==0}
+            />
+          );
+        }
         return (
           <Ionicons
             name={iconName}

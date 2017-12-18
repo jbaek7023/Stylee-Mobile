@@ -57,9 +57,23 @@ export default class RootNavigator extends React.Component {
     );
   }
 
+  // notification => {origin, data}
   _handleNotification = ({ origin, data }) => {
     console.log(
       `Push notification ${origin} with data: ${JSON.stringify(data)}`
     );
+
+    // Notifications.addListener((notification) => {
+      // const { data: {text}, origin} = notification;
+      // if(origin === 'received' && text ) {
+      // Show Notification
+      // {Alert} react-native
+      // Alert.aleart({'New Push Notification', notification, [{text: 'Ok.'}]})
+    // }
+  // })
+
+
+
+
   };
 }

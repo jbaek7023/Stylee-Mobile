@@ -283,7 +283,6 @@ class UserProfileScreen extends Component {
     return (
       this._renderProfile(profile)
     );
-
   }
 }
 

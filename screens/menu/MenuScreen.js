@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, List, ListItem, Text, Left, Body, Thumbnail } from 'native-base';
+import { Container, Content, List, Text, Left, Body, Thumbnail } from 'native-base';
 import { ScrollView, TouchableOpacity, View, AsyncStorage, StyleSheet, Button } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -110,16 +110,16 @@ class MenuScreen extends Component {
     // https://www.iconfinder.com/search/?q=user
     if(this.props.currentUser) {
       return (
-        <ListItem onPress={() => this._handleProfilePress(this.props.currentUser.id)}>
+        <TouchableOpacity style={styles.viewProfile} onPress={() => this._handleProfilePress(this.props.currentUser.id)}>
             {this._renderAvatar(this.props.currentUser.image)}
             <View>
               <RkText rkType='header4'>{this.props.currentUser.username}</RkText>
               <RkText rkType='secondary2 hintColor'>View Profile</RkText>
             </View>
-        </ListItem>
+        </TouchableOpacity>
       );
     }
-    return (<ListItem><Text>Not Found</Text></ListItem>);
+    return (<TouchableOpacity style={styles.viewProfile}><Text>Not Found</Text></TouchableOpacity>);
   }
 
   _handleProfilePress = (id) => {
@@ -138,6 +138,7 @@ class MenuScreen extends Component {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.section}>{this._renderProfile()}</View>
+        <View style={styles.separator}/>
         <View style={styles.section}>
           <View style={[styles.row, styles.heading]}>
             <RkText rkType='primary header6'>PROFILE SETTINGS</RkText>
@@ -158,7 +159,7 @@ class MenuScreen extends Component {
             </TouchableOpacity>
           </View>
         </View>
-
+        <View style={styles.separator}/>
         <View style={styles.section}>
           <View style={[styles.row, styles.heading]}>
             <RkText rkType='primary header6'>SUPPORT</RkText>
@@ -179,6 +180,7 @@ class MenuScreen extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        <View style={styles.separator}/>
         <View style={styles.section}>
           <View style={[styles.row, styles.heading]}>
             <RkText rkType='primary header6'>ACCOUNT</RkText>
@@ -196,6 +198,14 @@ class MenuScreen extends Component {
 }
 
 let styles = RkStyleSheet.create(theme => ({
+  viewProfile: {
+    padding:10,
+    flexDirection: 'row'
+  },
+  separator: {
+    backgroundColor: '#F0EEF4',
+    height: 10,
+  },
   item: {
     height: 50,
     justifyContent: 'center',
@@ -221,7 +231,7 @@ let styles = RkStyleSheet.create(theme => ({
     paddingVertical: 25
   },
   section: {
-    marginVertical: 15
+    marginVertical: 13
   },
   heading: {
     paddingBottom: 12.5
@@ -236,7 +246,7 @@ let styles = RkStyleSheet.create(theme => ({
   },
   rowButton: {
     flex: 1,
-    paddingVertical: 24
+    paddingVertical: 13
   },
   switch: {
     marginVertical: 0

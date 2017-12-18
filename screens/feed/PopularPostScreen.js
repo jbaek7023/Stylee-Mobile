@@ -12,9 +12,9 @@ import OutfitSimpleItem from '../../components/common/OutfitSimpleItem';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { Ionicons } from '@expo/vector-icons';
-
 import { Avatar } from '../../components/Avatar';
 import SocialBar from '../../components/SocialBar';
+import { Spinner } from 'native-base';
 
 class PopularPostScreen extends Component {
   static navigationOptions = ({navigation}) => ({
@@ -24,7 +24,8 @@ class PopularPostScreen extends Component {
   state = {
     grid: true,
     popularStyles: [],
-    next: null
+    next: null,
+    loading: true,
   }
 
   componentWillMount() {
@@ -39,7 +40,7 @@ class PopularPostScreen extends Component {
       this.props.fetchFirstPopularFeed(nextProps.token, nextProps.hType);
     }
     if(nextProps.page && (this.props.page!==nextProps.page)) {
-      this.setState({popularStyles: nextProps.page.results, next:nextProps.page.next});
+      this.setState({popularStyles: nextProps.page.results, next:nextProps.page.next, loading: false});
     }
   }
 
@@ -110,7 +111,7 @@ class PopularPostScreen extends Component {
   renderFlatHeader = () => {
     return (
       <View style={styles.styleSeparator}>
-        <RkText rkType="primary2">Popular styles in this week</RkText>
+        <RkText rkType="primary2">{"Today's Styles"}</RkText>
         <View style={{flexDirection: 'row', marginTop: -5}}>
           <TouchableHighlight
             onPress={()=>{this.setState({grid:true})
@@ -133,11 +134,11 @@ class PopularPostScreen extends Component {
   }
 
 
-// ListHeaderComponent={this.renderFlatHeader}
+
   _renderFlatList = () =>{
     return (
       <FlatList
-
+        ListHeaderComponent={this.renderFlatHeader}
         data={this.state.popularStyles}
         renderItem={(this.state.grid) ? this._renderGridItem : this._renderItem }
         keyExtractor={this._keyExtractor}
@@ -148,19 +149,16 @@ class PopularPostScreen extends Component {
   }
 
   render() {
+    if(this.state.loading) {
+      return (
+        <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+          <Spinner color='#6F3AB1'/>
+        </View>
+      );
+    }
     return (
       <View>
         {this._renderFlatList()}
-      </View>
-    );
-    return (
-      <View style={{flex:1, alignItems: 'center'}}>
-        <View style={styles.defaultContainer}>
-          <Image
-            fadeDuration={0}
-            style={styles.imageStyle} source={require('../../assets/images/follow.png')}/>
-          <RkText style={styles.imageBottomText} rkType="header5 hintColor">Follow someone to see your feed</RkText>
-        </View>
       </View>
     );
   }

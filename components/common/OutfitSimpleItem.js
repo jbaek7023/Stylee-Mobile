@@ -270,15 +270,6 @@ let styles = RkStyleSheet.create(theme => ({
     backgroundColor: 'white',
     height: 50
   },
-  separator: {
-    backgroundColor: theme.colors.border.base,
-    alignSelf: 'center',
-    flexDirection: 'row',
-    flex: 0,
-    width: 1,
-    height: 50,
-    backgroundColor: '#DCDCDC'
-  },
   outfitImage: {
     width: width(100),
     height: width(100)
