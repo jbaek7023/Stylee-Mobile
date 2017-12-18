@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFeedback, RefreshControl } from 'react-native';
 import { width, height, totalSize } from 'react-native-dimension';
 import { Fab, Icon, Button, Spinner } from 'native-base';
 import { connect } from 'react-redux';
@@ -13,7 +13,8 @@ class StylebookAllScreen extends Component {
   }
 
   state = {
-    isLoading: true
+    isLoading: true,
+    refreshing: false,
   }
 
   componentWillMount() {
@@ -63,6 +64,13 @@ class StylebookAllScreen extends Component {
     );
   }
 
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.props.loadOutfitAll(this.props.token, this.props.hType).then(()=>{
+      this.setState({refreshing: false})
+    })
+  }
+
   render() {
     if(this.state.isLoading) {
       return (
@@ -86,14 +94,18 @@ class StylebookAllScreen extends Component {
     }
     return (
       <View style={{ flex:1 }}>
-        <ScrollView automaticallyAdjustContentInsets={false}>
           <FlatList
             data={this.props.outfits}
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
             numColumns={3}
+            refreshControl={
+              <RefreshControl
+                refreshing = {this.state.refreshing}
+                onRefresh = {()=>this._onRefresh()}
+              />
+            }
           />
-        </ScrollView>
       </View>
     )
   }

@@ -31,15 +31,15 @@ class StylebookStarScreen extends Component {
       nextProps.navigation.navigate('Autho');
     } else {
       // if token is updated, retrieve current logged in user
-      if ( token !== nextProps.token) {
+      if ( nextProps.token && token !== nextProps.token) {
         this.props.fetchStarOutfitAll(token, hType);
       }
     }
-    if(this.props.starOutfits !== nextProps.starOutfits) {
+    if(nextProps.starOutfits && this.props.starOutfits !== nextProps.starOutfits) {
       this.setState({isLoading: false});
     }
 
-    if(this.props.bookmarked !== nextProps.bookmarked) {
+    if(nextProps.bookmarked && this.props.bookmarked !== nextProps.bookmarked) {
       this.props.fetchStarOutfitAll(token, hType);
     }
   }

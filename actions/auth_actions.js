@@ -67,7 +67,7 @@ export const doFacebookLogin = () => async dispatch => {
     // Are you Offline?
     dispatch({ type: FACEBOOK_LOGIN_FAIL });
   }
-
+  console.log(token);
   doSocialAuthLogin(dispatch, token);
 };
 
@@ -78,6 +78,7 @@ const doSocialAuthLogin = async (dispatch, token) => {
     backend: 'facebook',
     token
   })
+  console.log(response.data)
   if (response.data.access_token) {
     AsyncStorage.setItem('fb_token', response.data.access_token);
     // fb is type 2

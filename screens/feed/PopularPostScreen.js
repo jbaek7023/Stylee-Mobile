@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, Text, FlatList, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { Image, View, Text, FlatList, TouchableOpacity, TouchableHighlight, RefreshControl } from 'react-native';
 import { width, height, totalSize } from 'react-native-dimension';
 import {
   RkCard,
@@ -26,6 +26,7 @@ class PopularPostScreen extends Component {
     popularStyles: [],
     next: null,
     loading: true,
+    refreshing: false
   }
 
   componentWillMount() {
@@ -133,7 +134,12 @@ class PopularPostScreen extends Component {
     );
   }
 
-
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.props.fetchFirstPopularFeed(this.props.token, this.props.hType).then(()=>{
+      this.setState({refreshing: false})
+    });
+  }
 
   _renderFlatList = () =>{
     return (
@@ -144,6 +150,12 @@ class PopularPostScreen extends Component {
         keyExtractor={this._keyExtractor}
         numColumns={(this.state.grid) ? 3 : 1}
         key={(this.state.grid) ? 1 : 0}
+        refreshControl={
+          <RefreshControl
+            refreshing = {this.state.refreshing}
+            onRefresh = {()=>this._onRefresh()}
+          />
+        }
       />
     );
   }
