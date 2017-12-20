@@ -43,18 +43,8 @@ export const CATEGORY_DETAIL_LOAD_SUCCESS = 'category_detail_load_success';
 export const CATEGORY_DETAIL_LOAD_FAIL = 'category_detail_load_fail';
 export const CREATE_STYLE_SUCCESS = 'create_style_success';
 export const CREATE_STYLE_FAIL = 'create_style_fail';
-
-export const STAR_OUTFIT_LOAD_SUCCESS = 'star_outfit_load_success';
-export const STAR_OUTFIT_LOAD_FAIL = 'star_outfit_load_fail';
-export const LIKE_OUTFIT_SUCCESS = 'like_outfit_success';
-export const LIKE_OUTFIT_FAIL = 'like_outfit_fail';
-export const UNLIKE_OUTFIT_SUCCESS = 'unlike_outfit_success';
-export const UNLIKE_OUTFIT_FAIL = 'unlike_outfit_fail';
-export const BOOKMARK_OUTFIT_SUCCESS = 'bookmark_outfit_success';
-export const BOOKMARK_OUTFIT_FAIL = 'bookmark_outfit_fail';
-export const UNBOOKMARK_OUTFIT_SUCCESS = 'unbookmark_outift_success';
-export const UNBOOKMARK_OUTFIT_FAIL = 'unbookmark_outfit_fail';
-
+export const LOAD_NEXT_OUTFIT_SUCCESS = 'load_next_outfit_success';
+export const LOAD_NEXT_OUTFIT_FAIL = 'load_next_outfit_fail';
 
 // Wardrobe
 export const CLOTHES_LIST_SUCCESS = 'clothes_list_success';
@@ -84,6 +74,8 @@ export const CREATE_COMMENT_FAIL = 'create_comment_fail';
 // Category
 export const CATEGORIES_LOAD_SUCCESS = 'categories_load_success';
 export const CATEGORIES_LOAD_FAIL = 'categories_load_fail';
+export const CATELIST_NEXT_LOAD_SUCCESS = 'catelist_next_load_success';
+export const CATELIST_NEXT_LOAD_FAIL = 'catelist_next_load_fail';
 export const OUTFIT_CATEGORIES_LOAD_SUCCESS = 'outfit_categories_load_success';
 export const OUTFIT_CATEGORIES_LOAD_FAIL = 'outfit_categories_load_fail';
 export const CREATE_CATEGORY_SUCCESS = 'craete_category_success';
@@ -98,12 +90,22 @@ export const LIKE_CLOTH_SUCCESS = 'like_cloth_success';
 export const LIKE_CLOTH_FAIL = 'like_cloth_fail';
 export const UNLIKE_CLOTH_SUCCESS = 'unlike_cloth_success';
 export const UNLIKE_CLOTH_FAIL = 'unlike_cloth_fail';
+export const LIKE_OUTFIT_SUCCESS = 'like_outfit_success';
+export const LIKE_OUTFIT_FAIL = 'like_outfit_fail';
+export const UNLIKE_OUTFIT_SUCCESS = 'unlike_outfit_success';
+export const UNLIKE_OUTFIT_FAIL = 'unlike_outfit_fail';
 
 // BOOKMARK
 export const BOOKMARK_CLOTH_SUCCESS = 'bookmark_cloth_success';
 export const BOOKMARK_CLOTH_FAIL = 'bookmark_cloth_fail';
 export const UNBOOKMARK_CLOTH_SUCCESS = 'unbookmark_cloth_success';
 export const UNBOOKMARK_CLOTH_FAIL ='unbookmark_cloth_fail';
+export const STAR_OUTFIT_LOAD_SUCCESS = 'star_outfit_load_success';
+export const STAR_OUTFIT_LOAD_FAIL = 'star_outfit_load_fail';
+export const BOOKMARK_OUTFIT_SUCCESS = 'bookmark_outfit_success';
+export const BOOKMARK_OUTFIT_FAIL = 'bookmark_outfit_fail';
+export const UNBOOKMARK_OUTFIT_SUCCESS = 'unbookmark_outift_success';
+export const UNBOOKMARK_OUTFIT_FAIL = 'unbookmark_outfit_fail';
 
 // SEARCH
 export const SEARCH_SUCCESS = 'search_success';

@@ -29,7 +29,7 @@ class FeedWrappingScreen extends Component {
       <View style={{flex: 1}}>
         <Tabs initialPage={0}
           tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
-        >
+          locked={true}>
           <Tab
             heading="Following"
             tabStyle={styles.tabStyle}

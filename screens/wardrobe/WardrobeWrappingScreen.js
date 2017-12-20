@@ -74,6 +74,7 @@ class WardrobeWrappingScreen extends Component {
       <View style={{flex: 1}}>
           <Tabs initialPage={0}
             tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+            locked={true}
             renderTabBar={()=> <ScrollableTab style={{height:40}}/>}>
             <Tab
               heading="Top"

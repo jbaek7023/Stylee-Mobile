@@ -3,18 +3,20 @@ import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFe
 import { width, height, totalSize } from 'react-native-dimension';
 import { Fab, Icon, Button, Spinner } from 'native-base';
 import { connect } from 'react-redux';
-import { threeImageWidth } from '../../utils/scale';
+import { threeImageWidth, thresholdLength } from '../../utils/scale';
 import { RkText } from 'react-native-ui-kitten';
 
 import * as actions from '../../actions';
 
 class StylebookAllScreen extends Component {
   static navigationOptions = {
+
   }
 
   state = {
     isLoading: true,
     refreshing: false,
+    next: null,
   }
 
   componentWillMount() {
@@ -24,14 +26,9 @@ class StylebookAllScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // retrieve user data // add username and bio to props
-    if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
-      nextProps.navigation.navigate('Autho');
-    }
     if ( nextProps.token && (this.props.token !== nextProps.token)) {
       this.props.loadOutfitAll(nextProps.token, nextProps.hType);
     }
-
 
     if(this.props.created !== nextProps.created) {
       this.props.loadOutfitAll(nextProps.token, nextProps.hType);
@@ -39,7 +36,15 @@ class StylebookAllScreen extends Component {
     }
 
     if(this.props.outfits !== nextProps.outfits) {
+      // loading순간으로 바꿔야할수도... loading했는데 empty면 얻허게 할꺼야?
       this.setState({isLoading: false});
+    }
+  }
+
+  _onEndReachedThreshold = () => {
+    let { token, hType, nextUri } = this.props;
+    if(nextUri) {
+      this.props.loadOutfitNextAll(token, hType, nextUri);
     }
   }
 
@@ -66,10 +71,12 @@ class StylebookAllScreen extends Component {
 
   _onRefresh = () => {
     this.setState({refreshing: true});
-    this.props.loadOutfitAll(this.props.token, this.props.hType).then(()=>{
+    this.props.loadOutfitAll(this.props.token, this.props.hType).then((data)=>{
       this.setState({refreshing: false})
     })
   }
+
+
 
   render() {
     if(this.state.isLoading) {
@@ -105,6 +112,10 @@ class StylebookAllScreen extends Component {
                 onRefresh = {()=>this._onRefresh()}
               />
             }
+            onEndReachedThreshold={thresholdLength}
+            onEndReached = {()=>{
+              this._onEndReachedThreshold()
+            }}
           />
       </View>
     )
@@ -135,9 +146,9 @@ const styles = StyleSheet.create({
 });
 
 // var width = Dimensions.get('window').width;
-function mapStateToProps({auth: {token, hType}, outfit: {outfits, created} }) {
+function mapStateToProps({auth: {token, hType}, outfit: {outfits, created, nextUri} }) {
   return {
-    token, hType, outfits, created
+    token, hType, outfits, created, nextUri
   }
 }
 

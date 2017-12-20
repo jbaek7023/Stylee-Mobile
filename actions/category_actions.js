@@ -11,9 +11,45 @@ import {
   ADD_TO_CATEGORY_FAIL,
   DELTE_FROM_CATEGORY_SUCCESS,
   DELTE_FROM_CATEGORY_FAIL,
+  CATEGORY_LIST_LOAD_SUCCESS,
+  CATEGORY_LIST_LOAD_FAIL,
+  CATELIST_NEXT_LOAD_SUCCESS,
+  CATELIST_NEXT_LOAD_FAIL,
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
+
+export const loadCategoryAll = (token, hType) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(`${ROOT_URL}/category/list/`, { headers });
+  if (response.status === 200) {
+    dispatch({ type: CATEGORY_LIST_LOAD_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: CATEGORY_LIST_LOAD_FAIL })
+  }
+}
+
+export const loadCategoryNextAll = (token, hType, uri) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(uri, { headers });
+  if (response.status === 200) {
+    dispatch({ type: CATELIST_NEXT_LOAD_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: CATELIST_NEXT_LOAD_FAIL })
+  }
+}
 
 // Getting dispatch as a parameter because we want to access to the dispatch from the parent function
 export const fetchUserCategories = (token, hType) => async dispatch => {

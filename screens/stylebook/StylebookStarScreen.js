@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFeedback, RefreshControl } from 'react-native';
 import { width, height, totalSize } from 'react-native-dimension';
 import { Fab, Icon, Button, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { threeImageWidth } from '../../utils/scale';
 import { RkText } from 'react-native-ui-kitten';
+import { thresholdLength } from '../../utils/scale';
 import * as actions from '../../actions';
 
 class StylebookStarScreen extends Component {
@@ -14,14 +15,16 @@ class StylebookStarScreen extends Component {
   }
 
   state = {
-    isLoading: true
+    isLoading: true,
+    nextUri: null,
+    refreshing: false,
   }
 
   componentWillMount() {
     if(this.props.token == undefined) {
       // Auth Screen // set the
     }
-    this.props.fetchStarOutfitAll(this.props.token, this.props.hType);
+    this.props.loadBookmarkAll(this.props.token, this.props.hType);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -32,7 +35,7 @@ class StylebookStarScreen extends Component {
     } else {
       // if token is updated, retrieve current logged in user
       if ( nextProps.token && token !== nextProps.token) {
-        this.props.fetchStarOutfitAll(token, hType);
+        this.props.loadBookmarkAll(token, hType);
       }
     }
     if(nextProps.starOutfits && this.props.starOutfits !== nextProps.starOutfits) {
@@ -40,8 +43,22 @@ class StylebookStarScreen extends Component {
     }
 
     if(nextProps.bookmarked && this.props.bookmarked !== nextProps.bookmarked) {
-      this.props.fetchStarOutfitAll(token, hType);
+      this.props.loadBookmarkAll(token, hType);
     }
+  }
+
+  _onEndReachedThreshold = () => {
+    let { token, hType, nextUri } = this.props;
+    if(nextUri) {
+      this.props.loadBookmarkNextAll(token, hType, nextUri);
+    }
+  }
+
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.props.loadBookmarkAll(this.props.token, this.props.hType).then((data)=>{
+      this.setState({refreshing: false})
+    })
   }
 
   _keyExtractor = (item, index) => (item+index);
@@ -55,9 +72,9 @@ class StylebookStarScreen extends Component {
 
   }
 
+
+
   _renderItem = ({item}) => {
-    console.log(item);
-    console.log(item.object_id);
     return (
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.content_type, item.object_id)}>
@@ -72,8 +89,6 @@ class StylebookStarScreen extends Component {
     );
   }
 
-
-
   render() {
     if(this.state.isLoading) {
       return (
@@ -82,7 +97,6 @@ class StylebookStarScreen extends Component {
         </View>
       );
     }
-
     if(this.props.starOutfits && this.props.starOutfits.length==0) {
       return (
         <View style={{flex:1, alignItems: 'center'}}>
@@ -97,14 +111,22 @@ class StylebookStarScreen extends Component {
     }
     return (
       <View style={{ flex:1 }}>
-        <ScrollView automaticallyAdjustContentInsets={false}>
-          <FlatList
-            data={this.props.starOutfits}
-            renderItem={this._renderItem}
-            keyExtractor={this._keyExtractor}
-            numColumns={3}
-          />
-        </ScrollView>
+        <FlatList
+          data={this.props.starOutfits}
+          renderItem={this._renderItem}
+          keyExtractor={this._keyExtractor}
+          numColumns={3}
+          refreshControl={
+            <RefreshControl
+              refreshing = {this.state.refreshing}
+              onRefresh = {()=>this._onRefresh()}
+            />
+          }
+          onEndReachedThreshold={thresholdLength}
+          onEndReached = {()=>{
+            this._onEndReachedThreshold()
+          }}
+        />
       </View>
     )
   }
@@ -134,9 +156,9 @@ const styles = StyleSheet.create({
 });
 
 // var width = Dimensions.get('window').width;
-function mapStateToProps({auth: {token, hType}, outfit: { starOutfits, bookmarked } }) {
+function mapStateToProps({auth: {token, hType}, bookmark: { starOutfits, bookmarked, nextUri } }) {
   return {
-    token, hType, starOutfits, bookmarked
+    token, hType, starOutfits, bookmarked, nextUri
   }
 }
 

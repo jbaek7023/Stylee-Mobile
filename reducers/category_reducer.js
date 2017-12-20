@@ -9,12 +9,24 @@ import {
   ADD_TO_CATEGORY_FAIL,
   DELTE_FROM_CATEGORY_SUCCESS,
   DELTE_FROM_CATEGORY_FAIL,
+  CATEGORY_LIST_LOAD_SUCCESS,
+  CATEGORY_LIST_LOAD_FAIL,
+  CATELIST_NEXT_LOAD_SUCCESS,
+  CATELIST_NEXT_LOAD_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { list: [], listOnOutfit: [], name: '', add: '', del: ''}
+const INITIAL_STATE = { list: [], listOnOutfit: [], name: '', add: '', del: '', categories: []}
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case CATEGORY_LIST_LOAD_SUCCESS:
+      return { ...state, categories: action.payload.results, nextUri: action.payload.next }
+    case CATEGORY_LIST_LOAD_FAIL:
+      return { ...state, categories: null }
+    case CATELIST_NEXT_LOAD_SUCCESS:
+      return { ...state, categories: state.categories.concat(action.payload.results), nextUri: action.payload.next }
+    case CATELIST_NEXT_LOAD_FAIL:
+      return { ...state }
     case CATEGORIES_LOAD_SUCCESS:
       return { ...state, list: action.payload }
     case CATEGORIES_LOAD_FAIL:

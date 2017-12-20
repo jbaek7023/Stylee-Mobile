@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from '../../components/Avatar';
-import SocialBar from '../../components/SocialBar';
 import { Spinner } from 'native-base';
 
 class PopularPostScreen extends Component {
@@ -238,10 +237,6 @@ let styles = RkStyleSheet.create(theme => ({
   },
   content: {
     flex: 1,
-  },
-  socialContainer: {
-    paddingTop: 10,
-    paddingBottom: 10,
   },
   commentContainer: {
     borderTopWidth: 1.5,

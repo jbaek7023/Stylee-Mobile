@@ -58,7 +58,8 @@ class StylebookWrappingScreen extends Component {
     return (
       <View style={{flex: 1}}>
         <Tabs initialPage={0}
-          tabBarUnderlineStyle={styles.tabBarUnderlineStyle}>
+          tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+          locked={true}>
           <Tab
             heading="Styles"
             tabStyle={styles.tabStyle}

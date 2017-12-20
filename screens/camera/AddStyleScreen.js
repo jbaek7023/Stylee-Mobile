@@ -276,6 +276,11 @@ class AddStyleScreen extends Component {
     );
   }
 
+  _clearImagesFromImageStore = () => {
+    // for(uri in this.state.taggedClothes)
+    // ImageStore.removeTagImages()
+  }
+
   _renderHeader = () => {
     return (
       <View style={styles.header}>
@@ -284,7 +289,8 @@ class AddStyleScreen extends Component {
             rkType='clear'
             style={styles.menu}
             onPress={() => {
-            this.props.navigation.goBack()
+              this._clearImagesFromImageStore();
+              this.props.navigation.goBack()
           }}>
             <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
           </RkButton>
@@ -308,6 +314,7 @@ class AddStyleScreen extends Component {
                       location, description,
                     selectedClothesIds, taggedClothes, taggedCategories, onlyMe, link  });
                   }
+                  this._clearImagesFromImageStore();
                   this.props.navigation.goBack();
                 }}>
                 <RkText rkType="header3">SAVE</RkText>

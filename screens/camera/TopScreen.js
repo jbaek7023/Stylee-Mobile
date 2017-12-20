@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { width, height, totalSize } from 'react-native-dimension';
 import * as actions from '../../actions';
 import { CheckBox } from 'native-base';
+
 class TopScreen extends Component {
   _keyExtractor = (item, index) => item.id;
 
@@ -61,4 +62,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(null, actions)(TopScreen);
+function mapStateToProps({auth: {token, hType}, wardrobe}) {
+  return {token, hType, wardrobe}
+}
+
+export default connect(mapStateToProps, actions)(TopScreen);

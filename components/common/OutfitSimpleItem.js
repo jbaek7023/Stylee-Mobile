@@ -203,20 +203,9 @@ class OutfitSimpleItem extends Component {
           		source={{uri: item.outfit_img}}
               />
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={()=>{this._handleImagePress(item.id)}}>
-            <View style={{marginLeft:20, marginRight: 20}}>
-              <View style={{marginTop: 10}}>
-                  <RkText rkType="header3">{item.content}</RkText>
-              </View>
-          		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-        				<RkText rkType="secondary2 hintColor">{item.like_count.toString()} Likes</RkText>
-                <TouchableOpacity onPress={()=>this._handleCommentPress}>
-        				 <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{item.comment_count.toString()} Comments</RkText>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
+
         	<View style={styles.socialContainer}>
+
         		<SocialBar
               isLiked={this.state.liked}
               isStarred={this.state.starred}
@@ -230,8 +219,14 @@ class OutfitSimpleItem extends Component {
               oid={item.id}
             />
         	</View>
-          <View rkCardContent style={styles.commentContainer}>
-            <TouchableOpacity onPress={()=>this._handleCommentPress} style={{marginTop: 5}}>
+          <View style={{paddingVertical: 5, paddingLeft:17, flexDirection: 'row', borderTopWidth: 1.5, borderColor: '#e3e3e3',}}>
+            <RkText rkType="secondary2 hintColor">{item.like_count.toString()} Likes</RkText>
+            <TouchableOpacity onPress={()=>this._handleCommentPress}>
+             <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{item.comment_count.toString()} Comments</RkText>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.commentContainer}>
+            <TouchableOpacity onPress={()=>this._handleCommentPress}>
               {this._renderComments(item.comments)}
               <View>
                 <RkText rkType='secondary2 hintColor'>View All {item.comment_count.toString()} Comments</RkText>
@@ -255,8 +250,10 @@ let styles = RkStyleSheet.create(theme => ({
     paddingLeft: 10
   },
   commentContainer: {
-    borderTopWidth: 1.5,
+    borderTopWidth: 1,
     borderColor: '#e3e3e3',
+    paddingVertical: 8,
+    paddingLeft:17,
   },
   profileSeperator: {
     backgroundColor: '#D3D3D3',

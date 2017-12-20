@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, Text, StyleSheet, TouchableWithoutFeedback, ScrollView, FlatList } from 'react-native';
+import { Image, View, Text, StyleSheet, TouchableWithoutFeedback, ScrollView, FlatList, RefreshControl } from 'react-native';
 import { Card, CardItem, Body, Spinner } from 'native-base';
 import {
   RkText,
@@ -7,6 +7,7 @@ import {
 } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import { width, height, totalSize } from 'react-native-dimension';
+import { thresholdLength } from '../../utils/scale';
 import * as actions from '../../actions';
 
 class StylebookCategoryScreen extends Component {
@@ -16,6 +17,8 @@ class StylebookCategoryScreen extends Component {
 
   state = {
     isLoading: true,
+    nextUri: null,
+    refreshing: false,
   }
 
   componentWillMount() {
@@ -38,6 +41,14 @@ class StylebookCategoryScreen extends Component {
 
     if(this.props.categories !== nextProps.categories) {
       this.setState({isLoading:false})
+    }
+  }
+
+  _onEndReachedThreshold = () => {
+    console.log('hi');
+    let { token, hType, nextUri } = this.props;
+    if(nextUri) {
+      this.props.loadCategoryNextAll(token, hType, nextUri);
     }
   }
 
@@ -83,6 +94,13 @@ class StylebookCategoryScreen extends Component {
     this.props.navigation.navigate('CategoryDetail', {id, name})
   }
 
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.props.loadCategoryAll(this.props.token, this.props.hType).then((data)=>{
+      this.setState({refreshing: false})
+    })
+  }
+
   render() {
     if(this.state.isLoading) {
       return (
@@ -106,16 +124,26 @@ class StylebookCategoryScreen extends Component {
     }
     return (
       <View style={{ flex:1 }}>
-        <ScrollView automaticallyAdjustContentInsets={false}>
-          <FlatList
-            data={this.props.categories}
-            renderItem={this._renderItem}
-            keyExtractor={this._keyExtractor}
-            numColumns={2}
-            style={{flex: 1, flexDirection: 'row'}}
-            contentContainerStyle={{justifyContent: 'center'}}
-          />
-        </ScrollView>
+        <FlatList
+          data={this.props.categories}
+          renderItem={this._renderItem}
+          keyExtractor={this._keyExtractor}
+          numColumns={2}
+          style={{flex: 1, flexDirection: 'row'}}
+          contentContainerStyle={{justifyContent: 'center'}}
+          refreshControl={
+            <RefreshControl
+              refreshing = {this.state.refreshing}
+              onRefresh = {()=>this._onRefresh()}
+            />
+          }
+          onEndReachedThreshold={thresholdLength}
+          onEndReached = {({distanceFromEnd})=>{
+            console.log(distanceFromEnd)
+            console.log('rechead')
+            this._onEndReachedThreshold()
+          }}
+        />
       </View>
     )
   }
@@ -149,9 +177,9 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps({auth: {token, hType}, outfit: {categories}, category: {added, removed}}) {
+function mapStateToProps({auth: {token, hType}, category: {categories, added, removed, nextUri}}) {
   return {
-    token, hType, categories, added, removed
+    token, hType, categories, added, removed, nextUri
   }
 }
 

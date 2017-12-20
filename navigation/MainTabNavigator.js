@@ -40,30 +40,50 @@ export default TabNavigator(
         let iconName;
         switch (routeName) {
           case 'Feed':
-            iconName = 'ios-contacts';
+            if(focused) {
+              iconName = 'ios-contacts';
+            } else {
+              iconName = 'ios-contacts-outline';
+            }
             break;
           case 'Stylebook':
-            iconName = 'ios-body';
+            if(focused) {
+              iconName = 'ios-body';
+            } else {
+              iconName = 'ios-body-outline';
+            }
             break;
           case 'Wardrobe':
-            iconName = 'ios-shirt';
+            if(focused) {
+              iconName = 'ios-shirt';
+            } else {
+              iconName = 'ios-shirt-outline';
+            }
             break;
           case 'Noti':
-            iconName = 'ios-notifications';
+            if(focused) {
+              iconName = 'ios-notifications';
+            } else {
+              iconName = 'ios-notifications-outline';
+            }
             break;
           case 'Menu':
-            iconName = 'ios-menu';
+            if(focused) {
+              iconName = 'ios-menu';
+            } else {
+              iconName = 'ios-menu-outline';
+            }
             break;
         }
         // ios-menu, ios-body, ios-notifications, ios-shirt,
-        if(iconName == 'ios-notifications') {
+        if(iconName == 'ios-notifications-outline') {
           return (
             <IconBadge
               MainElement={
                 <Ionicons
                   name={iconName}
                   size={30}
-                  style={{ marginBottom: -3 }}
+                  style={{ marginBottom: 0 }}
                   color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}/>
               }
               BadgeElement={
@@ -83,7 +103,7 @@ export default TabNavigator(
           <Ionicons
             name={iconName}
             size={30}
-            style={{ marginBottom: -3 }}
+            style={{ marginBottom: 0 }}
             color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
           />
         );
@@ -97,16 +117,12 @@ export default TabNavigator(
     swipeEnabled: false,
     backBehavior: 'none',
     tabBarOptions: {
-        showLabel: true,
-        activeTintColor: '#6F3AB1',
-        labelStyle: {
-          fontSize: 11
-        },
+        showLabel: false,
         style: {
           backgroundColor: 'white',
           borderTopWidth: 0.5,
           borderColor: 'black',
-          height: 50
+          height: 45
         }
     },
     lazy: true,
