@@ -16,7 +16,6 @@ class StylebookStarScreen extends Component {
 
   state = {
     isLoading: true,
-    nextUri: null,
     refreshing: false,
   }
 

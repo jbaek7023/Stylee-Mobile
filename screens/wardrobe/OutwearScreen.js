@@ -1,16 +1,52 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableWithoutFeedback, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { width, height, totalSize } from 'react-native-dimension';
 import * as actions from '../../actions';
 import { RkText } from 'react-native-ui-kitten';
+import { Spinner } from 'native-base';
+import { thresholdLength } from '../../utils/scale';
 
 class OutwearScreen extends Component {
-  _keyExtractor = (item, index) => item.id;
+  state = {
+    isLoading: true,
+    refreshing: false,
+  }
+
+  componentWillMount() {
+    if(this.props.token) {
+      this.props.fetchOuterwearAll(this.props.token, this.props.hType);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(this.props.outerwears !== nextProps.outerwears) {
+      // loading순간으로 바꿔야할수도... loading했는데 empty면 얻허게 할꺼야?
+      this.setState({isLoading: false});
+    }
+  }
+
+  _onEndReachedThreshold = () => {
+    let { token, hType, nextUri } = this.props;
+    if(nextUri) {
+      this.props.fetchOuterwearNextAll(token, hType, nextUri);
+    }
+  }
+
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.props.fetchOuterwearAll(this.props.token, this.props.hType).then((data)=>{
+      this.setState({refreshing: false})
+    })
+  }
+
 
   _handleImagePress = (id) => {
     this.props.navigation.navigate('ClothDetail', {id})
   }
+
+  _keyExtractor = (item, index) => item.id;
+
 
   _renderItem = ({item}) => {
     return (
@@ -27,13 +63,18 @@ class OutwearScreen extends Component {
     );
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
 
   // ToDo: AppLoading
   render() {
-    if(this.props.clothes && this.props.clothes.length==0) {
+    if(this.state.isLoading) {
+      return (
+        <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+          <Spinner color='#6F3AB1'/>
+        </View>
+      );
+    }
+
+    if(this.props.outerwears && this.props.outerwears.length==0) {
       return (
         <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
           <Image
@@ -47,10 +88,20 @@ class OutwearScreen extends Component {
       <View style={{ flex:1 }}>
         <ScrollView automaticallyAdjustContentInsets={false}>
           <FlatList
-            data={this.props.clothes}
+            data={this.props.outerwears}
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
             numColumns={3}
+            refreshControl={
+              <RefreshControl
+                refreshing = {this.state.refreshing}
+                onRefresh = {()=>this._onRefresh()}
+              />
+            }
+            onEndReachedThreshold={thresholdLength}
+            onEndReached = {()=>{
+              this._onEndReachedThreshold()
+            }}
           />
         </ScrollView>
       </View>
@@ -75,4 +126,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(null, actions)(OutwearScreen);
+function mapStateToProps({auth: {token, hType}, wardrobe: {outerwears, outerwearNextUri}}) {
+  return {token, hType, outerwears, nextUri: outerwearNextUri}
+}
+
+export default connect(mapStateToProps, actions)(OutwearScreen);

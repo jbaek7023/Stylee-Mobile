@@ -47,10 +47,31 @@ export const LOAD_NEXT_OUTFIT_SUCCESS = 'load_next_outfit_success';
 export const LOAD_NEXT_OUTFIT_FAIL = 'load_next_outfit_fail';
 
 // Wardrobe
-export const CLOTHES_LIST_SUCCESS = 'clothes_list_success';
-export const CLOTHES_LIST_FAIL = 'clothes_list_fail';
 export const C_DETAIL_LOAD_SUCCESS = 'clothes_detail_sucess';
 export const C_DETAIL_LOAD_FAIL = 'clothes_detail_fail';
+
+export const FETCH_TOP_LIST_SUCCESS = 'list_top_success';
+export const FETCH_TOP_LIST_FAIL = 'list_top_fail';
+export const FETCH_OUTERWEAR_LIST_SUCCESS = 'list_outerwear_fail';
+export const FETCH_OUTERWEAR_LIST_FAIL = 'list_outerwear_fail';
+export const FETCH_BOTTOM_LIST_SUCCESS = 'list_bottom_fail';
+export const FETCH_BOTTOM_LIST_FAIL = 'list_bottom_fail';
+export const FETCH_SHOES_LIST_SUCCESS = 'list_shoes_fail';
+export const FETCH_SHOES_LIST_FAIL = 'list_shoes_fail';
+export const FETCH_ETC_LIST_SUCCESS = 'list_etc_fail';
+export const FETCH_ETC_LIST_FAIL = 'list_etc_fail';
+
+export const FETCH_NEXT_TOP_SUCCESS = 'fetch_next_top_success';
+export const FETCH_NEXT_TOP_FAIL = 'fetch_next_top_fail';
+export const FETCH_NEXT_OUTERWEAR_SUCCESS = 'fetch_next_outerwear_success';
+export const FETCH_NEXT_OUTERWEAR_FAIL = 'fetch_next_outerwear_fail';
+export const FETCH_NEXT_BOTTOM_SUCCESS = 'fetch_next_bottom_success';
+export const FETCH_NEXT_BOTTOM_FAIL = 'fetch_next_bottom_fail';
+export const FETCH_NEXT_SHOES_SUCCESS = 'fetch_next_shoes_success';
+export const FETCH_NEXT_SHOES_FAIL = 'fetch_next_shoes_fail';
+export const FETCH_NEXT_ETCS_SUCCESS = 'fetch_next_etcs_success';
+export const FETCH_NEXT_ETCS_FAIL = 'fetch_next_etcs_fail';
+
 // POST (Create Cloth and Style)
 export const CREATE_CLOTH_SUCCESS = 'create_cloth_success';
 export const CREATE_CLOTH_FAIL = 'create_cloth_fail';

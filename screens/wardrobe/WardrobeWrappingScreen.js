@@ -44,15 +44,9 @@ class WardrobeWrappingScreen extends Component {
     isModalVisible: false
   }
 
-  componentWillMount() {
-    if(this.props.token) {
-      this.props.fetchClothesAll(this.props.token, this.props.hType);
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     if(this.props.created !== nextProps.created) {
-      this.props.fetchClothesAll(nextProps.token, nextProps.hType);
+      // this.props.fetchClothesAll(nextProps.token, nextProps.hType);
     }
   }
 
@@ -82,7 +76,7 @@ class WardrobeWrappingScreen extends Component {
               activeTabStyle={styles.activeTabStyle}
               activeTextStyle={styles.activeTextStyle}
               textStyle={styles.textStyle}>
-              <TopScreen clothes={this.props.tops} navigation={this.props.navigation}/>
+              <TopScreen navigation={this.props.navigation}/>
             </Tab>
             <Tab
               heading="Outerwear"
@@ -90,7 +84,7 @@ class WardrobeWrappingScreen extends Component {
               activeTabStyle={styles.activeTabStyle}
               activeTextStyle={styles.activeTextStyle}
               textStyle={styles.textStyle}>
-              <OutwearScreen clothes={this.props.outwears} navigation={this.props.navigation}/>
+              <OutwearScreen navigation={this.props.navigation}/>
             </Tab>
             <Tab
               heading="Bottom"
@@ -98,7 +92,7 @@ class WardrobeWrappingScreen extends Component {
               activeTabStyle={styles.activeTabStyle}
               activeTextStyle={styles.activeTextStyle}
               textStyle={styles.textStyle}>
-             <BottomScreen clothes={this.props.bottoms} navigation={this.props.navigation}/>
+             <BottomScreen navigation={this.props.navigation}/>
             </Tab>
             <Tab
               heading="Shoes"
@@ -106,7 +100,7 @@ class WardrobeWrappingScreen extends Component {
               activeTabStyle={styles.activeTabStyle}
               activeTextStyle={styles.activeTextStyle}
               textStyle={styles.textStyle}>
-              <ShoeScreen clothes={this.props.shoes} navigation={this.props.navigation}/>
+              <ShoeScreen navigation={this.props.navigation}/>
             </Tab>
             <Tab
               heading="Others"
@@ -114,7 +108,7 @@ class WardrobeWrappingScreen extends Component {
               activeTabStyle={styles.activeTabStyle}
               activeTextStyle={styles.activeTextStyle}
               textStyle={styles.textStyle}>
-              <EtcScreen clothes={this.props.etcs} navigation={this.props.navigation}/>
+              <EtcScreen navigation={this.props.navigation}/>
             </Tab>
           </Tabs>
         {this._renderModal()}
@@ -148,11 +142,8 @@ let styles = RkStyleSheet.create(theme => ({
 }));
 
 
-function mapStateToProps({
-    auth: {token, hType},
-    wardrobe: { created, clothesList: {tops, bottoms, outwears, shoes, etcs} }
-  }) {
-  return { token, hType, tops, outwears, bottoms, shoes, etcs };
+function mapStateToProps({auth: {token, hType}}) {
+  return { token, hType };
 }
 
 export default connect(mapStateToProps, actions)(WardrobeWrappingScreen);

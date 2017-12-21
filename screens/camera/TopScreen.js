@@ -6,6 +6,18 @@ import * as actions from '../../actions';
 import { CheckBox } from 'native-base';
 
 class TopScreen extends Component {
+  componentWillMount() {
+    console.log('here');
+    console.log(this.props.token);
+    if(this.props.token) {
+      this.props.fetchTopAll(this.props.token, this.props.hType);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+  }
+
   _keyExtractor = (item, index) => item.id;
 
   _renderItem = ({item}) => {
@@ -41,7 +53,7 @@ class TopScreen extends Component {
       <View style={{ flex:1 }}>
         <ScrollView automaticallyAdjustContentInsets={false}>
           <FlatList
-            data={this.props.clothes}
+            data={this.props.tops}
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
             extraData={this.props.selectedClothesIds}
@@ -62,8 +74,8 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({auth: {token, hType}, wardrobe}) {
-  return {token, hType, wardrobe}
+function mapStateToProps({auth: {token, hType}, wardrobe: {tops}}) {
+  return {token, hType, tops}
 }
 
 export default connect(mapStateToProps, actions)(TopScreen);

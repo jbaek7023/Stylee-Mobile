@@ -16,7 +16,6 @@ class StylebookAllScreen extends Component {
   state = {
     isLoading: true,
     refreshing: false,
-    next: null,
   }
 
   componentWillMount() {
@@ -48,6 +47,13 @@ class StylebookAllScreen extends Component {
     }
   }
 
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.props.loadOutfitAll(this.props.token, this.props.hType).then((data)=>{
+      this.setState({refreshing: false})
+    })
+  }
+
   _keyExtractor = (item, index) => item.id;
 
   _handleImagePress = (id) => {
@@ -67,13 +73,6 @@ class StylebookAllScreen extends Component {
         />
       </TouchableWithoutFeedback>
     );
-  }
-
-  _onRefresh = () => {
-    this.setState({refreshing: true});
-    this.props.loadOutfitAll(this.props.token, this.props.hType).then((data)=>{
-      this.setState({refreshing: false})
-    })
   }
 
 

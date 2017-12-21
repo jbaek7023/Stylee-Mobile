@@ -1,13 +1,34 @@
 import axios from 'axios';
 
 import {
-  CLOTHES_LIST_SUCCESS,
-  CLOTHES_LIST_FAIL,
   C_DETAIL_LOAD_SUCCESS,
   C_DETAIL_LOAD_FAIL,
   CREATE_CLOTH_SUCCESS,
   CREATE_CLOTH_FAIL,
+
+  FETCH_TOP_LIST_SUCCESS,
+  FETCH_TOP_LIST_FAIL,
+  FETCH_OUTERWEAR_LIST_SUCCESS,
+  FETCH_OUTERWEAR_LIST_FAIL,
+  FETCH_BOTTOM_LIST_SUCCESS,
+  FETCH_BOTTOM_LIST_FAIL,
+  FETCH_SHOES_LIST_SUCCESS,
+  FETCH_SHOES_LIST_FAIL,
+  FETCH_ETC_LIST_SUCCESS,
+  FETCH_ETC_LIST_FAIL,
+
+  FETCH_NEXT_TOP_SUCCESS,
+  FETCH_NEXT_TOP_FAIL,
+  FETCH_NEXT_OUTERWEAR_SUCCESS,
+  FETCH_NEXT_OUTERWEAR_FAIL,
+  FETCH_NEXT_BOTTOM_SUCCESS,
+  FETCH_NEXT_BOTTOM_FAIL,
+  FETCH_NEXT_SHOES_SUCCESS,
+  FETCH_NEXT_SHOES_FAIL,
+  FETCH_NEXT_ETCS_SUCCESS,
+  FETCH_NEXT_ETCS_FAIL,
 } from './types';
+
 const ROOT_URL = 'http://10.0.2.2:8000';
 
 export const createCloth = (token, hType, clothObject) => async dispatch => {
@@ -38,7 +59,7 @@ export const createCloth = (token, hType, clothObject) => async dispatch => {
   }
 }
 
-export const fetchClothesAll = (token, hType) => async dispatch => {
+export const fetchTopAll = (token, hType) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};
   if(hType==1) {
     headers = { 'Authorization': `JWT ${token}`};
@@ -46,39 +67,152 @@ export const fetchClothesAll = (token, hType) => async dispatch => {
     headers = { 'Authorization': `Bearer ${token}`};
   }
 
-  let response = await axios.get(`${ROOT_URL}/clothes/list/`, { headers });
+  let response = await axios.get(`${ROOT_URL}/clothes/list/1/`, { headers });
   if (response.status === 200) {
-    const types = {
-      tops: [],
-      outwears: [],
-      bottoms: [],
-      shoes: [],
-      etcs: []
-    }
-    response.data.forEach(item => {
-      switch (item.big_cloth_type) {
-        case 'Top':
-          types.tops.push(item);
-          break;
-        case 'Outwear':
-          types.outwears.push(item);
-          break;
-        case 'Bottom':
-          types.bottoms.push(item);
-          break;
-        case 'Shoes':
-          types.shoes.push(item);
-          break;
-        case 'ETC':
-          types.etcs.push(item);
-          break;
-        default:
-          break
-      }
-    });
-    dispatch({ type: CLOTHES_LIST_SUCCESS, payload: types });
+    dispatch({ type: FETCH_TOP_LIST_SUCCESS, payload: response.data });
   } else {
-    dispatch({ type: CLOTHES_LIST_FAIL });
+    dispatch({ type: FETCH_TOP_LIST_FAIL });
+  }
+}
+
+export const fetchTopNextAll = (token, hType, uri) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(uri, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_NEXT_TOP_SUCCESS, payload: response.data });
+  } else {
+    dispatch({ type: FETCH_NEXT_TOP_FAIL });
+  }
+}
+
+export const fetchOuterwearAll = (token, hType) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(`${ROOT_URL}/clothes/list/2/`, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_OUTERWEAR_LIST_SUCCESS, payload: response.data });
+  } else {
+    dispatch({ type: FETCH_OUTERWEAR_LIST_FAIL });
+  }
+}
+
+export const fetchOuterwearNextAll = (token, hType, uri) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(uri, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_NEXT_OUTERWEAR_SUCCESS, payload: response.data });
+  } else {
+    dispatch({ type: FETCH_NEXT_OUTERWEAR_FAIL });
+  }
+}
+export const fetchBottomAll = (token, hType) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(`${ROOT_URL}/clothes/list/3/`, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_BOTTOM_LIST_SUCCESS, payload: response.data });
+  } else {
+    dispatch({ type: FETCH_BOTTOM_LIST_FAIL });
+  }
+}
+
+export const fetchBottomNextAll = (token, hType, uri) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(uri, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_NEXT_BOTTOM_SUCCESS, payload: response.data });
+  } else {
+    dispatch({ type: FETCH_NEXT_BOTTOM_FAIL });
+  }
+}
+export const fetchShoesAll = (token, hType) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(`${ROOT_URL}/clothes/list/4/`, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_SHOES_LIST_SUCCESS, payload: response.data });
+  } else {
+    dispatch({ type: FETCH_SHOES_LIST_FAIL });
+  }
+}
+
+export const fetchShoesNextAll = (token, hType, uri) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(uri, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_NEXT_SHOES_SUCCESS, payload: response.data });
+  } else {
+    dispatch({ type: FETCH_NEXT_SHOES_FAIL });
+  }
+}
+export const fetchEtcsAll = (token, hType) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(`${ROOT_URL}/clothes/list/5/`, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_ETC_LIST_SUCCESS, payload: response.data });
+  } else {
+    dispatch({ type: FETCH_ETC_LIST_FAIL });
+  }
+}
+
+export const fetchEtcsNextAll = (token, hType, uri) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(uri, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_NEXT_ETCS_SUCCESS, payload: response.data });
+  } else {
+    dispatch({ type: FETCH_NEXT_ETCS_FAIL });
   }
 }
 

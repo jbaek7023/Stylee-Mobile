@@ -17,7 +17,6 @@ class StylebookCategoryScreen extends Component {
 
   state = {
     isLoading: true,
-    nextUri: null,
     refreshing: false,
   }
 
