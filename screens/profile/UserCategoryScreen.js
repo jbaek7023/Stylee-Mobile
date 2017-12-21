@@ -1,28 +1,110 @@
 import React, { Component } from 'react';
-import { RkText, RkTextInput, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
-import { findNodeHandle, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
+import { Image, View, Text, StyleSheet, TouchableWithoutFeedback, ScrollView, FlatList, RefreshControl } from 'react-native';
+import { Card, CardItem, Body, Spinner } from 'native-base';
+import {
+  RkText,
+  RkCard, RkStyleSheet,
+  RkButton
+} from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
+import { width, height, totalSize } from 'react-native-dimension';
+import { thresholdLength } from '../../utils/scale';
 import {FontAwesome} from '../../assets/icons';
 import * as actions from '../../actions';
 
 class UserCategoryScreen extends Component {
   static navigationOptions = () => ({
     gesturesEnabled: false,
-    tabBarVisible: false,
     header: null
   })
 
+
   state = {
-    followers: [],
-    loading: false,
+    isLoading: true,
+    refreshing: false,
   }
 
   componentWillMount() {
     let { token, hType } = this.props;
-    if(this.props.token) {
-      let { userPk } = this.props.navigation.state.params;
-      this.props.fetchCategoriesById(token, hType, userPk);
+    let { userPk } = this.props.navigation.state.params;
+    if(token) {
+      this.props.fetchUserCategoriesById(token, hType, userPk);
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if token is updated, retrieve current logged in user
+    let condition = (nextProps.token && (this.props.token !== nextProps.token)) ||
+      (this.props.added !== nextProps.added) ||
+      (this.props.removed !== nextProps.removed ) ? true : false;
+    if ( condition ) {
+      this.props.fetchUserCategoriesById(nextProps.token, nextProps.hType);
+    }
+
+    if(this.props.categoryList !== nextProps.categoryList) {
+      this.setState({isLoading:false})
+    }
+  }
+
+  _onEndReachedThreshold = () => {
+    let { token, hType, cateNextUri } = this.props;
+    if(cateNextUri) {
+      this.props.fetchUserNextCategoriesById(token, hType, cateNextUri);
+    }
+  }
+
+  _renderImage = (item) => {
+    if(item.image) {
+      return (
+        <Image
+          fadeDuration={0}
+          key={item.id}
+          source={{uri: item.image}}
+          style={styles.rowImage}
+          resizeMode="cover"
+        />
+      );
+    }
+    return (
+      <Image
+        fadeDuration={0}
+        key={item.id}
+        source={require('../../assets/images/styles.png')}
+        style={styles.rowImage}
+        resizeMode="cover"
+      />
+    );
+  }
+
+  _renderItem = ({item}) => {
+    return (
+      <TouchableWithoutFeedback
+        onPress={() => this._handleCategoryPress(item.id, item.name)}>
+        <View style={styles.rowContainer}>
+          {this._renderImage(item)}
+          <View style={styles.rowWidth}>
+            <RkText rkType="primary3" numberOfLines={1} ellipsizeMode='tail'>{item.name}</RkText>
+          </View>
+          <RkText rkType="secondary2 hintColor">{item.length} Style</RkText>
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }
+
+  _keyExtractor = (item, index) => item.id;
+
+  _handleCategoryPress = (id, name) => {
+    this.props.navigation.navigate('CategoryDetail', {id, name})
+  }
+
+  _onRefresh = () => {
+    let { token, hType } = this.props;
+    let { userPk } = this.props.navigation.state.params;
+
+    this.setState({refreshing: true});
+    this.props.fetchUserCategoriesById(token, hType, userPk).then((data)=>{
+      this.setState({refreshing: false})
+    })
   }
 
   _renderHeader = () => {
@@ -50,105 +132,105 @@ class UserCategoryScreen extends Component {
   }
 
   render() {
-    return (
-      <View style={{flex:1}}>
-        {this._renderHeader()}
-        <View><RkText>{this.props.navigation.state.params.userPk}</RkText></View>
+    if(this.state.isLoading) {
+      return (
+        <View style={{flex:1}}>
+          <View>
+            {this._renderHeader()}
+          </View>
+          <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+            <Spinner color='#6F3AB1'/>
+          </View>
+        </View>
+      );
+    }
 
+    if(this.props.categoryList && this.props.categoryList.length==0) {
+      return (
+        <View style={{flex:1}}>
+          <View>
+            {this._renderHeader()}
+          </View>
+          <View style={{flex:1, alignItems: 'center'}}>
+            <View style={styles.defaultContainer}>
+              <Image
+                fadeDuration={0}
+                style={styles.imageStyle} source={require('../../assets/images/category.png')}/>
+              <RkText style={styles.imageBottomText} rkType="header5 hintColor">You can create your own category with your outfit styles</RkText>
+            </View>
+          </View>
+        </View>
+      );
+    }
+    return (
+
+      <View style={{ flex:1, backgroundColor: 'white' }}>
+        <View>
+          {this._renderHeader()}
+        </View>
+        <FlatList
+          data={this.props.categoryList}
+          renderItem={this._renderItem}
+          keyExtractor={this._keyExtractor}
+          numColumns={2}
+          style={{flex: 1, flexDirection: 'row'}}
+          contentContainerStyle={{justifyContent: 'center'}}
+          refreshControl={
+            <RefreshControl
+              refreshing = {this.state.refreshing}
+              onRefresh = {()=>this._onRefresh()}
+            />
+          }
+          onEndReachedThreshold={thresholdLength}
+          onEndReached = {({distanceFromEnd})=>{
+            this._onEndReachedThreshold()
+          }}
+        />
       </View>
-    );
+    )
   }
 }
 
-let styles = RkStyleSheet.create(theme => ({
-  container: {
-    backgroundColor: theme.colors.screen.base,
+const styles = StyleSheet.create({
+  rowImage:{
+    width:width(44),
+    height:width(44),
+    borderWidth:1,
+    borderColor:'#DCDCDC',
   },
-  switch: {
-    marginVertical: 0
+  rowWidth: {
+    width: width(44),
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  rowContainer: {
+    marginLeft:width(4),
+    marginTop: 12
+  },
+  imageStyle: {
+    width: width(30),
+    height: width(30),
+  },
+  imageBottomText: {
+    textAlign: 'center',
+    marginTop: 13,
+  },
+  defaultContainer: {
+    flex:1,
     alignItems: 'center',
-    paddingTop: 0,
-    paddingLeft:20
+    justifyContent: 'center',
+    width: width(70),
   },
-  titleRow: {
+  left: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    justifyContent: 'center',
   },
-  drow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  menu: {
+    width: 50
   },
-  headContainer: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#cfcfd6',
-    justifyContent: 'center'
-  },
-  leftheadContainer: {
-    width:90
-  },
-  imageContainer: {
-    margin:10,
-    height: 70,
-    justifyContent: 'center'
-  },
-  inputStyle: {
-    marginTop:10,
-    marginBottom:10,
+  content: {
     flex: 1,
-    fontSize: 15,
-    marginRight: 10,
   },
-  headValidStyle: {
-    width: 70,
-    height: 70
-  },
-  headImageStyle: {
-    width:45,
-    height: 45
-  },
-  rightheadContainer: {
-    alignItems: 'stretch',
-    flex: 1
-  },
-  dHeader: {
-    color: theme.colors.primary,
-  },
-  dContainer: {
-    padding: 10
-  },
-  contextSeperator: {
-    backgroundColor: "#e6e6ee",
-    height: 0.5
-  },
-  modalTitleTextContainer: {
-    flexDirection: 'row',
-    flex:1
-  },
-  modalContentTextContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    padding: 10
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    flex: 1,
-    overflow: 'hidden'
-  },
-  black: {
-    color: 'black'
-  },
-  moreDetailStyle: {
-    flex: 1,
-    textAlign: 'right',
-    fontSize: 15,
+  contentHeader: {
+    justifyContent: 'center',
   },
   header: {
     height: 55,
@@ -170,31 +252,14 @@ let styles = RkStyleSheet.create(theme => ({
     alignItems: 'center',
     flexDirection: 'row',
     flex: 1,
-    backgroundColor: theme.colors.screen.base
+    backgroundColor: 'white'
   },
-  left: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  right: {
-    position: 'absolute',
-    right: 15,
-    top: 0,
-    bottom: 0,
-    justifyContent: 'center',
-  },
-  menu: {
-    width: 50
-  },
-  content: {
-    flex: 1,
-  },
-  contentHeader: {
-    justifyContent: 'center',
-  },
-}));
+});
 
-function mapStateToProps({auth: {token, hType}, user: {categoryList}}) {
-  return {token, hType}
+function mapStateToProps({auth: {token, hType}, user: {categoryList, cateNextUri}}) {
+  return {
+    token, hType, categoryList, cateNextUri
+  }
 }
+
 export default connect(mapStateToProps, actions)(UserCategoryScreen);

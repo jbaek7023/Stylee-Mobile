@@ -79,7 +79,9 @@ class StylebookCategoryScreen extends Component {
         onPress={() => this._handleCategoryPress(item.id, item.name)}>
         <View style={styles.rowContainer}>
           {this._renderImage(item)}
-          <RkText rkType="primary3">{item.name}</RkText>
+          <View style={styles.rowWidth}>
+            <RkText rkType="primary3" numberOfLines={1} ellipsizeMode='tail'>{item.name}</RkText>
+          </View>
           <RkText rkType="secondary2 hintColor">{item.length} Style</RkText>
         </View>
       </TouchableWithoutFeedback>
@@ -151,7 +153,9 @@ const styles = StyleSheet.create({
     height:width(44),
     borderWidth:1,
     borderColor:'#DCDCDC',
-
+  },
+  rowWidth: {
+    width: width(44)
   },
   rowContainer: {
     marginLeft:width(4),

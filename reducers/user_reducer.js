@@ -76,6 +76,15 @@ export default function(state = INITIAL_STATE, action) {
       }
     case USER_PAGE_NEXT_FETCH_FAIL:
       return { ...state }
+
+    case FETCH_USER_CATEGORIES_BY_USER_ID_SUCCESS:
+      return {...state, categoryList: action.payload.results, cateNextUri: action.payload.next }
+    case FETCH_USER_CATEGORIES_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_NEXT_CATEGORIES_BY_USER_ID_SUCCESS:
+      return {...state, categoryList: state.categoryList.concat(action.payload.results), cateNextUri: action.payload.next }
+    case FETCH_NEXT_CATEGORIES_BY_USER_ID_FAIL:
+      return { ...state }
     case USER_FOLLOW_SUCCESS:
       return { ...state }
     case USER_FOLLOW_FAIL:

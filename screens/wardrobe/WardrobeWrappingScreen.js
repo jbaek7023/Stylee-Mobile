@@ -41,13 +41,8 @@ class WardrobeWrappingScreen extends Component {
   })
 
   state = {
+    // this is nothing! yet
     isModalVisible: false
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if(this.props.created !== nextProps.created) {
-      // this.props.fetchClothesAll(nextProps.token, nextProps.hType);
-    }
   }
 
   _showModal = () => this.setState({ isModalVisible: true })
