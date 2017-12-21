@@ -230,6 +230,19 @@ class UserProfileScreen extends Component {
     }
   }
 
+  _retrieveFollower = () => {
+    this.props.navigation.navigate('FollowerList', {userPk: this.props.navigation.state.params.userPk});
+  }
+  _retrieveFollowing = () => {
+    this.props.navigation.navigate('FollowingList', {userPk: this.props.navigation.state.params.userPk});
+  }
+  _retrieveCategories = () => {
+    this.props.navigation.navigate('UserCategoryList', {userPk: this.props.navigation.state.params.userPk});
+  }
+  _retrieveClothes = () => {
+    this.props.navigation.navigate('UserWardrobe', {userPk: this.props.navigation.state.params.userPk});
+  }
+
   _renderProfile = (profile) => {
     return (
       <View style={{flex:1}}>
@@ -259,10 +272,18 @@ class UserProfileScreen extends Component {
           </View>
 
           <View style={styles.buttons}>
-            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.followed_count}</RkText><RkText rkType="secondary2 hintColor">Follower</RkText></RkButton>
-            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.following_count}</RkText><RkText rkType="secondary2 hintColor">Following</RkText></RkButton>
-            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.category_count}</RkText><RkText rkType="secondary2 hintColor">Category</RkText></RkButton>
-            <RkButton style={styles.button} rkType='clear'><RkText rktype="header4">{profile.clothes_count}</RkText><RkText rkType="secondary2 hintColor">Clothes</RkText></RkButton>
+            <RkButton style={styles.button} rkType='clear' onPress={()=>this._retrieveFollower()}>
+              <RkText rktype="header4">{profile.followed_count}</RkText><RkText rkType="secondary2 hintColor">Follower</RkText>
+            </RkButton>
+            <RkButton style={styles.button} rkType='clear' onPress={()=>this._retrieveFollowing()}>
+              <RkText rktype="header4">{profile.following_count}</RkText><RkText rkType="secondary2 hintColor">Following</RkText>
+            </RkButton>
+            <RkButton style={styles.button} rkType='clear' onPress={()=>this._retrieveCategories()}>
+              <RkText rktype="header4">{profile.category_count}</RkText><RkText rkType="secondary2 hintColor">Category</RkText>
+            </RkButton>
+            <RkButton style={styles.button} rkType='clear' onPress={()=>this._retrieveClothes()}>
+              <RkText rktype="header4">{profile.clothes_count}</RkText><RkText rkType="secondary2 hintColor">Clothes</RkText>
+            </RkButton>
           </View>
 
           <View style={styles.styleSeparator}>

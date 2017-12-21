@@ -82,6 +82,43 @@ export const USER_UNFOLLOW_SUCCESS = 'user_unfollow_success';
 export const USER_UNFOLLOW_FAIL = 'user_unfollow_fail';
 export const USER_PAGE_NEXT_FETCH_SUCCESS = 'user_page_next_fetch_success';
 export const USER_PAGE_NEXT_FETCH_FAIL = 'user_page_next_fetch_fail';
+// USER Profile Continue - LIST Follower, Following, Categories, Wardrobe
+export const FETCH_USER_CATEGORIES_BY_USER_ID_SUCCESS = 'f_u_c_id_s';
+export const FETCH_USER_CATEGORIES_BY_USER_ID_FAIL = 'f_u_c_id_s2';
+export const FETCH_NEXT_CATEGORIES_BY_USER_ID_SUCCESS = 'f_u_c_id_s3';
+export const FETCH_NEXT_CATEGORIES_BY_USER_ID_FAIL = 'f_u_c_id_s4';
+// USER - WARDROBE
+export const FETCH_USER_TOP_BY_USER_ID_SUCCESS = 'f_wardrobet1';
+export const FETCH_USER_TOP_BY_USER_ID_FAIL = 'f_wardrobet2';
+export const FETCH_NEXT_TOP_BY_USER_ID_SUCCESS = 'f_wardrobet3';
+export const FETCH_NEXT_TOP_BY_USER_ID_FAIL = 'f_wardrobet4';
+export const FETCH_USER_OUTERWEAR_BY_USER_ID_SUCCESS = 'f_wardrobeq1';
+export const FETCH_USER_OUTERWEAR_BY_USER_ID_FAIL = 'f_wardrobeq2';
+export const FETCH_NEXT_OUTERWEAR_BY_USER_ID_SUCCESS = 'f_wardrobeq3';
+export const FETCH_NEXT_OUTERWEAR_BY_USER_ID_FAIL = 'f_wardrobeq4';
+export const FETCH_USER_BOTTOM_BY_USER_ID_SUCCESS = 'f_wardrobeqb1';
+export const FETCH_USER_BOTTOM_BY_USER_ID_FAIL = 'f_wardrobeqb2';
+export const FETCH_NEXT_BOTTOM_BY_USER_ID_SUCCESS = 'f_wardrobeqb3';
+export const FETCH_NEXT_BOTTOM_BY_USER_ID_FAIL = 'f_wardrobeqb4';
+export const FETCH_USER_SHOES_BY_USER_ID_SUCCESS = 'f_wardrobeqs1';
+export const FETCH_USER_SHOES_BY_USER_ID_FAIL = 'f_wardrobeqs2';
+export const FETCH_NEXT_SHOES_BY_USER_ID_SUCCESS = 'f_wardrobeqs3';
+export const FETCH_NEXT_SHOES_BY_USER_ID_FAIL = 'f_wardrobeqs4';
+export const FETCH_USER_ETCS_BY_USER_ID_SUCCESS = 'f_wardrobeqew1';
+export const FETCH_USER_ETCS_BY_USER_ID_FAIL = 'f_wardrobeqew2';
+export const FETCH_NEXT_ETCS_BY_USER_ID_SUCCESS = 'f_wardrobeqew3';
+export const FETCH_NEXT_ETCS_BY_USER_ID_FAIL = 'f_wardrobeqew4';
+// USER - follower
+export const FETCH_USER_FOLLOWER_BY_USER_ID_SUCCESS = 'f_u_1';
+export const FETCH_USER_FOLLOWER_BY_USER_ID_FAIL = 'f_u_2';
+export const FETCH_NEXT_FOLLOWER_BY_USER_ID_SUCCESS = 'f_u_3';
+export const FETCH_NEXT_FOLLOWER_BY_USER_ID_FAIL = 'f_u_4';
+// USER - following
+export const FETCH_USER_FOLLOWING_BY_USER_ID_SUCCESS = 'following_u_1';
+export const FETCH_USER_FOLLOWING_BY_USER_ID_FAIL = 'following_u_2';
+export const FETCH_NEXT_FOLLOWING_BY_USER_ID_SUCCESS = 'following_u_3';
+export const FETCH_NEXT_FOLLOWING_BY_USER_ID_FAIL = 'following_u_4';
+
 
 // Comments
 export const FETCH_COMMENTS_SUCCESS = 'fetch_comments_success';
