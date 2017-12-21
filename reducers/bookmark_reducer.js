@@ -11,7 +11,7 @@ import {
   STAR_OUTFIT_LOAD_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { bookmarked: '', starOutfits: null,}
+const INITIAL_STATE = { bookmarked: '', starOutfits: null, nextUri: undefined}
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {

@@ -221,6 +221,7 @@ class AddStyleScreen extends Component {
             (base64Data) => {
               imageDataArray.push({id:id, image: successURI, base64: base64Data});
               taggedClothesArray = Object.values(taggedClothes);
+              // remove!!!
               console.log(taggedClothes);
               const merged = taggedClothesArray.map((tagged, i) => {
                 return {

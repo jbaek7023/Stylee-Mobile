@@ -44,7 +44,6 @@ class StylebookCategoryScreen extends Component {
   }
 
   _onEndReachedThreshold = () => {
-    console.log('hi');
     let { token, hType, nextUri } = this.props;
     if(nextUri) {
       this.props.loadCategoryNextAll(token, hType, nextUri);
@@ -138,8 +137,6 @@ class StylebookCategoryScreen extends Component {
           }
           onEndReachedThreshold={thresholdLength}
           onEndReached = {({distanceFromEnd})=>{
-            console.log(distanceFromEnd)
-            console.log('rechead')
             this._onEndReachedThreshold()
           }}
         />

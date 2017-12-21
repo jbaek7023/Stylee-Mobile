@@ -5,8 +5,6 @@ import {
   OUTFIT_LOAD_FAIL,
   O_DETAIL_LOAD_SUCCESS,
   O_DETAIL_LOAD_FAIL,
-  CATEGORY_DETAIL_LOAD_SUCCESS,
-  CATEGORY_DETAIL_LOAD_FAIL,
   CREATE_STYLE_SUCCESS,
   CREATE_STYLE_FAIL,
   LOAD_NEXT_OUTFIT_SUCCESS,
@@ -84,21 +82,5 @@ export const fetchOutfitDetail = (token, hType, id) => async dispatch => {
     dispatch({ type: O_DETAIL_LOAD_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: O_DETAIL_LOAD_FAIL })
-  }
-}
-
-export const fetchCategoryDetail = (token, hType, id) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
-
-  let response = await axios.get(`${ROOT_URL}/category/detail/${id}`, { headers });
-  if (response.status === 200) {
-    dispatch({ type: CATEGORY_DETAIL_LOAD_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: CATEGORY_DETAIL_LOAD_FAIL })
   }
 }

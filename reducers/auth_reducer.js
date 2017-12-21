@@ -15,7 +15,7 @@ import {
   CHANGE_PASSWORD_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { token: null, errorMsg: undefined }
+const INITIAL_STATE = { token: null, errorMsg: undefined, hType: undefined, fbToken: undefined, }
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {

@@ -22,10 +22,8 @@ class SignUpUsernameScreen extends Component {
     // if username == username : valid
     // if username != username : obtained
 
-    console.log(this.props.newAuth);
     const { password, email } = this.props.newAuth;
     const { username } = this.state;
-    console.log(username);
     // register here //save token
     this.props.registerUser(username, email, password);
     // invalid? login? username should be wrong.

@@ -104,7 +104,6 @@ class EditProfileScreen extends Component {
   componentWillReceiveProps(nextProps){
     if(this.props.profile !== nextProps.profile) {
       // API : add username and title.
-      console.log('we r here/')
       let { username, title, gender, profile_img } = nextProps.profile;
       this.setState({username, title, gender, uri: profile_img, isLoading: false});
     }

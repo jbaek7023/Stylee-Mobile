@@ -61,13 +61,17 @@ export default StackNavigator ({
 }, {
     navigationOptions:({navigation, screenProps})=>({
       tabBarOnPress: ({jumpToIndex, scene}) => {
+
         jumpToIndex(scene.index);
-        navigation.dispatch(NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({ routeName: 'Stylebooko' }) // go to first screen of the StackNavigator
-          ]
-        }))
+        if(scene.focused) {
+          navigation.dispatch(NavigationActions.reset({
+            index: 0,
+            actions: [
+              NavigationActions.navigate({ routeName: 'Stylebooko' }) // go to first screen of the StackNavigator
+            ]
+          }))
+
+        }
       }
     }),
     lazy: true

@@ -20,7 +20,7 @@ import {
 // AsyncStorage.setItem('fb_token', token); <- returns a promise
 // AsyncStorage.getItem('fb_token');
 
-// localhost -> 10.0.2.2:YOUR_PORT
+// localhost -> 10.0.2.2:YOUR_PORT (Network Error otherwise)
 const ROOT_URL = 'http://10.0.2.2:8000'
 
 
@@ -67,7 +67,6 @@ export const doFacebookLogin = () => async dispatch => {
     // Are you Offline?
     dispatch({ type: FACEBOOK_LOGIN_FAIL });
   }
-  console.log(token);
   doSocialAuthLogin(dispatch, token);
 };
 
@@ -78,7 +77,7 @@ const doSocialAuthLogin = async (dispatch, token) => {
     backend: 'facebook',
     token
   })
-  console.log(response.data)
+
   if (response.data.access_token) {
     AsyncStorage.setItem('fb_token', response.data.access_token);
     // fb is type 2

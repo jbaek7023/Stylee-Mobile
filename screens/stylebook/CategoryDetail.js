@@ -8,13 +8,14 @@ import {withRkTheme} from 'react-native-ui-kitten';
 import SocialBar from '../../components/SocialBar';
 import { Ionicons } from '@expo/vector-icons';
 import {FontAwesome} from '../../assets/icons';
-
+import { Spinner } from 'native-base';
 import {
   RkCard,
   RkText,
   RkStyleSheet
 } from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
+import { thresholdLength } from '../../utils/scale';
 
 let ThemedNavigationBar = withRkTheme(NavBar);
 
@@ -28,10 +29,21 @@ class CategoryDetail extends Component {
     },
   })
 
+  state = {
+    isLoading: true,
+  }
+
   componentWillMount() {
     const { id } = this.props.navigation.state.params;
     const { token, hType } = this.props;
     this.props.fetchCategoryDetail(token, hType, id);
+  }
+
+  _onEndReachedThreshold = () => {
+    let { token, hType, nextUri } = this.props;
+    if(nextUri) {
+      this.props.fetchNextOutfitForCategoryDetail(token, hType, nextUri);
+    }
   }
 
   _keyExtractor = (item, index) => item.id;
@@ -66,8 +78,7 @@ class CategoryDetail extends Component {
           <RkCard>
             <View rkCardContent style={styles.cardContent}>
               <RkText rkType='h2'>{detail.name}</RkText>
-              <RkText rkType='h5' style={styles.marginName}>username</RkText>
-              <RkText rkType='secondary2 hintColor bigLine'>{detail.detail}This is one</RkText>
+              <RkText rkType='secondary2 hintColor bigLine'>{detail.owner.username}</RkText>
             </View>
             <View rkCardContent>
               <RkText rkType='secondary2'>{outfitCount} Styles</RkText>
@@ -78,6 +89,10 @@ class CategoryDetail extends Component {
               renderItem={this._renderItem}
               keyExtractor={this._keyExtractor}
               numColumns={3}
+              onEndReachedThreshold={thresholdLength}
+              onEndReached = {()=>{
+                this._onEndReachedThreshold()
+              }}
             />
         </ScrollView>
       );
@@ -116,8 +131,8 @@ let styles = RkStyleSheet.create(theme => ({
   }
 }));
 
-function mapStateToProps({auth: {token, hType}, outfit: {categoryDetail}}) {
-  return { token, hType, categoryDetail }
+function mapStateToProps({auth: {token, hType}, category: {categoryDetail, nextCategoryUri}}) {
+  return { token, hType, categoryDetail, nextUri: nextCategoryUri}
 }
 
 export default connect(mapStateToProps, actions)(CategoryDetail);

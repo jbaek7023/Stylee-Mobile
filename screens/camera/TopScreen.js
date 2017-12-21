@@ -7,8 +7,6 @@ import { CheckBox } from 'native-base';
 
 class TopScreen extends Component {
   componentWillMount() {
-    console.log('here');
-    console.log(this.props.token);
     if(this.props.token) {
       this.props.fetchTopAll(this.props.token, this.props.hType);
     }

@@ -3,8 +3,6 @@ import {
   OUTFIT_LOAD_FAIL,
   O_DETAIL_LOAD_SUCCESS,
   O_DETAIL_LOAD_FAIL,
-  CATEGORY_DETAIL_LOAD_SUCCESS,
-  CATEGORY_DETAIL_LOAD_FAIL,
   CREATE_STYLE_SUCCESS,
   CREATE_STYLE_FAIL,
   LOAD_NEXT_OUTFIT_SUCCESS,
@@ -14,7 +12,6 @@ import {
 const INITIAL_STATE = {
   outfits: null,
   outfitDetail: null,
-  categoryDetail: null,
   created: null,
   nextUri: null}
 
@@ -32,18 +29,10 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, outfitDetail: action.payload }
     case O_DETAIL_LOAD_FAIL:
       return { ...state, outfitDetail: null }
-    case CATEGORY_DETAIL_LOAD_SUCCESS:
-     return { ...state, categoryDetail: action.payload }
-    case CATEGORY_DETAIL_LOAD_FAIL:
-     return { ...state, categoryDetail: null }
-
     case CREATE_STYLE_SUCCESS:
      return { ...state, created: action.payload.created }
     case CREATE_STYLE_FAIL:
      return { ...state, created: null }
-
-
-
     default:
       return state;
   }

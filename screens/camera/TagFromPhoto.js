@@ -111,7 +111,7 @@ class TagFromPhoto extends Component {
               }
             })
           } else {
-            console.log('do nothing')
+            // do nothing
           }
         }
       },

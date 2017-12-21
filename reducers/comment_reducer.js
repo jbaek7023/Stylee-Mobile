@@ -7,7 +7,11 @@ import {
   CREATE_COMMENT_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { comments: [], replyComment: [], addedComment: {id:0}}
+const INITIAL_STATE = {
+  comments: [], 
+  replyComment: [],
+  addedComment: {id:0}
+}
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {

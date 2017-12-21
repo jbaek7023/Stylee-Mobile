@@ -13,12 +13,46 @@ import {
   CATEGORY_LIST_LOAD_FAIL,
   CATELIST_NEXT_LOAD_SUCCESS,
   CATELIST_NEXT_LOAD_FAIL,
+  CATEGORY_DETAIL_LOAD_SUCCESS,
+  CATEGORY_DETAIL_LOAD_FAIL,
+
+  CATEGORY_NEXT_OUTFITS_LOAD_SUCCESS,
+  CATEGORY_NEXT_OUTFITS_LOAD_FAIL,
 } from '../actions/types';
 
-const INITIAL_STATE = { list: [], listOnOutfit: [], name: '', add: '', del: '', categories: []}
+const INITIAL_STATE = {
+  list: [],
+  listOnOutfit: [],
+  name: '',
+  categories: [],
+  categoryDetail: null,
+  nextCategoryUri: null,
+  nextUri: null,
+  id: undefined,
+  added: undefined,
+  removed: undefined
+}
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case CATEGORY_DETAIL_LOAD_SUCCESS:
+      if(action.payload.outfits.length==18) {
+        return { ...state, categoryDetail: action.payload, nextCategoryUri: 1}
+      }
+      return { ...state, categoryDetail: action.payload }
+    case CATEGORY_DETAIL_LOAD_FAIL:
+     return { ...state, categoryDetail: null }
+    case CATEGORY_NEXT_OUTFITS_LOAD_SUCCESS:
+     return {
+       ...state,
+       categoryDetail: {
+         ...state.categoryDetail,
+         outfits: state.categoryDetail.outfits.concat(action.payload.results)
+       },
+       nextCategoryUri: action.payload.next
+     }
+    case CATEGORY_NEXT_OUTFITS_LOAD_FAIL:
+     return { ...state }
     case CATEGORY_LIST_LOAD_SUCCESS:
       return { ...state, categories: action.payload.results, nextUri: action.payload.next }
     case CATEGORY_LIST_LOAD_FAIL:

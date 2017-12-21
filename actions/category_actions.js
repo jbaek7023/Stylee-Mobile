@@ -3,8 +3,17 @@ import axios from 'axios';
 import {
   CATEGORIES_LOAD_SUCCESS,
   CATEGORIES_LOAD_FAIL,
+
+// category detail
+  CATEGORY_DETAIL_LOAD_SUCCESS,
+  CATEGORY_DETAIL_LOAD_FAIL,
+  CATEGORY_NEXT_OUTFITS_LOAD_SUCCESS,
+  CATEGORY_NEXT_OUTFITS_LOAD_FAIL,
+
+// get category
   OUTFIT_CATEGORIES_LOAD_SUCCESS,
   OUTFIT_CATEGORIES_LOAD_FAIL,
+
   CREATE_CATEGORY_SUCCESS,
   CREATE_CATEGORY_FAIL,
   ADD_TO_CATEGORY_SUCCESS,
@@ -18,6 +27,41 @@ import {
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
+
+export const fetchCategoryDetail = (token, hType, id) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(`${ROOT_URL}/category/detail/${id}/?page=1`, { headers });
+  if (response.status === 200) {
+    dispatch({ type: CATEGORY_DETAIL_LOAD_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: CATEGORY_DETAIL_LOAD_FAIL })
+  }
+}
+
+export const fetchNextOutfitForCategoryDetail = (token, hType, id, uri) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+  if(uri == 1) {
+    uri = `${ROOT_URL}/outfits/outfitsbycategory/1/?page=2`
+  }
+
+  let response = await axios.get(uri, { headers });
+  if (response.status === 200) {
+    dispatch({ type: CATEGORY_NEXT_OUTFITS_LOAD_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: CATEGORY_NEXT_OUTFITS_LOAD_FAIL })
+  }
+}
 
 export const loadCategoryAll = (token, hType) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};

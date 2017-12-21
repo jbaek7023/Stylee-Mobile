@@ -9,7 +9,13 @@ import {
   EDIT_PROFILE_IMG_FAIL
 } from '../actions/types';
 
-const INITIAL_STATE = { username: '', profile: undefined, imageCreated: '' }
+const INITIAL_STATE = {
+  username: '',
+  profile: undefined,
+  imageCreated: '',
+  bio: '',
+  currentUser: undefined,
+}
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {

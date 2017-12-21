@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, Image, View, Text, ScrollView, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { TouchableHighlight, Image, View, Text, ScrollView, FlatList, TouchableOpacity, TouchableWithoutFeedback, RefreshControl } from 'react-native';
 import {
   RkText,
   RkButton, RkStyleSheet,
@@ -16,6 +16,7 @@ import SocialBar from '../../components/SocialBar';
 import { Ionicons } from '@expo/vector-icons';
 import {FontAwesome} from '../../assets/icons';
 import OutfitSimpleItem from '../../components/common/OutfitSimpleItem';
+import { thresholdLength } from '../../utils/scale';
 
 class UserProfileScreen extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
@@ -26,7 +27,8 @@ class UserProfileScreen extends Component {
     grid: true,
     scrollY: 0,
     isFollowing: false,
-    isLoading: true
+    isLoading: true,
+    refreshing: false,
   }
 
   componentWillMount() {
@@ -42,6 +44,20 @@ class UserProfileScreen extends Component {
     if(this.props.cUserProfile !== nextProps.cUserProfile) {
       this.setState({isLoading: false});
     }
+  }
+
+  _onEndReachedThreshold = () => {
+    let { token, hType, nextUri } = this.props;
+    if(nextUri) {
+      this.props.fetchNextProfileOutfits(token, hType, this.props.navigation.state.params.userPk, nextUri);
+    }
+  }
+
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.props.fetchMyProfile(this.props.token, this.props.hType, this.props.navigation.state.params.userPk).then((data)=>{
+      this.setState({refreshing: false})
+    })
   }
 
   _renderAvatar = (uri) => {
@@ -181,6 +197,10 @@ class UserProfileScreen extends Component {
         keyExtractor={this._keyExtractor}
         numColumns={(this.state.grid) ? 3 : 1}
         key={(this.state.grid) ? 1 : 0}
+        onEndReachedThreshold={thresholdLength}
+        onEndReached = {()=>{
+          this._onEndReachedThreshold()
+        }}
       />
     );
   }
@@ -208,7 +228,6 @@ class UserProfileScreen extends Component {
         <Ionicons name="md-list" color='#6F3AB1' size={30}/>
       );
     }
-
   }
 
   _renderProfile = (profile) => {
@@ -221,7 +240,14 @@ class UserProfileScreen extends Component {
           ref={ref => this.scroll = ref}
           onScroll={(event)=>{
             this.setState({scrollY: event.nativeEvent.contentOffset.y})}}
-          style={styles.root}>
+          style={styles.root}
+          refreshControl={
+            <RefreshControl
+              refreshing = {this.state.refreshing}
+              onRefresh = {()=>this._onRefresh()}
+            />
+          }
+          >
           <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 20, marginRight: 20, marginTop: 30, marginBottom: 5}}>
             <View style={{justifyContent: 'center', alignItems: 'center', width:90, height:90}}>
               {this._renderAvatar(profile.image)}
@@ -444,8 +470,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, user: {cUserProfile}}) {
-  return {token, hType, cUserProfile}
+function mapStateToProps({auth: {token, hType}, user: {cUserProfile, nextUri}}) {
+  return {token, hType, cUserProfile, nextUri}
 }
 
 export default connect(mapStateToProps, actions)(UserProfileScreen);
