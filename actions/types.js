@@ -44,6 +44,8 @@ export const LOAD_NEXT_OUTFIT_SUCCESS = 'load_next_outfit_success';
 export const LOAD_NEXT_OUTFIT_FAIL = 'load_next_outfit_fail';
 export const EDIT_STYLE_SUCCESS = 'edit_style_success';
 export const EDIT_STYLE_FAIL = 'edit_style_fail';
+export const DELETE_STYLE_SUCCESS = 'delete_style_success';
+export const DELETE_STYLE_FAIL = 'delete_style_fail';
 
 // Wardrobe
 export const C_DETAIL_LOAD_SUCCESS = 'clothes_detail_sucess';

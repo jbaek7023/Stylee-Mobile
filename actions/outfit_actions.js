@@ -11,6 +11,8 @@ import {
   LOAD_NEXT_OUTFIT_FAIL,
   EDIT_STYLE_SUCCESS,
   EDIT_STYLE_FAIL,
+  DELETE_STYLE_SUCCESS,
+  DELETE_STYLE_FAIL,
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
@@ -58,6 +60,24 @@ export const editStyle = (token, hType, styleObject) => async dispatch => {
     dispatch({ type: EDIT_STYLE_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: EDIT_STYLE_FAIL })
+  }
+}
+
+export const deleteStyle = (token, hType, oid) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+
+  let response = await axios.delete(`${ROOT_URL}/outfits/edit/${oid}/`, {headers});
+
+  if(response.status === 204) {
+    dispatch({ type: DELETE_STYLE_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: DELETE_STYLE_FAIL })
   }
 }
 

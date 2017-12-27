@@ -14,7 +14,13 @@ import SnackBar from 'react-native-snackbar-dialog';
 
 class MenuModal extends Component {
   _deleteThisPost = () => {
-    SnackBar.show(('Deleted the post'), { duration: 2500 })
+
+    this.props.navigation.goBack();
+
+    let { token, hType } = this.props;
+    let { id } = this.props.detail;
+    this.props.deleteStyle(token, hType, id);
+
   }
 
   _handleEditPress = () => {
@@ -120,4 +126,9 @@ const styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-export default connect(null, actions)(MenuModal);
+
+function mapStateToProps({auth: {token, hType}}) {
+  return { token, hType }
+}
+
+export default connect(mapStateToProps, actions)(MenuModal);

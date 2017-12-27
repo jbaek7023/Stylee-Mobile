@@ -5,6 +5,7 @@ import { Fab, Icon, Button, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { threeImageWidth, thresholdLength } from '../../utils/scale';
 import { RkText } from 'react-native-ui-kitten';
+import SnackBar from 'react-native-snackbar-dialog';
 
 import * as actions from '../../actions';
 
@@ -29,9 +30,14 @@ class StylebookAllScreen extends Component {
       this.props.loadOutfitAll(nextProps.token, nextProps.hType);
     }
 
-    if(this.props.created !== nextProps.created) {
+    if(nextProps.created && this.props.created !== nextProps.created) {
       this.props.loadOutfitAll(nextProps.token, nextProps.hType);
       this.props.fetchClothesAll(nextProps.token, nextProps.hType);
+    }
+
+    if(nextProps.deleted && this.props.deleted !== nextProps.deleted) {
+      this.props.loadOutfitAll(nextProps.token, nextProps.hType);
+      SnackBar.show(('Deleted the post'), { duration: 2500 })
     }
 
     if(this.props.outfits !== nextProps.outfits) {
@@ -145,9 +151,9 @@ const styles = StyleSheet.create({
 });
 
 // var width = Dimensions.get('window').width;
-function mapStateToProps({auth: {token, hType}, outfit: {outfits, created, nextUri} }) {
+function mapStateToProps({auth: {token, hType}, outfit: {outfits, created, nextUri, deleted} }) {
   return {
-    token, hType, outfits, created, nextUri
+    token, hType, outfits, created, nextUri, deleted
   }
 }
 

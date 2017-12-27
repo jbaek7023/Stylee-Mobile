@@ -9,6 +9,8 @@ import {
   LOAD_NEXT_OUTFIT_FAIL,
   EDIT_STYLE_SUCCESS,
   EDIT_STYLE_FAIL,
+  DELETE_STYLE_SUCCESS,
+  DELETE_STYLE_FAIL,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -42,6 +44,11 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, edited: timeStamp.toString() }
     case EDIT_STYLE_SUCCESS:
       return { ...state, edited: null }
+    case DELETE_STYLE_SUCCESS:
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, deleted: timeStamp.toString() }
+    case DELETE_STYLE_FAIL:
+      return { ...state, deleted: null }
     default:
       return state;
   }
