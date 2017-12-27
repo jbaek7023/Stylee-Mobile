@@ -209,7 +209,6 @@ class ClothDetail extends Component {
         </View>
       );
     }
-
     return (
       <View style={styles.headerLayout}>
         <View rkCardHeader style={styles.left}>
@@ -395,7 +394,6 @@ let styles = RkStyleSheet.create(theme => ({
     alignItems: 'center',
     height: 50,
   },
-
   content: {
     marginLeft: 16,
     flex: 1,

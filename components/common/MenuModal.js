@@ -20,7 +20,8 @@ class MenuModal extends Component {
     if(this.props.postType == 1) {
       this.props.deleteStyle(token, hType, id);
     } else {
-      this.props.deleteCloth(token, hType, id);
+      let { big_cloth_type } = this.props.detail;
+      this.props.deleteCloth(token, hType, id, big_cloth_type);
     }
   }
 

@@ -5,6 +5,8 @@ import {
   CREATE_CLOTH_FAIL,
   UPDATE_CLOTH_SUCCESS,
   UPDATE_CLOTH_FAIL,
+  DELETE_CLOTH_SUCCESS,
+  DELETE_CLOTH_FAIL,
 
   FETCH_TOP_LIST_SUCCESS,
   FETCH_TOP_LIST_FAIL,
@@ -42,7 +44,12 @@ const INITIAL_STATE = {
   shoesNextUri: null,
   etcsNextUri: null,
   clothDetail: null,
-  created: null}
+  created: null,
+  deleted: null,
+  deletedBigType: null,
+  updated: null,
+  updatedBigType: null
+}
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -71,14 +78,20 @@ export default function(state = INITIAL_STATE, action) {
     case C_DETAIL_LOAD_FAIL:
       return { ...state }
     case CREATE_CLOTH_SUCCESS:
-      return { ...state, created: action.payload }
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, created: timeStamp.toString(), createdBigType: action.payload }
     case CREATE_CLOTH_FAIL:
       return { ...state, created: null }
     case UPDATE_CLOTH_SUCCESS:
       var timeStamp = Math.floor(Date.now());
-      return { ...state, updated: timeStamp.toString() }
+      return { ...state, updated: timeStamp.toString(), updatedBigType: action.payload}
     case UPDATE_CLOTH_FAIL:
       return { ...state, updated: null }
+    case DELETE_CLOTH_SUCCESS:
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, deleted: timeStamp.toString(), deletedBigType: action.payload }
+    case DELETE_CLOTH_FAIL:
+      return { ...state }
     default:
       return state;
   }

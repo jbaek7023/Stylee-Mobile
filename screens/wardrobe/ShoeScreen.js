@@ -24,6 +24,17 @@ class ShoeScreen extends Component {
       // loading순간으로 바꿔야할수도... loading했는데 empty면 얻허게 할꺼야?
       this.setState({isLoading: false});
     }
+
+    if(nextProps.deleted && this.props.deleted !== nextProps.deleted) {
+      if(nextProps.deletedBigType=="Shoes") {
+        this.props.fetchShoesAll(this.props.token, this.props.hType);
+      }
+    }
+    if(nextProps.created && this.props.created !== nextProps.created) {
+      if(nextProps.createdBigType=="Shoes") {
+        this.props.fetchShoesAll(this.props.token, this.props.hType);
+      }
+    }
   }
 
   _onEndReachedThreshold = () => {
@@ -126,8 +137,10 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({auth: {token, hType}, wardrobe: {shoes, shoesNextUri}}) {
-  return {token, hType, shoes, nextUri: shoesNextUri}
+function mapStateToProps({auth: {token, hType}, wardrobe: {
+  shoes, shoesNextUri, deleted, deletedBigType,
+  created, createdBigType}}) {
+  return {token, hType, shoes, nextUri: shoesNextUri, deleted, deletedBigType, created, createdBigType}
 }
 
 export default connect(mapStateToProps, actions)(ShoeScreen);

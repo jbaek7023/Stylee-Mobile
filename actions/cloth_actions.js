@@ -7,6 +7,9 @@ import {
   CREATE_CLOTH_FAIL,
   UPDATE_CLOTH_SUCCESS,
   UPDATE_CLOTH_FAIL,
+  DELETE_CLOTH_SUCCESS,
+  DELETE_CLOTH_FAIL,
+
 
   FETCH_TOP_LIST_SUCCESS,
   FETCH_TOP_LIST_FAIL,
@@ -55,7 +58,7 @@ export const createCloth = (token, hType, clothObject) => async dispatch => {
   }, {headers});
 
   if(response.data) {
-    dispatch({ type: CREATE_CLOTH_SUCCESS, payload: response.data })
+    dispatch({ type: CREATE_CLOTH_SUCCESS, payload: bigType })
   } else {
     dispatch({ type: CREATE_CLOTH_FAIL })
   }
@@ -81,9 +84,26 @@ export const editCloth = (token, hType, clothObject) => async dispatch => {
   }, {headers});
 
   if(response.status===200) {
-    dispatch({ type: UPDATE_CLOTH_SUCCESS, payload: response.data })
+    dispatch({ type: UPDATE_CLOTH_SUCCESS, payload: bigType })
   } else {
     dispatch({ type: UPDATE_CLOTH_FAIL })
+  }
+}
+
+export const deleteCloth = (token, hType, cid, bigClothType) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.delete(`${ROOT_URL}/clothes/edit/${cid}/`, {headers});
+
+  if(response.status === 204) {
+    dispatch({ type: DELETE_CLOTH_SUCCESS, payload: bigClothType })
+  } else {
+    dispatch({ type: DELETE_CLOTH_FAIL })
   }
 }
 

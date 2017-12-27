@@ -5,7 +5,6 @@ import { width, height, totalSize } from 'react-native-dimension';
 import * as actions from '../../actions';
 import { RkText } from 'react-native-ui-kitten';
 import { thresholdLength } from '../../utils/scale';
-
 import { Spinner } from 'native-base';
 
 class TopScreen extends Component {
@@ -24,6 +23,16 @@ class TopScreen extends Component {
     if(this.props.tops !== nextProps.tops) {
       // loading순간으로 바꿔야할수도... loading했는데 empty면 얻허게 할꺼야?
       this.setState({isLoading: false});
+    }
+    if(nextProps.deleted && this.props.deleted !== nextProps.deleted) {
+      if(nextProps.deletedBigType=="Top") {
+        this.props.fetchTopAll(nextProps.token, nextProps.hType);
+      }
+    }
+    if(nextProps.created && this.props.created !== nextProps.created) {
+      if(nextProps.createdBigType=="Top") {
+        this.props.fetchTopAll(nextProps.token, nextProps.hType);
+      }
     }
   }
 
@@ -123,8 +132,11 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({auth: {token, hType}, wardrobe: {tops, topNextUri}}) {
-  return {token, hType, tops, nextUri: topNextUri}
+function mapStateToProps({auth: {token, hType}, wardrobe: {
+  tops, topNextUri, deleted, deletedBigType,
+  created, createdBigType
+}}) {
+  return {token, hType, tops, nextUri: topNextUri, deleted, deletedBigType, created, createdBigType}
 }
 
 export default connect(mapStateToProps, actions)(TopScreen);

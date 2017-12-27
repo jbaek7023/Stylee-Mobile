@@ -52,6 +52,8 @@ export const C_DETAIL_LOAD_SUCCESS = 'clothes_detail_sucess';
 export const C_DETAIL_LOAD_FAIL = 'clothes_detail_fail';
 export const UPDATE_CLOTH_SUCCESS = 'update_cloth_success';
 export const UPDATE_CLOTH_FAIL = 'update_cloth_fail';
+export const DELETE_CLOTH_SUCCESS = 'delete_cloth_success';
+export const DELETE_CLOTH_FAIL = 'delete_cloth_fail';
 
 export const FETCH_TOP_LIST_SUCCESS = 'list_top_success';
 export const FETCH_TOP_LIST_FAIL = 'list_top_fail';
