@@ -338,9 +338,6 @@ class AddClothScreen extends Component {
     return seasonList
   }
 
-
-
-
   onCheck = ({selectedStyleIds}) => {
     this.setState({selectedStyleIds});
   }

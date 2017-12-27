@@ -6,9 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {FontAwesome} from '../../assets/icons';
 import {createResponder} from 'react-native-gesture-responder';
 import _ from 'lodash';
-import CroppedImage from '../../components/CroppedImage';
 import SnackBar from 'react-native-snackbar-dialog';
-
 
 import { items } from '../../utils/items';
 
@@ -26,34 +24,6 @@ class TagFromPhoto extends Component {
 
     taggedClothes: {
       //for debuggin purposes
-      0: {
-        id:0,
-        left:100,
-        top:100,
-        thumbSize:100,
-        bigType: 'Top',
-        clothType: 'T-Shirt',
-        selectedSeasonIds: [7, 8, 9, 10],
-        selectedSizeIds: [27],
-        gender: 'Unisex',
-        selectedColorIds: [],
-        onlyMe: false,
-        name: ''
-        },
-      1: {
-        id:1,
-        left:200,
-        top:200,
-        thumbSize:100,
-        bigType: 'Top',
-        clothType: 'T-Shirt',
-        selectedSeasonIds: [7 , 8, 9, 10],
-        selectedSizeIds: [27],
-        gender: 'Unisex',
-        selectedColorIds: [],
-        onlyMe: false,
-        name: ''
-      },
     },
     selectedClothId : 30,
   }
@@ -61,9 +31,6 @@ class TagFromPhoto extends Component {
   componentWillMount() {
     let { taggedClothes } = this.props.navigation.state.params;
     this.setState({taggedClothes});
-
-
-
 
     this.gestureResponder = createResponder({
       onStartShouldSetResponder: (evt, gestureState) => true,

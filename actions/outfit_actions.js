@@ -9,6 +9,8 @@ import {
   CREATE_STYLE_FAIL,
   LOAD_NEXT_OUTFIT_SUCCESS,
   LOAD_NEXT_OUTFIT_FAIL,
+  EDIT_STYLE_SUCCESS,
+  EDIT_STYLE_FAIL,
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
@@ -33,6 +35,29 @@ export const createStyle = (token, hType, styleObject) => async dispatch => {
     dispatch({ type: CREATE_STYLE_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: CREATE_STYLE_FAIL })
+  }
+}
+
+export const editStyle = (token, hType, styleObject) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let { id, name, gender, location, description,
+  selectedClothesIds, taggedClothes, onlyMe, link } = styleObject;
+
+  let response = await axios.put(`${ROOT_URL}/outfits/update/`, {
+    oid:id, name, gender, location, description,
+    selectedClothesIds, taggedClothes, onlyMe, link
+  }, {headers});
+
+  if(response.data) {
+    dispatch({ type: EDIT_STYLE_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: EDIT_STYLE_FAIL })
   }
 }
 
@@ -69,7 +94,7 @@ export const loadOutfitNextAll = (token, hType, nextUri) => async dispatch => {
   }
 };
 
-export const fetchOutfitDetail = (token, hType, id) => async dispatch => {
+export const fetchOutfitDetail = (token, hType, id, callback) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};
   if(hType==1) {
     headers = { 'Authorization': `JWT ${token}`};
@@ -78,6 +103,9 @@ export const fetchOutfitDetail = (token, hType, id) => async dispatch => {
   }
 
   let response = await axios.get(`${ROOT_URL}/outfits/detail/${id}`, { headers });
+  if(callback) {
+    callback();
+  }
   if (response.status === 200) {
     dispatch({ type: O_DETAIL_LOAD_SUCCESS, payload: response.data })
   } else {

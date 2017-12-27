@@ -30,8 +30,6 @@ import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
 
-
-
 class MenuScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Menu',

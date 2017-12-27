@@ -4,7 +4,22 @@ import { connect } from 'react-redux';
 import { width, height, totalSize } from 'react-native-dimension';
 import * as actions from '../../actions';
 import { CheckBox } from 'native-base';
+
 class OutwearScreen extends Component {
+  static navigationOptions = ({navigation}) => ({
+    tabBarVisible: false,
+  })
+
+  componentWillMount() {
+    if(this.props.token) {
+      this.props.fetchOuterwearAll(this.props.token, this.props.hType);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+  }
+
   _keyExtractor = (item, index) => item.id;
 
   _renderItem = ({item}) => {
@@ -29,7 +44,7 @@ class OutwearScreen extends Component {
   }
 
   render() {
-    if(this.props.clothes && this.props.clothes.length==0) {
+    if(this.props.outerwears && this.props.outerwears.length==0) {
       return (
         <View style={{ flex:1 }}>
           <Text>`Your Outwear slot is empty. Why don't you add more?`</Text>
@@ -40,7 +55,7 @@ class OutwearScreen extends Component {
       <View style={{ flex:1 }}>
         <ScrollView automaticallyAdjustContentInsets={false}>
           <FlatList
-            data={this.props.clothes}
+            data={this.props.outerwears}
             renderItem={this._renderItem}
             keyExtractor={this._keyExtractor}
             extraData={this.props.selectedClothesIds}
@@ -61,4 +76,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(null, actions)(OutwearScreen);
+function mapStateToProps({auth: {token, hType}, wardrobe: {outerwears}}) {
+  return {token, hType, outerwears}
+}
+
+export default connect(mapStateToProps, actions)(OutwearScreen);

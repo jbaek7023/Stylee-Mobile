@@ -31,8 +31,6 @@ class EditOutfitScreen extends Component {
   })
 
   state = {
-    newScreen: false,
-    base64: undefined,
     name: this.props.navigation.state.params.detail.content,
     textHeight: 0,
     image: this.props.navigation.state.params.detail.outfit_img,
@@ -48,12 +46,20 @@ class EditOutfitScreen extends Component {
     taggedClothes: [],
     manualTrigger: true,
     link: this.props.navigation.state.params.detail.link,
+    width: 0,
+    height: 0
   }
 
   componentWillMount() {
     this.setState({
       selectedClothesIds: this.props.navigation.state.params.detail.tagged_clothes.map(item=>item.id)
     });
+    Image.getSize(
+      this.props.navigation.state.params.detail.outfit_img,
+      (width, height) => {
+        this.setState({width, height});
+      }
+    );
   }
 
   _setClothImage = (image) => {this.setState({image});}
@@ -181,6 +187,7 @@ class EditOutfitScreen extends Component {
       link: item.link
     }));
     if(image) {
+      console.log(taggedClothes)
       this.props.navigation.navigate('TagFromPhoto', {image, tagFromPhoto: this.tagFromPhoto, taggedClothes});
     } else {
       this._showModal();
@@ -223,16 +230,16 @@ class EditOutfitScreen extends Component {
               <TouchableOpacity onPress={
                 () => {
                   let {
-                    name, base64, gender,
+                    name, gender,
                       location, description,
                     selectedClothesIds, taggedClothes, onlyMe, link } = this.state;
                   let {token, hType} = this.props;
+                  let { id } = this.props.navigation.state.params.detail;
                   if(token) {
-                    this.props.editStyle(token, hType, { name, base64, gender,
+                    this.props.editStyle(token, hType, { id, name, gender,
                       location, description,
                     selectedClothesIds, taggedClothes, onlyMe, link  });
                   }
-                  this._clearImagesFromImageStore();
                   this.props.navigation.goBack();
                 }}>
                 <RkText rkType="header3">SAVE</RkText>
@@ -383,10 +390,6 @@ class EditOutfitScreen extends Component {
         keyExtractor={this._keyExtractor}
       />
     );
-  }
-
-  _setToCreateScreen = (newScreen) => {
-    this.setState({newScreen});
   }
 
   render() {

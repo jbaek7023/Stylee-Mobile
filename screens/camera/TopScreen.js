@@ -6,6 +6,10 @@ import * as actions from '../../actions';
 import { CheckBox } from 'native-base';
 
 class TopScreen extends Component {
+  static navigationOptions = ({navigation}) => ({
+    tabBarVisible: false,
+  })
+
   componentWillMount() {
     if(this.props.token) {
       this.props.fetchTopAll(this.props.token, this.props.hType);
@@ -40,7 +44,7 @@ class TopScreen extends Component {
   }
 
   render() {
-    if(this.props.clothes && this.props.clothes.length==0) {
+    if(this.props.tops && this.props.tops.length==0) {
       return (
         <View style={{ flex:1 }}>
           <Text>`Your Outwear slot is empty. Why don't you add more?`</Text>

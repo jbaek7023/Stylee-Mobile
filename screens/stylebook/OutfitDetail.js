@@ -53,6 +53,18 @@ class OutfitDetail extends Component {
       this.setState({isLoading: false});
     }
 
+    if(nextProps.edited && (this.props.edited !== nextProps.edited)) {
+      const { token, hType } = nextProps;
+      const { id } = this.props.navigation.state.params;
+      this.setState({isLoading: true});
+      this.props.fetchOutfitDetail(
+        token, hType, id,
+        ()=>{
+          this.setState({isLoading:false})
+        }
+      );
+    }
+
     // check follonwing, liked, starred
     let isFollowing = nextProps.outfitDetail.is_following;
     let { liked, starred } = nextProps.outfitDetail;
@@ -180,7 +192,7 @@ class OutfitDetail extends Component {
 
   _renderFollow = (isOwner, isFollowing, userPk) => {
     return (
-      <TouchableOpacity onPress={()=>{this._handleMenuPress()}}>
+      <TouchableOpacity style={{height:55, justifyContent: 'center'}} onPress={()=>{this._handleMenuPress()}}>
         <Ionicons name="ios-more" size={32} style={{ marginLeft: 5 }}/>
       </TouchableOpacity>
     );
@@ -544,8 +556,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail}, category: {listOnOutfit, name, added, removed}}) {
-  return { token, hType, outfitDetail, listOnOutfit, name, added, removed }
+function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail, edited}, category: {listOnOutfit, name, added, removed}}) {
+  return { token, hType, outfitDetail, listOnOutfit, name, added, removed, edited}
 }
 
 export default connect(mapStateToProps, actions)(OutfitDetail);

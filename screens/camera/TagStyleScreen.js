@@ -40,8 +40,6 @@ class TagStyleScreen extends Component {
     ),
   })
 
-
-
   state = {
     selectedStyleIds: this.props.navigation.state.params.selectedStyleIds
   }
@@ -49,7 +47,7 @@ class TagStyleScreen extends Component {
   _handleImagePress = (id) => {
     // add image to selected press
     // add id to the array.
-    let ids = this.state.selectedStyleIdsc
+    let ids = this.state.selectedStyleIds
     if(ids == undefined) {
       ids = [];
     }

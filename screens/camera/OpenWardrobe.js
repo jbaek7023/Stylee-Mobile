@@ -1,63 +1,33 @@
 import React, { Component } from 'react';
-import { Image, View, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, FlatList, Text } from 'react-native';
-import Modal from 'react-native-modal';
-import { Button, CheckBox, ScrollableTab } from 'native-base';
-import { width, height, totalSize } from 'react-native-dimension';
-import { RkText, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import FABs from '../../components/common/FABs';
+import { Tabs, Tab, TabHeading, ScrollableTab } from 'native-base';
+
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import {FontAwesome} from '../../assets/icons';
-import { threeImageWidth } from '../../utils/scale';
-import _ from 'lodash';
-import {UIConstants} from '../../config/appConstants';
 
 import TopScreen from './TopScreen';
 import OutwearScreen from './OutwearScreen';
 import BottomScreen from './BottomScreen';
 import ShoeScreen from './ShoeScreen';
 import EtcScreen from './EtcScreen';
+import CameraImageSelectModal from '../../components/common/CameraImageSelectModal';
+import {FontAwesome} from '../../assets/icons';
+import { RkText, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
 
-import { Tabs, Tab, TabHeading } from 'native-base';
-import { NavBar } from '../../components/navBar';
-import {withRkTheme} from 'react-native-ui-kitten'
-let ThemedNavigationBar = withRkTheme(NavBar);
-
-class OpenWardrobe extends Component {
-  // normal navigation
-  static navigationOptions = ({ navigation, screenProps }) => ({
-    gesturesEnabled: false,
+class WardrobeWrappingScreen extends Component {
+  static navigationOptions = ({navigation}) => ({
+    header: null,
     tabBarVisible: false,
-    header: null
   })
 
-  componentWillMount() {
-
-  }
-
   state = {
-    selectedClothesIds: this.props.navigation.state.params.selectedClothesIds
+    isModalVisible: false,
+    selectedClothesIds: this.props.navigation.state.params.selectedClothesIds,
   }
 
-  _handleImagePress = (id) => {
-    // add image to selected press
-    // add id to the array.
-    let ids = this.state.selectedClothesIds;
-    if(_.includes(ids, id)) {
-      let newSelectedClothesIds = _.filter(ids, (curObject) => {
-          return curObject !== id;
-      });
-      this.setState({selectedClothesIds : newSelectedClothesIds});
-      this.props.navigation.setParams({
-        selectedClothesIds: newSelectedClothesIds
-      })
-    } else {
-      let newSelectedClothesIds = [...ids, id];
-      this.setState({selectedClothesIds : newSelectedClothesIds});
-      this.props.navigation.setParams({
-        selectedClothesIds: newSelectedClothesIds
-      })
-    }
-  }
+  _showModal = () => this.setState({ isModalVisible: true })
+  _hideModal = () => this.setState({ isModalVisible: false })
 
   _renderHeader = () => {
     return (
@@ -92,12 +62,29 @@ class OpenWardrobe extends Component {
     );
   }
 
+  _handleImagePress = (id) => {
+    let ids = this.state.selectedClothesIds
+    if(ids == undefined) {
+      ids = [];
+    }
+    if(_.includes(ids, id)) {
+      let newSelectedClothesIds = _.filter(ids, (curObject) => {
+          return curObject !== id;
+      });
+      this.setState({selectedClothesIds : newSelectedClothesIds});
+    } else {
+      let newSelectedClothesIds = [...ids, id];
+      this.setState({selectedClothesIds : newSelectedClothesIds});
+    }
+  }
+
   render() {
     return (
       <View style={{flex:1}}>
         {this._renderHeader()}
         <Tabs initialPage={0}
           tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+          locked={true}
           renderTabBar={()=> <ScrollableTab style={{height:40}}/>}>
           <Tab
             heading="Top"
@@ -106,10 +93,9 @@ class OpenWardrobe extends Component {
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
             <TopScreen
-              clothes={this.props.tops}
+              navigation={this.props.navigation}
               selectedClothesIds={this.state.selectedClothesIds}
-              handleImagePress={this._handleImagePress}
-              />
+              handleImagePress={this._handleImagePress}/>
           </Tab>
           <Tab
             heading="Outerwear"
@@ -118,10 +104,9 @@ class OpenWardrobe extends Component {
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
             <OutwearScreen
-              clothes={this.props.outwears}
+              navigation={this.props.navigation}
               selectedClothesIds={this.state.selectedClothesIds}
-              handleImagePress={this._handleImagePress}
-            />
+              handleImagePress={this._handleImagePress}/>
           </Tab>
           <Tab
             heading="Bottom"
@@ -130,10 +115,9 @@ class OpenWardrobe extends Component {
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
            <BottomScreen
-            clothes={this.props.bottoms}
+            navigation={this.props.navigation}
             selectedClothesIds={this.state.selectedClothesIds}
-            handleImagePress={this._handleImagePress}
-            />
+            handleImagePress={this._handleImagePress}/>
           </Tab>
           <Tab
             heading="Shoes"
@@ -142,62 +126,36 @@ class OpenWardrobe extends Component {
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
             <ShoeScreen
-              clothes={this.props.shoes}
+              navigation={this.props.navigation}
               selectedClothesIds={this.state.selectedClothesIds}
-              handleImagePress={this._handleImagePress}
-            />
+              handleImagePress={this._handleImagePress}/>
           </Tab>
           <Tab
-            heading="ETC"
+            heading="Others"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}>
             <EtcScreen
-              clothes={this.props.etcs}
+              navigation={this.props.navigation}
               selectedClothesIds={this.state.selectedClothesIds}
-              handleImagePress={this._handleImagePress}
-            />
+              handleImagePress={this._handleImagePress}/>
           </Tab>
         </Tabs>
         <View style={styles.footer}>
-          <RkText rkType="primary2">{this.state.selectedClothesIds.length} Style Selected</RkText>
+          <RkText rkType="primary2">{this.state.selectedClothesIds.length} Item Selected</RkText>
         </View>
       </View>
-    );
+    )
   }
+}
 
-  componentDidMount() {
-    this.props.fetchClothesAll(this.props.token, this.props.hType);
-  }
-};
-
-const styles = RkStyleSheet.create(theme => ({
-  root: {
-    backgroundColor: theme.colors.screen.base,
-    flex: 1
-  },
-  rowImage:{
-    width: threeImageWidth,
-    height: threeImageWidth,
-    marginRight: 2,
-    marginTop: 2
-  },
+let styles = RkStyleSheet.create(theme => ({
   footer: {
     padding: 10,
     backgroundColor: theme.colors.screen.alter,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  layoutheader: {
-    backgroundColor: theme.colors.navbar,
-    paddingTop: UIConstants.StatusbarHeight,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: theme.colors.border.base
-  },
-  containerheader: {
-    flexDirection: 'row',
-    height: UIConstants.AppbarHeight,
   },
   tabStyle : {
     backgroundColor: 'white',
@@ -220,11 +178,12 @@ const styles = RkStyleSheet.create(theme => ({
     backgroundColor: theme.colors.navbar,
     height: 2
   },
-  footer: {
-    padding: 10,
-    backgroundColor: theme.colors.screen.alter,
-    alignItems: 'center',
-    justifyContent: 'center'
+  content: {
+    flex: 1,
+  },
+  contentHeader: {
+    justifyContent: 'space-between',
+    paddingLeft: 10
   },
   header: {
     height: 55,
@@ -260,21 +219,13 @@ const styles = RkStyleSheet.create(theme => ({
     justifyContent: 'center',
   },
   menu: {
-    width: 50
-  },
-  content: {
-    flex: 1,
-  },
-  contentHeader: {
-    justifyContent: 'center',
-  },
+    width: 40
+  }
 }));
 
-function mapStateToProps({
-    auth: {token, hType},
-    wardrobe: { clothesList: {tops, bottoms, outwears, shoes, etcs} }
-  }) {
-  return { token, hType, tops, outwears, bottoms, shoes, etcs };
+
+function mapStateToProps({auth: {token, hType}}) {
+  return { token, hType };
 }
 
-export default connect(mapStateToProps, actions)(OpenWardrobe);
+export default connect(mapStateToProps, actions)(WardrobeWrappingScreen);
