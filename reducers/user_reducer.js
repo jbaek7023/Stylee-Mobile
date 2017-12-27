@@ -53,6 +53,17 @@ const INITIAL_STATE = {
 
   categoryList: [],
   cateNextUri: null,
+
+  tops: [],
+  topNextUri: null,
+  outerwears: [],
+  outNextUri: null,
+  bottoms: [],
+  botNextUri: null,
+  shoes: [],
+  shoNextUri: null,
+  etcs: [],
+  etcsNextUri: null,
 }
 
 export default function(state = INITIAL_STATE, action) {
@@ -76,7 +87,6 @@ export default function(state = INITIAL_STATE, action) {
       }
     case USER_PAGE_NEXT_FETCH_FAIL:
       return { ...state }
-
     case FETCH_USER_CATEGORIES_BY_USER_ID_SUCCESS:
       return {...state, categoryList: action.payload.results, cateNextUri: action.payload.next }
     case FETCH_USER_CATEGORIES_BY_USER_ID_FAIL:
@@ -85,6 +95,47 @@ export default function(state = INITIAL_STATE, action) {
       return {...state, categoryList: state.categoryList.concat(action.payload.results), cateNextUri: action.payload.next }
     case FETCH_NEXT_CATEGORIES_BY_USER_ID_FAIL:
       return { ...state }
+    case FETCH_USER_TOP_BY_USER_ID_SUCCESS:
+      return {...state, tops: action.payload.results, topNextUri: action.payload.next }
+    case FETCH_USER_TOP_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_NEXT_TOP_BY_USER_ID_SUCCESS:
+      return {...state, tops: state.tops.concat(action.payload.results), topNextUri: action.payload.next }
+    case FETCH_NEXT_TOP_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_USER_OUTERWEAR_BY_USER_ID_SUCCESS:
+      return {...state, outerwears: action.payload.results, outNextUri: action.payload.next }
+    case FETCH_USER_OUTERWEAR_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_NEXT_OUTERWEAR_BY_USER_ID_SUCCESS:
+      return {...state, outerwears: state.outerwears.concat(action.payload.results), outNextUri: action.payload.next }
+    case FETCH_NEXT_OUTERWEAR_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_USER_BOTTOM_BY_USER_ID_SUCCESS:
+      return {...state, bottoms: action.payload.results, botNextUri: action.payload.next }
+    case FETCH_USER_BOTTOM_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_NEXT_BOTTOM_BY_USER_ID_SUCCESS:
+      return {...state, bottoms: state.bottoms.concat(action.payload.results), botNextUri: action.payload.next }
+    case FETCH_NEXT_BOTTOM_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_USER_SHOES_BY_USER_ID_SUCCESS:
+      return {...state, shoes: action.payload.results, shoNextUri: action.payload.next }
+    case FETCH_USER_SHOES_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_NEXT_SHOES_BY_USER_ID_SUCCESS:
+      return {...state, shoes: state.shoes.concat(action.payload.results), shoNextUri: action.payload.next }
+    case FETCH_NEXT_SHOES_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_USER_ETCS_BY_USER_ID_SUCCESS:
+      return {...state, etcs: action.payload.results, etcsNextUri: action.payload.next }
+    case FETCH_USER_ETCS_BY_USER_ID_FAIL:
+      return { ...state }
+    case FETCH_NEXT_ETCS_BY_USER_ID_SUCCESS:
+      return {...state, etcs: state.etcs.concat(action.payload.results), etcsNextUri: action.payload.next }
+    case FETCH_NEXT_ETCS_BY_USER_ID_FAIL:
+      return { ...state }
+
     case USER_FOLLOW_SUCCESS:
       return { ...state }
     case USER_FOLLOW_FAIL:

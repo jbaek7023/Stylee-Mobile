@@ -14,6 +14,12 @@ import OpenWardrobe from '../screens/camera/OpenWardrobe';
 import FABs from '../components/common/FABs';
 import TagFromPhoto from '../screens/camera/TagFromPhoto';
 import EditTaggedItem from '../screens/camera/EditTaggedItem';
+import FollowerScreen from '../screens/profile/FollowerScreen';
+import FollowingScreen from '../screens/profile/FollowingScreen';
+import UserCategoryScreen from '../screens/profile/UserCategoryScreen';
+import UserWardrobeScreen from '../screens/profile/UserWardrobeScreen';
+import EditOutfitScreen from '../screens/stylebook/EditOutfitScreen';
+import EditClothScreen from '../screens/wardrobe/EditClothScreen';
 
 export default StackNavigator ({
   Stylebooko: {
@@ -57,6 +63,24 @@ export default StackNavigator ({
   },
   EditTaggedItem: {
     screen: EditTaggedItem
+  },
+  FollowerList: {
+    screen: FollowerScreen
+  },
+  FollowingList: {
+    screen: FollowingScreen
+  },
+  UserCategoryList: {
+    screen: UserCategoryScreen
+  },
+  UserWardrobe: {
+    screen: UserWardrobeScreen
+  },
+  EditOutfit: {
+    screen: EditOutfitScreen
+  },
+  EditCloth: {
+    screen: EditClothScreen
   }
 }, {
     navigationOptions:({navigation, screenProps})=>({

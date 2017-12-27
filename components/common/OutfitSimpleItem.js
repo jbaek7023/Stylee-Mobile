@@ -76,7 +76,7 @@ class OutfitSimpleItem extends Component {
 
   _renderAvatar = (uri) => {
     if(_.isNil(uri)) {
-      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/robot-dev.png')}/>)
+      return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/default_profile.png')}/>)
     }
     return (
       <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
@@ -205,7 +205,6 @@ class OutfitSimpleItem extends Component {
           </TouchableWithoutFeedback>
 
         	<View style={styles.socialContainer}>
-
         		<SocialBar
               isLiked={this.state.liked}
               isStarred={this.state.starred}

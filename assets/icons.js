@@ -38,4 +38,6 @@ export const FontAwesome = {
   all: String.fromCharCode(61612),
   edit: String.fromCharCode(61504),
   delete: String.fromCharCode(61453),
+  detailMenu: String.fromCharCode(61761),
+  warning: String.fromCharCode(61553),
 };

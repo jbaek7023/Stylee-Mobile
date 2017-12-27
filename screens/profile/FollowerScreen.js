@@ -1,20 +1,38 @@
 import React, { Component } from 'react';
 import { RkText, RkTextInput, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
-import { findNodeHandle, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
+import { findNodeHandle, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import {FontAwesome} from '../../assets/icons';
 import * as actions from '../../actions';
+import { thresholdLength } from '../../utils/scale';
+import { Avatar } from '../../components/Avatar';
+import { Spinner } from 'native-base';
 
 class FollowerScreen extends Component {
   static navigationOptions = () => ({
     gesturesEnabled: false,
-    tabBarVisible: false,
     header: null
   })
 
   state = {
     followers: [],
-    loading: false,
+    isLoading: true,
+    followers: [],
+    nextUri: null,
+    noInternetConnection: false,
+  }
+
+  componentDidMount() {
+    let { token, hType } = this.props;
+    let { userPk } = this.props.navigation.state.params;
+    this.props.retrieveFollowersByUser(
+      token, hType, userPk, (followers, nextUri) => {
+        this.setState({followers, nextUri, isLoading: false});
+      },
+      () => {
+        this.setState({isLoading: false, noInternetConnection: true});
+      }
+    );
   }
 
   _renderHeader = () => {
@@ -41,11 +59,86 @@ class FollowerScreen extends Component {
     );
   }
 
+  _onEndReachedThreshold = () => {
+    if(this.state.nextUri) {
+      this.props.retrieveNextFollowByUser(
+        token, hType, this.state.nextUri, (followers, nextUri) => {
+          let newFollowers = this.state.followers.concat(followers);
+          this.setState({followers: newFollowers, nextUri, isLoading: false});
+        }
+      );
+    }
+  }
+
+  _keyExtractor = (item, index) => item.id;
+
+  _renderAvatar = (uri) => {
+    if(_.isNil(uri)) {
+      return (<Avatar rkType='circle' img={require('../../assets/images/default_profile.png')}/>)
+    }
+    return (
+      <Avatar rkType='circle' img={{uri}}/>
+    );
+  }
+
+  _renderName = (name, username) => {
+    if(name) {
+      return (
+        <RkText rkType='secondary2 hintColor'>{name}</RkText>
+      );
+    }
+    return (
+      <RkText rkType='secondary2 hintColor'>{username}</RkText>
+    );
+  }
+
+  _renderItem = ({item}) => {
+    let { image, name, username, id} = item.target;
+    return (
+      <TouchableOpacity
+        style={styles.headerLayout}
+        onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
+        <View rkCardHeader style={styles.left}>
+          <View>
+            {this._renderAvatar(image)}
+          </View>
+          <View
+            style={styles.content}>
+            <View style={styles.contentHeader}>
+              <RkText rkType='header5'>{username}</RkText>
+              {this._renderName(name, username)}
+
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
   render() {
+    if(this.state.isLoading) {
+      return (
+        <View style={{flex:1}}>
+          {this._renderHeader()}
+          <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+            <Spinner color='#6F3AB1'/>
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={{flex:1}}>
         {this._renderHeader()}
-        <View><RkText>YO!</RkText></View>
+        <FlatList
+          data={this.state.followers}
+          renderItem={ this._renderItem }
+          keyExtractor={this._keyExtractor}
+          numColumns={1}
+          onEndReachedThreshold={thresholdLength}
+          onEndReached = {()=>{
+            this._onEndReachedThreshold()
+          }}
+        />
       </View>
     );
   }
@@ -53,36 +146,11 @@ class FollowerScreen extends Component {
 
 let styles = RkStyleSheet.create(theme => ({
   container: {
-    backgroundColor: theme.colors.screen.base,
-  },
-  switch: {
-    marginVertical: 0
-  },
-  row: {
+    paddingLeft: 19,
+    paddingRight: 16,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 0,
-    paddingLeft:20
-  },
-  titleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  drow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headContainer: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#cfcfd6',
-    justifyContent: 'center'
-  },
-  leftheadContainer: {
-    width:90
+    height: 50,
   },
   imageContainer: {
     margin:10,
@@ -103,10 +171,6 @@ let styles = RkStyleSheet.create(theme => ({
   headImageStyle: {
     width:45,
     height: 45
-  },
-  rightheadContainer: {
-    alignItems: 'stretch',
-    flex: 1
   },
   dHeader: {
     color: theme.colors.primary,
@@ -161,7 +225,8 @@ let styles = RkStyleSheet.create(theme => ({
     alignItems: 'center',
     flexDirection: 'row',
     flex: 1,
-    backgroundColor: theme.colors.screen.base
+    backgroundColor: theme.colors.screen.base,
+    padding: 10,
   },
   left: {
     flexDirection: 'row',
@@ -181,7 +246,8 @@ let styles = RkStyleSheet.create(theme => ({
     flex: 1,
   },
   contentHeader: {
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: 10
   },
 }));
 

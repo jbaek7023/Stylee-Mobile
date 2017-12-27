@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
-import { RkText, RkTextInput, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
-import { findNodeHandle, ScrollView, View, List, Image, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
-import { connect } from 'react-redux';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import FABs from '../../components/common/FABs';
+import { Tabs, Tab, TabHeading, ScrollableTab } from 'native-base';
+import TopScreen from './TopScreen';
+import OutwearScreen from './OutwearScreen';
+import BottomScreen from './BottomScreen';
+import ShoeScreen from './ShoeScreen';
+import EtcScreen from './EtcScreen';
+import { RkStyleSheet, RkButton, RkText } from 'react-native-ui-kitten';
 import {FontAwesome} from '../../assets/icons';
+import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 class UserWardrobeScreen extends Component {
-  static navigationOptions = () => ({
-    gesturesEnabled: false,
-    tabBarVisible: false,
+  static navigationOptions = ({navigation}) => ({
     header: null
   })
 
-  state = {
-    followers: [],
-    loading: false,
-  }
 
   _renderHeader = () => {
     return (
@@ -41,105 +42,100 @@ class UserWardrobeScreen extends Component {
     );
   }
 
+
   render() {
+    let { userPk } = this.props.navigation.state.params;
     return (
-      <View style={{flex:1}}>
-        {this._renderHeader()}
-        <View><RkText>YO!</RkText></View>
+      <View style={{flex: 1}}>
+        <View>
+          {this._renderHeader()}
+        </View>
+          <Tabs initialPage={0}
+            tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
+            locked={true}
+            renderTabBar={()=> <ScrollableTab style={{height:40}}/>}>
+            <Tab
+              heading="Top"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+              <TopScreen
+                navigation={this.props.navigation}
+                userPk={userPk}/>
+            </Tab>
+            <Tab
+              heading="Outerwear"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+              <OutwearScreen navigation={this.props.navigation} userPk={userPk}/>
+            </Tab>
+            <Tab
+              heading="Bottom"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+             <BottomScreen navigation={this.props.navigation} userPk={userPk}/>
+            </Tab>
+            <Tab
+              heading="Shoes"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+              <ShoeScreen navigation={this.props.navigation} userPk={userPk}/>
+            </Tab>
+            <Tab
+              heading="Others"
+              tabStyle={styles.tabStyle}
+              activeTabStyle={styles.activeTabStyle}
+              activeTextStyle={styles.activeTextStyle}
+              textStyle={styles.textStyle}>
+              <EtcScreen navigation={this.props.navigation} userPk={userPk}/>
+            </Tab>
+          </Tabs>
       </View>
-    );
+    )
   }
 }
 
 let styles = RkStyleSheet.create(theme => ({
-  container: {
-    backgroundColor: theme.colors.screen.base,
+  tabStyle : {
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    height: 40
   },
-  switch: {
-    marginVertical: 0
+  activeTabStyle: {
+    backgroundColor: 'white',
+    height: 40,
   },
-  row: {
+  textStyle: {
+    color: "#6d6d6d",
+    fontSize: 14
+  },
+  activeTextStyle: {
+    color: theme.colors.navbar,
+    fontSize: 14
+  },
+  tabBarUnderlineStyle: {
+    backgroundColor: theme.colors.navbar,
+    height: 2
+  },
+  left: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 0,
-    paddingLeft:20
+    justifyContent: 'center',
   },
-  titleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  menu: {
+    width: 50
   },
-  drow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headContainer: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#cfcfd6',
-    justifyContent: 'center'
-  },
-  leftheadContainer: {
-    width:90
-  },
-  imageContainer: {
-    margin:10,
-    height: 70,
-    justifyContent: 'center'
-  },
-  inputStyle: {
-    marginTop:10,
-    marginBottom:10,
+  content: {
     flex: 1,
-    fontSize: 15,
-    marginRight: 10,
   },
-  headValidStyle: {
-    width: 70,
-    height: 70
-  },
-  headImageStyle: {
-    width:45,
-    height: 45
-  },
-  rightheadContainer: {
-    alignItems: 'stretch',
-    flex: 1
-  },
-  dHeader: {
-    color: theme.colors.primary,
-  },
-  dContainer: {
-    padding: 10
-  },
-  contextSeperator: {
-    backgroundColor: "#e6e6ee",
-    height: 0.5
-  },
-  modalTitleTextContainer: {
-    flexDirection: 'row',
-    flex:1
-  },
-  modalContentTextContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    padding: 10
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    flex: 1,
-    overflow: 'hidden'
-  },
-  black: {
-    color: 'black'
-  },
-  moreDetailStyle: {
-    flex: 1,
-    textAlign: 'right',
-    fontSize: 15,
+  contentHeader: {
+    justifyContent: 'center',
   },
   header: {
     height: 55,
@@ -161,31 +157,13 @@ let styles = RkStyleSheet.create(theme => ({
     alignItems: 'center',
     flexDirection: 'row',
     flex: 1,
-    backgroundColor: theme.colors.screen.base
-  },
-  left: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  right: {
-    position: 'absolute',
-    right: 15,
-    top: 0,
-    bottom: 0,
-    justifyContent: 'center',
-  },
-  menu: {
-    width: 50
-  },
-  content: {
-    flex: 1,
-  },
-  contentHeader: {
-    justifyContent: 'center',
+    backgroundColor: 'white'
   },
 }));
 
+
 function mapStateToProps({auth: {token, hType}}) {
-  return {token, hType}
+  return { token, hType };
 }
+
 export default connect(mapStateToProps, actions)(UserWardrobeScreen);

@@ -7,7 +7,9 @@ export const AvatarTypes = (theme) => {
       },
       image: {
         width: 40,
-        height: 40
+        height: 40,
+        borderWidth: 0.5,
+        borderColor: '#808080',
       },
       badge: {
         width: 15,
@@ -17,7 +19,7 @@ export const AvatarTypes = (theme) => {
         justifyContent: 'center',
         position: 'absolute',
         bottom: -2,
-        right: -2
+        right: -2,
       },
       badgeText: {
         backgroundColor: 'transparent',

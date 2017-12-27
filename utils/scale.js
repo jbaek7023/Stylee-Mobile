@@ -10,6 +10,6 @@ const scaleVertical = size => height / guidelineBaseHeight * size;
 const scaleModerate = (size, factor = 0.5) => size + ( scale(size) - size ) * factor;
 
 const threeImageWidth = (width-4)/3;
-const thresholdLength = 700;
+const thresholdLength = 0.5;
 
 export {scale, scaleVertical, scaleModerate, threeImageWidth};

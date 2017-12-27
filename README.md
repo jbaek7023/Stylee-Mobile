@@ -137,26 +137,9 @@ People
 => import { StackNavigator } from '../'
 
 2.0-.
-```
 jest-haste-map: Watchman crawl failed. Retrying once with node crawler.
-  Usually this happens when watchman isn't running. Create an empty `.watchmanconfig` file in your project's root folder or initialize a git or hg repository in your project.
-  Error: Watchman error: A non-recoverable condition has triggered.  Watchman needs your help!
-The triggering condition was at timestamp=1502849928: inotify-add-watch(/home/jaemin/Desktop/Stylee/workspace/Stylee-Mobile/node_modules/lottie-react-native/lib/android/build/intermediates/classes/debug/com/facebook/drawee/backends) -> The user limit on the total number of inotify watches was reached; increase the fs.inotify.max_user_watches sysctl
-All requests will continue to fail with this message until you resolve
-the underlying problem.  You will find more information on fixing this at
-https://facebook.github.io/watchman/docs/troubleshooting.html#poison-inotify-add-watch. Make sure watchman is running for this project. See https://facebook.github.io/watchman/docs/troubleshooting.html.
+
 ```
-=> sudo sysctl fs.inotify.max_user_watches=32768
-=> restart atom
-=> echo 32768 | sudo tee -a /proc/sys/fs/inotify/max_user_watches
-
-
-2- facebook::react::Recoverable: Could not open file: No such file or directory
-after reload
-The development server returned response error code: 502 ...
-Failed to complete tunnel connection
-
-=> (watchman is not working!)
 echo 256 | sudo tee -a /proc/sys/fs/inotify/max_user_instances
 # sudo 니까 일단 첫번째껏만
 echo 32768 | sudo tee -a /proc/sys/fs/inotify/max_queued_events
@@ -164,6 +147,22 @@ echo 65536 | sudo tee -a /proc/sys/fs/inotify/max_user_watches
 watchman shutdown-server
 watchman watch-del-all
 and restart project
+```
+
+
+  Usually this happens when watchman isn't running. Create an empty `.watchmanconfig` file in your project's root folder or initialize a git or hg repository in your project.
+  Error: Watchman error: A non-recoverable condition has triggered.  Watchman needs your help!
+The triggering condition was at timestamp=1502849928: inotify-add-watch(/home/jaemin/Desktop/Stylee/workspace/Stylee-Mobile/node_modules/lottie-react-native/lib/android/build/intermediates/classes/debug/com/facebook/drawee/backends) -> The user limit on the total number of inotify watches was reached; increase the fs.inotify.max_user_watches sysctl
+All requests will continue to fail with this message until you resolve
+the underlying problem.  You will find more information on fixing this at
+https://facebook.github.io/watchman/docs/troubleshooting.html#poison-inotify-add-watch. Make sure watchman is running for this project. See https://facebook.github.io/watchman/docs/troubleshooting.html.
+facebook::react::Recoverable: Could not open file: No such file or directory
+after reload
+The development server returned response error code: 502 ...
+Failed to complete tunnel connection
+=> (watchman is not working!)
+
+
 
 3- exp: “Node version 4.6.1 is not supported, please use Node.js 6.0 or higher
 XDE : Warning: You are using npm version 5.3.0. There may be bugs in this

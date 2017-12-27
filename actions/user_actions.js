@@ -68,6 +68,51 @@ export const fetchMyProfile = (token, hType, userPk) => async dispatch => {
   }
 }
 
+export const retrieveFollowersByUser = (token, hType, userPk, callback, callback2) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(`${ROOT_URL}/follows/follower/${userPk}/?page=1`, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    callback2();
+  }
+}
+
+export const retrieveFollowingsByUser = (token, hType, userPk, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(`${ROOT_URL}/follows/following/${userPk}/?page=1`, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+export const retrieveNextFollowByUser = (token, hType, nextUri, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(nextUri, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    console.error(e);
+  }
+}
+
 export const fetchNextProfileOutfits = (token, hType, userPk, uri) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};
   if(hType==1) {
@@ -118,6 +163,38 @@ export const fetchUserNextCategoriesById = (token, hType, uri) => async dispatch
     dispatch({ type: FETCH_NEXT_CATEGORIES_BY_USER_ID_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: FETCH_NEXT_CATEGORIES_BY_USER_ID_FAIL })
+  }
+}
+
+export const fetchUserTopAll = (token, hType, userPk) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(`${ROOT_URL}/clothes/clothlist/${userPk}/1/?page=1`, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_USER_TOP_BY_USER_ID_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: FETCH_USER_TOP_BY_USER_ID_FAIL })
+  }
+}
+
+export const fetchUserTopNextAll = (token, hType, uri) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.get(uri, { headers });
+  if (response.status === 200) {
+    dispatch({ type: FETCH_NEXT_TOP_BY_USER_ID_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: FETCH_NEXT_TOP_BY_USER_ID_FAIL })
   }
 }
 

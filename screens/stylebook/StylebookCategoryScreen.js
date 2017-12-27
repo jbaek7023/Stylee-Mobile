@@ -11,6 +11,11 @@ import { thresholdLength } from '../../utils/scale';
 import * as actions from '../../actions';
 
 class StylebookCategoryScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.onEndReachedCalledDuringMomentum = true;
+  }
+
   static navigationOptions = {
   //  title: 'Category'
   }
@@ -44,9 +49,12 @@ class StylebookCategoryScreen extends Component {
   }
 
   _onEndReachedThreshold = () => {
-    let { token, hType, nextUri } = this.props;
-    if(nextUri) {
-      this.props.loadCategoryNextAll(token, hType, nextUri);
+    if(!this.onEndReachedCalledDuringMomentum) {
+      let { token, hType, nextUri } = this.props;
+      if(nextUri) {
+        this.props.loadCategoryNextAll(token, hType, nextUri);
+      }
+      this.onEndReachedCalledDuringMomentum = true;
     }
   }
 
@@ -141,6 +149,7 @@ class StylebookCategoryScreen extends Component {
           onEndReached = {({distanceFromEnd})=>{
             this._onEndReachedThreshold()
           }}
+          onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
         />
       </View>
     )

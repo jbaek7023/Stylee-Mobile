@@ -156,7 +156,7 @@ class UserCategoryScreen extends Component {
               <Image
                 fadeDuration={0}
                 style={styles.imageStyle} source={require('../../assets/images/category.png')}/>
-              <RkText style={styles.imageBottomText} rkType="header5 hintColor">You can create your own category with your outfit styles</RkText>
+              <RkText style={styles.imageBottomText} rkType="header5 hintColor">No category yet</RkText>
             </View>
           </View>
         </View>

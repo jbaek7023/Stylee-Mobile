@@ -43,11 +43,6 @@ class MenuScreen extends Component {
 
   state = {
     isModalVisible: false,
-    sendPush: true,
-    shouldRefresh: false,
-    twitterEnabled: true,
-    googleEnabled: false,
-    facebookEnabled: true
   }
 
   componentWillMount() {
@@ -58,6 +53,7 @@ class MenuScreen extends Component {
   componentWillReceiveProps(nextProps) {
     // retrieve user data // add username and bio to props
     if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
+      //https://stackoverflow.com/questions/43496739/reset-navigation-history-to-login-screen-using-react-navigation
       const backAction = NavigationActions.back({
         key: null
       })
@@ -87,8 +83,9 @@ class MenuScreen extends Component {
 
   _doLogOut = () => {
     // remove stylee token, close modal, set all props null.
-    AsyncStorage.removeItem('stylee_token');
-    AsyncStorage.removeItem('fb_token');
+    // AsyncStorage.removeItem('stylee_token');
+    // AsyncStorage.removeItem('fb_token');
+    AsyncStorage.clear();
     this.setState({ isModalVisible: false })
     this.props.setToken(undefined, undefined, undefined);
   }

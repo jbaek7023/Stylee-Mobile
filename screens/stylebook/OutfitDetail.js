@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, FlatList, TouchableWithoutFeedback, Image } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, FlatList, TouchableWithoutFeedback, Image, Alert } from 'react-native';
 import {
   RkCard,
   RkText,
@@ -17,9 +17,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { width, height, totalSize } from 'react-native-dimension';
 import { threeImageWidth } from '../../utils/scale';
 import CategoryModal from '../../components/common/CategoryModal';
+import MenuModal from '../../components/common/MenuModal';
 import Toast from 'react-native-simple-toast';
 import SnackBar from 'react-native-snackbar-dialog';
 import { Spinner } from 'native-base';
+import Modal from 'react-native-modal';
+
 class OutfitDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
     header: null,
@@ -36,6 +39,7 @@ class OutfitDetail extends Component {
     onlyMe: false,
     taggedCategories: [],
     isLoading: true,
+    isMenuOpen: false,
   }
 
   componentWillMount() {
@@ -170,34 +174,16 @@ class OutfitDetail extends Component {
 
   _keyExtractor = (item, index) => item.id;
 
+  _handleMenuPress = () => {
+    this.setState({isMenuOpen: true});
+  }
+
   _renderFollow = (isOwner, isFollowing, userPk) => {
-    let { token, hType } = this.props;
-    if(!isOwner) {
-      // only if this is not owner
-      if(this.state.isFollowing) {
-        return (
-          <TouchableOpacity
-            onPress={()=>{
-              this.props.unfollow(token, hType, userPk);
-              this.setState({isFollowing:false});
-            }}>
-            <RkText rkType='header3' style={{color: 'black'}}>Following</RkText>
-          </TouchableOpacity>
-        );
-      } else {
-        return (
-          <TouchableOpacity
-            onPress={()=>{
-              this.props.follow(token, hType, userPk);
-              this.setState({isFollowing:true});
-            }}>
-            <RkText rkType='header3' style={{color: 'blue'}}>Follow</RkText>
-          </TouchableOpacity>
-        )
-      }
-    } else {
-      return <View />
-    }
+    return (
+      <TouchableOpacity onPress={()=>{this._handleMenuPress()}}>
+        <Ionicons name="ios-more" size={32} style={{ marginLeft: 5 }}/>
+      </TouchableOpacity>
+    );
   }
 
   _renderHeader = (detail) => {
@@ -335,6 +321,21 @@ class OutfitDetail extends Component {
     );
   }
 
+  _handleClose = () => this.setState({isMenuOpen: false})
+
+  _renderMenuModal = (isOwner, id) => {
+    return (
+      <MenuModal
+        isVisible={this.state.isMenuOpen}
+        isOwner={isOwner}
+        postId={id}
+        postType={1}
+        handleClose={this._handleClose}
+        navigation={this.props.navigation}
+      />
+    );
+  }
+
   render() {
     const detail = this.props.outfitDetail;
     // User Access Not Yet
@@ -426,6 +427,9 @@ class OutfitDetail extends Component {
             </View>
           </RkCard>
           {this._renderCategoryModal(detail.id)}
+          <View>
+            {this._renderMenuModal(detail.is_owner, detail.id)}
+          </View>
         </ScrollView>
       </View>
     );
@@ -435,6 +439,7 @@ class OutfitDetail extends Component {
 
 
 let styles = RkStyleSheet.create(theme => ({
+
   root: {
     backgroundColor: theme.colors.screen.base,
     flex: 1

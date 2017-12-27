@@ -52,6 +52,13 @@ class AuthScreen extends Component {
     }
 
     let token = await AsyncStorage.getItem('stylee_token');
+  //   AsyncStorage.getItem('token').then((token) => {
+  //     if (token) {
+  //       this.setState({loggedIn: true})
+  //     } else {
+  //       console.log('No user yet Created');
+  //     }
+  // })
     if(!_.isNull(token)) {
       this.props.setToken(token, 1);
     } else {

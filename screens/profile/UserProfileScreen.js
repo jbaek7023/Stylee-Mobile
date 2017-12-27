@@ -97,7 +97,7 @@ class UserProfileScreen extends Component {
         </TouchableOpacity>
       );
     } else {
-      return <View />
+      return <View><RkText rkType='header3'>Profile</RkText></View>
     }
   }
 
@@ -163,6 +163,9 @@ class UserProfileScreen extends Component {
           }}>
             <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
           </RkButton>
+          <View style={{justifyContent: 'center'}}>
+            <View><RkText rkType='header3'>Profile</RkText></View>
+          </View>
         </View>
       </View>
     );
