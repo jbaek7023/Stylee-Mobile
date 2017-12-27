@@ -86,7 +86,7 @@ export default class DetailRender extends Component {
       return '-'
     }
     let colorList = colorArray.map((color) => {
-      return ' ' + items[color].value;
+      return ' ' + items[color].name;
     })
     return colorList
   }

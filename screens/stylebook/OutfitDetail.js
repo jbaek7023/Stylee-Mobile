@@ -347,6 +347,15 @@ class OutfitDetail extends Component {
     );
   }
 
+  _renderCommentCount = (count) => {
+    if(count>0) {
+      return (
+        <RkText rkType='secondary2 hintColor'>View All {count.toString()} Comments</RkText>
+      );
+    }
+    return (<View />);
+  }
+
   render() {
     const detail = this.props.outfitDetail;
     // User Access Not Yet
@@ -401,11 +410,12 @@ class OutfitDetail extends Component {
                 oid={detail.id}
               />
             </View>
+
             <View rkCardContent style={styles.commentContainer}>
               <TouchableOpacity onPress={()=>{this._handleCommentPress()}} style={{marginTop: 5}}>
                 {this._renderComments(detail.comments)}
                 <View>
-                  <RkText rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
+                  {this._renderCommentCount(detail.comment_count)}
                 </View>
               </TouchableOpacity>
             </View>

@@ -13,6 +13,8 @@ import TagStyleScreen from '../screens/camera/TagStyleScreen';
 import OpenWardrobe from '../screens/camera/OpenWardrobe';
 import FABs from '../components/common/FABs';
 import TagFromPhoto from '../screens/camera/TagFromPhoto';
+import EditOutfitScreen from '../screens/stylebook/EditOutfitScreen';
+import EditClothScreen from '../screens/wardrobe/EditClothScreen';
 
 export default StackNavigator ({
   Wardrobeo: {
@@ -53,6 +55,12 @@ export default StackNavigator ({
   },
   TagFromPhoto: {
     screen: TagFromPhoto
+  },
+  EditOutfit: {
+    screen: EditOutfitScreen
+  },
+  EditCloth: {
+    screen: EditClothScreen
   }
 }, {
   navigationOptions:({navigation, screenProps})=>({

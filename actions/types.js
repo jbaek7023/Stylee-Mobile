@@ -50,6 +50,8 @@ export const DELETE_STYLE_FAIL = 'delete_style_fail';
 // Wardrobe
 export const C_DETAIL_LOAD_SUCCESS = 'clothes_detail_sucess';
 export const C_DETAIL_LOAD_FAIL = 'clothes_detail_fail';
+export const UPDATE_CLOTH_SUCCESS = 'update_cloth_success';
+export const UPDATE_CLOTH_FAIL = 'update_cloth_fail';
 
 export const FETCH_TOP_LIST_SUCCESS = 'list_top_success';
 export const FETCH_TOP_LIST_FAIL = 'list_top_fail';

@@ -20,7 +20,7 @@ import SelectedSeasonsSelector from '../../selectors/selected_seasons';
 import SelectedColorsSelector from '../../selectors/selected_colors';
 import SelectedSizesSelector from '../../selectors/selected_sizes';
 import { connect } from 'react-redux';
-
+import _ from 'lodash';
 import * as actions from '../../actions';
 
 class EditClothScreen extends Component {
@@ -31,22 +31,35 @@ class EditClothScreen extends Component {
   })
 
   state = {
-    onlyMe: this.props.navigation.state.params.taggedItem.onlyMe,
+    onlyMe: this.props.navigation.state.params.detail.only_me,
     textHeight: 0,
     inWardrobe: true,
     isSelectorVisible: false,
     items: [],
-    bigType: this.props.navigation.state.params.taggedItem.bigType,
-    clothType: this.props.navigation.state.params.taggedItem.clothType,
+    bigType: this.props.navigation.state.params.detail.big_cloth_type,
+    clothType: this.props.navigation.state.params.detail.cloth_type,
     selectionType: 5,
-    selectedSeasonIds: this.props.navigation.state.params.taggedItem.selectedSeasonIds,
+    selectedSeasonIds: this.props.navigation.state.params.detail.detail.seasons,
     seasons: seasons,
-    selectedSizeIds: this.props.navigation.state.params.taggedItem.selectedSizeIds,
+    selectedSizeIds: this.props.navigation.state.params.detail.detail.size,
     clothSize: topSize,
-    selectedColorIds: this.props.navigation.state.params.taggedItem.selectedColorIds,
+    selectedColorIds: this.props.navigation.state.params.detail.detail.color,
     clothColor: clothColors,
-    gender: this.props.navigation.state.params.taggedItem.gender,
-    name: this.props.navigation.state.params.taggedItem.name,
+    gender: this.props.navigation.state.params.detail.detail.sex,
+    name: this.props.navigation.state.params.detail.content,
+    selectedStyleIds: [],
+  }
+
+  componentWillMount() {
+    let { seasons, size, color} = this.props.navigation.state.params.detail.detail;
+    if(_.isNull(seasons)) { seasons = [] }
+    if(_.isNull(size)) { size = []}
+    if(_.isNull(color)) { color = []}
+    this.setState({
+      selectedSeasonIds: seasons,
+      selectedSizeIds: size,
+      selectedColorIds: color,
+      selectedStyleIds: this.props.navigation.state.params.detail.tagged_outfits.map((item)=>item.id)})
   }
 
   _showSelector = () => this.setState({ isSelectorVisible: true });
@@ -93,48 +106,6 @@ class EditClothScreen extends Component {
 
   _setClothImage = (image) => {this.setState({image});}
 
-  // CAMERA
-  _handleCameraPress = async () => {
-    this._hideModal();
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [3, 3],
-      base64: true
-    });
-//     Object {
-//   "cancelled": false,
-//   "height": 480,
-//   "uri": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540jbaek7023%252Fstylee/ImagePicker/324f36f5-14c2-481a-aeae-4f698e2f3919.jpg",
-//   "width": 480,
-// }
-
-    if (!result.cancelled) {
-      // this.setState({ image: result.uri });
-      this._setClothImage(result.uri);
-      this.setState({base64: result.base64});
-    }
-  }
-
-  _handleAlbumPress = async () => {
-    this._hideModal();
-    this._pickImage();
-  }
-
-  _pickImage = async () => {
-    this._hideModal();
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [3, 3],
-      base64: true
-    });
-
-    if (!result.cancelled) {
-      this._setClothImage(result.uri);
-      this.setState({base64: result.base64});
-    }
-  };
-  // END OF CAMEARA
-
   //  this is single action (selectionType: 1, 3, 6)
   _selectAction = (value, id) => {
     // if seasons, genders, bigType, topType, outwearType
@@ -163,7 +134,7 @@ class EditClothScreen extends Component {
     }
   }
 
-  //  this is single action (selectionType: 2, 4, 5}
+  //  this is multiple action (selectionType: 2, 4, 5}
   _seasonSelectAction = (id) => {
     if(this.state.selectionType===4) {
       if(_.includes(this.state.selectedSizeIds, id)) {
@@ -390,7 +361,7 @@ class EditClothScreen extends Component {
           <View rkCardHeader style={styles.left}>
             <View style={styles.content}>
               <View style={styles.contentHeader}>
-                <RkText rkType='header3'>Edit Your Tagged Item</RkText>
+                <RkText rkType='header3'>Edit</RkText>
               </View>
             </View>
           </View>
@@ -398,11 +369,12 @@ class EditClothScreen extends Component {
               <TouchableOpacity onPress={
                 () => {
                   let { name, bigType, clothType, selectedSeasonIds, gender,
-                    selectedSizeIds, selectedColorIds, inWardrobe, onlyMe } = this.state;
-                  let { id } = this.props.navigation.state.params.taggedItem;
-                  this.props.navigation.state.params.editTaggedItem(
-                    name, bigType, clothType, selectedSeasonIds, gender,
-                    selectedSizeIds, selectedColorIds, inWardrobe, onlyMe, id);
+                    selectedSizeIds, selectedColorIds, inWardrobe, onlyMe, selectedStyleIds } = this.state;
+                  let { id } = this.props.navigation.state.params.detail;
+                  let { token, hType } = this.props;
+                  this.props.editCloth( token, hType,
+                    { name, bigType, clothType, selectedSeasonIds, gender,
+                    selectedSizeIds, selectedColorIds, inWardrobe, onlyMe, selectedStyleIds, id});
                   this.props.navigation.goBack();
                 }}>
                 <RkText rkType="header3">SAVE</RkText>
@@ -472,6 +444,11 @@ class EditClothScreen extends Component {
               <RkText rkType="primary2">{this._renderColors()}</RkText>
 
             </TouchableOpacity>
+            <View style={styles.contextSeperator}/>
+            <View style={[styles.dContainer, styles.drow]}>
+              <RkText rkType="header5">Tagged Styles</RkText>
+              {this._renderTagStyleButton()}
+            </View>
 
             <View style={styles.contextSeperator}/>
             <View style={[styles.dContainer, styles.row]}>
@@ -496,9 +473,6 @@ class EditClothScreen extends Component {
                   this._setOnlyMe()
                 }}
                 />
-            </View>
-            <View style={{alignItems: 'center', marginTop: 8, }}>
-              <RkText style={{textAlign: 'center'}} rkType="primary4">You will be able to add more detail from your Wardrobe</RkText>
             </View>
             <View>
               {this._renderSelectorModal()}
@@ -531,7 +505,8 @@ let styles = RkStyleSheet.create(theme => ({
     backgroundColor: theme.colors.screen.base,
   },
   switch: {
-    marginVertical: 0
+    marginVertical: 0,
+    marginTop: 10,
   },
   row: {
     flexDirection: 'row',

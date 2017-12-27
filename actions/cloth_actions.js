@@ -5,6 +5,8 @@ import {
   C_DETAIL_LOAD_FAIL,
   CREATE_CLOTH_SUCCESS,
   CREATE_CLOTH_FAIL,
+  UPDATE_CLOTH_SUCCESS,
+  UPDATE_CLOTH_FAIL,
 
   FETCH_TOP_LIST_SUCCESS,
   FETCH_TOP_LIST_FAIL,
@@ -56,6 +58,32 @@ export const createCloth = (token, hType, clothObject) => async dispatch => {
     dispatch({ type: CREATE_CLOTH_SUCCESS, payload: response.data })
   } else {
     dispatch({ type: CREATE_CLOTH_FAIL })
+  }
+}
+
+export const editCloth = (token, hType, clothObject) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let {
+    name, bigType, clothType, selectedSeasonIds, gender,
+  selectedSizeIds, selectedColorIds, inWardrobe, onlyMe, selectedStyleIds, id
+  } = clothObject;
+
+  let response = await axios.put(`${ROOT_URL}/clothes/update/`, {
+    cid: id,
+    name, bigType, clothType, selectedSeasonIds, gender,
+    selectedSizeIds, selectedColorIds, inWardrobe, onlyMe, selectedStyleIds
+  }, {headers});
+
+  if(response.status===200) {
+    dispatch({ type: UPDATE_CLOTH_SUCCESS, payload: response.data })
+  } else {
+    dispatch({ type: UPDATE_CLOTH_FAIL })
   }
 }
 

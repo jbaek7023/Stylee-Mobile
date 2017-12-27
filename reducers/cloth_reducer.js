@@ -3,6 +3,9 @@ import {
   C_DETAIL_LOAD_FAIL,
   CREATE_CLOTH_SUCCESS,
   CREATE_CLOTH_FAIL,
+  UPDATE_CLOTH_SUCCESS,
+  UPDATE_CLOTH_FAIL,
+
   FETCH_TOP_LIST_SUCCESS,
   FETCH_TOP_LIST_FAIL,
   FETCH_OUTERWEAR_LIST_SUCCESS,
@@ -24,6 +27,7 @@ import {
   FETCH_NEXT_SHOES_FAIL,
   FETCH_NEXT_ETCS_SUCCESS,
   FETCH_NEXT_ETCS_FAIL,
+
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -70,6 +74,11 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, created: action.payload }
     case CREATE_CLOTH_FAIL:
       return { ...state, created: null }
+    case UPDATE_CLOTH_SUCCESS:
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, updated: timeStamp.toString() }
+    case UPDATE_CLOTH_FAIL:
+      return { ...state, updated: null }
     default:
       return state;
   }

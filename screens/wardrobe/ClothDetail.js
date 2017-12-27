@@ -36,10 +36,19 @@ class ClothDetail extends Component {
   componentWillMount() {
     const { id } = this.props.navigation.state.params;
     const { token, hType} = this.props;
-    this.props.fetchClothDetail(token, hType, id);
+    if ( token ) {
+      this.props.fetchClothDetail(token, hType, id);
+    }
+
   }
 
   componentWillReceiveProps(nextProps) {
+    const { id } = this.props.navigation.state.params;
+    const { token, hType} = this.props;
+    if(nextProps.updated && this.props.updated !== nextProps.updated) {
+      this.props.fetchClothDetail(token, hType, id);
+    }
+
     if(this.props.clothDetail !== nextProps.clothDetail) {
       this.setState({isLoading: false})
     }
@@ -233,6 +242,39 @@ class ClothDetail extends Component {
     }
   }
 
+  _renderCommentCount = (count) => {
+    if(count>0) {
+      return (
+        <RkText rkType='secondary2 hintColor'>View All {count.toString()} Comments</RkText>
+      );
+    }
+    return (<View />);
+  }
+
+  _renderTaggedStyles = (taggedOutfits) => {
+    if(taggedOutfits.length>0) {
+      return (
+        <View>
+          <View style={styles.headContainer}>
+            <RkText rkType="header5">Tagged Styles ({taggedOutfits.length.toString()})</RkText>
+          </View>
+          <ScrollView
+            horizontal={true}
+            style={{paddingBottom: 10}}>
+            <FlatList
+              horizontal
+              style={{paddingBottom: 10}}
+              data={taggedOutfits}
+              renderItem={this._renderOutfitItem}
+              keyExtractor={this._keyExtractor}/>
+          </ScrollView>
+        </View>
+      );
+    }
+    return (<View />);
+
+  }
+
   render() {
     const detail = this.props.clothDetail;
     if(this.state.isLoading) {
@@ -290,26 +332,13 @@ class ClothDetail extends Component {
                 <TouchableOpacity onPress={()=>this._handleCommentPress()}>
                   <View style={{marginTop: 5}}>
                     {this._renderComments(detail.comments)}
-                    <RkText rkType='secondary2 hintColor'>View All {detail.comment_count.toString()} Comments</RkText>
+                    <View>
+                      {this._renderCommentCount(detail.comment_count)}
+                    </View>
                   </View>
                 </TouchableOpacity>
               </View>
-              <View>
-                <View style={styles.headContainer}>
-                  <RkText rkType="header5">Tagged Styles ({detail.tagged_outfits.length.toString()})</RkText>
-                </View>
-                <ScrollView
-                  horizontal={true}
-                  style={{paddingBottom: 10}}>
-                  <FlatList
-                    horizontal
-                    style={{paddingBottom: 10}}
-                    data={detail.tagged_outfits}
-                    renderItem={this._renderOutfitItem}
-                    keyExtractor={this._keyExtractor}
-                  />
-                </ScrollView>
-              </View>
+              {this._renderTaggedStyles(detail.tagged_outfits)}
               <DetailRender
                 type={detail.cloth_type}
                 seasons={detail.detail.seasons}
@@ -330,9 +359,7 @@ class ClothDetail extends Component {
   }
 }
 
-function mapStateToProps({auth: {token, hType}, wardrobe: {clothDetail}}) {
-  return { token, hType, clothDetail }
-}
+
 
 let styles = RkStyleSheet.create(theme => ({
   root: {
@@ -435,5 +462,9 @@ let styles = RkStyleSheet.create(theme => ({
     justifyContent: 'center',
   },
 }));
+
+function mapStateToProps({auth: {token, hType}, wardrobe: {clothDetail, updated}}) {
+  return { token, hType, clothDetail, updated }
+}
 
 export default connect(mapStateToProps, actions)(ClothDetail);

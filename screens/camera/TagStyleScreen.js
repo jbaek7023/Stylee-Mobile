@@ -69,7 +69,10 @@ class TagStyleScreen extends Component {
   }
 
   _renderItem = ({item}) => {
+    console.log(item.id);
+    console.log(this.state.selectedStyleIds);
     let isSelected = _.includes(this.state.selectedStyleIds, item.id);
+    console.log(isSelected);
 
     // checkbox = onPress, checked, color,
     if(!_.isNil(item.outfit_img)) {
