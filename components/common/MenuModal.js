@@ -14,16 +14,16 @@ import SnackBar from 'react-native-snackbar-dialog';
 
 class MenuModal extends Component {
   _deleteThisPost = () => {
-    SnackBar.show(('The post is deleted'), { duration: 2500 })
+    SnackBar.show(('Deleted the post'), { duration: 2500 })
   }
 
   _handleEditPress = () => {
     this.props.handleClose();
-    let { postId } = this.props;
+    let { detail } = this.props;
     if(this.props.postType == 1) {
-      this.props.navigation.navigate('EditOutfit', {id: postId})
+      this.props.navigation.navigate('EditOutfit', {detail})
     } else {
-      this.props.navigation.navigate('EditCloth', {id: postId})
+      this.props.navigation.navigate('EditCloth', {detail})
     }
   }
 
@@ -33,7 +33,7 @@ class MenuModal extends Component {
   // PASSWORD: CLASSI880FIED383877
   _handleReportPress = () => {
     this.props.handleClose();
-    SnackBar.show(('Thanks for your feedback! We will review this post soon'), { duration: 2500 })
+    SnackBar.show(('Thanks for your feedback! We will review your report soon'), { duration: 2500 })
   }
 
   _handleDeletePress = () => {
@@ -51,7 +51,7 @@ class MenuModal extends Component {
   }
 
   _renderChildren = () => {
-    if(this.props.isOwner) {
+    if(this.props.detail.is_owner) {
       return (
         <View style={styles.modalContent}>
           <TouchableOpacity onPress={()=>this._handleEditPress()}>
@@ -74,7 +74,6 @@ class MenuModal extends Component {
           </TouchableOpacity>
         </View>
       );
-
     }
   }
 

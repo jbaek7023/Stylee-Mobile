@@ -36,7 +36,6 @@
     "react-native-keyboard-aware-scrollview": "^1.1.7",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-modal": "^4.1.0",
-    "react-native-modalbox": "^1.4.2",
     "react-native-scalable-image": "^0.2.1",
     "react-native-simple-toast": "^0.0.7",
     "react-native-snackbar-dialog": "^1.4.0",

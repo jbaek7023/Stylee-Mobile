@@ -323,12 +323,11 @@ class OutfitDetail extends Component {
 
   _handleClose = () => this.setState({isMenuOpen: false})
 
-  _renderMenuModal = (isOwner, id) => {
+  _renderMenuModal = (detail) => {
     return (
       <MenuModal
         isVisible={this.state.isMenuOpen}
-        isOwner={isOwner}
-        postId={id}
+        detail={detail}
         postType={1}
         handleClose={this._handleClose}
         navigation={this.props.navigation}
@@ -421,14 +420,17 @@ class OutfitDetail extends Component {
               <TouchableOpacity style={[styles.dContainer, styles.row]}>
                 <RkText rkType="primary2">Gender</RkText><RkText rkType="primary3">{detail.gender}</RkText>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.dContainer, styles.lastrow]}>
+              <TouchableOpacity style={[styles.dContainer, styles.row]}>
                 <RkText rkType="primary2">Location</RkText><RkText rkType="primary3">{detail.location}</RkText>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.dContainer, styles.lastrow]}>
+                <RkText rkType="primary2">Link</RkText><RkText rkType="primary3">{detail.link}</RkText>
               </TouchableOpacity>
             </View>
           </RkCard>
           {this._renderCategoryModal(detail.id)}
           <View>
-            {this._renderMenuModal(detail.is_owner, detail.id)}
+            {this._renderMenuModal(detail)}
           </View>
         </ScrollView>
       </View>
