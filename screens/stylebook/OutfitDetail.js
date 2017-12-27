@@ -192,7 +192,7 @@ class OutfitDetail extends Component {
 
   _renderFollow = (isOwner, isFollowing, userPk) => {
     return (
-      <TouchableOpacity style={{height:55, justifyContent: 'center'}} onPress={()=>{this._handleMenuPress()}}>
+      <TouchableOpacity  style={{height:55, width:50, paddingLeft:25, justifyContent: 'center'}} onPress={()=>{this._handleMenuPress()}}>
         <Ionicons name="ios-more" size={32} style={{ marginLeft: 5 }}/>
       </TouchableOpacity>
     );

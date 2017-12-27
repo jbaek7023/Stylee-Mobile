@@ -16,14 +16,15 @@ import {
 } from 'react-native-ui-kitten';
 import { Avatar } from '../../components/Avatar';
 import { thresholdLength } from '../../utils/scale';
+import SnackBar from 'react-native-snackbar-dialog';
 
 let ThemedNavigationBar = withRkTheme(NavBar);
 
 class CategoryDetail extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerRight: (
-      <Ionicons name="md-more" size={32} style={{ marginLeft: 5 }} color="white"/>
-    ),
+    // headerRight: (
+    //   <Ionicons name="md-more" size={32} style={{ marginLeft: 5 }} color="white"/>
+    // ),
     header: (headerProps) => {
       return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
     },
@@ -37,6 +38,15 @@ class CategoryDetail extends Component {
     const { id } = this.props.navigation.state.params;
     const { token, hType } = this.props;
     this.props.fetchCategoryDetail(token, hType, id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.deleted && this.props.deleted !== nextProps.deleted) {
+      const { id } = this.props.navigation.state.params;
+      const { token, hType } = this.props;
+      this.props.fetchCategoryDetail(token, hType, id);
+      SnackBar.show(('Deleted the post'), { duration: 2500 })
+    }
   }
 
   _onEndReachedThreshold = () => {

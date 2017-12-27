@@ -18,6 +18,7 @@ import { width, height, totalSize } from 'react-native-dimension';
 import { threeImageWidth } from '../../utils/scale';
 import DetailRender from '../../components/DetailRender';
 import Toast from 'react-native-simple-toast';
+import MenuModal from '../../components/common/MenuModal';
 
 class ClothDetail extends Component {
   static navigationOptions = ({navigation, screenProps}) => ({
@@ -29,6 +30,7 @@ class ClothDetail extends Component {
     liked: false,
     starred: false,
     isLoading: true,
+    isMenuOpen: false,
   }
 
   componentWillMount() {
@@ -139,32 +141,30 @@ class ClothDetail extends Component {
     );
   }
 
+  _handleClose = () => this.setState({isMenuOpen: false})
+
+  _handleMenuPress = () => {
+    this.setState({isMenuOpen: true});
+  }
+
   _renderFollow = (isOwner, isFollowing, userPk) => {
-    let { token, hType } = this.props;
-    if(!isOwner) {
-      if(this.state.isFollowing) {
-        return (
-          <TouchableOpacity
-            onPress={()=>{
-              this.props.unfollow(token, hType, userPk);
-              this.setState({isFollowing:false});
-            }}>
-            <RkText rkType='header3' style={{color: 'black'}}>Following</RkText>
-          </TouchableOpacity>
-        );
-      } else {
-        return (
-          <TouchableOpacity
-            onPress={()=>{
-              this.props.follow(token, hType, this.props.navigation.state.params.userPk);
-              this.setState({isFollowing:true});
-            }}>
-            <RkText rkType='header3' style={{color: 'blue'}}>Follow</RkText>
-          </TouchableOpacity>
-        )
-      }
-    }
-    return <View />
+    return (
+      <TouchableOpacity style={{height:55, width:50, paddingLeft:25, justifyContent: 'center'}} onPress={()=>{this._handleMenuPress()}}>
+        <Ionicons name="ios-more" size={32} style={{ marginLeft: 5 }}/>
+      </TouchableOpacity>
+    );
+  }
+
+  _renderMenuModal = (detail) => {
+    return (
+      <MenuModal
+        isVisible={this.state.isMenuOpen}
+        detail={detail}
+        postType={2}
+        handleClose={this._handleClose}
+        navigation={this.props.navigation}
+      />
+    );
   }
 
   _renderHeader = (detail) => {
@@ -323,6 +323,7 @@ class ClothDetail extends Component {
                 />
             </RkCard>
           </ScrollView>
+          <View>{this._renderMenuModal(detail)}</View>
         </View>
       );
     }

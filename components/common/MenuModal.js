@@ -14,13 +14,14 @@ import SnackBar from 'react-native-snackbar-dialog';
 
 class MenuModal extends Component {
   _deleteThisPost = () => {
-
     this.props.navigation.goBack();
-
     let { token, hType } = this.props;
     let { id } = this.props.detail;
-    this.props.deleteStyle(token, hType, id);
-
+    if(this.props.postType == 1) {
+      this.props.deleteStyle(token, hType, id);
+    } else {
+      this.props.deleteCloth(token, hType, id);
+    }
   }
 
   _handleEditPress = () => {
