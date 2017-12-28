@@ -51,20 +51,39 @@ import {
 
 const ROOT_URL = 'http://10.0.2.2:8000';
 
-export const fetchMyProfile = (token, hType, userPk) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
+export const fetchProfileById = (token, hType, userPk, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(`${ROOT_URL}/profile/pageid/${userPk}/?page=1`, { headers });
+    callback(response.data)
+  } catch(e) {
+    console.log(e);
   }
+}
 
+// Continue from fetchprofileById
+export const fetchNextProfileOutfits = (token, hType, userPk, uri, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
 
-  let response = await axios.get(`${ROOT_URL}/profile/pageid/${userPk}/?page=1`, { headers });
-  if (response.status === 200) {
-    dispatch({ type: USER_PAGE_FETCH_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: USER_PAGE_FETCH_FAIL })
+    if(uri==1) {
+      uri = `${ROOT_URL}/outfits/next/${userPk}/?page=2`
+    }
+
+    let response = await axios.get(uri, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    console.log(e);
   }
 }
 
@@ -113,25 +132,6 @@ export const retrieveNextFollowByUser = (token, hType, nextUri, callback) => asy
   }
 }
 
-export const fetchNextProfileOutfits = (token, hType, userPk, uri) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
-
-  if(uri==1) {
-    uri = `${ROOT_URL}/outfits/next/${userPk}/?page=2`
-  }
-
-  let response = await axios.get(uri, { headers });
-  if (response.status === 200) {
-    dispatch({ type: USER_PAGE_NEXT_FETCH_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: USER_PAGE_NEXT_FETCH_FAIL })
-  }
-}
 
 export const fetchUserCategoriesById = (token, hType, userPk, callback) => async dispatch => {
   try {

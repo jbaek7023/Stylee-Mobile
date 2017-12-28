@@ -26,38 +26,60 @@ class UserProfileScreen extends Component {
   state = {
     grid: true,
     scrollY: 0,
-    isFollowing: false,
     isLoading: true,
     refreshing: false,
+    profile: null,
+    nextUri: 1,
+    isFollowing: undefined,
   }
 
   componentWillMount() {
     const { token, hType } = this.props;
-    this.props.fetchMyProfile(token, hType, this.props.navigation.state.params.userPk);
+    this.props.fetchProfileById(
+      token,
+      hType,
+      this.props.navigation.state.params.userPk,
+      (profile) =>{
+        this.setState({profile, isLoading: false, isFollowing: profile.is_following})
+      }
+    );
   }
 
   componentWillReceiveProps(nextProps) {
-    let isFollowing = nextProps.cUserProfile.is_following;
-    if(this.state.isFollowing!=isFollowing) {
-      this.setState({isFollowing});
-    }
-    if(this.props.cUserProfile !== nextProps.cUserProfile) {
-      this.setState({isLoading: false});
-    }
+
   }
 
   _onEndReachedThreshold = () => {
-    let { token, hType, nextUri } = this.props;
-    if(nextUri) {
-      this.props.fetchNextProfileOutfits(token, hType, this.props.navigation.state.params.userPk, nextUri);
+    let { token, hType } = this.props;
+    if(this.state.nextUri) {
+      this.props.fetchNextProfileOutfits(
+        token,
+        hType,
+        this.props.navigation.state.params.userPk,
+        this.state.nextUri,
+        (outfits, nextUri) => {
+          this.setState({
+            profile: {
+              ...this.state.profile,
+              outfits: this.state.profile.outfits.concat(outfits)
+            }
+            ,nextUri
+          });
+        }
+      );
     }
   }
 
   _onRefresh = () => {
     this.setState({refreshing: true});
-    this.props.fetchMyProfile(this.props.token, this.props.hType, this.props.navigation.state.params.userPk).then((data)=>{
-      this.setState({refreshing: false})
-    })
+    this.props.fetchProfileById(
+      token,
+      hType,
+      this.props.navigation.state.params.userPk,
+      (profile) =>{
+        this.setState({profile, refreshing: false})
+      }
+    );
   }
 
   _renderAvatar = (uri) => {
@@ -101,7 +123,7 @@ class UserProfileScreen extends Component {
     }
   }
 
-  _renderOwner = (isOwner, isFollowing) => {
+  _renderOwner = (isOwner) => {
     let { token, hType } = this.props;
     if(!isOwner) {
       if(this.state.isFollowing) {
@@ -129,7 +151,7 @@ class UserProfileScreen extends Component {
     return <View />
   }
 
-  _renderHeader = (username, isOwner, isFollowing) => {
+  _renderHeader = (username, isOwner) => {
     if(username) {
       return (
         <View style={styles.headerLayout}>
@@ -147,7 +169,7 @@ class UserProfileScreen extends Component {
             </View>
           </View>
           <View style={styles.right}>
-            {this._renderOwner(isOwner, isFollowing)}
+            {this._renderOwner(isOwner)}
           </View>
         </View>
       );
@@ -250,7 +272,7 @@ class UserProfileScreen extends Component {
     return (
       <View style={{flex:1}}>
         <View style={styles.header}>
-          {this._renderHeader(profile.username, profile.is_owner, profile.is_following)}
+          {this._renderHeader(profile.username, profile.is_owner)}
         </View>
         <ScrollView
           ref={ref => this.scroll = ref}
@@ -317,7 +339,6 @@ class UserProfileScreen extends Component {
   }
 
   render() {
-    const profile = this.props.cUserProfile;
     if(this.state.isLoading) {
       return (
         <View style={styles.root}>
@@ -331,7 +352,7 @@ class UserProfileScreen extends Component {
       );
     }
     return (
-      this._renderProfile(profile)
+      this._renderProfile(this.state.profile)
     );
   }
 }
@@ -494,8 +515,9 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, user: {cUserProfile, nextUri}}) {
-  return {token, hType, cUserProfile, nextUri}
+// user 관계된거 다 지워야함그냥.
+function mapStateToProps({auth: {token, hType}}) {
+  return { token, hType }
 }
 
 export default connect(mapStateToProps, actions)(UserProfileScreen);
