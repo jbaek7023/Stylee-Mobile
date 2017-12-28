@@ -167,6 +167,7 @@ class OutfitDetail extends Component {
             source={{uri: item.cloth_image}}
             style={styles.rowImage}
             resizeMode="cover"
+            defaultSource={require('../../assets/images/styles.png')}
           />
         </TouchableWithoutFeedback>
       );
@@ -176,7 +177,7 @@ class OutfitDetail extends Component {
         onPress={() => this._handleImagePress(item.id)}>
         <Image
           key={item.id}
-          source={require('../../assets/images/robot-dev.png')}
+          source={require('../../assets/images/styles.png')}
           style={styles.rowImage}
           resizeMode="cover"
         />
@@ -292,7 +293,7 @@ class OutfitDetail extends Component {
     let { title, onlyMe } = this.state;
     let { token, hType } = this.props;
     this.props.createNewCategory(token, hType, oid, title, onlyMe);
-    this.setState({newScreen:false});
+    this.setState({newScreen:false, title: '', onlyMe: false});
     this.hideModal();
   }
 
@@ -355,6 +356,30 @@ class OutfitDetail extends Component {
     }
     return (<View />);
   }
+
+  _renderTaggedClothes = (taggedClothes) => {
+    if(taggedClothes.length>0) {
+      return (
+        <View>
+          <View style={styles.headContainer}>
+            <RkText rkType="header5">Tagged Clothes ({taggedClothes.length.toString()})</RkText>
+          </View>
+          <ScrollView
+            horizontal={true}
+            style={{paddingBottom: 10}}>
+            <FlatList
+              horizontal
+              data={taggedClothes}
+              renderItem={this._renderClothesItem}
+              keyExtractor={this._keyExtractor}
+            />
+          </ScrollView>
+        </View>
+      );
+    }
+    return (<View />);
+  }
+
 
   render() {
     const detail = this.props.outfitDetail;
@@ -420,21 +445,9 @@ class OutfitDetail extends Component {
               </TouchableOpacity>
             </View>
 
-            <View>
-              <View style={styles.headContainer}>
-                <RkText rkType="header5">Tagged Clothes ({this.props.outfitDetail.tagged_clothes.length.toString()})</RkText>
-              </View>
-              <ScrollView
-                horizontal={true}
-                style={{paddingBottom: 10}}>
-                <FlatList
-                  horizontal
-                  data={this.props.outfitDetail.tagged_clothes}
-                  renderItem={this._renderClothesItem}
-                  keyExtractor={this._keyExtractor}
-                />
-              </ScrollView>
-            </View>
+              {this._renderTaggedClothes(this.props.outfitDetail.tagged_clothes)}
+
+
             <View style={{marginBottom: 10}}>
               <View style={styles.headContainer}>
                 <RkText rkType="header5">Detail</RkText>

@@ -22,13 +22,22 @@ class UserCategoryScreen extends Component {
   state = {
     isLoading: true,
     refreshing: false,
+    categoryList: [],
+    nextUri: null
   }
 
   componentWillMount() {
     let { token, hType } = this.props;
     let { userPk } = this.props.navigation.state.params;
     if(token) {
-      this.props.fetchUserCategoriesById(token, hType, userPk);
+      this.props.fetchUserCategoriesById(
+        token,
+        hType,
+        userPk,
+        (categoryList, nextUri) => {
+          this.setState({categoryList, nextUri, isLoading: false});
+        }
+      );
     }
   }
 
@@ -40,16 +49,17 @@ class UserCategoryScreen extends Component {
     if ( condition ) {
       this.props.fetchUserCategoriesById(nextProps.token, nextProps.hType);
     }
-
-    if(this.props.categoryList !== nextProps.categoryList) {
-      this.setState({isLoading:false})
-    }
   }
 
   _onEndReachedThreshold = () => {
-    let { token, hType, cateNextUri } = this.props;
-    if(cateNextUri) {
-      this.props.fetchUserNextCategoriesById(token, hType, cateNextUri);
+    let { token, hType } = this.props;
+    if(this.state.nextUri) {
+      this.props.fetchUserNextCategoriesById(
+        token, hType, this.state.nextUri,
+        (categoryList, nextUri)=>{
+          this.setState({categoryList: this.state.categoryList.concat(categoryList), nextUri});
+        }
+      );
     }
   }
 
@@ -102,9 +112,14 @@ class UserCategoryScreen extends Component {
     let { userPk } = this.props.navigation.state.params;
 
     this.setState({refreshing: true});
-    this.props.fetchUserCategoriesById(token, hType, userPk).then((data)=>{
-      this.setState({refreshing: false})
-    })
+    this.props.fetchUserCategoriesById(
+      token,
+      hType,
+      userPk,
+      (categoryList, nextUri) => {
+        this.setState({categoryList, nextUri, isLoading: false, refreshing: false});
+      }
+    );
   }
 
   _renderHeader = () => {
@@ -145,7 +160,7 @@ class UserCategoryScreen extends Component {
       );
     }
 
-    if(this.props.categoryList && this.props.categoryList.length==0) {
+    if(this.state.categoryList && this.state.categoryList.length==0) {
       return (
         <View style={{flex:1}}>
           <View>
@@ -169,7 +184,7 @@ class UserCategoryScreen extends Component {
           {this._renderHeader()}
         </View>
         <FlatList
-          data={this.props.categoryList}
+          data={this.state.categoryList}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
           numColumns={2}
@@ -256,9 +271,9 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps({auth: {token, hType}, user: {categoryList, cateNextUri}}) {
+function mapStateToProps({auth: {token, hType}}) {
   return {
-    token, hType, categoryList, cateNextUri
+    token, hType
   }
 }
 

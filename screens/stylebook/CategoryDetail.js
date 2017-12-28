@@ -63,6 +63,7 @@ class CategoryDetail extends Component {
   }
 
   _renderItem = ({item}) => {
+    console.log(item.outfit_img);
     return (
       <TouchableWithoutFeedback
         onPress={() => this._handleImagePress(item.id)}>

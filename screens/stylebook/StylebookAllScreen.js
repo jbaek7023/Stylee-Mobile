@@ -32,7 +32,6 @@ class StylebookAllScreen extends Component {
 
     if(nextProps.created && this.props.created !== nextProps.created) {
       this.props.loadOutfitAll(nextProps.token, nextProps.hType);
-      this.props.fetchClothesAll(nextProps.token, nextProps.hType);
     }
 
     if(nextProps.deleted && this.props.deleted !== nextProps.deleted) {

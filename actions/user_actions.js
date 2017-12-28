@@ -133,36 +133,34 @@ export const fetchNextProfileOutfits = (token, hType, userPk, uri) => async disp
   }
 }
 
-export const fetchUserCategoriesById = (token, hType, userPk) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
-
-
-  let response = await axios.get(`${ROOT_URL}/category/catelist/${userPk}/?page=1`, { headers });
-  if (response.status === 200) {
-    dispatch({ type: FETCH_USER_CATEGORIES_BY_USER_ID_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: FETCH_USER_CATEGORIES_BY_USER_ID_FAIL })
+export const fetchUserCategoriesById = (token, hType, userPk, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(`${ROOT_URL}/category/catelist/${userPk}/?page=1`, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    console.log(e);
   }
 }
 
-export const fetchUserNextCategoriesById = (token, hType, uri) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
+export const fetchUserNextCategoriesById = (token, hType, uri, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
 
-  let response = await axios.get(uri, { headers });
-  if (response.status === 200) {
-    dispatch({ type: FETCH_NEXT_CATEGORIES_BY_USER_ID_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: FETCH_NEXT_CATEGORIES_BY_USER_ID_FAIL })
+    let response = await axios.get(uri, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    console.log(e);
   }
 }
 

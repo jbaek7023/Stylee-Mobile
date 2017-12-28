@@ -17,7 +17,6 @@ class UserWardrobeScreen extends Component {
     header: null
   })
 
-
   _renderHeader = () => {
     return (
       <View style={styles.header}>
