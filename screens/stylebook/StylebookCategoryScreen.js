@@ -34,7 +34,8 @@ class StylebookCategoryScreen extends Component {
     let condition = (nextProps.token && (this.props.token !== nextProps.token)) ||
       (this.props.added !== nextProps.added) ||
       (this.props.removed !== nextProps.removed ) ||
-      (this.props.edited !== nextProps.edited) ? true : false;
+      (this.props.edited !== nextProps.edited) ||
+      (this.props.time !== nextProps.time) ? true : false;
     if ( condition ) {
       this.props.loadCategoryAll(nextProps.token, nextProps.hType);
     }
@@ -176,9 +177,9 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps({auth: {token, hType}, category: {categories, added, removed, nextUri, edited}}) {
+function mapStateToProps({auth: {token, hType}, category: {categories, added, removed, nextUri, edited, categoryRemoved: {time, cateId}}}) {
   return {
-    token, hType, categories, added, removed, nextUri, edited
+    token, hType, categories, added, removed, nextUri, edited, time, cateId
   }
 }
 

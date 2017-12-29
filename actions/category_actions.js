@@ -27,6 +27,9 @@ import {
   CATEGORY_LIST_LOAD_FAIL,
   CATELIST_NEXT_LOAD_SUCCESS,
   CATELIST_NEXT_LOAD_FAIL,
+
+  REMOVE_CATEGORY_SUCCESS,
+  REMOVE_CATEGORY_FAIL,
 } from './types';
 
 const ROOT_URL = 'http://10.0.2.2:8000';
@@ -86,6 +89,24 @@ export const editCategoryDetail = (token, hType, categoryId, {name, onlyMe}) => 
     console.log(e);
   }
 }
+
+export const deleteCategory = (token, hType, categoryId) => async dispatch => {
+  let headers = { 'Authorization': `JWT ${token}`};
+  if(hType==1) {
+    headers = { 'Authorization': `JWT ${token}`};
+  } else if (hType==2) {
+    headers = { 'Authorization': `Bearer ${token}`};
+  }
+
+  let response = await axios.delete(`${ROOT_URL}/category/edit/${categoryId}/`, {headers});
+
+  if(response.status === 204) {
+    dispatch({ type: REMOVE_CATEGORY_SUCCESS, payload: categoryId })
+  } else {
+    dispatch({ type: REMOVE_CATEGORY_FAIL })
+  }
+}
+
 
 export const loadCategoryAll = (token, hType) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};

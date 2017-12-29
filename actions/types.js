@@ -151,7 +151,8 @@ export const DELETE_OUTFIT_FROM_CATEGORY_SUCCESS = 'delete_from_category_success
 export const DELETE_OUTFIT_FROM_CATEGORY_FAIL = 'delete_from_category_fail';
 export const EDIT_CATEGORY_SUCCESS = 'edit_category_success';
 export const EDIT_CATEGORY_FAIL = 'edit_category_fail';
-
+export const REMOVE_CATEGORY_SUCCESS = 'remove_category_success';
+export const REMOVE_CATEGORY_FAIL = 'remove_category_fail';
 
 export const CATEGORY_LIST_LOAD_SUCCESS = 'category_list_load_success';
 export const CATEGORY_LIST_LOAD_FAIL = 'category_list_load_fail';

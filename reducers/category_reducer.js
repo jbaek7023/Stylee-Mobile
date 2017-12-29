@@ -19,6 +19,8 @@ import {
   EDIT_CATEGORY_FAIL,
   CATEGORY_NEXT_OUTFITS_LOAD_SUCCESS,
   CATEGORY_NEXT_OUTFITS_LOAD_FAIL,
+  REMOVE_CATEGORY_SUCCESS,
+  REMOVE_CATEGORY_FAIL,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -33,6 +35,7 @@ const INITIAL_STATE = {
   added: undefined,
   removed: undefined,
   edited: undefined,
+  categoryRemoved: {time: undefined, cateId: undefined}
 }
 
 export default function(state = INITIAL_STATE, action) {
@@ -90,6 +93,11 @@ export default function(state = INITIAL_STATE, action) {
       var timeStamp = Math.floor(Date.now());
       return { ...state, edited: timeStamp.toString()}
     case EDIT_CATEGORY_FAIL:
+      return { ...state }
+    case REMOVE_CATEGORY_SUCCESS:
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, categoryRemoved: { cateId: action.payload, time: timeStamp.toString() } }
+    case REMOVE_CATEGORY_FAIL:
       return { ...state }
     default:
       return state;

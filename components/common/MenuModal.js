@@ -50,9 +50,15 @@ class MenuModal extends Component {
 
   _handleDeletePress = () => {
     this.props.handleClose();
+    let question = 'Are you sure you want to delete this style?'
+    if(this.props.postType==2) {
+      question = 'Are you sure you want to delete this item?'
+    } else if(this.props.postType==3) {
+      question = 'Are you sure you want to delete this category?'
+    }
     // this.props.postId
     Alert.alert(
-      'Are you sure you want to delete your post?',
+      question,
       "This action cannot be undone. This will permanently delete the post",
       [
         {text: 'Cancel'},

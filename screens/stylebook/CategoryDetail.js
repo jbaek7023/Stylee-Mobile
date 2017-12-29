@@ -52,9 +52,10 @@ class CategoryDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { id } = this.props.navigation.state.params;
+    const { token, hType } = this.props;
     if(nextProps.edited && nextProps.edited !== this.props.edited) {
-      const { id } = this.props.navigation.state.params;
-      const { token, hType } = this.props;
+
       this.props.fetchCategoryDetail(
         token,
         hType,
@@ -63,6 +64,12 @@ class CategoryDetail extends Component {
           this.setState({categoryDetail, isLoading: false})
         }
       );
+    }
+
+    if(nextProps.time && nextProps.time !== this.props.time) {
+      if (nextProps.cateId.toString() === id.toString()) {
+        this.props.navigation.goBack();
+      }
     }
   }
 
@@ -254,8 +261,8 @@ let styles = RkStyleSheet.create(theme => ({
   }
 }));
 
-function mapStateToProps({auth: {token, hType}, category: {edited}}) {
-  return { token, hType, edited }
+function mapStateToProps({auth: {token, hType}, category: {edited, removed, categoryRemoved: {time, cateId}}}) {
+  return { token, hType, edited, removed, time, cateId }
 }
 
 export default connect(mapStateToProps, actions)(CategoryDetail);
