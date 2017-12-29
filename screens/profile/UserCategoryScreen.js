@@ -86,6 +86,18 @@ class UserCategoryScreen extends Component {
     );
   }
 
+  _renderPrivacy = (onlyMe) => {
+    if(onlyMe) {
+      return (
+        <RkText rkType="awesome hintColor" style={{marginTop:1, paddingRight:5}}>{FontAwesome.onlyMe}</RkText>
+      );
+    } else {
+      return (
+        <RkText rkType="awesome hintColor" style={{marginTop:1, paddingRight:5}}>{FontAwesome.all}</RkText>
+      );
+    }
+  }
+
   _renderItem = ({item}) => {
     return (
       <TouchableWithoutFeedback
@@ -95,7 +107,10 @@ class UserCategoryScreen extends Component {
           <View style={styles.rowWidth}>
             <RkText rkType="primary3" numberOfLines={1} ellipsizeMode='tail'>{item.name}</RkText>
           </View>
-          <RkText rkType="secondary2 hintColor">{item.length} Style</RkText>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <RkText rkType="secondary2 hintColor">{item.length} Style</RkText>
+            {this._renderPrivacy(item.only_me)}
+          </View>
         </View>
       </TouchableWithoutFeedback>
     );
