@@ -7,6 +7,7 @@ import * as actions from '../../actions';
 import { width, height, totalSize } from 'react-native-dimension';
 import TimeAgo from 'react-native-timeago';
 import CategoryModal from '../../components/common/CategoryModal';
+import LikeAndComment from '../../components/common/LikeAndComment';
 import SnackBar from 'react-native-snackbar-dialog';
 
 import { Avatar } from '../../components/Avatar';
@@ -190,6 +191,31 @@ class OutfitSimpleItem extends Component {
     this.showModal();
   }
 
+  _renderCommentCount = (count) => {
+    if(count>0) {
+      return (
+        <RkText rkType='secondary2 hintColor'>View All {count.toString()} Comments</RkText>
+      );
+    }
+    return (<View />);
+  }
+
+  _handleTheNumberOfLikePress = () => {
+    // Like Lists
+  }
+
+
+  _renderLikeAndComment = (likeCount, commentCount) => {
+    return (
+      <LikeAndComment
+        likeCount={likeCount}
+        commentCount={commentCount}
+        handleTheNumberOfLikePress={this._handleTheNumberOfLikePress}
+        handleCommentPress={this._handleCommentPress}/>
+    );
+  }
+
+
   render() {
     let { item } = this.props;
     return (
@@ -218,17 +244,12 @@ class OutfitSimpleItem extends Component {
               oid={item.id}
             />
         	</View>
-          <View style={{paddingVertical: 5, paddingLeft:17, flexDirection: 'row', borderTopWidth: 1.5, borderColor: '#e3e3e3',}}>
-            <RkText rkType="secondary2 hintColor">{item.like_count.toString()} Likes</RkText>
-            <TouchableOpacity onPress={()=>this._handleCommentPress}>
-             <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{item.comment_count.toString()} Comments</RkText>
-            </TouchableOpacity>
-          </View>
+          {this._renderLikeAndComment(item.like_count, item.comment_count)}
           <View style={styles.commentContainer}>
             <TouchableOpacity onPress={()=>this._handleCommentPress}>
               {this._renderComments(item.comments)}
               <View>
-                <RkText rkType='secondary2 hintColor'>View All {item.comment_count.toString()} Comments</RkText>
+                {this._renderCommentCount(item.comment_count)}
               </View>
             </TouchableOpacity>
           </View>
