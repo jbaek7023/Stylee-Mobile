@@ -7,15 +7,16 @@ import {
   CREATE_CATEGORY_FAIL,
   ADD_TO_CATEGORY_SUCCESS,
   ADD_TO_CATEGORY_FAIL,
-  DELTE_FROM_CATEGORY_SUCCESS,
-  DELTE_FROM_CATEGORY_FAIL,
+  DELETE_OUTFIT_FROM_CATEGORY_SUCCESS,
+  DELETE_OUTFIT_FROM_CATEGORY_FAIL,
   CATEGORY_LIST_LOAD_SUCCESS,
   CATEGORY_LIST_LOAD_FAIL,
   CATELIST_NEXT_LOAD_SUCCESS,
   CATELIST_NEXT_LOAD_FAIL,
   CATEGORY_DETAIL_LOAD_SUCCESS,
   CATEGORY_DETAIL_LOAD_FAIL,
-
+  EDIT_CATEGORY_SUCCESS,
+  EDIT_CATEGORY_FAIL,
   CATEGORY_NEXT_OUTFITS_LOAD_SUCCESS,
   CATEGORY_NEXT_OUTFITS_LOAD_FAIL,
 } from '../actions/types';
@@ -30,7 +31,8 @@ const INITIAL_STATE = {
   nextUri: null,
   id: undefined,
   added: undefined,
-  removed: undefined
+  removed: undefined,
+  edited: undefined,
 }
 
 export default function(state = INITIAL_STATE, action) {
@@ -80,9 +82,14 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, added: action.payload.added}
     case ADD_TO_CATEGORY_SUCCESS:
       return { ...state }
-    case DELTE_FROM_CATEGORY_SUCCESS:
+    case DELETE_OUTFIT_FROM_CATEGORY_SUCCESS:
       return { ...state, removed: action.payload.removed}
-    case DELTE_FROM_CATEGORY_SUCCESS:
+    case DELETE_OUTFIT_FROM_CATEGORY_SUCCESS:
+      return { ...state }
+    case EDIT_CATEGORY_SUCCESS:
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, edited: timeStamp.toString()}
+    case EDIT_CATEGORY_FAIL:
       return { ...state }
     default:
       return state;

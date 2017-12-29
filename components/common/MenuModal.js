@@ -19,9 +19,11 @@ class MenuModal extends Component {
     let { id } = this.props.detail;
     if(this.props.postType == 1) {
       this.props.deleteStyle(token, hType, id);
-    } else {
+    } else if(this.props.postType == 2){
       let { big_cloth_type } = this.props.detail;
       this.props.deleteCloth(token, hType, id, big_cloth_type);
+    } else if(this.props.postType == 3) {
+      this.props.deleteCategory(token, hType, id);
     }
   }
 
@@ -30,8 +32,10 @@ class MenuModal extends Component {
     let { detail } = this.props;
     if(this.props.postType == 1) {
       this.props.navigation.navigate('EditOutfit', {detail})
-    } else {
+    } else if(this.props.postType == 2){
       this.props.navigation.navigate('EditCloth', {detail})
+    } else if(this.props.postType ==3) {
+      this.props.showEditCategory();
     }
   }
 

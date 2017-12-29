@@ -33,11 +33,11 @@ class StylebookCategoryScreen extends Component {
     // if token is updated, retrieve current logged in user
     let condition = (nextProps.token && (this.props.token !== nextProps.token)) ||
       (this.props.added !== nextProps.added) ||
-      (this.props.removed !== nextProps.removed ) ? true : false;
+      (this.props.removed !== nextProps.removed ) ||
+      (this.props.edited !== nextProps.edited) ? true : false;
     if ( condition ) {
       this.props.loadCategoryAll(nextProps.token, nextProps.hType);
     }
-
     if(this.props.categories !== nextProps.categories) {
       this.setState({isLoading:false})
     }
@@ -176,9 +176,9 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps({auth: {token, hType}, category: {categories, added, removed, nextUri}}) {
+function mapStateToProps({auth: {token, hType}, category: {categories, added, removed, nextUri, edited}}) {
   return {
-    token, hType, categories, added, removed, nextUri
+    token, hType, categories, added, removed, nextUri, edited
   }
 }
 

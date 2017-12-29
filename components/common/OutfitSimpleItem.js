@@ -125,7 +125,7 @@ class OutfitSimpleItem extends Component {
     });
     let { token, hType } = this.props;
     this.setState({taggedCategories});
-    this.props.deleteFromCategory(token, hType, oid, categoryId);
+    this.props.deleteOutfitFromCategory(token, hType, oid, categoryId);
   }
 
   _selectCategory = (oid, categoryId) => {

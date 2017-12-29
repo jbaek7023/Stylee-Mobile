@@ -10,6 +10,9 @@ import {
   CATEGORY_NEXT_OUTFITS_LOAD_SUCCESS,
   CATEGORY_NEXT_OUTFITS_LOAD_FAIL,
 
+  EDIT_CATEGORY_SUCCESS,
+  EDIT_CATEGORY_FAIL,
+
 // get category
   OUTFIT_CATEGORIES_LOAD_SUCCESS,
   OUTFIT_CATEGORIES_LOAD_FAIL,
@@ -18,8 +21,8 @@ import {
   CREATE_CATEGORY_FAIL,
   ADD_TO_CATEGORY_SUCCESS,
   ADD_TO_CATEGORY_FAIL,
-  DELTE_FROM_CATEGORY_SUCCESS,
-  DELTE_FROM_CATEGORY_FAIL,
+  DELETE_OUTFIT_FROM_CATEGORY_SUCCESS,
+  DELETE_OUTFIT_FROM_CATEGORY_FAIL,
   CATEGORY_LIST_LOAD_SUCCESS,
   CATEGORY_LIST_LOAD_FAIL,
   CATELIST_NEXT_LOAD_SUCCESS,
@@ -28,38 +31,59 @@ import {
 
 const ROOT_URL = 'http://10.0.2.2:8000';
 
-export const fetchCategoryDetail = (token, hType, id) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
+export const fetchCategoryDetail = (token, hType, id, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
 
-  let response = await axios.get(`${ROOT_URL}/category/detail/${id}/?page=1`, { headers });
-  if (response.status === 200) {
-    dispatch({ type: CATEGORY_DETAIL_LOAD_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: CATEGORY_DETAIL_LOAD_FAIL })
+    let response = await axios.get(`${ROOT_URL}/category/detail/${id}/?page=1`, { headers });
+    callback(response.data);
+  } catch(e) {
+    console.log(e);
   }
 }
 
-export const fetchNextOutfitForCategoryDetail = (token, hType, id, uri) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
-  if(uri == 1) {
-    uri = `${ROOT_URL}/outfits/outfitsbycategory/1/?page=2`
-  }
+export const fetchNextOutfitForCategoryDetail = (token, hType, id, uri, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    if(uri == 1) {
+      uri = `${ROOT_URL}/outfits/outfitsbycategory/1/?page=2`
+    }
 
-  let response = await axios.get(uri, { headers });
-  if (response.status === 200) {
-    dispatch({ type: CATEGORY_NEXT_OUTFITS_LOAD_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: CATEGORY_NEXT_OUTFITS_LOAD_FAIL })
+    let response = await axios.get(uri, { headers });
+    callback(response.results, response.next);
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+export const editCategoryDetail = (token, hType, categoryId, {name, onlyMe}) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.put(`${ROOT_URL}/category/edit/${categoryId}/`, {
+      name, only_me: onlyMe
+    }, {headers});
+    if (response.status === 200) {
+      dispatch({ type: EDIT_CATEGORY_SUCCESS })
+    } else {
+      dispatch({ type: EDIT_CATEGORY_FAIL })
+    }
+  } catch(e) {
+    console.log(e);
   }
 }
 
@@ -146,7 +170,7 @@ export const addToCategory = (token, hType, oid, categoryId) => async dispatch =
     dispatch({ type: ADD_TO_CATEGORY_FAIL })
   }
 };
-export const deleteFromCategory = (token, hType, oid, categoryId) => async dispatch => {
+export const deleteOutfitFromCategory = (token, hType, oid, categoryId) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};
   if(hType==1) {
     headers = { 'Authorization': `JWT ${token}`};
@@ -159,9 +183,9 @@ export const deleteFromCategory = (token, hType, oid, categoryId) => async dispa
     category_id: categoryId
   }, {headers});
   if (response.status === 200) {
-    dispatch({ type: DELTE_FROM_CATEGORY_SUCCESS, payload: response.data })
+    dispatch({ type: DELETE_OUTFIT_FROM_CATEGORY_SUCCESS, payload: response.data })
   } else {
-    dispatch({ type: DELTE_FROM_CATEGORY_FAIL })
+    dispatch({ type: DELETE_OUTFIT_FROM_CATEGORY_FAIL })
   }
 };
 

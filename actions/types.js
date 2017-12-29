@@ -147,8 +147,11 @@ export const CREATE_CATEGORY_SUCCESS = 'craete_category_success';
 export const CREATE_CATEGORY_FAIL = 'craete_category_fail';
 export const ADD_TO_CATEGORY_SUCCESS = 'add_to_category_sucess';
 export const ADD_TO_CATEGORY_FAIL = 'add_to_category_fail';
-export const DELTE_FROM_CATEGORY_SUCCESS = 'delete_from_category_success';
-export const DELTE_FROM_CATEGORY_FAIL = 'delete_from_category_fail';
+export const DELETE_OUTFIT_FROM_CATEGORY_SUCCESS = 'delete_from_category_success';
+export const DELETE_OUTFIT_FROM_CATEGORY_FAIL = 'delete_from_category_fail';
+export const EDIT_CATEGORY_SUCCESS = 'edit_category_success';
+export const EDIT_CATEGORY_FAIL = 'edit_category_fail';
+
 
 export const CATEGORY_LIST_LOAD_SUCCESS = 'category_list_load_success';
 export const CATEGORY_LIST_LOAD_FAIL = 'category_list_load_fail';
