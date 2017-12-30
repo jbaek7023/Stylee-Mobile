@@ -164,35 +164,35 @@ export const fetchUserNextCategoriesById = (token, hType, uri, callback) => asyn
   }
 }
 
-export const fetchUserTopAll = (token, hType, userPk) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
+export const fetchUserClothesAll = (token, hType, userPk, clothesType, callback, callback2) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
 
-  let response = await axios.get(`${ROOT_URL}/clothes/clothlist/${userPk}/1/?page=1`, { headers });
-  if (response.status === 200) {
-    dispatch({ type: FETCH_USER_TOP_BY_USER_ID_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: FETCH_USER_TOP_BY_USER_ID_FAIL })
+    let response = await axios.get(`${ROOT_URL}/clothes/clothlist/${userPk}/${clothesType}/?page=1`, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    callback2();
   }
 }
 
-export const fetchUserTopNextAll = (token, hType, uri) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
+export const fetchUserClothesNextAll = (token, hType, uri, callback, callback2) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
 
-  let response = await axios.get(uri, { headers });
-  if (response.status === 200) {
-    dispatch({ type: FETCH_NEXT_TOP_BY_USER_ID_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: FETCH_NEXT_TOP_BY_USER_ID_FAIL })
+    let response = await axios.get(uri, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    callback2();
   }
 }
 

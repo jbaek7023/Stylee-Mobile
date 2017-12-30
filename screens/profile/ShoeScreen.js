@@ -4,49 +4,82 @@ import { connect } from 'react-redux';
 import { width, height, totalSize } from 'react-native-dimension';
 import * as actions from '../../actions';
 import { RkText } from 'react-native-ui-kitten';
-import { Spinner } from 'native-base';
 import { thresholdLength } from '../../utils/scale';
 
-class ShoeScreen extends Component {
+import { Spinner } from 'native-base';
+
+class TopScreen extends Component {
   state = {
     isLoading: true,
     refreshing: false,
+    tops: [],
+    nextUri: null,
+    isLoadError: false,
   }
 
   componentWillMount() {
-    if(this.props.token) {
-      this.props.fetchShoesAll(this.props.token, this.props.hType);
+    let { token, hType, userPk } = this.props;
+    if(token) {
+      this.props.fetchUserClothesAll(
+        token,
+        hType,
+        userPk,
+        4,
+        (tops, nextUri) => {
+          this.setState({tops, nextUri, isLoading: false});
+        },
+        () => {
+          this.setState({isLoadError: true, isLoading: false});
+        }
+      );
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.shoes !== nextProps.shoes) {
-      // loading순간으로 바꿔야할수도... loading했는데 empty면 얻허게 할꺼야?
-      this.setState({isLoading: false});
-    }
+
   }
 
   _onEndReachedThreshold = () => {
     let { token, hType, nextUri } = this.props;
     if(nextUri) {
-      this.props.fetchShoesNextAll(token, hType, nextUri);
+      this.props.fetchUserClothesNextAll(
+        token,
+        hType,
+        nextUri,
+        (tops, nextUri) => {
+          this.setState({tops, nextUri, isLoading: false});
+        },
+        () => {
+
+        },
+      );
     }
   }
 
   _onRefresh = () => {
     this.setState({refreshing: true});
-    this.props.fetchShoesAll(this.props.token, this.props.hType).then((data)=>{
-      this.setState({refreshing: false})
-    })
-  }
-
-
-  _handleImagePress = (id) => {
-    this.props.navigation.navigate('ClothDetail', {id})
+    let { token, hType, userPk } = this.props;
+    if(this.props.token) {
+      this.props.fetchUserClothesAll(
+        token,
+        hType,
+        userPk,
+        4,
+        (tops, nextUri) => {
+          this.setState({tops, nextUri, isLoading: false, refreshing: false});
+        },
+        () => {
+          this.setState({isLoadError: true, isLoading: false, refreshing: false});
+        }
+      );
+    }
   }
 
   _keyExtractor = (item, index) => item.id;
 
+  _handleImagePress = (id) => {
+    this.props.navigation.navigate('ClothDetail', {id})
+  }
 
   _renderItem = ({item}) => {
     return (
@@ -63,8 +96,6 @@ class ShoeScreen extends Component {
     );
   }
 
-
-  // ToDo: AppLoading
   render() {
     if(this.state.isLoading) {
       return (
@@ -74,36 +105,34 @@ class ShoeScreen extends Component {
       );
     }
 
-    if(this.props.shoes && this.props.shoes.length==0) {
+    if(this.state.tops && this.state.tops.length==0) {
       return (
         <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
           <Image
             fadeDuration={0}
-            style={styles.imageStyle} source={require('../../assets/images/outerwear.png')}/>
-          <RkText style={styles.imageBottomText} rkType="header5 hintColor">Your Outwerwear will be stored here</RkText>
+            style={styles.imageStyle} source={require('../../assets/images/t-shirt.png')}/>
+          <RkText style={styles.imageBottomText} rkType="header5 hintColor">Your Top will be stored here</RkText>
         </View>
       );
     }
     return (
       <View style={{ flex:1 }}>
-        <ScrollView automaticallyAdjustContentInsets={false}>
-          <FlatList
-            data={this.props.shoes}
-            renderItem={this._renderItem}
-            keyExtractor={this._keyExtractor}
-            numColumns={3}
-            refreshControl={
-              <RefreshControl
-                refreshing = {this.state.refreshing}
-                onRefresh = {()=>this._onRefresh()}
-              />
-            }
-            onEndReachedThreshold={thresholdLength}
-            onEndReached = {()=>{
-              this._onEndReachedThreshold()
-            }}
-          />
-        </ScrollView>
+        <FlatList
+          data={this.state.tops}
+          renderItem={this._renderItem}
+          keyExtractor={this._keyExtractor}
+          numColumns={3}
+          refreshControl={
+            <RefreshControl
+              refreshing = {this.state.refreshing}
+              onRefresh = {()=>this._onRefresh()}
+            />
+          }
+          onEndReachedThreshold={thresholdLength}
+          onEndReached = {()=>{
+            this._onEndReachedThreshold()
+          }}
+        />
       </View>
     )
   }
@@ -126,8 +155,8 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({auth: {token, hType}, wardrobe: {shoes, shoesNextUri}}) {
-  return {token, hType, shoes, nextUri: shoesNextUri}
+function mapStateToProps({auth: {token, hType}}) {
+  return { token, hType }
 }
 
-export default connect(mapStateToProps, actions)(ShoeScreen);
+export default connect(mapStateToProps, actions)(TopScreen);

@@ -12,33 +12,67 @@ class TopScreen extends Component {
   state = {
     isLoading: true,
     refreshing: false,
+    tops: [],
+    nextUri: null,
+    isLoadError: false,
   }
 
   componentWillMount() {
-    if(this.props.token) {
-      this.props.fetchUserTopAll(this.props.token, this.props.hType, this.props.userPk);
+    let { token, hType, userPk } = this.props;
+    if(token) {
+      this.props.fetchUserClothesAll(
+        token,
+        hType,
+        userPk,
+        1,
+        (tops, nextUri) => {
+          this.setState({tops, nextUri, isLoading: false});
+        },
+        () => {
+          this.setState({isLoadError: true, isLoading: false});
+        }
+      );
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.tops !== nextProps.tops) {
-      // loading순간으로 바꿔야할수도... loading했는데 empty면 얻허게 할꺼야?
-      this.setState({isLoading: false});
-    }
+
   }
 
   _onEndReachedThreshold = () => {
     let { token, hType, nextUri } = this.props;
     if(nextUri) {
-      this.props.fetchUserTopNextAll(token, hType, nextUri);
+      this.props.fetchUserClothesNextAll(
+        token,
+        hType,
+        nextUri,
+        (tops, nextUri) => {
+          this.setState({tops, nextUri, isLoading: false});
+        },
+        () => {
+
+        },
+      );
     }
   }
 
   _onRefresh = () => {
     this.setState({refreshing: true});
-    this.props.fetchUserTopAll(this.props.token, this.props.hType).then((data)=>{
-      this.setState({refreshing: false})
-    })
+    let { token, hType, userPk } = this.props;
+    if(this.props.token) {
+      this.props.fetchUserClothesAll(
+        token,
+        hType,
+        userPk,
+        1,
+        (tops, nextUri) => {
+          this.setState({tops, nextUri, isLoading: false, refreshing: false});
+        },
+        () => {
+          this.setState({isLoadError: true, isLoading: false, refreshing: false});
+        }
+      );
+    }
   }
 
   _keyExtractor = (item, index) => item.id;
@@ -62,8 +96,6 @@ class TopScreen extends Component {
     );
   }
 
-
-
   render() {
     if(this.state.isLoading) {
       return (
@@ -73,7 +105,7 @@ class TopScreen extends Component {
       );
     }
 
-    if(this.props.tops && this.props.tops.length==0) {
+    if(this.state.tops && this.state.tops.length==0) {
       return (
         <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
           <Image
@@ -86,7 +118,7 @@ class TopScreen extends Component {
     return (
       <View style={{ flex:1 }}>
         <FlatList
-          data={this.props.tops}
+          data={this.state.tops}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
           numColumns={3}
@@ -123,8 +155,8 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({auth: {token, hType}, user: {tops, topNextUri}}) {
-  return {token, hType, tops, nextUri: topNextUri}
+function mapStateToProps({auth: {token, hType}}) {
+  return { token, hType }
 }
 
 export default connect(mapStateToProps, actions)(TopScreen);
