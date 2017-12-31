@@ -21,7 +21,8 @@ class OutfitSimpleItem extends Component {
     listOnOutfit: [],
     title: '',
     onlyMe: false,
-    taggedCategories: []
+    taggedCategories: [],
+    isCategoryLoading: true,
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,21 +35,23 @@ class OutfitSimpleItem extends Component {
       this.setState({liked, starred});
     }
 
-    let { listOnOutfit, name } = nextProps;
-    let categoryUpdateCondition = (this.state.listOnOutfit != listOnOutfit) ? true: false;
-    if(categoryUpdateCondition) {
-      this.setState({listOnOutfit});
-      let taggedCategories = listOnOutfit.reduce((row, {id, added}) => {
-        if(added)
-          row.push(id);
-        return row;
-      }, []);
-      this.setState({ taggedCategories })
-    }
-    // Snackbar disabled
+    // You can't do this. about 10 components will do this job.
+    // let addedCondition = (this.props.added != nextProps.added) ? true : false;
+    // if(addedCondition) {
+    //   SnackBar.show(('Added to '+nextProps.added), { duration: 2500 })
+    // }
+    // let removedCondition = (this.props.removed != nextProps.removed) ? true : false;
+    // if(removedCondition) {
+    //   SnackBar.show(('Removed From '+nextProps.removed), { duration: 2500 })
+    // }
+    //
+    // let newCategoryCondition = (this.props.name != nextProps.name) ? true: false;
+    // if (newCategoryCondition) {
+    //   SnackBar.show(('Added to '+nextProps.name), { duration: 2500 })
+    // }
   }
 
-  hideModal = () => this.setState({isCategoryVisible: false})
+  hideModal = () => this.setState({isCategoryVisible: false, isCategoryLoading: true})
   showModal = () => this.setState({isCategoryVisible: true});
 
   _handleLikePress = (oid) => {
@@ -168,6 +171,7 @@ class OutfitSimpleItem extends Component {
         newScreen={this.state.newScreen}
         categoryList={this.state.listOnOutfit}
         isCategoryVisible={this.state.isCategoryVisible}
+        isCategoryLoading={this.state.isCategoryLoading}
         hideModal={this.hideModal}
         setToCreateScreen={this._setToCreateScreen}
         handleCreatePress={this._handleCreatePress}
@@ -186,9 +190,19 @@ class OutfitSimpleItem extends Component {
   _handleCategoryPress = (oid) => {
     let { token, hType } = this.props;
     // fetchCategory
-    this.props.fetchOutfitCategories(token, hType, oid);
-    this.setState({newScreen:false});
     this.showModal();
+    this.props.fetchOutfitCategories(
+      token,
+      hType,
+      oid,
+      (listOnOutfit) => {
+      let taggedCategories = listOnOutfit.reduce((row, {id, added}) => {
+        if(added)
+          row.push(id);
+        return row;
+      }, []);
+      this.setState({listOnOutfit, taggedCategories, newScreen: false, isCategoryLoading: false});
+    });
   }
 
   _renderCommentCount = (count) => {
@@ -324,8 +338,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, category: {listOnOutfit, name, added, removed}}) {
-  return { token, hType, listOnOutfit, name, added, removed }
+function mapStateToProps({auth: {token, hType}, category: {name, added, removed}}) {
+  return { token, hType, name, added, removed }
 }
 
 export default connect(mapStateToProps, actions)(OutfitSimpleItem);

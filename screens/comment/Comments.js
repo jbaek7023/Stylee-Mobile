@@ -18,6 +18,7 @@ import {
   RkTextInput,
   RkAvoidKeyboard
 } from 'react-native-ui-kitten';
+import Swipeout from 'react-native-swipeout';
 import { Avatar } from '../../components/Avatar';
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten';
@@ -36,23 +37,31 @@ class CommentsScreen extends Component {
   });
 
   state = {
-    message: ''
+    message: '',
+    comments: [],
+    isLoading: true,
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(this.props.addedComment.id !== nextProps.addedComment.id) {
-      // fetch things
-      const { token, hType} = this.props;
-      const { id, postType } = this.props.navigation.state.params;
+  componentDidMount() {
+    this._fetchComments();
+  }
 
-      this.props.fetchComments(token, hType, id, postType);
-    }
+  _fetchComments = () => {
+    const { token, hType} = this.props;
+    const { id, postType } = this.props.navigation.state.params;
 
-    if(this.props.comments.length != nextProps.comments.length) {
-      InteractionManager.runAfterInteractions(() => {
-        this.scrollC.scrollToEnd();
-      });
-    }
+    this.props.fetchComments(
+      token,
+      hType,
+      id,
+      postType,
+      (comments) => {
+        this.setState({comments, isLoading: false});
+        InteractionManager.runAfterInteractions(() => {
+          setTimeout(()=>this.scrollC.scrollToEnd(), 500);
+        });
+      }
+    );
   }
 
   _keyExtractor(item, index) {
@@ -122,25 +131,52 @@ class CommentsScreen extends Component {
     );
   }
 
+  _deleteComment = (commentId) => {
+    let { token, hType } = this.props;
+    this.props.deleteComment(
+      token,
+      hType,
+      commentId,
+      () => {
+        let comments = _.filter(this.state.comments, (curObject) => {
+            return curObject.id !== commentId;
+        });
+        this.setState({ comments });
+      }
+    );
+  }
+
   _renderItem = (row) => {
     let { id: userId, image: uri, username } = row.item.user;
     let { id: commentId, content, created_at, reply_count: replyCount } = row.item;
+    var swipeoutBtns = [
+      {
+        text: 'Delete',
+        onPress: () => { this._deleteComment(commentId) },
+        backgroundColor: '#f64e59'
+      }
+    ]
     return (
       <View>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
-            {this._renderAvatar(uri)}
-          </TouchableOpacity>
-          <View style={styles.content}>
-            <View style={styles.contentHeader}>
-              <RkText rkType='header5'>{username}</RkText>
-              <RkText rkType='secondary4 hintColor'>
-                <TimeAgo time={created_at}/>
-              </RkText>
+        <Swipeout
+          autoClose={true}
+          right={swipeoutBtns}
+          style={styles.swipeContainer}>
+          <View style={styles.container}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+              {this._renderAvatar(uri)}
+            </TouchableOpacity>
+            <View style={styles.content}>
+              <View style={styles.contentHeader}>
+                <RkText rkType='header5'>{username}</RkText>
+                <RkText rkType='secondary4 hintColor'>
+                  <TimeAgo time={created_at}/>
+                </RkText>
+              </View>
+              <RkText rkType='primary3 mediumLine'>{content}</RkText>
             </View>
-            <RkText rkType='primary3 mediumLine'>{content}</RkText>
           </View>
-        </View>
+        </Swipeout>
         {this._renderReplies(commentId, replyCount, 1, uri, 'jbaek7023',  'hello world', created_at)}
       </View>
     )
@@ -159,11 +195,18 @@ class CommentsScreen extends Component {
     let { token, hType } = this.props;
     let { id, postType } = this.props.navigation.state.params;
     let { message } = this.state;
-    this.props.createComment(token, hType, postType, id, message);
+    this.props.createComment(
+      token,
+      hType,
+      postType,
+      id,
+      message,
+      () => {
+        this._fetchComments();
+      }
+    );
     Keyboard.dismiss();
     this.setState({message: ''});
-
-
   }
 
   _renderKeyboard = () => {
@@ -191,7 +234,7 @@ class CommentsScreen extends Component {
         <FlatList
           ref={(focus) => {this.scrollC = focus}}
           style={styles.root}
-          data={this.props.comments}
+          data={this.state.comments}
           ItemSeparatorComponent={this._renderSeparator}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}/>
@@ -200,19 +243,12 @@ class CommentsScreen extends Component {
       </View>
     )
   }
-
-  componentDidMount() {
-    const { token, hType} = this.props;
-    const { id, postType } = this.props.navigation.state.params;
-
-    InteractionManager.runAfterInteractions(() => {
-      this.scrollC.scrollToEnd();
-    });
-    this.props.fetchComments(token, hType, id, postType);
-  }
 }
 
 let styles = RkStyleSheet.create(theme => ({
+  swipeContainer: {
+    backgroundColor: theme.colors.screen.base
+  },
   root: {
     backgroundColor: theme.colors.screen.base
   },

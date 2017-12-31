@@ -39,6 +39,7 @@
     "react-native-scalable-image": "^0.2.1",
     "react-native-simple-toast": "^0.0.7",
     "react-native-snackbar-dialog": "^1.4.0",
+    "react-native-swipeout": "^2.3.3",
     "react-native-timeago": "^0.3.0",
     "react-native-ui-kitten": "^2.0.1",
     "react-navigation": "^1.0.0-beta.21",

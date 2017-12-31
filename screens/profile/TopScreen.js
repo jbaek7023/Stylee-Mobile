@@ -111,7 +111,7 @@ class TopScreen extends Component {
           <Image
             fadeDuration={0}
             style={styles.imageStyle} source={require('../../assets/images/t-shirt.png')}/>
-          <RkText style={styles.imageBottomText} rkType="header5 hintColor">Your Top will be stored here</RkText>
+          <RkText style={styles.imageBottomText} rkType="header5 hintColor">No top items to show</RkText>
         </View>
       );
     }
@@ -131,10 +131,9 @@ class TopScreen extends Component {
           onEndReachedThreshold={thresholdLength}
           onEndReached = {()=>{
             this._onEndReachedThreshold()
-          }}
-        />
+          }}/>
       </View>
-    )
+    );
   }
 }
 
@@ -150,8 +149,7 @@ const styles = StyleSheet.create({
     height: width(30),
   },
   imageBottomText: {
-    width: width(70),
-    marginLeft: 23,
+    textAlign: 'center'
   }
 });
 

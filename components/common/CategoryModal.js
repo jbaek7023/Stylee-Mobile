@@ -10,6 +10,7 @@ import {FontAwesome} from '../../assets/icons';
 import {
   RkSwitch
 } from '../../components/switch/index';
+import { Spinner } from 'native-base';
 
 class CategoryModal extends Component {
   _renderPrivacy = (onlyMe) => {
@@ -23,8 +24,6 @@ class CategoryModal extends Component {
       );
     }
   }
-
-
 
   _handleSelectCategory = (categoryId, selected) => {
     if(selected) {
@@ -49,6 +48,27 @@ class CategoryModal extends Component {
       </TouchableOpacity>
     );
   }
+
+  _renderFlatList = () => {
+    if(this.props.isCategoryLoading) {
+      return (
+        <View style={styles.spinnerViewStyle}>
+          <Spinner color='#6F3AB1'/>
+        </View>
+      );
+    }
+    return (
+      <ScrollView style={styles.scrollViewStyle}>
+        <FlatList
+          data={this.props.categoryList}
+          renderItem={this.renderItem}
+          keyExtractor={this._keyExtractor}
+          extraData={this.props.taggedCategories}
+        />
+      </ScrollView>
+    );
+  }
+
 
   _keyExtractor = (item, index) => item.id;
 
@@ -102,14 +122,7 @@ class CategoryModal extends Component {
               <RkText rkType="primary1">Done</RkText>
             </TouchableOpacity>
           </View>
-          <ScrollView style={styles.scrollViewStyle}>
-            <FlatList
-              data={this.props.categoryList}
-              renderItem={this.renderItem}
-              keyExtractor={this._keyExtractor}
-              extraData={this.props.taggedCategories}
-            />
-          </ScrollView>
+          {this._renderFlatList()}
           <View style={styles.addButton}>
             <RkButton
               rkType='clear'
@@ -191,6 +204,11 @@ const styles = RkStyleSheet.create(theme => ({
   },
   scrollViewStyle: {
     maxHeight: 237
+  },
+  spinnerViewStyle: {
+    height: 237,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   titleRow: {
     flexDirection: 'row',

@@ -120,7 +120,7 @@ class AuthScreen extends Component {
             <Image
               fadeDuration={0}
               style={styles.logo}
-              source={require('../../assets/images/styleeicon.png')}
+              source={require('../../assets/images/logo.png')}
             />
           </View>
           <Form style={styles.formStyle}>
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   formStyle: {
+    marginTop: 20,
     paddingTop: 10
   },
   formAndLogoContainer: {
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: width(50),
-    height: height(25)
+    height: width(18)
   }
 });
 

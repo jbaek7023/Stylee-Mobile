@@ -46,8 +46,11 @@ class EtcScreen extends Component {
   render() {
     if(this.props.etcs && this.props.etcs.length==0) {
       return (
-        <View style={{ flex:1 }}>
-          <Text>`Your Outwear slot is empty. Why don't you add more?`</Text>
+        <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
+          <Image
+            fadeDuration={0}
+            style={styles.imageStyle} source={require('../../assets/images/t-shirt.png')}/>
+          <RkText style={styles.imageBottomText} rkType="header5 hintColor">No top items to show</RkText>
         </View>
       );
     }
@@ -73,6 +76,13 @@ const styles = StyleSheet.create({
     height:width(33),
     borderWidth:.5,
     borderColor:'#fff'
+  },
+  imageStyle: {
+    width: width(30),
+    height: width(30),
+  },
+  imageBottomText: {
+    textAlign: 'center'
   }
 });
 

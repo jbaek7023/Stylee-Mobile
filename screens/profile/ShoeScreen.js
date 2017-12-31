@@ -8,11 +8,11 @@ import { thresholdLength } from '../../utils/scale';
 
 import { Spinner } from 'native-base';
 
-class TopScreen extends Component {
+class ShoeScreen extends Component {
   state = {
     isLoading: true,
     refreshing: false,
-    tops: [],
+    shoes: [],
     nextUri: null,
     isLoadError: false,
   }
@@ -25,8 +25,8 @@ class TopScreen extends Component {
         hType,
         userPk,
         4,
-        (tops, nextUri) => {
-          this.setState({tops, nextUri, isLoading: false});
+        (shoes, nextUri) => {
+          this.setState({shoes, nextUri, isLoading: false});
         },
         () => {
           this.setState({isLoadError: true, isLoading: false});
@@ -46,8 +46,8 @@ class TopScreen extends Component {
         token,
         hType,
         nextUri,
-        (tops, nextUri) => {
-          this.setState({tops, nextUri, isLoading: false});
+        (shoes, nextUri) => {
+          this.setState({shoes, nextUri, isLoading: false});
         },
         () => {
 
@@ -65,8 +65,8 @@ class TopScreen extends Component {
         hType,
         userPk,
         4,
-        (tops, nextUri) => {
-          this.setState({tops, nextUri, isLoading: false, refreshing: false});
+        (shoes, nextUri) => {
+          this.setState({shoes, nextUri, isLoading: false, refreshing: false});
         },
         () => {
           this.setState({isLoadError: true, isLoading: false, refreshing: false});
@@ -105,20 +105,20 @@ class TopScreen extends Component {
       );
     }
 
-    if(this.state.tops && this.state.tops.length==0) {
+    if(this.state.shoes && this.state.shoes.length==0) {
       return (
         <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
           <Image
             fadeDuration={0}
-            style={styles.imageStyle} source={require('../../assets/images/t-shirt.png')}/>
-          <RkText style={styles.imageBottomText} rkType="header5 hintColor">Your Top will be stored here</RkText>
+            style={styles.imageStyle} source={require('../../assets/images/shoes.png')}/>
+          <RkText style={styles.imageBottomText} rkType="header5 hintColor">No shoe items to show</RkText>
         </View>
       );
     }
     return (
       <View style={{ flex:1 }}>
         <FlatList
-          data={this.state.tops}
+          data={this.state.shoes}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
           numColumns={3}
@@ -150,8 +150,7 @@ const styles = StyleSheet.create({
     height: width(30),
   },
   imageBottomText: {
-    width: width(70),
-    marginLeft: 23,
+    textAlign: 'center'
   }
 });
 
@@ -159,4 +158,4 @@ function mapStateToProps({auth: {token, hType}}) {
   return { token, hType }
 }
 
-export default connect(mapStateToProps, actions)(TopScreen);
+export default connect(mapStateToProps, actions)(ShoeScreen);

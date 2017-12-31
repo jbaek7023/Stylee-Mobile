@@ -157,19 +157,19 @@ export const fetchUserCategories = (token, hType) => async dispatch => {
   }
 };
 
-export const fetchOutfitCategories = (token, hType, oid) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
+export const fetchOutfitCategories = (token, hType, oid, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
 
-  let response = await axios.get(`${ROOT_URL}/outfits/catelist/${oid}/`, { headers });
-  if (response.status === 200) {
-    dispatch({ type: OUTFIT_CATEGORIES_LOAD_SUCCESS, payload: response.data.categories })
-  } else {
-    dispatch({ type: OUTFIT_CATEGORIES_LOAD_FAIL })
+    let response = await axios.get(`${ROOT_URL}/outfits/catelist/${oid}/`, { headers });
+    callback(response.data.categories);
+  } catch(e) {
+    console.log(e);
   }
 };
 

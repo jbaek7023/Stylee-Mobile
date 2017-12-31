@@ -29,6 +29,7 @@ import SnackBar from 'react-native-snackbar-dialog';
 import { NavBar } from '../../components/navBar';
 import {withRkTheme} from 'react-native-ui-kitten'
 let ThemedNavigationBar = withRkTheme(NavBar);
+import { Spinner } from 'native-base';
 
 class MenuScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -114,7 +115,7 @@ class MenuScreen extends Component {
         </TouchableOpacity>
       );
     }
-    return (<TouchableOpacity style={styles.viewProfile}><Text>Not Found</Text></TouchableOpacity>);
+    return (<TouchableOpacity style={styles.viewProfile}><Spinner color='#6F3AB1'/></TouchableOpacity>);
   }
 
   _handleProfilePress = (id) => {

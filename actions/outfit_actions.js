@@ -71,7 +71,6 @@ export const deleteStyle = (token, hType, oid) => async dispatch => {
     headers = { 'Authorization': `Bearer ${token}`};
   }
 
-
   let response = await axios.delete(`${ROOT_URL}/outfits/edit/${oid}/`, {headers});
 
   if(response.status === 204) {
@@ -115,20 +114,16 @@ export const loadOutfitNextAll = (token, hType, nextUri) => async dispatch => {
 };
 
 export const fetchOutfitDetail = (token, hType, id, callback) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
-
-  let response = await axios.get(`${ROOT_URL}/outfits/detail/${id}`, { headers });
-  if(callback) {
-    callback();
-  }
-  if (response.status === 200) {
-    dispatch({ type: O_DETAIL_LOAD_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: O_DETAIL_LOAD_FAIL })
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(`${ROOT_URL}/outfits/detail/${id}`, { headers });
+    callback(response.data);
+  } catch(e) {
+    console.log(e);
   }
 }

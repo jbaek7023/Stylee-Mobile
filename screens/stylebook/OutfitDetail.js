@@ -30,9 +30,6 @@ class OutfitDetail extends Component {
 
   state = {
     isCategoryVisible: false,
-    isFollowing: false,
-    liked: false,
-    starred: false,
     newScreen: false,
     listOnOutfit: [],
     title: '',
@@ -40,58 +37,42 @@ class OutfitDetail extends Component {
     taggedCategories: [],
     isLoading: true,
     isMenuOpen: false,
+    outfitDetail: undefined,
+    isCategoryLoading: true,
   }
 
   componentWillMount() {
     const { id } = this.props.navigation.state.params;
     const { token, hType } = this.props;
-    this.props.fetchOutfitDetail(token, hType, id);
+    this.props.fetchOutfitDetail(
+      token,
+      hType,
+      id,
+      (outfitDetail) => {
+        this.setState({outfitDetail, isLoading: false})
+      }
+    );
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.outfitDetail && (this.props.outfitDetail !== nextProps.outfitDetail)) {
-      this.setState({isLoading: false});
-    }
-
     if(nextProps.edited && (this.props.edited !== nextProps.edited)) {
       const { token, hType } = nextProps;
       const { id } = this.props.navigation.state.params;
       this.setState({isLoading: true});
       this.props.fetchOutfitDetail(
         token, hType, id,
-        ()=>{
-          this.setState({isLoading:false})
+        (outfitDetail)=>{
+          this.setState({
+            outfitDetail,
+            isLoading:false
+          })
         }
       );
     }
 
-    // check follonwing, liked, starred
-    let isFollowing = nextProps.outfitDetail.is_following;
-    let { liked, starred } = nextProps.outfitDetail;
-    let condition = (
-      this.state.isFollowing!=isFollowing ||
-      this.state.liked!=liked ||
-      this.state.starred!=starred
-    ) ? true : false;
-    if(condition) {
-      this.setState({isFollowing, liked, starred});
-    }
-
-    let { listOnOutfit, name } = nextProps;
-    let categoryUpdateCondition = (this.state.listOnOutfit != listOnOutfit) ? true: false;
-    if(categoryUpdateCondition) {
-      this.setState({listOnOutfit});
-      let taggedCategories = listOnOutfit.reduce((row, {id, added}) => {
-        if(added)
-          row.push(id);
-        return row;
-      }, []);
-      this.setState({ taggedCategories })
-    }
-
     let addedCondition = (this.props.added != nextProps.added) ? true : false;
     if(addedCondition) {
-      SnackBar.show(('Added to '+nextProps.removed), { duration: 2500 })
+      SnackBar.show(('Added to '+nextProps.added), { duration: 2500 })
     }
     let removedCondition = (this.props.removed != nextProps.removed) ? true : false;
     if(removedCondition) {
@@ -104,29 +85,49 @@ class OutfitDetail extends Component {
     }
   }
 
-  hideModal = () => this.setState({isCategoryVisible: false})
+  hideModal = () => this.setState({isCategoryVisible: false, isCategoryLoading: true});
   showModal = () => this.setState({isCategoryVisible: true});
   _handleLikePress = (oid) => {
     let { token, hType } = this.props;
-    this.setState({liked: true})
+    this.setState({
+      outfitDetail: {
+        ...this.state.outfitDetail,
+        liked: true
+      }
+    })
     this.props.likeOutfit(token, hType, oid)
   }
 
   _handleUnlikePress = (oid) => {
     let { token, hType } = this.props;
-    this.setState({liked: false})
+    this.setState({
+      outfitDetail: {
+        ...this.state.outfitDetail,
+        liked: false
+      }
+    })
     this.props.unlikeOutfit(token, hType, oid)
   }
 
   _handleBookmarkPress = (oid) => {
     let { token, hType } = this.props;
-    this.setState({starred: true})
+    this.setState({
+      outfitDetail: {
+        ...this.state.outfitDetail,
+        starred: true
+      }
+    })
     this.props.bookmarkOutfit(token, hType, oid)
   }
 
   _handleUnbookmarkPress = (oid) => {
     let { token, hType } = this.props;
-    this.setState({starred: false})
+    this.setState({
+      outfitDetail: {
+        ...outfitDetail,
+        starred: false
+      }
+    })
     this.props.unbookmarkOutfit(token, hType, oid)
   }
 
@@ -191,7 +192,7 @@ class OutfitDetail extends Component {
     this.setState({isMenuOpen: true});
   }
 
-  _renderFollow = (isOwner, isFollowing, userPk) => {
+  _renderFollow = () => {
     return (
       <TouchableOpacity  style={{height:55, width:50, paddingLeft:25, justifyContent: 'center'}} onPress={()=>{this._handleMenuPress()}}>
         <Ionicons name="ios-more" size={32} style={{ marginLeft: 5 }}/>
@@ -225,7 +226,7 @@ class OutfitDetail extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.right}>
-            {this._renderFollow(detail.is_owner, detail.is_following, detail.user.id)}
+            {this._renderFollow()}
           </View>
         </View>
       );
@@ -279,9 +280,20 @@ class OutfitDetail extends Component {
   _handleCategoryPress = (oid) => {
     let { token, hType } = this.props;
     // fetchCategory
-    this.props.fetchOutfitCategories(token, hType, oid);
-    this.setState({newScreen:false});
     this.showModal();
+    this.props.fetchOutfitCategories(
+      token,
+      hType,
+      oid,
+      (listOnOutfit) => {
+      let taggedCategories = listOnOutfit.reduce((row, {id, added}) => {
+        if(added)
+          row.push(id);
+        return row;
+      }, []);
+      this.setState({listOnOutfit, taggedCategories, newScreen: false, isCategoryLoading: false});
+    });
+
   }
 
   // Category Modal Functions
@@ -318,6 +330,7 @@ class OutfitDetail extends Component {
       <CategoryModal
         newScreen={this.state.newScreen}
         categoryList={this.state.listOnOutfit}
+        isCategoryLoading={this.state.isCategoryLoading}
         isCategoryVisible={this.state.isCategoryVisible}
         hideModal={this.hideModal}
         setToCreateScreen={this._setToCreateScreen}
@@ -382,7 +395,7 @@ class OutfitDetail extends Component {
 
 
   render() {
-    const detail = this.props.outfitDetail;
+    const detail = this.state.outfitDetail;
     // User Access Not Yet
     if(this.state.isLoading) {
       return (
@@ -396,80 +409,83 @@ class OutfitDetail extends Component {
         </View>
       );
     }
-    return (
-      <View style={styles.root}>
-        <View style={styles.header}>
-          {this._renderHeader(detail)}
-        </View>
-        <ScrollView style={styles.rootScroll}>
-          <RkCard rkType='article'>
-            <Image
-              fadeDuration={0}
-              style={styles.outfitImage}
-              resizeMode="cover"
-              source={{uri: detail.outfit_img}} />
-            <View style={{ marginLeft:20, marginRight: 20, flexDirection: 'row', flex:1, justifyContent: 'space-between' }}>
-              <View>
-                <View style={{marginTop: 10}}>
-                    <RkText rkType="header4">{detail.content}</RkText>
-                </View>
-            		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-          				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
-                  <TouchableOpacity onPress={()=>this._handleCommentPress()}>
-          				  <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={{justifyContent: 'center'}}>{this._renderPrivacy(detail.only_me)}</View>
-            </View>
-            <View style={styles.socialContainer}>
-              <SocialBar
-                isLiked={this.state.liked}
-                isStarred={this.state.starred}
-                handleLikePress={this._handleLikePress}
-                handleUnlikePress={this._handleUnlikePress}
-                handleBookmarkPress={this._handleBookmarkPress}
-                handleUnbookmarkPress={this._handleUnbookmarkPress}
-                handleCategoryPress={this._handleCategoryPress}
-                handleCommentPress={this._handleCommentPress}
-                oid={detail.id}
-              />
-            </View>
-
-            <View rkCardContent style={styles.commentContainer}>
-              <TouchableOpacity onPress={()=>{this._handleCommentPress()}} style={{marginTop: 5}}>
-                {this._renderComments(detail.comments)}
-                <View>
-                  {this._renderCommentCount(detail.comment_count)}
-                </View>
-              </TouchableOpacity>
-            </View>
-
-              {this._renderTaggedClothes(this.props.outfitDetail.tagged_clothes)}
-
-
-            <View style={{marginBottom: 10}}>
-              <View style={styles.headContainer}>
-                <RkText rkType="header5">Detail</RkText>
-              </View>
-              <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary2">Gender</RkText><RkText rkType="primary3">{detail.gender}</RkText>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.dContainer, styles.row]}>
-                <RkText rkType="primary2">Location</RkText><RkText rkType="primary3">{detail.location}</RkText>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.dContainer, styles.lastrow]}>
-                <RkText rkType="primary2">Link</RkText><RkText rkType="primary3">{detail.link}</RkText>
-              </TouchableOpacity>
-            </View>
-          </RkCard>
-          {this._renderCategoryModal(detail.id)}
-          <View>
-            {this._renderMenuModal(detail)}
+    if(detail) {
+      return (
+        <View style={styles.root}>
+          <View style={styles.header}>
+            {this._renderHeader(detail)}
           </View>
-        </ScrollView>
-      </View>
-    );
+          <ScrollView style={styles.rootScroll}>
+            <RkCard rkType='article'>
+              <Image
+                fadeDuration={0}
+                style={styles.outfitImage}
+                resizeMode="cover"
+                source={{uri: detail.outfit_img}} />
+              <View style={{ marginLeft:20, marginRight: 20, flexDirection: 'row', flex:1, justifyContent: 'space-between' }}>
+                <View>
+                  <View style={{marginTop: 10}}>
+                      <RkText rkType="header4">{detail.content}</RkText>
+                  </View>
+              		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+            				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
+                    <TouchableOpacity onPress={()=>this._handleCommentPress()}>
+            				  <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={{justifyContent: 'center'}}>{this._renderPrivacy(detail.only_me)}</View>
+              </View>
+              <View style={styles.socialContainer}>
+                <SocialBar
+                  isLiked={this.state.outfitDetail.liked}
+                  isStarred={this.state.outfitDetail.starred}
+                  handleLikePress={this._handleLikePress}
+                  handleUnlikePress={this._handleUnlikePress}
+                  handleBookmarkPress={this._handleBookmarkPress}
+                  handleUnbookmarkPress={this._handleUnbookmarkPress}
+                  handleCategoryPress={this._handleCategoryPress}
+                  handleCommentPress={this._handleCommentPress}
+                  oid={detail.id}
+                />
+              </View>
+
+              <View rkCardContent style={styles.commentContainer}>
+                <TouchableOpacity onPress={()=>{this._handleCommentPress()}} style={{marginTop: 5}}>
+                  {this._renderComments(detail.comments)}
+                  <View>
+                    {this._renderCommentCount(detail.comment_count)}
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+                {this._renderTaggedClothes(this.state.outfitDetail.tagged_clothes)}
+
+
+              <View style={{marginBottom: 10}}>
+                <View style={styles.headContainer}>
+                  <RkText rkType="header5">Detail</RkText>
+                </View>
+                <TouchableOpacity style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary2">Gender</RkText><RkText rkType="primary3">{detail.gender}</RkText>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.dContainer, styles.row]}>
+                  <RkText rkType="primary2">Location</RkText><RkText rkType="primary3">{detail.location}</RkText>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.dContainer, styles.lastrow]}>
+                  <RkText rkType="primary2">Link</RkText><RkText rkType="primary3">{detail.link}</RkText>
+                </TouchableOpacity>
+              </View>
+            </RkCard>
+            {this._renderCategoryModal(detail.id)}
+            <View>
+              {this._renderMenuModal(detail)}
+            </View>
+          </ScrollView>
+        </View>
+      );
+    }
+    return <View />;
   }
 }
 
@@ -579,8 +595,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, outfit: {outfitDetail, edited}, category: {listOnOutfit, name, added, removed}}) {
-  return { token, hType, outfitDetail, listOnOutfit, name, added, removed, edited}
+function mapStateToProps({auth: {token, hType}, outfit: {edited}, category: {name, added, removed}}) {
+  return { token, hType, name, added, removed, edited}
 }
 
 export default connect(mapStateToProps, actions)(OutfitDetail);
