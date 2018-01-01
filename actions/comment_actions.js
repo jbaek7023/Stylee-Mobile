@@ -33,6 +33,25 @@ export const createComment = (token, hType, postType, id, text, callback) => asy
   }
 }
 
+export const replyOnComment = (token, hType, id, message, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+
+    let response = await axios.post(`${ROOT_URL}/comments/reply/`, {
+      pid: id,
+      message
+    }, {headers});
+    callback();
+  } catch(e) {
+    console.log(e);
+  }
+}
+
 export const deleteComment = (token, hType, id, callback) => async dispatch => {
   try {
     let headers = { 'Authorization': `JWT ${token}`};
@@ -61,27 +80,27 @@ export const fetchComments = (token, hType, id, postType, callback) => async dis
 
     let reaponse = null;
     if(postType==1) {
-      response = await axios.get(`${ROOT_URL}/outfits/comments/${id}/`, { headers });
+      response = await axios.get(`${ROOT_URL}/comments/olist/${id}/`, { headers });
     } else if (postType==2) {
-      response = await axios.get(`${ROOT_URL}/clothes/comments/${id}/`, { headers });
+      response = await axios.get(`${ROOT_URL}/comments/clist/${id}/`, { headers });
     }
-    callback(response.data.comments);
+    callback(response.data);
   } catch(e) {
     console.log(e);
   }
 }
 
-export const fetchCommentDetail = (token, hType, id) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
-  let response = await axios.get(`${ROOT_URL}/comments/detail/${id}/`, { headers });
-  if (response.status === 200) {
-    dispatch({ type: COMMENT_DETAIL_SUCCESS, payload: response.data });
-  } else {
-    dispatch({ type: COMMENT_DETAIL_FAIL });
+export const fetchCommentDetail = (token, hType, id, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(`${ROOT_URL}/comments/detail/${id}/`, { headers });
+    callback(response.data);
+  } catch(e) {
+    console.log(e);
   }
 }

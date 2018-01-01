@@ -9,7 +9,8 @@ import {
   Keyboard,
   Image,
   Platform,
-  InteractionManager
+  InteractionManager,
+  Alert
 } from 'react-native';
 import {
   RkStyleSheet,
@@ -26,6 +27,8 @@ import TimeAgo from 'react-native-timeago';
 import _ from 'lodash';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 let ThemedNavigationBar = withRkTheme(NavBar);
+import { Spinner } from 'native-base';
+import SnackBar from 'react-native-snackbar-dialog';
 
 class CommentsScreen extends Component {
   static navigationOptions = ({navigation}) => ({
@@ -40,13 +43,14 @@ class CommentsScreen extends Component {
     message: '',
     comments: [],
     isLoading: true,
+    isReplyFetching: false,
   }
 
   componentDidMount() {
     this._fetchComments();
   }
 
-  _fetchComments = () => {
+  _fetchComments = (create) => {
     const { token, hType} = this.props;
     const { id, postType } = this.props.navigation.state.params;
 
@@ -56,10 +60,14 @@ class CommentsScreen extends Component {
       id,
       postType,
       (comments) => {
-        this.setState({comments, isLoading: false});
-        InteractionManager.runAfterInteractions(() => {
-          setTimeout(()=>this.scrollC.scrollToEnd(), 500);
-        });
+        if(create===1) {
+          this.setState({comments, isReplyFetching: false})
+        } else {
+          this.setState({comments, isLoading: false});
+          InteractionManager.runAfterInteractions(() => {
+            setTimeout(()=>this.scrollC.scrollToEnd(), 200);
+          });
+        }
       }
     );
   }
@@ -74,12 +82,12 @@ class CommentsScreen extends Component {
     )
   }
 
-  _renderReplies = (id, replyCount, userId, uri, username, content, created_at) => {
+  _renderReplies = (commentId, replyCount, userId, uri, username, content, created_at) => {
     if(replyCount==1) {
       return (
         <View style={[styles.container, {marginLeft: 25}]}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
-            <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+            {this._renderAvatar(uri)}
           </TouchableOpacity>
           <View style={styles.content}>
             <View style={styles.contentHeader}>
@@ -89,6 +97,11 @@ class CommentsScreen extends Component {
               </RkText>
             </View>
             <RkText rkType='primary3 mediumLine'>{content}</RkText>
+            <View style={{flexDirection: 'row', marginTop:5}}>
+              <TouchableOpacity onPress={()=>this._handleReplyPress(commentId)}>
+                <RkText rkType='secondary4 hintColor'>Reply</RkText>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       );
@@ -96,25 +109,33 @@ class CommentsScreen extends Component {
       return (
         <View>
           <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('CommentDetail', {id})}}
+            onPress={()=>this._handleReplyPress(commentId)}
             style={styles.cmtContainer}>
             <RkText
               rkType='header6'>View all {replyCount} replies</RkText>
           </TouchableOpacity>
           <View style={[styles.container, {marginLeft: 25}]}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
-              <Avatar rkType='circle' style={styles.avatar} img={{uri}}/>
+              {this._renderAvatar(uri)}
             </TouchableOpacity>
-            <View style={styles.content}>
+            <TouchableOpacity
+              onPress={()=>this._handleReplyPress(commentId)}
+              style={styles.content}>
               <View style={styles.contentHeader}>
+                <TouchableOpacity  onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
                 <RkText rkType='header5'>{username}</RkText>
+                </TouchableOpacity>
                 <RkText rkType='secondary4 hintColor'>
                   <TimeAgo time={created_at}/>
                 </RkText>
               </View>
               <RkText rkType='primary3 mediumLine'>{content}</RkText>
-            </View>
+              <View style={{flexDirection: 'row', marginTop:5}}>
+                <TouchableOpacity onPress={()=>this._handleReplyPress(commentId)}>
+                  <RkText rkType='secondary4 hintColor'>Reply</RkText>
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       );
@@ -142,8 +163,26 @@ class CommentsScreen extends Component {
             return curObject.id !== commentId;
         });
         this.setState({ comments });
+        SnackBar.show(('Comment Deleted'), { duration: 1100 })
       }
     );
+  }
+
+  _deletePress = (commentId) => {
+    // SHOW Alert
+    Alert.alert(
+      'Delete',
+      'Are you permanently deleting this comment?',
+      [
+        {text: 'Cancel'},
+        {text: 'Delete', onPress: () => this._deleteComment(commentId)},
+      ],
+      { cancelable: true }
+    )
+  }
+
+  _handleReplyPress = (commentId) => {
+    this.props.navigation.navigate('CommentDetail', {id: commentId});
   }
 
   _renderItem = (row) => {
@@ -152,7 +191,7 @@ class CommentsScreen extends Component {
     var swipeoutBtns = [
       {
         text: 'Delete',
-        onPress: () => { this._deleteComment(commentId) },
+        onPress: () => { this._deletePress(commentId) },
         backgroundColor: '#f64e59'
       }
     ]
@@ -168,12 +207,19 @@ class CommentsScreen extends Component {
             </TouchableOpacity>
             <View style={styles.content}>
               <View style={styles.contentHeader}>
-                <RkText rkType='header5'>{username}</RkText>
-                <RkText rkType='secondary4 hintColor'>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+                  <RkText rkType='header5'>{username}</RkText>
+                </TouchableOpacity>
+                <RkText rkType="secondary4 hintColor">
                   <TimeAgo time={created_at}/>
                 </RkText>
               </View>
               <RkText rkType='primary3 mediumLine'>{content}</RkText>
+              <View style={{flexDirection: 'row', marginTop:5}}>
+                <TouchableOpacity onPress={()=>this._handleReplyPress(commentId)}>
+                  <RkText rkType='secondary4 hintColor'>Reply</RkText>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Swipeout>
@@ -195,6 +241,7 @@ class CommentsScreen extends Component {
     let { token, hType } = this.props;
     let { id, postType } = this.props.navigation.state.params;
     let { message } = this.state;
+    this.setState({isReplyFetching: true})
     this.props.createComment(
       token,
       hType,
@@ -202,7 +249,7 @@ class CommentsScreen extends Component {
       id,
       message,
       () => {
-        this._fetchComments();
+        this._fetchComments(1);
       }
     );
     Keyboard.dismiss();
@@ -228,16 +275,32 @@ class CommentsScreen extends Component {
     );
   }
 
+  _renderFetchCommentLoading = () => {
+    if(this.state.isReplyFetching) {
+      return (
+        <View style={{alignItems: 'center'}}><Spinner color="#6F3AB1"/></View>
+      );
+    }
+    return <View />;
+
+  }
+
   render() {
+    if(this.state.isLoading) {
+      return (
+        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}><Spinner color="#6F3AB1"/></View>
+      );
+    }
     return (
-      <View style={{flex:1}}>
+      <View style={[{flex:1}, styles.root]}>
         <FlatList
           ref={(focus) => {this.scrollC = focus}}
-          style={styles.root}
           data={this.state.comments}
           ItemSeparatorComponent={this._renderSeparator}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}/>
+          {this._renderFetchCommentLoading()}
+
         {this._renderKeyboard()}
         <KeyboardSpacer/>
       </View>
@@ -293,8 +356,8 @@ let styles = RkStyleSheet.create(theme => ({
   }
 }));
 
-function mapStateToProps({auth: {token, hType}, comment: {comments, addedComment}}) {
-  return { token, hType, comments, addedComment }
+function mapStateToProps({auth: {token, hType}}) {
+  return { token, hType }
 }
 
 export default connect(mapStateToProps, actions)(CommentsScreen);
