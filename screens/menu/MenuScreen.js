@@ -13,10 +13,10 @@ import {
   RkButton,
 } from 'react-native-ui-kitten';
 import { NavigationActions } from 'react-navigation';
-
+import MainTabNavigator from '../../navigation/MainTabNavigator';
 import {FontAwesome} from '../../assets/icons';
 import { Avatar } from '../../components/Avatar';
-
+import { WebBrowser } from 'expo';
 import {
   RkSwitch
 } from '../../components/switch/index';
@@ -160,17 +160,17 @@ class MenuScreen extends Component {
             <RkText rkType='primary header6'>SUPPORT</RkText>
           </View>
           <View style={styles.row}>
-            <TouchableOpacity style={styles.rowButton}>
+            <TouchableOpacity style={styles.rowButton} onPress={()=> WebBrowser.openBrowserAsync('https://www.facebook.com/Stylee-Help-Center-365392553871519/')}>
               <RkText rkType='header6'>Help</RkText>
             </TouchableOpacity>
           </View>
           <View style={styles.row}>
-            <TouchableOpacity style={styles.rowButton}>
+            <TouchableOpacity style={styles.rowButton} onPress={()=>this.props.navigation.navigate('Privacyo')}>
               <RkText rkType='header6'>Privacy Policy</RkText>
             </TouchableOpacity>
           </View>
           <View style={styles.row}>
-            <TouchableOpacity style={styles.rowButton}>
+            <TouchableOpacity style={styles.rowButton} onPress={()=>this.props.navigation.navigate('TAndCondition')}>
               <RkText rkType='header6'>Terms & Conditions</RkText>
             </TouchableOpacity>
           </View>

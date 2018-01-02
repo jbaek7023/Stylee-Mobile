@@ -6,6 +6,8 @@ import MenuScreen from '../screens/menu/MenuScreen';
 // only for Menu
 import ChangePasswordScreen from '../screens/menu/ChangePasswordScreen';
 import EditProfileScreen from '../screens/menu/EditProfileScreen';
+import PrivacyPolicyScreen from '../screens/menu/PrivacyPolicyScreen';
+import TermsAndConditionsScreen from '../screens/menu/TermsAndConditionsScreen';
 
 // COMMON
 import UserProfileScreen from '../screens/profile/UserProfileScreen';
@@ -71,6 +73,12 @@ export default StackNavigator ({
   },
   LikeScreen: {
     screen: LikeScreen
+  },
+  Privacyo: {
+    screen: PrivacyPolicyScreen
+  },
+  TAndCondition: {
+    screen: TermsAndConditionsScreen
   }
 }, {
   navigationOptions:({navigation, screenProps})=>({
