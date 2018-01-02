@@ -222,7 +222,6 @@ class AddStyleScreen extends Component {
               imageDataArray.push({id:id, image: successURI, base64: base64Data});
               taggedClothesArray = Object.values(taggedClothes);
               // remove!!!
-              console.log(taggedClothes);
               const merged = taggedClothesArray.map((tagged, i) => {
                 return {
                   ...tagged,
@@ -278,8 +277,13 @@ class AddStyleScreen extends Component {
   }
 
   _clearImagesFromImageStore = () => {
-    // for(uri in this.state.taggedClothes)
-    // ImageStore.removeTagImages()
+    this.state.taggedClothes.forEach((item)=>{
+      try {
+          ImageStore.removeTagImages(item.image);
+      } catch(e) {
+        console.log(e);
+      }
+    });
   }
 
   _renderHeader = () => {
@@ -313,9 +317,9 @@ class AddStyleScreen extends Component {
                   if(token) {
                     this.props.createStyle(token, hType, { name, base64, gender,
                       location, description,
-                    selectedClothesIds, taggedClothes, taggedCategories, onlyMe, link  });
+                    selectedClothesIds, taggedClothes, taggedCategories, onlyMe, link },
+                    () => {this._clearImagesFromImageStore()});
                   }
-                  this._clearImagesFromImageStore();
                   this.props.navigation.goBack();
                 }}>
                 <RkText rkType="header3">SAVE</RkText>

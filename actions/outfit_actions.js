@@ -17,7 +17,7 @@ import {
 
 const ROOT_URL = 'http://10.0.2.2:8000';
 
-export const createStyle = (token, hType, styleObject) => async dispatch => {
+export const createStyle = (token, hType, styleObject, callback) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};
   if(hType==1) {
     headers = { 'Authorization': `JWT ${token}`};
@@ -32,7 +32,7 @@ export const createStyle = (token, hType, styleObject) => async dispatch => {
     name, base64, gender, location, description,
     selectedClothesIds, taggedClothes, taggedCategories, onlyMe
   }, {headers});
-
+  callback();
   if(response.data) {
     dispatch({ type: CREATE_STYLE_SUCCESS, payload: response.data })
   } else {

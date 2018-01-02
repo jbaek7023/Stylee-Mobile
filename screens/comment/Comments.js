@@ -86,12 +86,14 @@ class CommentsScreen extends Component {
     if(replyCount==1) {
       return (
         <View style={[styles.container, {marginLeft: 25}]}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: userId})}>
             {this._renderAvatar(uri)}
           </TouchableOpacity>
           <View style={styles.content}>
             <View style={styles.contentHeader}>
-              <RkText rkType='header5'>{username}</RkText>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
+                <RkText rkType='header5'>{username}</RkText>
+              </TouchableOpacity>
               <RkText rkType='secondary4 hintColor'>
                 <TimeAgo time={created_at}/>
               </RkText>
@@ -115,14 +117,14 @@ class CommentsScreen extends Component {
               rkType='header6'>View all {replyCount} replies</RkText>
           </TouchableOpacity>
           <View style={[styles.container, {marginLeft: 25}]}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: userId})}>
               {this._renderAvatar(uri)}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={()=>this._handleReplyPress(commentId)}
               style={styles.content}>
               <View style={styles.contentHeader}>
-                <TouchableOpacity  onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+                <TouchableOpacity  onPress={() => this.props.navigation.navigate('Profile', {userPk: userId})}>
                 <RkText rkType='header5'>{username}</RkText>
                 </TouchableOpacity>
                 <RkText rkType='secondary4 hintColor'>
@@ -202,12 +204,12 @@ class CommentsScreen extends Component {
           right={swipeoutBtns}
           style={styles.swipeContainer}>
           <View style={styles.container}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: userId})}>
               {this._renderAvatar(uri)}
             </TouchableOpacity>
             <View style={styles.content}>
               <View style={styles.contentHeader}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id: userId})}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: userId})}>
                   <RkText rkType='header5'>{username}</RkText>
                 </TouchableOpacity>
                 <RkText rkType="secondary4 hintColor">

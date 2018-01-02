@@ -26,18 +26,23 @@ class ClothDetail extends Component {
   });
 
   state = {
-    isFollowing: false,
-    liked: false,
-    starred: false,
     isLoading: true,
     isMenuOpen: false,
+    clothDetail: null,
   }
 
   componentWillMount() {
     const { id } = this.props.navigation.state.params;
-    const { token, hType} = this.props;
+    const { token, hType } = this.props;
     if ( token ) {
-      this.props.fetchClothDetail(token, hType, id);
+      this.props.fetchClothDetail(
+        token,
+        hType,
+        id,
+        (clothDetail) => {
+          this.setState({clothDetail, isLoading: false});
+        }
+      );
     }
 
   }
@@ -46,42 +51,52 @@ class ClothDetail extends Component {
     const { id } = this.props.navigation.state.params;
     const { token, hType} = this.props;
     if(nextProps.updated && this.props.updated !== nextProps.updated) {
-      this.props.fetchClothDetail(token, hType, id);
-    }
-
-    if(this.props.clothDetail !== nextProps.clothDetail) {
-      this.setState({isLoading: false})
-    }
-    let isFollowing = nextProps.clothDetail.is_following;
-    let liked = nextProps.clothDetail.liked;
-    let starred = nextProps.clothDetail.starred;
-    let condition = (this.state.isFollowing!=isFollowing || this.state.liked!=liked || this.state.starred!=starred) ? true : false;
-    if(condition) {
-      this.setState({isFollowing, liked, starred});
+      this.setState({isLoading: true});
+      this.props.fetchClothDetail(
+        token,
+        hType,
+        id,
+        (clothDetail) => this.setState({clothDetail, isLoading: false}));
     }
   }
 
   _handleLikePress = (cid) => {
     let { token, hType } = this.props;
-    this.setState({liked: true})
+    this.setState({ clothDetail: {
+      ...this.state.clothDetail,
+      liked: true
+      }
+    });
     this.props.likeCloth(token, hType, cid)
   }
 
   _handleUnlikePress = (cid) => {
     let { token, hType } = this.props;
-    this.setState({liked: false})
+    this.setState({ clothDetail: {
+      ...this.state.clothDetail,
+      liked: false
+      }
+    });
     this.props.unlikeCloth(token, hType, cid)
   }
 
   _handleBookmarkPress = (cid) => {
     let { token, hType } = this.props;
-    this.setState({starred: true})
+    this.setState({ clothDetail: {
+      ...this.state.clothDetail,
+      starred: true
+      }
+    });
     this.props.bookmarkCloth(token, hType, cid)
   }
 
   _handleUnbookmarkPress = (cid) => {
     let { token, hType } = this.props;
-    this.setState({starred: false})
+    this.setState({ clothDetail: {
+      ...this.state.clothDetail,
+      starred: false
+      }
+    });
     this.props.unbookmarkCloth(token, hType, cid)
   }
 
@@ -156,7 +171,7 @@ class ClothDetail extends Component {
     this.setState({isMenuOpen: true});
   }
 
-  _renderFollow = (isOwner, isFollowing, userPk) => {
+  _renderFollow = () => {
     return (
       <TouchableOpacity style={{height:55, width:50, paddingLeft:25, justifyContent: 'center'}} onPress={()=>{this._handleMenuPress()}}>
         <Ionicons name="ios-more" size={32} style={{ marginLeft: 5 }}/>
@@ -203,7 +218,7 @@ class ClothDetail extends Component {
               </TouchableOpacity>
             </View>
             <View style={styles.right}>
-              {this._renderFollow(detail.is_owner, detail.is_following, detail.user.id)}
+              {this._renderFollow()}
             </View>
           </View>
         </View>
@@ -271,11 +286,28 @@ class ClothDetail extends Component {
       );
     }
     return (<View />);
+  }
 
+  _handleTheNumberOfLikePress = () => {
+    const { id } = this.props.navigation.state.params;
+    this.props.navigation.navigate('Likeo', {postType: 2, id})
+  }
+
+  _renderLikeAndComments = (likeCount, commentCount) => {
+    return (
+      <View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+        <TouchableOpacity onPress={()=>this._handleTheNumberOfLikePress()}>
+            <RkText rkType="secondary2 hintColor">{likeCount.toString()} Likes</RkText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>this._handleCommentPress()}>
+          <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{commentCount.toString()} Comments</RkText>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   render() {
-    const detail = this.props.clothDetail;
+    const detail = this.state.clothDetail;
     if(this.state.isLoading) {
       return (
         <View style={styles.root}>
@@ -304,21 +336,14 @@ class ClothDetail extends Component {
                   <View style={{ marginTop: 10 }}>
                       <RkText rkType="header4">{detail.content}</RkText>
                   </View>
-                  <View style={{
-                    marginTop: 10,
-                    marginBottom: 10,
-                    flexDirection: 'row',
-                  }}>
-                    <RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
-                    <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
-                  </View>
+                  {this._renderLikeAndComments(detail.like_count, detail.comment_count)}
                 </View>
                 <View style={{justifyContent: 'center'}}>{this._renderPrivacy(detail.only_me)}</View>
               </View>
               <View style={{marginTop: 10, marginBottom: 10}}>
                 <SocialThreeBar
-                  liked={this.state.liked}
-                  starred={this.state.starred}
+                  liked={detail.liked}
+                  starred={detail.starred}
                   handleLikePress={this._handleLikePress}
                   handleUnlikePress={this._handleUnlikePress}
                   handleBookmarkPress={this._handleBookmarkPress}
@@ -357,8 +382,6 @@ class ClothDetail extends Component {
     }
   }
 }
-
-
 
 let styles = RkStyleSheet.create(theme => ({
   root: {
@@ -461,8 +484,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({auth: {token, hType}, wardrobe: {clothDetail, updated}}) {
-  return { token, hType, clothDetail, updated }
+function mapStateToProps({auth: {token, hType}, wardrobe: {updated}}) {
+  return { token, hType, updated }
 }
 
 export default connect(mapStateToProps, actions)(ClothDetail);

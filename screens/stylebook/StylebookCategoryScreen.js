@@ -11,7 +11,6 @@ import { thresholdLength } from '../../utils/scale';
 import * as actions from '../../actions';
 import {FontAwesome} from '../../assets/icons';
 
-
 class StylebookCategoryScreen extends Component {
   static navigationOptions = {
   //  title: 'Category'

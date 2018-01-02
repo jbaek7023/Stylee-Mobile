@@ -17,6 +17,7 @@ import OutfitDetail from '../screens/stylebook/OutfitDetail';
 import CategoryDetail from '../screens/stylebook/CategoryDetail';
 import ClothDetail from '../screens/wardrobe/ClothDetail';
 import CommentsScreen from '../screens/comment/Comments';
+import LikeScreen from '../screens/profile/LikeScreen';
 
 export default StackNavigator ({
   Feedo: {
@@ -62,6 +63,9 @@ export default StackNavigator ({
   UserWardrobe: {
     screen: UserWardrobeScreen
   },
+  Likeo: {
+    screen: LikeScreen
+  }
 }, {
   navigationOptions:({navigation, screenProps})=>({
     tabBarOnPress: ({jumpToIndex, scene}) => {

@@ -60,6 +60,9 @@ class CommentDetail extends Component {
           this.setState({commentDetail, isReplyFetching: false})
         } else {
           this.setState({commentDetail, isLoading: false})
+          InteractionManager.runAfterInteractions(() => {
+            setTimeout(()=>this.scrollC.scrollToEnd(), 200);
+          });
         }
 
       }
@@ -124,12 +127,14 @@ class CommentDetail extends Component {
     if(user) {
       return (
         <View style={styles.container}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id})}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
             {this._renderAvatar(uri)}
           </TouchableOpacity>
           <View style={styles.content}>
             <View style={styles.contentHeader}>
-              <RkText rkType='header5'>{username}asd</RkText>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
+                <RkText rkType='header5'>{username}</RkText>
+              </TouchableOpacity>
               <RkText rkType='secondary4 hintColor'>
                 <TimeAgo time={created_at}/>
               </RkText>
@@ -157,12 +162,14 @@ class CommentDetail extends Component {
         right={swipeoutBtns}
         style={styles.swipeContainer}>
       <View style={[styles.container, styles.replyStyle]}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {id})}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
           {this._renderAvatar(uri)}
         </TouchableOpacity>
         <View style={styles.content}>
           <View style={styles.contentHeader}>
-            <RkText rkType='header5'>{username}</RkText>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
+              <RkText rkType='header5'>{username}</RkText>
+            </TouchableOpacity>
             <RkText rkType='secondary4 hintColor'>
               <TimeAgo time={created_at}/>
             </RkText>
@@ -232,7 +239,6 @@ class CommentDetail extends Component {
 
   render() {
     let detail = this.state.commentDetail;
-    console.log(detail);
     if(this.state.isLoading) {
       return (
         <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}><Spinner color="#6F3AB1"/></View>

@@ -393,6 +393,23 @@ class OutfitDetail extends Component {
     return (<View />);
   }
 
+  _handleTheNumberOfLikePress = () => {
+    const { id } = this.props.navigation.state.params;
+    this.props.navigation.navigate('Likeo', {postType: 1, id})
+  }
+
+  _renderLikeAndComments = (likeCount, commentCount) => {
+    return (
+      <View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+        <TouchableOpacity onPress={()=>this._handleTheNumberOfLikePress()}>
+            <RkText rkType="secondary2 hintColor">{likeCount.toString()} Likes</RkText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>this._handleCommentPress()}>
+          <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{commentCount.toString()} Comments</RkText>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   render() {
     const detail = this.state.outfitDetail;
@@ -427,12 +444,7 @@ class OutfitDetail extends Component {
                   <View style={{marginTop: 10}}>
                       <RkText rkType="header4">{detail.content}</RkText>
                   </View>
-              		<View style={{marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-            				<RkText rkType="secondary2 hintColor">{detail.like_count.toString()} Likes</RkText>
-                    <TouchableOpacity onPress={()=>this._handleCommentPress()}>
-            				  <RkText rkType="secondary2 hintColor" style={{marginLeft: 13}}>{detail.comment_count.toString()} Comments</RkText>
-                    </TouchableOpacity>
-                  </View>
+                  {this._renderLikeAndComments(detail.like_count, detail.comment_count)}
                 </View>
                 <View style={{justifyContent: 'center'}}>{this._renderPrivacy(detail.only_me)}</View>
               </View>
@@ -492,7 +504,6 @@ class OutfitDetail extends Component {
 
 
 let styles = RkStyleSheet.create(theme => ({
-
   root: {
     backgroundColor: theme.colors.screen.base,
     flex: 1

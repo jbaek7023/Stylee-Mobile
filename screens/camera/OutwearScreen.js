@@ -49,7 +49,7 @@ class OutwearScreen extends Component {
         <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
           <Image
             fadeDuration={0}
-            style={styles.imageStyle} source={require('../../assets/images/t-shirt.png')}/>
+            style={styles.imageStyle} source={require('../../assets/images/outerwear.png')}/>
           <RkText style={styles.imageBottomText} rkType="header5 hintColor">No top items to show</RkText>
         </View>
       );

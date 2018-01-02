@@ -215,19 +215,22 @@ class UserProfileScreen extends Component {
   }
 
   _renderFlatList = (outfits) => {
-    return (
-      <FlatList
-        data={outfits}
-        renderItem={(this.state.grid) ? this._renderGridItem : this._renderItem }
-        keyExtractor={this._keyExtractor}
-        numColumns={(this.state.grid) ? 3 : 1}
-        key={(this.state.grid) ? 1 : 0}
-        onEndReachedThreshold={thresholdLength}
-        onEndReached = {()=>{
-          this._onEndReachedThreshold()
-        }}
-      />
-    );
+    if(outfits.length > 0) {
+      return (
+        <FlatList
+          data={outfits}
+          renderItem={(this.state.grid) ? this._renderGridItem : this._renderItem }
+          keyExtractor={this._keyExtractor}
+          numColumns={(this.state.grid) ? 3 : 1}
+          key={(this.state.grid) ? 1 : 0}
+          onEndReachedThreshold={thresholdLength}
+          onEndReached = {()=>{
+            this._onEndReachedThreshold()
+          }}
+        />
+      );
+    }
+    return (<View style={styles.noContainer}><RkText rkType="primary3">{"No Style to show"}</RkText></View>);
   }
 
   _renderSelection1 = () => {
@@ -284,8 +287,7 @@ class UserProfileScreen extends Component {
               refreshing = {this.state.refreshing}
               onRefresh = {()=>this._onRefresh()}
             />
-          }
-          >
+          }>
           <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 20, marginRight: 20, marginTop: 30, marginBottom: 5}}>
             <View style={{justifyContent: 'center', alignItems: 'center', width:90, height:90}}>
               {this._renderAvatar(profile.image)}
@@ -364,6 +366,11 @@ let eachSpec = specWidth/4;
 let avatarLength = 90;
 
 let styles = RkStyleSheet.create(theme => ({
+  noContainer: {
+    height: 130,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   mainAvatar: {
     width: avatarLength,
     height: avatarLength

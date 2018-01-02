@@ -193,7 +193,6 @@ class UserCategoryScreen extends Component {
       );
     }
     return (
-
       <View style={{ flex:1, backgroundColor: 'white' }}>
         <View>
           {this._renderHeader()}

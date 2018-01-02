@@ -15,6 +15,51 @@ import {
 
 const ROOT_URL = 'http://10.0.2.2:8000';
 
+export const fetchLikeListOnOutfit = (token, hType, id, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(`${ROOT_URL}/likes/outfit/${id}/?page=1`, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+export const fetchLikeListOnCloth = (token, hType, id, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(`${ROOT_URL}/likes/cloth/${id}/?page=1`, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+export const fetchLikeNextOnPost = (token, hType, uri, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(uri, { headers });
+    callback(response.data.results, response.data.next);
+  } catch(e) {
+    console.log(e);
+  }
+}
+
 export const likeCloth = (token, hType, cid) => async dispatch => {
   let headers = { 'Authorization': `JWT ${token}`};
   if(hType==1) {

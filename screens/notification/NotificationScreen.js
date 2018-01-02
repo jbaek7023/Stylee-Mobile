@@ -22,7 +22,7 @@ class NotificationScreen extends Component {
     });
 
   componentWillMount() {
-    console.log('RENDERED NOTIFICATIon Will MOUNT')
+
   }
 
   _keyExtractor = (item, index) => item.id;
@@ -57,7 +57,6 @@ class NotificationScreen extends Component {
 
   // Put the Data Srouce Here! notification.photo, type(comment,like), description, time
   render() {
-    console.log('RENDERED NOTIFICATIon ALREADY')
     let mocDataSource = [
       {
         id:1,

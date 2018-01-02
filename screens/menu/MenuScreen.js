@@ -52,7 +52,6 @@ class MenuScreen extends Component {
   componentWillReceiveProps(nextProps) {
     // retrieve user data // add username and bio to props
     if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
-      //https://stackoverflow.com/questions/43496739/reset-navigation-history-to-login-screen-using-react-navigation
       const backAction = NavigationActions.back({
         key: null
       })

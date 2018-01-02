@@ -56,7 +56,7 @@ export const createCloth = (token, hType, clothObject) => async dispatch => {
     gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
     brand, location, link, inWardrobe, onlyMe, description
   }, {headers});
-
+  
   if(response.data) {
     dispatch({ type: CREATE_CLOTH_SUCCESS, payload: bigType })
   } else {
@@ -264,18 +264,17 @@ export const fetchEtcsNextAll = (token, hType, uri) => async dispatch => {
   }
 }
 
-export const fetchClothDetail = (token, hType, id) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
-
-  let response = await axios.get(`${ROOT_URL}/clothes/detail/${id}`, { headers });
-  if (response.status === 200) {
-    dispatch({ type: C_DETAIL_LOAD_SUCCESS, payload: response.data })
-  } else {
-    dispatch({ type: C_DETAIL_LOAD_FAIL })
+export const fetchClothDetail = (token, hType, id, callback) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
+    }
+    let response = await axios.get(`${ROOT_URL}/clothes/detail/${id}`, { headers });
+    callback(response.data);
+  } catch(e) {
+    console.log(e);
   }
 }

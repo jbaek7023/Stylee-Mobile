@@ -7,7 +7,6 @@ import _ from 'lodash';
 import Modal from 'react-native-modal';
 // import DjangoCSRFToken from 'django-react-csrftoken';
 import { width, height, totalSize } from 'react-native-dimension';
-import Hr from 'react-native-hr';
 
 import * as actions from '../../actions';
 
@@ -29,8 +28,6 @@ class AuthScreen extends Component {
     isModalVisible: false,
     isReady: false,
   }
-
-
 
   async componentWillMount() {
     let token = await AsyncStorage.getItem('stylee_token');
@@ -142,7 +139,7 @@ class AuthScreen extends Component {
             <Button block style={styles.buttonStyle} onPress={this._authClicked}>
               <Text style={styles.buttonText}>Log in</Text>
             </Button>
-            <Hr lineColor='#b3b3b3' text='OR'/>
+            <View style={styles.hr}/>
             <Button block onPress={this._fbClicked}>
               <Text style={styles.buttonText}>Log in with the Facebook</Text>
             </Button>
@@ -160,6 +157,12 @@ class AuthScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  hr: {
+    marginHorizontal: 8,
+    height: 1,
+    backgroundColor: '#968D8A',
+    marginVertical: 8,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

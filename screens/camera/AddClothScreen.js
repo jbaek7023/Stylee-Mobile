@@ -428,7 +428,8 @@ class AddClothScreen extends Component {
                     this.props.createCloth(token, hType, {
                       image, name, bigType, clothType, selectedSeasonIds,
                       gender, selectedSizeIds, selectedColorIds, selectedStyleIds,
-                      brand, location, link, inWardrobe, onlyMe, base64, description });
+                      brand, location, link, inWardrobe, onlyMe, base64, description }
+                    );
                   }
                   this.props.navigation.goBack();
                 }}>
