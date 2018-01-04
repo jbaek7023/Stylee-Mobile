@@ -82,69 +82,6 @@ class CommentsScreen extends Component {
     )
   }
 
-  _renderReplies = (commentId, replyCount, userId, uri, username, content, created_at) => {
-    if(replyCount==1) {
-      return (
-        <View style={[styles.container, {marginLeft: 25}]}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: userId})}>
-            {this._renderAvatar(uri)}
-          </TouchableOpacity>
-          <View style={styles.content}>
-            <View style={styles.contentHeader}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
-                <RkText rkType='header5'>{username}</RkText>
-              </TouchableOpacity>
-              <RkText rkType='secondary4 hintColor'>
-                <TimeAgo time={created_at}/>
-              </RkText>
-            </View>
-            <RkText rkType='primary3 mediumLine'>{content}</RkText>
-            <View style={{flexDirection: 'row', marginTop:5}}>
-              <TouchableOpacity onPress={()=>this._handleReplyPress(commentId)}>
-                <RkText rkType='secondary4 hintColor'>Reply</RkText>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      );
-    } else if(replyCount>1) {
-      return (
-        <View>
-          <TouchableOpacity
-            onPress={()=>this._handleReplyPress(commentId)}
-            style={styles.cmtContainer}>
-            <RkText
-              rkType='header6'>View all {replyCount} replies</RkText>
-          </TouchableOpacity>
-          <View style={[styles.container, {marginLeft: 25}]}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: userId})}>
-              {this._renderAvatar(uri)}
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={()=>this._handleReplyPress(commentId)}
-              style={styles.content}>
-              <View style={styles.contentHeader}>
-                <TouchableOpacity  onPress={() => this.props.navigation.navigate('Profile', {userPk: userId})}>
-                <RkText rkType='header5'>{username}</RkText>
-                </TouchableOpacity>
-                <RkText rkType='secondary4 hintColor'>
-                  <TimeAgo time={created_at}/>
-                </RkText>
-              </View>
-              <RkText rkType='primary3 mediumLine'>{content}</RkText>
-              <View style={{flexDirection: 'row', marginTop:5}}>
-                <TouchableOpacity onPress={()=>this._handleReplyPress(commentId)}>
-                  <RkText rkType='secondary4 hintColor'>Reply</RkText>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    }//댓글 4개 모두보기
-    return (<View />)
-  }
-
   _renderAvatar = (uri) => {
     if(_.isNil(uri)) {
       return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/default_profile.png')}/>)
@@ -183,20 +120,107 @@ class CommentsScreen extends Component {
     )
   }
 
+  _reportPress = () => {
+    setTimeout(()=>SnackBar.show(('Thanks for your feedback! We will review your report soon'), { duration: 2500 }), 1000);
+  }
+
   _handleReplyPress = (commentId) => {
     this.props.navigation.navigate('CommentDetail', {id: commentId});
   }
 
+  _renderReplies = (commentId, replyCount, child) => {
+    if(replyCount==1) {
+      let { created_at, is_owner, content } = child;
+      let { id, image, username } = child.user;
+      return (
+        <View>
+          <TouchableOpacity onPress={()=>this._handleReplyPress(commentId)} style={[styles.container, {marginLeft: 25}]}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
+              {this._renderAvatar(image)}
+            </TouchableOpacity>
+            <View style={styles.content}>
+              <View style={styles.contentHeader}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
+                  <RkText rkType='header5'>{username}</RkText>
+                </TouchableOpacity>
+                <RkText rkType='secondary4 hintColor'>
+                  <TimeAgo time={created_at}/>
+                </RkText>
+              </View>
+              <RkText rkType='primary3 mediumLine'>{content}</RkText>
+              <View style={{flexDirection: 'row', marginTop:5}}>
+                <TouchableOpacity onPress={()=>this._handleReplyPress(commentId)}>
+                  <RkText rkType='secondary4 hintColor'>Reply</RkText>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    } else if(replyCount>1) {
+      let { created_at, content } = child;
+      let { id, image, username } = child.user;
+      return (
+        <View>
+          <TouchableOpacity
+            onPress={()=>this._handleReplyPress(commentId)}
+            style={styles.cmtContainer}>
+            <RkText
+              rkType='header6'>View all {replyCount} replies</RkText>
+          </TouchableOpacity>
+          <View style={[styles.container, {marginLeft: 25}]}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
+              {this._renderAvatar(image)}
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={()=>this._handleReplyPress(commentId)}
+              style={styles.content}>
+              <View style={styles.contentHeader}>
+                <TouchableOpacity  onPress={() => this.props.navigation.navigate('Profile', {userPk: id})}>
+                <RkText rkType='header5'>{username}</RkText>
+                </TouchableOpacity>
+                <RkText rkType='secondary4 hintColor'>
+                  <TimeAgo time={created_at}/>
+                </RkText>
+              </View>
+              <RkText rkType='primary3 mediumLine'>{content}</RkText>
+              <View style={{flexDirection: 'row', marginTop:5}}>
+                <TouchableOpacity onPress={()=>this._handleReplyPress(commentId)}>
+                  <RkText rkType='secondary4 hintColor'>Reply</RkText>
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }//댓글 4개 모두보기
+    return (<View />)
+  }
+
   _renderItem = (row) => {
     let { id: userId, image: uri, username } = row.item.user;
-    let { id: commentId, content, created_at, reply_count: replyCount } = row.item;
-    var swipeoutBtns = [
-      {
-        text: 'Delete',
-        onPress: () => { this._deletePress(commentId) },
-        backgroundColor: '#f64e59'
-      }
-    ]
+    let { id: commentId, content, created_at, reply_count: replyCount, is_owner: isOwner, child } = row.item;
+
+
+    let swipeoutBtns = null
+    if(isOwner) {
+      swipeoutBtns = [
+        {
+          text: 'Delete',
+          onPress: () => { this._deletePress(commentId) },
+          backgroundColor: '#f64e59'
+        }
+      ]
+    } else {
+      swipeoutBtns = [
+        {
+          text: 'Report',
+          onPress: () => { this._reportPress(commentId) },
+          backgroundColor: '#f64e59'
+        }
+      ]
+    }
+
     return (
       <View>
         <Swipeout
@@ -225,7 +249,7 @@ class CommentsScreen extends Component {
             </View>
           </View>
         </Swipeout>
-        {this._renderReplies(commentId, replyCount, 1, uri, 'jbaek7023',  'hello world', created_at)}
+        {this._renderReplies(commentId, replyCount, child)}
       </View>
     )
   }

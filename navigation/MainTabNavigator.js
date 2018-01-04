@@ -128,7 +128,7 @@ export default TabNavigator(
     lazy: true,
   }
 );
-// 
+//
 // const navigator = MainTabNavigator;
 // const defaultGetStateForAction = navigator.router.getStateForAction
 //

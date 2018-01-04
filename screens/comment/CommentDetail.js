@@ -64,7 +64,6 @@ class CommentDetail extends Component {
             setTimeout(()=>this.scrollC.scrollToEnd(), 200);
           });
         }
-
       }
     );
   }
@@ -113,6 +112,10 @@ class CommentDetail extends Component {
     )
   }
 
+  _reportPress = (commentId) => {
+    setTimeout(()=>SnackBar.show(('Thanks for your feedback! We will review your report soon'), { duration: 2500 }), 1000);
+  }
+
   _renderAvatar = (uri) => {
     if(_.isNil(uri)) {
       return (<Avatar rkType='circle' style={styles.avatar} img={require('../../assets/images/default_profile.png')}/>)
@@ -148,14 +151,27 @@ class CommentDetail extends Component {
 
   _renderItem = ({item}) => {
     let { id, image: uri, username } = item.user;
-    let { content, created_at } = item;
-    var swipeoutBtns = [
-      {
-        text: 'Delete',
-        onPress: () => { this._deletePress(item.id) },
-        backgroundColor: '#f64e59'
-      }
-    ]
+    let { id: commentId ,content, created_at, is_owner:isOwner } = item;
+    let swipeoutBtns = null;
+
+    if(isOwner) {
+      swipeoutBtns = [
+        {
+          text: 'Delete',
+          onPress: () => { this._deletePress(commentId) },
+          backgroundColor: '#f64e59'
+        }
+      ]
+    } else {
+      swipeoutBtns = [
+        {
+          text: 'Report',
+          onPress: () => { this._reportPress(commentId) },
+          backgroundColor: '#f64e59'
+        }
+      ]
+    }
+
     return (
       <Swipeout
         autoClose={true}

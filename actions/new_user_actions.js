@@ -15,9 +15,9 @@ import {
 const ROOT_URL = 'http://10.0.2.2:8000';
 
 // Getting dispatch as a parameter because we want to access to the dispatch from the parent function
-export const doEmailCheck = (email) => async dispatch => {
+export const doEmailCheck = (email, callback) => async dispatch => {
   let response = await axios.get(`${ROOT_URL}/profile/echeck/?em=${email}`)
-
+  callback(response.data);
   if (response.status === 200) {
     // Return valid email and username
     response.data.email = email;
@@ -37,26 +37,28 @@ export const doUsernameCheck = (username) => async dispatch => {
   }
 }
 
-export const addFullNameAndPassword = (fullname, password) => ({
+export const addFullNameAndPassword = (fullname, password, callback) => async dispatch => {
   // add fullname and password to the props
-  type: ADD_BIO_AND_PASSWORD,
-  payload: { fullname, password }
-})
+  dispatch({ type: ADD_BIO_AND_PASSWORD, payload: {fullname, password} });
+  callback();
+}
 
-
-export const registerUser = ( username, email, password ) => async dispatch => {
-  let response = await axios.post(`${ROOT_URL}/rest-auth/registration/`, {
-    username,
-    email,
-    password1: password,
-    password2: password
-  })
-  if(response.data.token) {
-    // registration successful
-    AsyncStorage.setItem('stylee_token', response.data.token);
-    // set header type prop
-    dispatch({ type: REGISTER_SUCCESS, payload: response.data.token })
-  } else {
-    dispatch({ type: REGISTER_FAIL, payload: response.data })
+export const registerUser = ( username, email, password, callback, callback2 ) => async dispatch => {
+  try {
+    let response = await axios.post(`${ROOT_URL}/rest-auth/registration/`, {
+      username,
+      email,
+      password1: password,
+      password2: password
+    })
+    if(response.data.token) {
+      AsyncStorage.setItem('stylee_token', response.data.token);
+      dispatch({ type: REGISTER_SUCCESS, payload: response.data.token })
+    } else {
+      dispatch({ type: REGISTER_FAIL, payload: response.data })
+    }
+    callback();
+  } catch(e) {
+    callback2();
   }
 }

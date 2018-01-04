@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, AsyncStorage, View, TouchableOpacity, Dimensions, Image, KeyboardAvoidingView } from 'react-native';
+import { Alert, StyleSheet, AsyncStorage, View, TouchableOpacity, Dimensions, Image, KeyboardAvoidingView } from 'react-native';
 import { Container, Content, Button, Form, Text,Input, Label, Item } from 'native-base';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
@@ -11,9 +11,7 @@ import { width, height, totalSize } from 'react-native-dimension';
 import * as actions from '../../actions';
 
 import { AuthFieldInput } from '../../components/common/AuthFieldInput';
-import CommonModal from '../../components/common/CommonModal';
-
-import { AppLoading } from 'expo';
+import { Spinner } from 'native-base';
 
 class AuthScreen extends Component {
   static navigationOptions = {
@@ -25,85 +23,98 @@ class AuthScreen extends Component {
     username: '',
     password: '',
     error: '',
-    isModalVisible: false,
     isReady: false,
+    isLoading: true,
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     let token = await AsyncStorage.getItem('stylee_token');
     if(!_.isNull(token)) {
-      this.props.setToken(token, 1);
+      this.props.setToken(token, 1, () => this._navigateToMain());
     } else {
       let fbToken = await AsyncStorage.getItem('fb_token');
       if(!_.isNull(fbToken)) {
-        this.props.setToken(fbToken, 2);
+        this.props.setToken(fbToken, 2, () => this._navigateToMain());
       }
     }
-    this.setState({isLoading:true});
+    this.setState({isLoading: false});
   }
 
   // When we rerender,
   async componentWillReceiveProps(nextProps) {
-    if(nextProps.errorMsg && (nextProps.errorMsg !== this.props.errorMsg)) {
-      this._showModal();
-    }
-
     let token = await AsyncStorage.getItem('stylee_token');
-  //   AsyncStorage.getItem('token').then((token) => {
-  //     if (token) {
-  //       this.setState({loggedIn: true})
-  //     } else {
-  //       console.log('No user yet Created');
-  //     }
-  // })
     if(!_.isNull(token)) {
-      this.props.setToken(token, 1);
+      this.props.setToken(token, 1, () => this._navigateToMain());
     } else {
       let fbToken = await AsyncStorage.getItem('fb_token');
       if(!_.isNull(fbToken)) {
-        this.props.setToken(fbToken, 2);
+        this.props.setToken(fbToken, 2, () => this._navigateToMain());
       }
     }
-
-    if (nextProps.hType == 1 || nextProps.hType == 2) {
-      nextProps.navigation.navigate('Feed');
-      this.setState({ password: ''})
-    }
+    this.setState({isLoading: false});
   }
 
-  _showModal = () => this.setState({ isModalVisible: true })
-
-  _hideModal = () => {
-    // set error
-    this.setState({ isModalVisible: false });
+  _navigateToMain = () => {
+    this.setState({password: '', isLoading: false});
+    this.props.navigation.navigate('Feed');
   }
 
   _authClicked = () => {
-    this.props.doAuthLogin(this.state.username, this.state.password);
+    this.setState({isLoading: true});
+    this.props.doAuthLogin(
+      this.state.username,
+      this.state.password,
+      () => {
+        this.setState({isLoading: false});
+      },
+      () => {
+        this.setState({isLoading: false});
+        Alert.alert(
+          "Can't Find Account",
+          `It looks like ${this.state.username} doesn't match an existing account. If you have a Stylee account, you can create one now`,
+          [
+            {text: 'Create One', onPress:() => this._goSignUp()},
+            {text: 'Try Again'},
+          ],
+          { cancelable: true }
+        )
+      }
+    );
   }
 
   _fbClicked = () => {
     // Call the FacebookAction
-    this.props.doFacebookLogin();
+    this.setState({isLoading: true});
+    this.props.doFacebookLogin(
+      ()=>this.setState({isLoading: false}),
+      ()=> {
+        this.setState({isLoading: false}),
+        Alert.alert(
+          "Can't Login With Facebook",
+          `If you have a Stylee account, you can create one now`,
+          [
+            {text: 'Create One', onPress:() => this._goSignUp()},
+            {text: 'Try Again'},
+          ],
+          { cancelable: true }
+        )
+      }
+    );
   }
 
   _goSignUp = () => {
     this.props.navigation.navigate('SignUp');
   }
 
-  _renderCommonModal = () => {
-    return (
-      <CommonModal
-        username={this.state.username}
-        _hideModal={this._hideModal}
-        isModalVisible={this.state.isModalVisible}
-      />
-    );
-  }
-
   render() {
-    if(!this.state.isLoading) {
-      return <AppLoading />;
+    if(this.state.isLoading) {
+      return (
+        <View style={styles.container}>
+          <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'  }}>
+            <Spinner color='#6F3AB1'/>
+          </View>
+        </View>
+      );
     }
     return (
       <View style={styles.container}>
@@ -147,9 +158,7 @@ class AuthScreen extends Component {
           <View style={styles.signUpContainer}>
             <Text onPress={this._goSignUp} >CREATE NEW STYLEE ACCOUNT</Text>
           </View>
-          <View>
-            {this._renderCommonModal()}
-          </View>
+
         </KeyboardAvoidingView>
       </View>
     )
@@ -170,7 +179,6 @@ const styles = StyleSheet.create({
   languageContainer: {
     flex: 1,
     paddingTop: 10,
-    justifyContent: 'flex-start',
   },
   languagePosition: {
     alignItems: 'center'

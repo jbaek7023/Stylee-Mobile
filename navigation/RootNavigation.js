@@ -1,6 +1,6 @@
 import { Notifications } from 'expo';
 import React from 'react';
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
 
 import MainTabNavigator from './MainTabNavigator';
 import AuthStackNavigator from './AuthStackNavigator';
@@ -9,7 +9,22 @@ import registerForPushNotificationsAsync from '../api/registerForPushNotificatio
 
 import WelcomeScreen from '../screens/initial/WelcomeScreen';
 
-const RootTabNavigator = TabNavigator ({
+const changeAppNavigator = Navigator => {
+   const router = Navigator.router;
+
+   const defaultGetStateForAction = router.getStateForAction;
+
+   router.getStateForAction = (action, state) => {
+       if (state && action.type === "RESET_TO_AUTH") {
+          return defaultGetStateForAction(NavigationActions.init())
+       }
+       return defaultGetStateForAction(action, state);
+  };
+
+  return Navigator;
+};
+
+const RootTabNavigator = changeAppNavigator(TabNavigator ({
     Auth: {
       screen: AuthStackNavigator,
     },
@@ -23,13 +38,15 @@ const RootTabNavigator = TabNavigator ({
     navigationOptions: () => ({
       headerTitleStyle: {
         fontWeight: 'normal',
-      },swipeEnabled: false,
+      },
+      swipeEnabled: false,
       tabBarVisible: false,
     }),
     swipeEnabled: false,
+    backBehavior: 'none',
     lazy: true,
   }
-);
+));
 
 export default class RootNavigator extends React.Component {
   componentDidMount() {
@@ -71,9 +88,5 @@ export default class RootNavigator extends React.Component {
       // Alert.aleart({'New Push Notification', notification, [{text: 'Ok.'}]})
     // }
   // })
-
-
-
-
   };
 }

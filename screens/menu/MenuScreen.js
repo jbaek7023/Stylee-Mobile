@@ -46,23 +46,30 @@ class MenuScreen extends Component {
 
   componentWillMount() {
     // retrieve user data // add username and bio to props
-    this.props.retrieveCurrentUser(this.props.token, this.props.hType);
+    let {token, hType} = this.props;
+    if(token) {
+        this.props.retrieveCurrentUser(token, hType);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    // retrieve user data // add username and bio to props
-    if ( nextProps.token == undefined || _.isNil(nextProps.token) ) {
-      const backAction = NavigationActions.back({
-        key: null
-      })
-      nextProps.navigation.dispatch(backAction);
-    } else {
-      // if token is updated, retrieve current logged in user
-      let condition = ( this.props.token !== nextProps.token) || (this.props.imageCreated !== nextProps.imageCreated)
-      if ( condition ) {
-        this.props.retrieveCurrentUser(nextProps.token, this.props.hType);
-      }
+    let condition = ( nextProps.token && this.props.token !== nextProps.token) || (this.props.imageCreated !== nextProps.imageCreated)
+    if ( condition ) {
+      this.props.retrieveCurrentUser(nextProps.token, nextProps.hType);
     }
+  }
+
+  _doLogOut = () => {
+    // remove stylee token, close modal, set all props null.
+    // AsyncStorage.removeItem('stylee_token');
+    // AsyncStorage.removeItem('fb_token');
+    AsyncStorage.clear();
+    this.setState({ isModalVisible: false })
+    this.props.setToken(
+      undefined,
+      undefined,
+      () => this.props.navigation.dispatch({type: "RESET_TO_AUTH"})
+    );
   }
 
   _showModal = () => this.setState({ isModalVisible: true })
@@ -77,15 +84,6 @@ class MenuScreen extends Component {
         _doLogOut={this._doLogOut}
       />
     );
-  }
-
-  _doLogOut = () => {
-    // remove stylee token, close modal, set all props null.
-    // AsyncStorage.removeItem('stylee_token');
-    // AsyncStorage.removeItem('fb_token');
-    AsyncStorage.clear();
-    this.setState({ isModalVisible: false })
-    this.props.setToken(undefined, undefined, undefined);
   }
 
   _changePassword = () => {

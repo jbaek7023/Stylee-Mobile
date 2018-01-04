@@ -4,6 +4,9 @@ import AuthScreen from '../screens/initial/AuthScreen';
 import SignUpScreen from '../screens/initial/SignUpScreen';
 import SignUpUserBioScreen from '../screens/initial/SignUpUserBioScreen';
 import SignUpUsernameScreen from '../screens/initial/SignUpUsernameScreen';
+import PrivacyPolicyScreen from '../screens/menu/PrivacyPolicyScreen';
+import TermsAndConditionsScreen from '../screens/menu/TermsAndConditionsScreen';
+
 export default StackNavigator ({
   Autho: {
     screen: AuthScreen,
@@ -17,6 +20,12 @@ export default StackNavigator ({
   SignUpUsername: {
     screen: SignUpUsernameScreen,
   },
+  PrivacyOne: {
+    screen: PrivacyPolicyScreen
+  },
+  Terms: {
+    screen: TermsAndConditionsScreen
+  }
 }, {
     header: null,
     headerMode: 'none',

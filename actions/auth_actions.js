@@ -53,12 +53,13 @@ export const changePassword = ( token, hType, currentPassword, passwordOne, pass
 };
 
 // Getting dispatch as a parameter because we want to access to the dispatch from the parent function
-export const doFacebookLogin = () => async dispatch => {
+export const doFacebookLogin = (callback, callback2) => async dispatch => {
   let { type, token } = await Facebook.logInWithReadPermissionsAsync('1946324505614230', {
       permissions: ['public_profile']
   });
 
   if (type === 'cancel') {
+    callback2();
     return dispatch({ type: FACEBOOK_LOGIN_CANCEL })
   }
 
@@ -67,27 +68,33 @@ export const doFacebookLogin = () => async dispatch => {
     // Are you Offline?
     dispatch({ type: FACEBOOK_LOGIN_FAIL });
   }
-  doSocialAuthLogin(dispatch, token);
+  doSocialAuthLogin(dispatch, token, callback, callback2);
 };
 
-const doSocialAuthLogin = async (dispatch, token) => {
-  let response = await axios.post(`${ROOT_URL}/auth/convert-token/`, {
-    grant_type: 'convert_token',
-    client_id: 'jsEqE859ixa2TCXg5Fib26A9NxE1Pu6AqUbztmzm',
-    backend: 'facebook',
-    token
-  })
+const doSocialAuthLogin = async (dispatch, token, callback, callback2) => {
+  try {
+    let response = await axios.post(`${ROOT_URL}/auth/convert-token/`, {
+      grant_type: 'convert_token',
+      client_id: 'jsEqE859ixa2TCXg5Fib26A9NxE1Pu6AqUbztmzm',
+      backend: 'facebook',
+      token
+    })
 
-  if (response.data.access_token) {
-    AsyncStorage.setItem('fb_token', response.data.access_token);
-    // fb is type 2
-    dispatch({ type: FB_AUTH_LOGIN_SUCCESS, payload: response.data.access_token });
-  } else {
-    dispatch({ type: FB_AUTH_LOGIN_FAIL });
+    if (response.data.access_token) {
+      AsyncStorage.setItem('fb_token', response.data.access_token);
+      // fb is type 2
+      dispatch({ type: FB_AUTH_LOGIN_SUCCESS, payload: response.data.access_token });
+    } else {
+      dispatch({ type: FB_AUTH_LOGIN_FAIL });
+    }
+    callback();
+  } catch(e) {
+    callback2();
   }
+
 }
 
-export const doAuthLogin = ( username, password ) => async dispatch => {
+export const doAuthLogin = ( username, password, callback, callback2 ) => async dispatch => {
   try {
     let response = await axios.post(`${ROOT_URL}/rest-auth/login/`, {
       username,
@@ -98,14 +105,22 @@ export const doAuthLogin = ( username, password ) => async dispatch => {
       // fb is type 2
       AsyncStorage.setItem('stylee_token', response.data.token);
       dispatch({ type: AUTH_LOGIN_SUCCESS, payload: response.data.token});
+      callback();
     }
+
   } catch (error) {
-    console.log('fail');
+    console.log('here');
+    callback2();
     dispatch({ type: AUTH_LOGIN_FAIL});
   }
 };
 
-export const setToken = ( token, hType ) => ({
-  type: SET_TOKEN,
-  payload: { token, hType }
-});
+export const setToken = (token, hType, callback) => async dispatch => {
+  try {
+    dispatch({ type: SET_TOKEN, payload: { token, hType } });
+    callback()
+  } catch(e) {
+    console.log(e)
+  }
+
+}
