@@ -24,31 +24,28 @@ import {
 const ROOT_URL = 'http://10.0.2.2:8000'
 
 
-export const changePassword = ( token, hType, currentPassword, passwordOne, passwordTwo ) => async dispatch => {
-  let headers = { 'Authorization': `JWT ${token}`};
-  if(hType==1) {
-    headers = { 'Authorization': `JWT ${token}`};
-  } else if (hType==2) {
-    headers = { 'Authorization': `Bearer ${token}`};
-  }
-
-  let response = await axios.post(`${ROOT_URL}/password/change/`, {
-    old_password: currentPassword,
-    new_password1: passwordOne,
-    new_password2: passwordTwo,
-  }, {
-    headers
-  });
-
-  if (response.status === 200) {
-    dispatch({ type: CHANGE_PASSWORD_SUCCESS, payload: response.data });
-  } else {
-    if(response.status === 400) {
-      console.log('Not authorized. ');
-    } else if (response.status === 403){
-      console.log('You are not suposed to see this message. Contact Administrator');
+export const changePassword = ( token, hType, currentPassword, passwordOne, passwordTwo, callback, callback2 ) => async dispatch => {
+  try {
+    let headers = { 'Authorization': `JWT ${token}`};
+    if(hType==1) {
+      headers = { 'Authorization': `JWT ${token}`};
+    } else if (hType==2) {
+      headers = { 'Authorization': `Bearer ${token}`};
     }
-    dispatch({ type: CHANGE_PASSWORD_FAIL});
+
+    let response = await axios.post(`${ROOT_URL}/rest-auth/password/change/`, {
+      old_password: currentPassword,
+      new_password1: passwordOne,
+      new_password2: passwordTwo,
+    }, {
+      headers
+    });
+    if (response.status === 200) {
+      dispatch({ type: CHANGE_PASSWORD_SUCCESS });
+    }
+    callback();
+  } catch(error) {
+    callback2(error.response.data);
   }
 };
 

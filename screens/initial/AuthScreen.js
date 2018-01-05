@@ -74,7 +74,7 @@ class AuthScreen extends Component {
           `It looks like ${this.state.username} doesn't match an existing account. If you have a Stylee account, you can create one now`,
           [
             {text: 'Create One', onPress:() => this._goSignUp()},
-            {text: 'Try Again'},
+            {text: 'Try Again', onPress: ()=>this.setState({password:''})},
           ],
           { cancelable: true }
         )

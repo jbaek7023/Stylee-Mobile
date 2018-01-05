@@ -10,17 +10,15 @@ import registerForPushNotificationsAsync from '../api/registerForPushNotificatio
 import WelcomeScreen from '../screens/initial/WelcomeScreen';
 
 const changeAppNavigator = Navigator => {
-   const router = Navigator.router;
+      const router = Navigator.router;
 
-   const defaultGetStateForAction = router.getStateForAction;
-
-   router.getStateForAction = (action, state) => {
-       if (state && action.type === "RESET_TO_AUTH") {
+      const defaultGetStateForAction = router.getStateForAction;
+      router.getStateForAction = (action, state) => {
+        if (state && action.type === "RESET_TO_AUTH") {
           return defaultGetStateForAction(NavigationActions.init())
-       }
-       return defaultGetStateForAction(action, state);
-  };
-
+        }
+        return defaultGetStateForAction(action, state);
+      };
   return Navigator;
 };
 
@@ -35,6 +33,7 @@ const RootTabNavigator = changeAppNavigator(TabNavigator ({
       screen: MainTabNavigator,
     },
   }, {
+    initialRouteName: 'Auth',
     navigationOptions: () => ({
       headerTitleStyle: {
         fontWeight: 'normal',

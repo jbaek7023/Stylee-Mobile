@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
 import { width, height, totalSize } from 'react-native-dimension';
 import { AuthFieldInput } from '../../components/common/AuthFieldInput';
 import { Field, reduxForm } from 'redux-form';
@@ -8,6 +8,7 @@ import * as actions from '../../actions';
 import { connect } from 'react-redux';
 import { RkText, RkStyleSheet, RkButton } from 'react-native-ui-kitten';
 import {FontAwesome} from '../../assets/icons';
+import SnackBar from 'react-native-snackbar-dialog';
 
 import axios from 'axios';
 
@@ -28,9 +29,36 @@ class ChangePasswordScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // if(this.props.)
-    //  this.setState({currentPassword: '', passwordOne: '', passwordTwo: ''});
-    //  this.props.navigation.goback();
+
+  }
+
+  _handleChangePasswordPress = () => {
+    let { token, hType } = this.props;
+    let {currentPassword, passwordOne, passwordTwo} = this.state;
+    this.props.changePassword(
+      token,
+      hType,
+      currentPassword,
+      passwordOne,
+      passwordTwo,
+      () => {
+        SnackBar.show(('Password Changed'), { duration: 2500 });
+        this.props.navigation.goBack();
+      },
+      (error) => {
+        errorDetail = '';
+        Object.keys(error).forEach((key, index) => {
+          errorDetail = error[key][0]
+        });
+        Alert.alert(
+          'Unable to change password',
+          errorDetail,
+          [{text: 'Try Again'}],
+          { cancelable: true }
+        )
+      }
+    );
+
   }
 
   _renderHeader = () => {
@@ -48,19 +76,9 @@ class ChangePasswordScreen extends Component {
           <View rkCardHeader style={styles.left}>
             <View style={styles.content}>
               <View style={styles.contentHeader}>
-                <RkText rkType='header3'>Change Your Password</RkText>
+                <RkText rkType='header3'>Change Password</RkText>
               </View>
             </View>
-          </View>
-          <View style={styles.right}>
-              <TouchableOpacity onPress={()=>{
-                let { token, hType } = this.props;
-                let {currentPassword, passwordOne, passwordTwo} = this.state;
-                this.props.changePassword(token, hType, currentPassword, passwordOne, passwordTwo);
-                this.props.navigation.goBack();
-              }}>
-                <RkText rkType="header3">SAVE</RkText>
-              </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -95,9 +113,12 @@ class ChangePasswordScreen extends Component {
           />
         </Form>
         <View style={styles.buttonContainer}>
-          <Button block style={styles.buttonStyle} onPress={this._changePassword}>
-            <Text style={styles.buttonText}>Next</Text>
+          <Button block style={styles.buttonStyle} onPress={()=>this._handleChangePasswordPress()}>
+            <Text style={styles.buttonText}>Save</Text>
           </Button>
+        </View>
+        <View style={styles.directionContainer}>
+          <RkText rkType="primary4 hintColor">{"After changing your password, you will be logged out and log in again with the changed password"}</RkText>
         </View>
       </View>
     );
@@ -105,6 +126,9 @@ class ChangePasswordScreen extends Component {
 }
 
 let styles = RkStyleSheet.create(theme => ({
+  directionContainer: {
+    padding: 15
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

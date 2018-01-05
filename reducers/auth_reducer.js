@@ -46,7 +46,8 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, errorMsg: undefined}
     case CHANGE_PASSWORD_SUCCESS:
       //incomplete: we should send data later
-      return { ...state }
+      var timeStamp = Math.floor(Date.now());
+      return { ...state, changed: timeStamp.toString()}
     case  CHANGE_PASSWORD_FAIL:
       return { ...state }
     default:

@@ -246,9 +246,9 @@ let styles = RkStyleSheet.create(theme => ({
   },
 }));
 
-function mapStateToProps({ auth: { token, hType }, menu:{ currentUser, imageCreated }}) {
+function mapStateToProps({ auth: { token, hType, changed }, menu:{ currentUser, imageCreated }}) {
   return {
-    token, hType, currentUser, imageCreated
+    token, hType, currentUser, imageCreated, changed
   }
 }
 
