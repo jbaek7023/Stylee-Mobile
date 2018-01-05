@@ -24,8 +24,9 @@ class SignUpScreen extends Component {
     this.props.doEmailCheck(
       this.state.email,
       (data)=> {
-        this.setState({isLoading: false});
+
         if(data.obtained) {
+          this.setState({isLoading: false})
           Alert.alert(
             "Have you signed up already?",
             `The email is already obtained`,
@@ -36,6 +37,7 @@ class SignUpScreen extends Component {
           )
         } else {
           this.props.navigation.navigate('SignUpBio');
+          setTimeout(()=>this.setState({isLoading: false}), 200);
         }
       }
     )
@@ -104,9 +106,9 @@ class SignUpScreen extends Component {
             value={this.state.email}
             onChangeText={email => this.setState({email})}
             returnKeyType="go"
+            onSubmitEditing={(event)=>this._submitEmail()}
           />
         </Form>
-
         <View style={styles.buttonContainer}>
           <Button block style={styles.buttonStyle} onPress={this._submitEmail}>
             <Text style={styles.buttonText}>Next</Text>

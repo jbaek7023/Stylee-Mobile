@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, StyleSheet, AsyncStorage, View, TouchableOpacity, Dimensions, Image, KeyboardAvoidingView } from 'react-native';
-import { Container, Content, Button, Form, Text,Input, Label, Item } from 'native-base';
+import { TextInput, Alert, StyleSheet, AsyncStorage, View, TouchableOpacity, Dimensions, Image, KeyboardAvoidingView } from 'react-native';
+import { Container, Content, Button, Form, Text, Input, Label, Item } from 'native-base';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import _ from 'lodash';
@@ -55,8 +55,8 @@ class AuthScreen extends Component {
   }
 
   _navigateToMain = () => {
-    this.setState({password: '', isLoading: false});
     this.props.navigation.navigate('Feed');
+    setTimeout(()=>this.setState({password: '', isLoading: false}), 200);
   }
 
   _authClicked = () => {
@@ -132,19 +132,30 @@ class AuthScreen extends Component {
             />
           </View>
           <Form style={styles.formStyle}>
-            <AuthFieldInput
-              placeholder="Username or Email"
-              value={this.state.username}
-              onChangeText={username => this.setState({username})}
-              returnKeyType="next"
-            />
-            <AuthFieldInput
-              placeholder="Password"
-              value={this.state.password}
-              onChangeText={password => this.setState({password})}
-              secureTextEntry
-              returnKeyType="go"
-            />
+            <Item>
+              <Input
+                value={this.state.username}
+                onChangeText={(username)=>this.setState({username})}
+                placeholder="Username or Email"
+                autoCorrect={false}
+                returnKeyType="next"
+                onSubmitEditing={()=>{
+                  this.refs.passfield._root.focus();
+                }}/>
+            </Item>
+            <Item>
+              <Input
+                ref='passfield'
+                value={this.state.password}
+                onChangeText={password => this.setState({password})}
+                placeholder="Password"
+                autoCorrect={false}
+                secureTextEntry
+                returnKeyType="go"
+                onSubmitEditing={(event)=>{
+                  this._authClicked();
+                }}/>
+            </Item>
           </Form>
           <View style={styles.buttonContainer}>
             <Button block style={styles.buttonStyle} onPress={this._authClicked}>
@@ -158,7 +169,6 @@ class AuthScreen extends Component {
           <View style={styles.signUpContainer}>
             <Text onPress={this._goSignUp} >CREATE NEW STYLEE ACCOUNT</Text>
           </View>
-
         </KeyboardAvoidingView>
       </View>
     )

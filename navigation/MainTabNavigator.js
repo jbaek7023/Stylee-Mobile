@@ -128,15 +128,3 @@ export default TabNavigator(
     lazy: true,
   }
 );
-//
-// const navigator = MainTabNavigator;
-// const defaultGetStateForAction = navigator.router.getStateForAction
-//
-// navigator.router.getStateForAction = (action, state) => {
-//   if (action.type === 'MyCompleteReset') {
-//      // For your custom action, reset it all
-//      return defaultGetStateForAction(NavigationActions.init())
-//   }
-//   // Handle all other actions with the default handler
-//   return defaultGetStateForAction(action, state)
-// }

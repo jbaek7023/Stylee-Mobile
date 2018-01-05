@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, Alert } from 'react-native';
 import { width, height, totalSize } from 'react-native-dimension';
 import { AuthFieldInput } from '../../components/common/AuthFieldInput';
 import { Field, reduxForm } from 'redux-form';
-import { Text, Button, Form, Input, Label, Spinner } from 'native-base';
+import { Text, Button, Form, Input, Item, Label, Spinner } from 'native-base';
 import { RkButton, RkText } from 'react-native-ui-kitten';
 import {FontAwesome} from '../../assets/icons';
 import * as actions from '../../actions';
@@ -84,14 +84,21 @@ class SignUpUserBioScreen extends Component {
             value={this.state.bio}
             onChangeText={bio => this.setState({bio})}
             returnKeyType="next"
-          />
-          <AuthFieldInput
-            placeholder="Password"
-            value={this.state.password}
-            onChangeText={password => this.setState({password})}
-            secureTextEntry
-            returnKeyType="go"
-          />
+            onSubmitEditing={()=>{
+              this.refs.passfield._root.focus();
+            }}/>
+          <Item>
+            <Input
+              ref='passfield'
+              value={this.state.password}
+              onChangeText={password=>this.setState({password})}
+              placeholder="Password"
+              autoCorrect={false}
+              secureTextEntry
+              returnKeyType="go"
+              onSubmitEditing={(event)=>this._submitEmail()}
+            />
+          </Item>
         </Form>
 
         <View style={styles.buttonContainer}>

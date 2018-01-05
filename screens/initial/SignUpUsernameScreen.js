@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import _ from 'lodash';
 
-
 const ROOT_URL = 'http://10.0.2.2:8000';
 
 class SignUpUsernameScreen extends Component {
@@ -109,6 +108,7 @@ class SignUpUsernameScreen extends Component {
             value={this.state.username}
             onChangeText={username => this.setState({username})}
             returnKeyType="go"
+            onSubmitEditing={(event)=>this._register()}
           />
         </Form>
         <View style={styles.buttonContainer}>

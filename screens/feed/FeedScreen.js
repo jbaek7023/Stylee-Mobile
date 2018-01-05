@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Image, View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { width, height, totalSize } from 'react-native-dimension';
+import {NavigationActions} from 'react-navigation';
 import {
   RkCard,
   RkText,
@@ -15,6 +16,18 @@ class FeedScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     title: 'StyleFeed'
   })
+
+  componentWillMount() {
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({
+          routeName: "Feedo",
+        })
+      ]
+    });
+    this.props.navigation.dispatch(resetAction);
+  }
 
   _keyExtractor = (item, index) => item.id;
 
